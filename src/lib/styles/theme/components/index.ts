@@ -1,5 +1,7 @@
-import { Button } from "./button";
+import type {DeepPartial, Theme} from "@chakra-ui/react"
 
-export const components = {
-  Button,
-};
+import {Button} from "./button"
+
+export const components: DeepPartial<Theme["components"]> = {
+  Button
+}

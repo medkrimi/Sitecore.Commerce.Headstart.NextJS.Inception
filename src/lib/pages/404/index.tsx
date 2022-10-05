@@ -6,23 +6,23 @@ import {
   Text,
   Link as ChakraLink,
   useColorMode,
-  Flex,
-} from "@chakra-ui/react";
-import { NextSeo } from "next-seo";
-import Link from "next/link";
+  Flex
+} from "@chakra-ui/react"
+import {NextSeo} from "next-seo"
+import Link from "next/link"
 
-import MotionBox from "lib/components/motion/Box";
+import MotionBox from "lib/components/motion/Box"
 
 const Page404 = () => {
-  const { colorMode } = useColorMode();
+  const {colorMode} = useColorMode()
 
   return (
     <Flex minHeight="70vh" direction="column" justifyContent="center">
       <NextSeo title="404 Not Found" />
       <MotionBox
-        animate={{ y: 20 }}
-        transition={{ repeat: Infinity, duration: 2, repeatType: "reverse" }}
-        width={{ base: "100%", sm: "70%", md: "60%" }}
+        animate={{y: 20}}
+        transition={{repeat: Infinity, duration: 2, repeatType: "reverse"}}
+        width={{base: "100%", sm: "70%", md: "60%"}}
         margin="0 auto"
       >
         <Image
@@ -51,7 +51,7 @@ const Page404 = () => {
           </Text>
           <Link href="/" passHref>
             <Button
-              backgroundColor={colorMode === "light" ? "gray.300" : "teal.500"}
+              backgroundColor={colorMode === "light" ? "gray.300" : "brand.500"}
               size="sm"
             >
               Let&apos;s Head Back
@@ -60,7 +60,7 @@ const Page404 = () => {
         </Box>
       </Box>
     </Flex>
-  );
-};
+  )
+}
 
-export default Page404;
+export default Page404
