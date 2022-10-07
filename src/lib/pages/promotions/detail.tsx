@@ -73,7 +73,7 @@ const PromotionDetails = () => {
       const breadcrumbItems: BreadcrumbItem[] = [
         {
           name: "Home",
-          url: "/admin"
+          url: "/dashboard"
         },
         {
           name: "Promotions",

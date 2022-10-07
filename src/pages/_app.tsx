@@ -5,7 +5,7 @@ import Head from "next/head"
 
 import defaultSEOConfig from "../../next-seo.config"
 import {Chakra} from "lib/components/Chakra"
-import Layout from "lib/layout/privatelayout"
+import Layout from "lib/layout/Layout"
 import "lib/styles/globals.css"
 import OcProvider from "../lib/redux/ocProvider"
 import {ApiRole} from "ordercloud-javascript-sdk"

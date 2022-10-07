@@ -79,7 +79,7 @@ const UserDetails = () => {
       const breadcrumbItems: BreadcrumbItem[] = [
         {
           name: "Home",
-          url: "/admin"
+          url: "/dashboard"
         },
         {
           name: "Users",

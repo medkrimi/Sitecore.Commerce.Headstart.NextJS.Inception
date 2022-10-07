@@ -28,22 +28,6 @@ const Footer = () => {
 
   return (
     <Box bg={bg} color={color}>
-      <Container as={Stack} maxW={"6xl"} py={10}>
-        <SimpleGrid columns={{base: 1, sm: 2, md: 4}} spacing={8}>
-          <Stack align={"flex-start"}>
-            <InformationNavigation />
-          </Stack>
-          <Stack align={"flex-start"}>
-            <TopCategoriesNavigation />
-          </Stack>
-          <Stack align={"flex-start"}>
-            <ShoppingNavigation />
-          </Stack>
-          <Stack align={"flex-start"}>
-            <FooterLinksNavigation />
-          </Stack>
-        </SimpleGrid>
-      </Container>
       <Box py={10}>
         <Flex
           align={"center"}
@@ -65,7 +49,7 @@ const Footer = () => {
           <FooterLogo />
         </Flex>
         <Text pt={6} fontSize={"sm"} textAlign={"center"}>
-          Copyright © {new Date().getFullYear()} Sitecore.com All Rights
+          Copyright © {new Date().getFullYear()} Sitecore.com All Rights Reserved.
         </Text>
       </Box>
     </Box>
