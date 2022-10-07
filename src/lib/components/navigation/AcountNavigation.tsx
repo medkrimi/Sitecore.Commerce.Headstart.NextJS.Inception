@@ -39,7 +39,7 @@ const MobileNavigation = () => {
   const {isOpen, onOpen, onClose} = useDisclosure()
   const btnRef = React.useRef()
   const {colorMode, toggleColorMode} = useColorMode()
-  
+
   return (
     <HStack>
       <Menu>
