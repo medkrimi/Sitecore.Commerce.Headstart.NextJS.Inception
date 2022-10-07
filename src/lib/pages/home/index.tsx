@@ -7,7 +7,7 @@ const Home = () => {
   const {push} = useRouter()
   const {colorMode, toggleColorMode} = useColorMode()
   const handleOnLoggedIn = () => {
-    push("/admin")
+    push("/dashboard")
   }
 
   return (

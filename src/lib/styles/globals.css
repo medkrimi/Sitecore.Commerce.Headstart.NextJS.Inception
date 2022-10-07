@@ -8,10 +8,7 @@
 
 body {
   font-family: sans-serif;
-  background-image: url("/Background.jpg") !important;
-  background-position: top !important;
-  background-repeat: cover !important;
-  background-size: contain !important;
+  background: #f4f4f4!important;
 }
 
 .carousel {

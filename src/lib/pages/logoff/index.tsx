@@ -14,7 +14,7 @@ import {useRouter} from "next/router"
 const LogOff = () => {
   const {push} = useRouter()
   const handleOnLoggedIn = () => {
-    push("/admin")
+    push("/dashboard")
   }
 
   return (

@@ -1,9 +1,6 @@
-# OC-Seller-App
+# Sitecore Commerce Seller Application
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/git?s=https://github.com/SitecoreNA/OC-Seller-App)
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app), added with [**Chakra UI**](https://chakra-ui.com) and [**TypeScript**](https://www.typescriptlang.org) setup.
-Start developing right away!
+This application has been developed as a kick starter for the customer and partner community. It is a lightweight version built with React, Next.JS, Typescript and utilizing Chakra UI to make a OrderCloud seller application that can be used to quickly spin up POCs or projects.
 
 ## 🔋 ⚡ OrderCloud React Seller Application
 
