@@ -7,15 +7,15 @@ import {
   SimpleGrid,
   GridItem,
   useColorModeValue,
-  Button,
   HStack,
   VStack,
   useColorMode,
-  Center,
-  Tag
+  Image,
+  Link
 } from "@chakra-ui/react"
 import {NextSeo} from "next-seo"
 import {useRouter} from "next/router"
+import NextLink from "next/link"
 import {useEffect, useState} from "react"
 import {
   Buyers,
@@ -141,6 +141,7 @@ const Dashboard = () => {
     LoadOrdercloudData()
 
     // dispatch(setListOptions(options))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAnonymous])
 
   const shadow = "5px 5px 5px #999999"
@@ -152,6 +153,7 @@ const Dashboard = () => {
   const focusColor = useColorModeValue("brand.300", "brand.400")
   const colorSheme = "gray"
   const color = useColorModeValue("boxTextColor.900", "boxTextColor.100")
+  const tileBg = useColorModeValue("tileBg.500", "tileBg.900")
 
   return (
     <Flex
@@ -162,11 +164,12 @@ const Dashboard = () => {
       gap={4}
       mb={8}
       w="full"
+      width="100%"
     >
       <NextSeo title="Dashboard" />
       <VStack as="header" width="full" align="center">
         <HStack as="section" w="100%" p="3">
-          <Container maxW="container.xl" fontSize="x-small" fontWeight="normal">
+          <Container maxW="full" fontSize="x-small" fontWeight="normal">
             <HStack as="section" w="100%" p="2"></HStack>
 
             <SimpleGrid
@@ -175,59 +178,79 @@ const Dashboard = () => {
               mt={4}
               mb={4}
             >
-              <GridItem
-                colSpan={{base: 1, sm: 1, md: 2, lg: 2, xl: 4}}
-                _hover={{bg: hoverColor, borderRadius: "10px"}}
-              >
-                <Button
-                  as={"a"}
-                  // href={"/Dashboard"}
-                  rounded={10}
-                  width={"full"}
-                  height={233}
-                  _hover={{bg: hoverColor}}
-                  _focus={{bg: focusColor}}
-                  // colorScheme={colorSheme}
-                  size="lg"
-                  color={color}
-                  boxShadow={shadow}
-                  bgGradient={gradient}
-                  p={8}
-                  disabled={true}
-                >
-                  <Heading size="xl">Dashboard</Heading>
-                  <Tag
-                    position={"absolute"}
-                    right={4}
-                    bottom={4}
-                    size={"md"}
-                    bg={useColorModeValue("brand.500", "brand.700")}
-                    ml={2}
-                    color={useColorModeValue("textColor.900", "textColor.100")}
-                  >
-                    COMING SOON
-                  </Tag>
-                </Button>
+              <GridItem>
+                <NextLink href="/products" passHref>
+                  <Link>
+                    <Box
+                      bg="white"
+                      borderRadius="xl"
+                      p="20px"
+                      pt="40px"
+                      pb="40px"
+                      shadow="xl"
+                      w="100%"
+                      width="full"
+                      _hover={{
+                        bg: "gray.200",
+                        textDecoration: "none",
+                        borderRadius: "10px"
+                      }}
+                    >
+                      <Flex
+                        direction="column"
+                        mb="20px"
+                        ps="22px"
+                        alignSelf="flex-start"
+                      >
+                        <Text fontSize="lg" fontWeight="bold" mb="6px">
+                          Sales Overview
+                        </Text>
+                        <Text
+                          fontSize="sm"
+                          fontWeight="medium"
+                          color="gray.400"
+                        >
+                          <Text as="span" color="green.400" fontWeight="bold">
+                            (+5%) more
+                          </Text>{" "}
+                          in 2022
+                        </Text>
+                      </Flex>
+                      <Box
+                        w="100%"
+                        h={{sm: "300px", xl: "100%"}}
+                        ps="8px"
+                      ></Box>
+                    </Box>
+                  </Link>
+                </NextLink>
               </GridItem>
-              <GridItem _hover={{bg: hoverColor, borderRadius: "10px"}}>
-                <Button
-                  as={"a"}
-                  href={"/products"}
-                  rounded={10}
-                  width={"full"}
-                  height={233}
-                  colorScheme={colorSheme}
-                  boxShadow={shadow}
-                  bgGradient={gradient}
-                  color={color}
-                  size="lg"
-                >
-                  <Box>
-                    <HStack>
-                      <Heading size="xl">
-                        Products
-                        <Center>
-                          <Text as="div">
+              <GridItem>
+                <NextLink href="/products" passHref>
+                  <Link>
+                    <Box
+                      bg="white"
+                      borderRadius="xl"
+                      p="20px"
+                      pt="40px"
+                      pb="40px"
+                      shadow="xl"
+                      w="100%"
+                      width="full"
+                      _hover={{
+                        bg: "gray.200",
+                        textDecoration: "none",
+                        borderRadius: "10px"
+                      }}
+                    >
+                      <HStack
+                        justifyContent="space-around"
+                        w="100%"
+                        width="full"
+                      >
+                        <Heading size="md">
+                          Products
+                          <Text as="span" pl="8px">
                             {orderCloudData.Products != null ? (
                               <i>({orderCloudData.Products.length})</i>
                             ) : (
@@ -236,289 +259,137 @@ const Dashboard = () => {
                               </Box>
                             )}
                           </Text>
-                        </Center>
-                      </Heading>
-                    </HStack>
-                  </Box>
-                </Button>
+                        </Heading>
+                        <Image
+                          src="/images/icon_product.png"
+                          alt="Icon Products"
+                        />
+                      </HStack>
+                    </Box>
+                  </Link>
+                </NextLink>
               </GridItem>
-              <GridItem _hover={{bg: hoverColor, borderRadius: "10px"}}>
-                <Button
-                  as={"a"}
-                  href={"/promotions"}
-                  rounded={10}
-                  width={"full"}
-                  height={233}
-                  _hover={{bg: hoverColor}}
-                  _focus={{bg: focusColor}}
-                  // colorScheme={colorSheme}
-                  size="lg"
-                  color={color}
-                  boxShadow={shadow}
-                  bgGradient={gradient}
-                  p={8}
-                >
-                  <Heading size="xl">
-                    Promotions{" "}
-                    <Center>
-                      <Text as="div">
-                        {orderCloudData.Promotions != null ? (
-                          <i>({orderCloudData.Promotions.length})</i>
-                        ) : (
-                          <Box pt={2}>
-                            <BrandedSpinner />
-                          </Box>
-                        )}
-                      </Text>{" "}
-                    </Center>
-                  </Heading>
-                </Button>
+              <GridItem>
+                <NextLink href="/products" passHref>
+                  <Link>
+                    <Box
+                      bg="white"
+                      borderRadius="xl"
+                      p="20px"
+                      pt="40px"
+                      pb="40px"
+                      shadow="xl"
+                      _hover={{
+                        bg: "gray.200",
+                        textDecoration: "none",
+                        borderRadius: "10px"
+                      }}
+                    >
+                      <HStack
+                        justifyContent="space-around"
+                        w="100%"
+                        width="full"
+                      >
+                        <Heading size="md">
+                          Orders
+                          <Text as="span" pl="8px">
+                            {orderCloudData.Orders != null ? (
+                              <i>({orderCloudData.Orders.length})</i>
+                            ) : (
+                              <Box pt={2}>
+                                <BrandedSpinner />
+                              </Box>
+                            )}
+                          </Text>
+                        </Heading>
+                        <Image src="/images/icon_order.png" alt="Icon Orders" />
+                      </HStack>
+                    </Box>
+                  </Link>
+                </NextLink>
               </GridItem>
-              <GridItem _hover={{bg: hoverColor, borderRadius: "10px"}}>
-                <Button
-                  as={"a"}
-                  // href={"/catalogs"}
-                  rounded={10}
-                  width={"full"}
-                  height={233}
-                  _hover={{bg: hoverColor}}
-                  _focus={{bg: focusColor}}
-                  // colorScheme={colorSheme}
-                  boxShadow={shadow}
-                  bgGradient={gradient}
-                  color={color}
-                  size="lg"
-                  disabled={true}
-                >
-                  <Heading alignContent={"center"} size="xl">
-                    Catalogs
-                    <Center>
-                      <Text as="div">
-                        {orderCloudData.Catalogs != null ? (
-                          <i>({orderCloudData.Catalogs.length})</i>
-                        ) : (
-                          <Box pt={2}>
-                            <BrandedSpinner />
-                          </Box>
-                        )}
-                      </Text>{" "}
-                    </Center>
-                  </Heading>
-                  <Tag
-                    position={"absolute"}
-                    right={4}
-                    bottom={4}
-                    size={"md"}
-                    bg={useColorModeValue("brand.500", "brand.700")}
-                    ml={2}
-                    color={useColorModeValue("textColor.900", "textColor.100")}
-                  >
-                    COMING SOON
-                  </Tag>
-                </Button>
+              <GridItem>
+                <NextLink href="/users" passHref>
+                  <Link>
+                    <Box
+                      bg="white"
+                      borderRadius="xl"
+                      p="20px"
+                      pt="40px"
+                      pb="40px"
+                      shadow="xl"
+                      _hover={{
+                        bg: "gray.200",
+                        textDecoration: "none",
+                        borderRadius: "10px"
+                      }}
+                    >
+                      <HStack
+                        justifyContent="space-around"
+                        w="100%"
+                        width="full"
+                      >
+                        <Heading size="md">
+                          Users
+                          <Text as="span" pl="8px">
+                            {orderCloudData.Buyers != -1 ? (
+                              <i>({orderCloudData.Buyers})</i>
+                            ) : (
+                              <Box pt={2}>
+                                <BrandedSpinner />
+                              </Box>
+                            )}
+                          </Text>
+                        </Heading>
+                        <Image src="/images/icon_user.png" alt="Icon Users" />
+                      </HStack>
+                    </Box>
+                  </Link>
+                </NextLink>
               </GridItem>
-              <GridItem _hover={{bg: hoverColor, borderRadius: "10px"}}>
-                <Button
-                  as={"a"}
-                  href={"/users"}
-                  rounded={10}
-                  width={"full"}
-                  height={233}
-                  _hover={{bg: hoverColor}}
-                  _focus={{bg: focusColor}}
-                  // colorScheme={colorSheme}
-                  boxShadow={shadow}
-                  bgGradient={gradient}
-                  color={color}
-                  size="lg"
-                >
-                  <Heading size="xl">
-                    User{" "}
-                    <Center>
-                      <Text as="div">
-                        {orderCloudData.Buyers != -1 ? (
-                          <i>({orderCloudData.Buyers})</i>
-                        ) : (
-                          <Box pt={2}>
-                            <BrandedSpinner />
-                          </Box>
-                        )}
-                      </Text>{" "}
-                    </Center>
-                  </Heading>
-                </Button>
-              </GridItem>
-              <GridItem _hover={{bg: hoverColor, borderRadius: "10px"}}>
-                <Button
-                  as={"a"}
-                  // href={"/prices"}
-                  rounded={10}
-                  width={"full"}
-                  height={233}
-                  _hover={{bg: hoverColor}}
-                  _focus={{bg: focusColor}}
-                  // colorScheme={colorSheme}
-                  boxShadow={shadow}
-                  bgGradient={gradient}
-                  color={color}
-                  size="lg"
-                  disabled={true}
-                >
-                  <Heading size="xl">
-                    Prices{" "}
-                    <Center>
-                      <Text as="div">
-                        {orderCloudData.Prices != null ? (
-                          <i>({orderCloudData.Prices.length})</i>
-                        ) : (
-                          <Box pt={2}>
-                            <BrandedSpinner />
-                          </Box>
-                        )}
-                      </Text>{" "}
-                    </Center>
-                  </Heading>
-                  <Tag
-                    position={"absolute"}
-                    right={4}
-                    bottom={4}
-                    size={"md"}
-                    bg={useColorModeValue("brand.500", "brand.700")}
-                    ml={2}
-                    color={useColorModeValue("textColor.900", "textColor.100")}
-                  >
-                    COMING SOON
-                  </Tag>
-                </Button>
-              </GridItem>
-              <GridItem _hover={{bg: hoverColor, borderRadius: "10px"}}>
-                <Button
-                  as={"a"}
-                  // href={"/specs"}
-                  rounded={10}
-                  width={"full"}
-                  height={233}
-                  _hover={{bg: hoverColor}}
-                  _focus={{bg: focusColor}}
-                  // colorScheme={colorSheme}
-                  boxShadow={shadow}
-                  bgGradient={gradient}
-                  color={color}
-                  size="lg"
-                  disabled={true}
-                >
-                  <Heading size="xl">
-                    Specs{" "}
-                    <Center>
-                      <Text as="div">
-                        {orderCloudData.Specs != null ? (
-                          <i>({orderCloudData.Specs.length})</i>
-                        ) : (
-                          <Box pt={2}>
-                            <BrandedSpinner />
-                          </Box>
-                        )}
-                      </Text>{" "}
-                    </Center>
-                  </Heading>
-                  <Tag
-                    position={"absolute"}
-                    right={4}
-                    bottom={4}
-                    size={"md"}
-                    bg={useColorModeValue("brand.500", "brand.700")}
-                    ml={2}
-                    color={useColorModeValue("textColor.900", "textColor.100")}
-                  >
-                    COMING SOON
-                  </Tag>
-                </Button>
-              </GridItem>
-              <GridItem _hover={{bg: hoverColor, borderRadius: "10px"}}>
-                <Button
-                  as={"a"}
-                  // href={"/Supplier"}
-                  rounded={10}
-                  width={"full"}
-                  height={233}
-                  _hover={{bg: hoverColor}}
-                  _focus={{bg: focusColor}}
-                  // colorScheme={colorSheme}
-                  boxShadow={shadow}
-                  bgGradient={gradient}
-                  color={color}
-                  size="lg"
-                  disabled={true}
-                >
-                  <Heading size="xl">
-                    Supplier{" "}
-                    <Center>
-                      <Text as="div">
-                        {orderCloudData.Supplier != null ? (
-                          <i>({orderCloudData.Supplier.length})</i>
-                        ) : (
-                          <Box pt={2}>
-                            <BrandedSpinner />
-                          </Box>
-                        )}
-                      </Text>{" "}
-                    </Center>
-                  </Heading>
-                  <Tag
-                    position={"absolute"}
-                    right={4}
-                    bottom={4}
-                    size={"md"}
-                    bg={useColorModeValue("brand.500", "brand.700")}
-                    ml={2}
-                    color={useColorModeValue("textColor.900", "textColor.100")}
-                  >
-                    COMING SOON
-                  </Tag>
-                </Button>
-              </GridItem>
-              <GridItem _hover={{bg: hoverColor, borderRadius: "10px"}}>
-                <Button
-                  as={"a"}
-                  // href={"/orders"}
-                  rounded={10}
-                  width={"full"}
-                  height={233}
-                  _hover={{bg: hoverColor}}
-                  _focus={{bg: focusColor}}
-                  // colorScheme={colorSheme}
-                  boxShadow={shadow}
-                  bgGradient={gradient}
-                  color={color}
-                  size="lg"
-                  disabled={true}
-                >
-                  <Heading size="xl">
-                    Orders{" "}
-                    <Center>
-                      <Text as="div">
-                        {orderCloudData.Orders != null ? (
-                          <i>({orderCloudData.Orders.length})</i>
-                        ) : (
-                          <Box pt={2}>
-                            <BrandedSpinner />
-                          </Box>
-                        )}
-                      </Text>{" "}
-                    </Center>
-                  </Heading>
-                  <Tag
-                    position={"absolute"}
-                    right={4}
-                    bottom={4}
-                    size={"md"}
-                    bg={useColorModeValue("brand.500", "brand.700")}
-                    ml={2}
-                    color={useColorModeValue("textColor.900", "textColor.100")}
-                  >
-                    COMING SOON
-                  </Tag>
-                </Button>
+              <GridItem>
+                <NextLink href="/promotions" passHref>
+                  <Link>
+                    <Box
+                      bg="white"
+                      borderRadius="xl"
+                      p="20px"
+                      pt="40px"
+                      pb="40px"
+                      shadow="xl"
+                      w="100%"
+                      width="full"
+                      _hover={{
+                        bg: "gray.200",
+                        textDecoration: "none",
+                        borderRadius: "10px"
+                      }}
+                    >
+                      <HStack
+                        justifyContent="space-around"
+                        w="100%"
+                        width="full"
+                      >
+                        <Heading size="md">
+                          Promotions
+                          <Text as="span" pl="8px">
+                            {orderCloudData.Promotions != null ? (
+                              <i>({orderCloudData.Promotions.length})</i>
+                            ) : (
+                              <Box pt={2}>
+                                <BrandedSpinner />
+                              </Box>
+                            )}
+                          </Text>
+                        </Heading>
+                        <Image
+                          src="/images/icon_promo.png"
+                          alt="Icon Promotions"
+                        />
+                      </HStack>
+                    </Box>
+                  </Link>
+                </NextLink>
               </GridItem>
             </SimpleGrid>
           </Container>

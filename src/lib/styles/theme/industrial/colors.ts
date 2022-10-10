@@ -39,6 +39,10 @@ const extendedColors: DeepPartial<
   footerBg: {
     400: "#A0AEC0",
     600: "#4A5568"
+  },
+  tileBg: {
+    500: "white",
+    900: "#4A5568"
   }
 }
 

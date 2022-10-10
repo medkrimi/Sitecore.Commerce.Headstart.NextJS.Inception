@@ -25,6 +25,7 @@ const useOcProductList = (
       promise = dispatch(setListOptions(listOptions))
     }
     return () => promise && promise.abort()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated])
 
   return products

@@ -3,7 +3,8 @@ import {
   VStack,
   useColorMode,
   useColorModeValue,
-  Heading
+  Heading,
+  Flex
 } from "@chakra-ui/react"
 import HeaderLogo from "lib/components/branding/HeaderLogo"
 import {useOcDispatch, useOcSelector} from "../redux/ocStore"
@@ -16,12 +17,16 @@ const Header = () => {
   const color = useColorModeValue("textColor.900", "textColor.100")
 
   return (
-    <VStack
+    <Flex
       as="header"
       width="full"
       align="center"
       backgroundColor={bg}
       color={color}
+      position="fixed"
+      w="100%"
+      zIndex="overlay"
+      top="0"
     >
       <HStack
         as="section"
@@ -49,7 +54,7 @@ const Header = () => {
           </HStack>
         </HStack>
       </HStack>
-    </VStack>
+    </Flex>
   )
 }
 

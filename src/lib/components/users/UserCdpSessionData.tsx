@@ -75,6 +75,7 @@ export default function UserCdpSessionData({
   useEffect(() => {
     setComponentUser(user)
     setCdpGuestData(cdpGuest)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   return (
