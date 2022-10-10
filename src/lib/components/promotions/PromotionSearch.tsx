@@ -37,6 +37,7 @@ export default function PromotionSearch({query}: PromotionSearchProps) {
     console.log(query)
     setSearchQuery(query)
     doSearch(query)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query])
 
   async function doSearch(query?: string) {

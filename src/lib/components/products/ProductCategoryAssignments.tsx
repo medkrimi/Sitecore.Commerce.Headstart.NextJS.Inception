@@ -7,14 +7,11 @@ import {
   AlertDialogOverlay,
   Box,
   Button,
-  Collapse,
   FormControl,
   Heading,
   HStack,
   Input,
   ListItem,
-  Table,
-  TableContainer,
   Tbody,
   Td,
   Text,
@@ -23,7 +20,6 @@ import {
   Tooltip,
   Tr,
   UnorderedList,
-  useColorMode,
   useColorModeValue,
   useDisclosure
 } from "@chakra-ui/react"
@@ -31,19 +27,15 @@ import {setProductId} from "lib/redux/ocProductDetail"
 import {useOcDispatch} from "lib/redux/ocStore"
 import {
   Catalog,
-  Catalogs,
   Categories,
   Category,
-  CategoryAssignment,
   CategoryProductAssignment,
-  ListPage,
   Product,
-  ProductCatalogAssignment,
   RequiredDeep
 } from "ordercloud-javascript-sdk"
 import React from "react"
 import {useEffect, useState} from "react"
-import {FiEdit, FiPlus, FiTrash2} from "react-icons/fi"
+import {FiPlus, FiTrash2} from "react-icons/fi"
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
@@ -93,6 +85,7 @@ export default function BasicProductData({product, catalog}: ProductDataProps) {
       setProductCategoryAssignments(categories)
     }
     GetAssignments()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [catalog])
 
   const onRemoveCategory = async (e) => {

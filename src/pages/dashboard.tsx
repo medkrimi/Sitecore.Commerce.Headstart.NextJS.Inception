@@ -7,12 +7,9 @@ import {
   SimpleGrid,
   GridItem,
   useColorModeValue,
-  Button,
   HStack,
   VStack,
   useColorMode,
-  Center,
-  Tag,
   Image,
   Link
 } from "@chakra-ui/react"
@@ -33,9 +30,6 @@ import {
 } from "ordercloud-javascript-sdk"
 import {useOcSelector} from "lib/redux/ocStore"
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
-import ClickableTile from "lib/components/generic/card/ClickableTile"
-import {HiOutlineBell, HiOutlineCog} from "react-icons/hi"
-import CardHeader from "lib/components/generic/card/CardHeader"
 
 const Dashboard = () => {
   const {push} = useRouter()
@@ -147,6 +141,7 @@ const Dashboard = () => {
     LoadOrdercloudData()
 
     // dispatch(setListOptions(options))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAnonymous])
 
   const shadow = "5px 5px 5px #999999"

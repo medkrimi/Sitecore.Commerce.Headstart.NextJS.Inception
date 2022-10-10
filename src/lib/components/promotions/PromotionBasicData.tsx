@@ -16,7 +16,6 @@ import {
   Checkbox,
   useToast
 } from "@chakra-ui/react"
-import ProductDetails from "lib/pages/products/detail"
 import {setProductId} from "lib/redux/ocProductDetail"
 import {useOcDispatch} from "lib/redux/ocStore"
 import {PromotionXPs} from "lib/types/PromotionXPs"

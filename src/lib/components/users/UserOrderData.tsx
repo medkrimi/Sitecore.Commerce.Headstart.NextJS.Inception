@@ -3,26 +3,15 @@ import {
   Box,
   Button,
   Heading,
-  HStack,
   Tooltip,
   useColorModeValue,
-  Text,
-  Container,
   Flex,
   Collapse,
-  Input,
-  Checkbox,
-  useToast,
-  ListItem,
-  UnorderedList,
-  OrderedList,
-  color,
   Tbody,
   Td,
   Th,
   Thead,
   Tr,
-  Center,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -33,8 +22,6 @@ import {
   useDisclosure,
   Divider
 } from "@chakra-ui/react"
-import {getGuestContext, getGuestRefByEmail} from "lib/scripts/CDPService"
-import {JsonLd} from "next-seo/lib/jsonld/jsonld"
 import {
   Filters,
   LineItem,
@@ -90,6 +77,7 @@ export default function UserOrderData({user, buyerId}: UserDataProps) {
       }
     }
     doGetUserOrders()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   const onOrderClicked = (index: number) => async (e) => {

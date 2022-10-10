@@ -10,7 +10,6 @@ import {
   useColorMode,
   Spinner
 } from "@chakra-ui/react"
-import ProductDetails from "lib/pages/products/detail"
 import {Product, RequiredDeep} from "ordercloud-javascript-sdk"
 import {useState} from "react"
 import {FiCheck, FiEdit, FiX} from "react-icons/fi"
