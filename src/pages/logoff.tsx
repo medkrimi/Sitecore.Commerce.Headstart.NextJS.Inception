@@ -8,8 +8,15 @@ import {
   Container
 } from "@chakra-ui/react"
 import {NextSeo} from "next-seo"
+import Login from "../lib/components/account/Login"
+import {useRouter} from "next/router"
 
-const Orders = () => {
+const LogOff = () => {
+  const {push} = useRouter()
+  const handleOnLoggedIn = () => {
+    push("/dashboard")
+  }
+
   return (
     <Flex
       direction="column"
@@ -20,10 +27,10 @@ const Orders = () => {
       mb={8}
       w="full"
     >
-      <NextSeo title="Buyer" />
-      <Heading as="h1">OrderCloud Buyer Group and User Search!</Heading>
+      <NextSeo title="LogOff" />
+      <Login onLoggedIn={handleOnLoggedIn} />
     </Flex>
   )
 }
 
-export default Orders
+export default LogOff
