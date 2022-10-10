@@ -4,7 +4,9 @@ import type {DocumentContext} from "next/document"
 import Document, {Html, Head, Main, NextScript} from "next/document"
 import Script from "next/script"
 
-import customTheme from "lib/styles/theme"
+import sitecorecommerceTheme from "lib/styles/theme/sitecorecommerce/"
+import playsummitTheme from "lib/styles/theme/playsummit/"
+import industrialTheme from "lib/styles/theme/industrial/"
 
 const APP_NAME = "nextarter-chakra"
 
@@ -44,7 +46,7 @@ class MyDocument extends Document {
         </Head>
         <body>
           <ColorModeScript
-            initialColorMode={customTheme.config?.initialColorMode}
+            initialColorMode={sitecorecommerceTheme.config?.initialColorMode}
           />
           <Main />
           <NextScript />

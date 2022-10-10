@@ -21,7 +21,8 @@ import {
   DrawerFooter,
   useDisclosure,
   Tooltip,
-  useColorMode
+  useColorMode,
+  Select
 } from "@chakra-ui/react"
 import NextLink from "next/link"
 import {BsSun, BsMoonStarsFill} from "react-icons/bs"
@@ -31,7 +32,8 @@ import {useOcDispatch, useOcSelector} from "../../redux/ocStore"
 import {HiOutlineBell, HiOutlineCog} from "react-icons/hi"
 import {ChevronDownIcon} from "@chakra-ui/icons"
 import {ItemContent} from "../generic/ItemContent"
-import React from "react"
+import React, {useState} from "react"
+import Cookies from "universal-cookie"
 
 const MobileNavigation = () => {
   let menuBg = useColorModeValue("white", "navy.800")
@@ -39,7 +41,19 @@ const MobileNavigation = () => {
   const {isOpen, onOpen, onClose} = useDisclosure()
   const btnRef = React.useRef()
   const {colorMode, toggleColorMode} = useColorMode()
+  const [selectedOption, setSelectedOption] = useState<String>()
 
+  // This function is triggered when the select changes
+  const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value
+    setSelectedOption(value)
+    const cookies = new Cookies()
+    cookies.set("currenttheme", value, {
+      path: "/"
+    })
+    //Reload page so the theme takes affect
+    window.location.reload()
+  }
   return (
     <HStack>
       <Menu>
@@ -148,6 +162,14 @@ const MobileNavigation = () => {
                 {colorMode === "light" ? <BsMoonStarsFill /> : <BsSun />}
               </Button>
             </Tooltip>
+            <Text mt="20">Change Theme:</Text>
+            <Select id="ThemeDropdown" onChange={selectChange}>
+              <option value="lib/styles/theme/sitecorecommerce/">
+                Sitecore Commerce
+              </option>
+              <option value="lib/styles/theme/playsummit/">Play Summit</option>
+              <option value="lib/styles/theme/industrial/">Industrial</option>
+            </Select>
           </DrawerBody>
 
           <DrawerFooter></DrawerFooter>

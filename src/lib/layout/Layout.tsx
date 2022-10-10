@@ -2,10 +2,7 @@ import {Box, HStack} from "@chakra-ui/react"
 import type {ReactNode} from "react"
 import Footer from "./Footer"
 import Header from "./Header"
-import {FunctionComponent} from "react"
 import {useOcDispatch, useOcSelector} from "../redux/ocStore"
-import {useEffect} from "react"
-import {useRouter} from "next/router"
 import LeftNavigation from "lib/components/navigation/SideNavigation"
 
 type LayoutProps = {
@@ -32,6 +29,7 @@ const Layout = ({children}: LayoutProps) => {
         w="100%"
         width="full"
         as="section"
+        mt="65px"
       >
         {!isAnonymous ? <LeftNavigation /> : ""}
         {children}
