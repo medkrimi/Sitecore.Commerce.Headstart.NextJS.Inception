@@ -9,24 +9,24 @@ import OcProvider from "../lib/redux/ocProvider"
 import {ApiRole} from "ordercloud-javascript-sdk"
 
 const ocConfig = {
-  clientId: "7FE553C4-6FA4-4FF1-95BB-9A1440DC98B7",
+  clientId: "4A9F0BAC-EC1D-4711-B01F-1A394F72F2B6",
   baseApiUrl: "https://sandboxapi.ordercloud.io",
   scope: [
+    "FullAccess",
     "Shopper",
     "MeAddressAdmin",
-    "CategoryReader",
-    "FullAccess"
+    "CategoryReader"
   ] as ApiRole[] /* Default user role */,
   allowAnonymous:
-    Boolean("false") /* Whether anonymous product browsing is allowed */,
+    Boolean("true") /* Whether anonymous product browsing is allowed */,
   hostedApp: true,
-  marketplaceID: "commercesizzle",
-  marketplaceName: "Commerce Sizzle",
-  appname: "Commerce Sizzle",
+  marketplaceID: "SitecoreCommerce",
+  marketplaceName: "Sitecore Commerce",
+  appname: "Sitecore Commerce",
   middlewareUrl: "https://localhost:5001",
   translateBlobUrl:
-    "https://headstartstoragemr.blob.core.windows.net/ngx-translate/i18n/",
-  blobStorageUrl: "https://headstartstoragemr.blob.core.windows.net",
+    "https://sitecorecommerce.blob.core.windows.net/ngx-translate/i18n/",
+  blobStorageUrl: "https://sitecorecommerce.blob.core.windows.net",
   orderCloudApiUrl: "https://sandboxapi.ordercloud.io"
 }
 

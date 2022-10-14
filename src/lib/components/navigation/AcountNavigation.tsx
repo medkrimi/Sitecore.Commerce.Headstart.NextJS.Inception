@@ -17,7 +17,6 @@ import {
   DrawerCloseButton,
   DrawerHeader,
   DrawerBody,
-  Input,
   DrawerFooter,
   useDisclosure,
   Tooltip,
@@ -28,6 +27,7 @@ import NextLink from "next/link"
 import {BsSun, BsMoonStarsFill} from "react-icons/bs"
 import logout from "../../redux/ocAuth/logout"
 import {useOcDispatch, useOcSelector} from "../../redux/ocStore"
+import {Me, RequiredDeep} from "ordercloud-javascript-sdk"
 
 import {HiOutlineBell, HiOutlineCog} from "react-icons/hi"
 import {ChevronDownIcon} from "@chakra-ui/icons"

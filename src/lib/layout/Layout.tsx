@@ -30,6 +30,7 @@ const Layout = ({children}: LayoutProps) => {
         width="full"
         as="section"
         mt="65px"
+        justify="flex-start"
       >
         {!isAnonymous ? <LeftNavigation /> : ""}
         {children}
