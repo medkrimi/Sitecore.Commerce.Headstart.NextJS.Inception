@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react"
 import {NextSeo} from "next-seo"
 
-const Orders = () => {
+const Promotions = () => {
   return (
     <Flex
       direction="column"
@@ -20,10 +20,10 @@ const Orders = () => {
       mb={8}
       w="full"
     >
-      <NextSeo title="Buyer" />
-      <Heading as="h1">OrderCloud Buyer Group and User Search!</Heading>
+      <NextSeo title="Promotions" />
+      <Heading as="h1">OrderCloud Promotions!</Heading>
     </Flex>
   )
 }
 
-export default Orders
+export default Promotions

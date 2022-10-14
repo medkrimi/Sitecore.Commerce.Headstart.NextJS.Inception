@@ -1,11 +1,12 @@
 import {createSlice, SerializedError} from "@reduxjs/toolkit"
-import {Configuration, DecodedToken, Tokens} from "ordercloud-javascript-sdk"
+import {DecodedToken, Tokens} from "ordercloud-javascript-sdk"
 import parseJwt from "../../../lib/utils/parseJwt"
 import login from "./login"
 import logout from "./logout"
 
-interface OcAuthState {
+export interface OcAuthState {
   isAuthenticated: boolean
+  isAdmin: boolean
   decodedToken?: DecodedToken
   isAnonymous: boolean
   error?: SerializedError
@@ -15,6 +16,7 @@ interface OcAuthState {
 
 const initialState: OcAuthState = {
   isAuthenticated: false,
+  isAdmin: false,
   isAnonymous: true,
   loading: false,
   initialized: false
@@ -27,15 +29,18 @@ const ocAuthSlice = createSlice({
     initializeAuth: (state) => {
       const initialAccessToken = Tokens.GetAccessToken()
       let isAnonymous = true
-      let decodedToken
+      let isAdmin = false
+      let decodedToken: DecodedToken
 
       if (initialAccessToken) {
-        decodedToken = parseJwt(initialAccessToken)
+        decodedToken = parseJwt(initialAccessToken) as DecodedToken
         isAnonymous = !!decodedToken.orderid
+        isAdmin = decodedToken.usrtype === "admin"
       }
 
       state.isAuthenticated = !!initialAccessToken
       state.isAnonymous = isAnonymous
+      state.isAdmin = isAdmin
       state.decodedToken = decodedToken
       state.initialized = true
     }
@@ -51,6 +56,7 @@ const ocAuthSlice = createSlice({
       state.isAnonymous = false
       state.isAuthenticated = true
       state.decodedToken = parseJwt(action.payload.access_token)
+      state.isAdmin = state.decodedToken.usrtype === "admin"
       state.loading = false
     })
     builder.addCase(login.rejected, (state, action) => {
@@ -69,6 +75,7 @@ const ocAuthSlice = createSlice({
     })
     builder.addCase(logout.fulfilled, (state, action) => {
       state.isAnonymous = true
+      state.isAdmin = false
       state.isAuthenticated = true
       state.decodedToken = action.payload
         ? parseJwt(action.payload.access_token)

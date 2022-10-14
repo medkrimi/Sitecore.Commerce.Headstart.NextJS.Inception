@@ -26,10 +26,16 @@ Getting started with the Sitecore Commerce application is as simple as creating 
 Then, run the development server:
 
 ```bash
-npm run dev
-# or
 yarn dev
 ```
+Use Yarn to do your development. This will help when you checkin, we are pushing to Vercel and they will run "yarn run build" to check if the project will build
+
+Before checking in verify that the new code passes.
+yarn lint
+yarn tsc --noEmit
+yarn run build
+
+If it passes these three commands it should be ready to be checked in.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

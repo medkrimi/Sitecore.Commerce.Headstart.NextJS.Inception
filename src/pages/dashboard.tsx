@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-undef */
 import {
   Box,
   Flex,
@@ -11,7 +12,8 @@ import {
   VStack,
   useColorMode,
   Image,
-  Link
+  Link,
+  Icon
 } from "@chakra-ui/react"
 import {NextSeo} from "next-seo"
 import {useRouter} from "next/router"
@@ -30,6 +32,19 @@ import {
 } from "ordercloud-javascript-sdk"
 import {useOcSelector} from "lib/redux/ocStore"
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
+import AverageOrderAmount from "lib/components/analytics/AverageOrderAmount"
+import TodaysMoney from "lib/components/analytics/PercentChangeTile"
+import TodaysUsers from "lib/components/analytics/PercentChangeTile"
+import NewClients from "lib/components/analytics/PercentChangeTile"
+import TotalSales from "lib/components/analytics/PercentChangeTile"
+import formatShortPrice from "lib/utils/formatShortPrice"
+import {
+  HiOutlineCurrencyDollar,
+  HiOutlineFolderOpen,
+  HiOutlineUserAdd,
+  HiOutlineUserCircle
+} from "react-icons/hi"
+import Card from "lib/components/card/Card"
 
 const Dashboard = () => {
   const {push} = useRouter()
@@ -173,6 +188,82 @@ const Dashboard = () => {
             <HStack as="section" w="100%" p="2"></HStack>
 
             <SimpleGrid
+              columns={{xl: 2, lg: 2, md: 1, sm: 1, base: 1}}
+              gap={12}
+              mt={4}
+              mb={4}
+            >
+              <GridItem>
+                <HStack w="full" width="100%">
+                  <Box w="full" width="100%" pr={6}>
+                    <NextLink href="#" passHref>
+                      <Link>
+                        <TodaysMoney
+                          title="todays money"
+                          totalamount={` ${formatShortPrice(53897)}`}
+                          percentchange="3.48"
+                          percentchangetype="pos"
+                          percentlabel="Since last month"
+                          icon={<Icon as={HiOutlineFolderOpen} />}
+                        />
+                      </Link>
+                    </NextLink>
+                  </Box>
+                  <Box w="full" width="100%" pl={6}>
+                    <NextLink href="#" passHref>
+                      <Link>
+                        <TodaysUsers
+                          title="todays users"
+                          totalamount={` ${formatShortPrice(3200)}`}
+                          percentchange="5.2"
+                          percentchangetype="pos"
+                          percentlabel="Since last month"
+                          icon={<Icon as={HiOutlineUserCircle} />}
+                        />
+                      </Link>
+                    </NextLink>
+                  </Box>
+                </HStack>
+                <HStack w="full" width="100%" pt={12} pb={12}>
+                  <Box w="full" width="100%" pr={6}>
+                    <NextLink href="#" passHref>
+                      <Link>
+                        <NewClients
+                          title="new clients"
+                          totalamount={` ${formatShortPrice(2503)}`}
+                          percentchange="2.82"
+                          percentchangetype="pos"
+                          percentlabel="Since last month"
+                          icon={<Icon as={HiOutlineUserAdd} />}
+                        />
+                      </Link>
+                    </NextLink>
+                  </Box>
+                  <Box w="full" width="100%" pl={6}>
+                    <NextLink href="#" passHref>
+                      <Link>
+                        <TotalSales
+                          title="total sales"
+                          totalamount={` ${formatShortPrice(173000)}`}
+                          percentchange="8.12"
+                          percentchangetype="pos"
+                          percentlabel="Compared to last year"
+                          icon={<Icon as={HiOutlineCurrencyDollar} />}
+                        />
+                      </Link>
+                    </NextLink>
+                  </Box>
+                </HStack>
+              </GridItem>
+              <GridItem pb={12}>
+                <NextLink href="#" passHref>
+                  <Link>
+                    <AverageOrderAmount />
+                  </Link>
+                </NextLink>
+              </GridItem>
+            </SimpleGrid>
+            <SimpleGrid
               columns={{xl: 4, lg: 2, md: 2, sm: 1, base: 1}}
               gap={12}
               mt={4}
@@ -181,68 +272,7 @@ const Dashboard = () => {
               <GridItem>
                 <NextLink href="/products" passHref>
                   <Link>
-                    <Box
-                      bg="white"
-                      borderRadius="xl"
-                      p="20px"
-                      pt="40px"
-                      pb="40px"
-                      shadow="xl"
-                      w="100%"
-                      width="full"
-                      _hover={{
-                        bg: "gray.200",
-                        textDecoration: "none",
-                        borderRadius: "10px"
-                      }}
-                    >
-                      <Flex
-                        direction="column"
-                        mb="20px"
-                        ps="22px"
-                        alignSelf="flex-start"
-                      >
-                        <Text fontSize="lg" fontWeight="bold" mb="6px">
-                          Sales Overview
-                        </Text>
-                        <Text
-                          fontSize="sm"
-                          fontWeight="medium"
-                          color="gray.400"
-                        >
-                          <Text as="span" color="green.400" fontWeight="bold">
-                            (+5%) more
-                          </Text>{" "}
-                          in 2022
-                        </Text>
-                      </Flex>
-                      <Box
-                        w="100%"
-                        h={{sm: "300px", xl: "100%"}}
-                        ps="8px"
-                      ></Box>
-                    </Box>
-                  </Link>
-                </NextLink>
-              </GridItem>
-              <GridItem>
-                <NextLink href="/products" passHref>
-                  <Link>
-                    <Box
-                      bg="white"
-                      borderRadius="xl"
-                      p="20px"
-                      pt="40px"
-                      pb="40px"
-                      shadow="xl"
-                      w="100%"
-                      width="full"
-                      _hover={{
-                        bg: "gray.200",
-                        textDecoration: "none",
-                        borderRadius: "10px"
-                      }}
-                    >
+                    <Card p="28px 10px 0px 0px" mb={{sm: "26px", lg: "0px"}}>
                       <HStack
                         justifyContent="space-around"
                         w="100%"
@@ -265,26 +295,14 @@ const Dashboard = () => {
                           alt="Icon Products"
                         />
                       </HStack>
-                    </Box>
+                    </Card>
                   </Link>
                 </NextLink>
               </GridItem>
               <GridItem>
                 <NextLink href="/products" passHref>
                   <Link>
-                    <Box
-                      bg="white"
-                      borderRadius="xl"
-                      p="20px"
-                      pt="40px"
-                      pb="40px"
-                      shadow="xl"
-                      _hover={{
-                        bg: "gray.200",
-                        textDecoration: "none",
-                        borderRadius: "10px"
-                      }}
-                    >
+                    <Card p="28px 10px 0px 0px" mb={{sm: "26px", lg: "0px"}}>
                       <HStack
                         justifyContent="space-around"
                         w="100%"
@@ -304,26 +322,14 @@ const Dashboard = () => {
                         </Heading>
                         <Image src="/images/icon_order.png" alt="Icon Orders" />
                       </HStack>
-                    </Box>
+                    </Card>
                   </Link>
                 </NextLink>
               </GridItem>
               <GridItem>
                 <NextLink href="/users" passHref>
                   <Link>
-                    <Box
-                      bg="white"
-                      borderRadius="xl"
-                      p="20px"
-                      pt="40px"
-                      pb="40px"
-                      shadow="xl"
-                      _hover={{
-                        bg: "gray.200",
-                        textDecoration: "none",
-                        borderRadius: "10px"
-                      }}
-                    >
+                    <Card p="28px 10px 0px 0px" mb={{sm: "26px", lg: "0px"}}>
                       <HStack
                         justifyContent="space-around"
                         w="100%"
@@ -343,28 +349,14 @@ const Dashboard = () => {
                         </Heading>
                         <Image src="/images/icon_user.png" alt="Icon Users" />
                       </HStack>
-                    </Box>
+                    </Card>
                   </Link>
                 </NextLink>
               </GridItem>
               <GridItem>
                 <NextLink href="/promotions" passHref>
                   <Link>
-                    <Box
-                      bg="white"
-                      borderRadius="xl"
-                      p="20px"
-                      pt="40px"
-                      pb="40px"
-                      shadow="xl"
-                      w="100%"
-                      width="full"
-                      _hover={{
-                        bg: "gray.200",
-                        textDecoration: "none",
-                        borderRadius: "10px"
-                      }}
-                    >
+                    <Card p="28px 10px 0px 0px" mb={{sm: "26px", lg: "0px"}}>
                       <HStack
                         justifyContent="space-around"
                         w="100%"
@@ -387,7 +379,7 @@ const Dashboard = () => {
                           alt="Icon Promotions"
                         />
                       </HStack>
-                    </Box>
+                    </Card>
                   </Link>
                 </NextLink>
               </GridItem>
