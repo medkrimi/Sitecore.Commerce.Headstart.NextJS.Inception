@@ -1,5 +1,6 @@
 import React from "react"
-import ReactApexChart from "react-apexcharts"
+import dynamic from "next/dynamic"
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {ssr: false})
 
 class DonutChart extends React.Component {
   constructor(props) {

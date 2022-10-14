@@ -1,5 +1,6 @@
 import React from "react"
-import ReactApexChart from "react-apexcharts"
+import dynamic from "next/dynamic"
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {ssr: false})
 
 class LineChart extends React.Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class LineChart extends React.Component {
       <ReactApexChart
         options={(this.state as any).chartOptions}
         series={(this.state as any).chartData}
-        type="area"
+        //type="area"
         width="100%"
         height="100%"
       />

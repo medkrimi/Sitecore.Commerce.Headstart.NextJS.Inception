@@ -3,10 +3,10 @@ import React from "react"
 
 import LineChart from "../charts/LineChart"
 import Card from "../card/Card"
-// import {
-//   lineChartDataDefault,
-//   lineChartOptionsDefault
-// } from "../../variables/charts"
+import {
+  lineChartDataDefault,
+  lineChartOptionsDefault
+} from "../../variables/charts"
 
 export default function AverageOrderAmount() {
   return (
@@ -24,8 +24,8 @@ export default function AverageOrderAmount() {
       </Flex>
       <Box w="100%" h={{sm: "300px", xl: "100%"}} ps="8px">
         <LineChart
-        //chartData={lineChartDataDefault}
-        //chartOptions={lineChartOptionsDefault}
+        // chartData={lineChartDataDefault}
+        // chartOptions={lineChartOptionsDefault}
         />
       </Box>
     </Card>
