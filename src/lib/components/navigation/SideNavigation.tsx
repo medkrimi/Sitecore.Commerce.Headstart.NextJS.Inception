@@ -13,7 +13,12 @@ import {
 } from "@chakra-ui/react"
 import React from "react"
 import NextLink from "next/link"
-import {HiOutlineChartBar, HiOutlineEmojiSad, HiOutlineQrcode, HiOutlineUser} from "react-icons/hi"
+import {
+  HiOutlineChartBar,
+  HiOutlineEmojiSad,
+  HiOutlineQrcode,
+  HiOutlineUser
+} from "react-icons/hi"
 import {FiStar, FiSettings, FiMenu} from "react-icons/fi"
 import {BsCurrencyDollar} from "react-icons/bs"
 
