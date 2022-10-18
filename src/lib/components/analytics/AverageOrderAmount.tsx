@@ -1,7 +1,7 @@
 import {Flex, Text, Box} from "@chakra-ui/react"
 import React from "react"
 
-import LineChart from "../charts/LineChart"
+// import LineChart from "../charts/LineChart"
 import Card from "../card/Card"
 import {
   lineChartDataDefault,
@@ -23,10 +23,10 @@ export default function AverageOrderAmount() {
         </Text>
       </Flex>
       <Box w="100%" h={{sm: "300px", xl: "100%"}} ps="8px">
-        <LineChart
+        {/* <LineChart
         // chartData={lineChartDataDefault}
         // chartOptions={lineChartOptionsDefault}
-        />
+        /> */}
       </Box>
     </Card>
   )
