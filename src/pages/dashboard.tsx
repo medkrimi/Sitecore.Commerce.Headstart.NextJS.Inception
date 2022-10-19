@@ -189,13 +189,17 @@ const Dashboard = () => {
 
             <SimpleGrid
               columns={{xl: 2, lg: 2, md: 1, sm: 1, base: 1}}
-              gap={12}
+              gap={{xl: 12, lg: 8, md: 4, sm: 2, base: 2}}
               mt={4}
               mb={4}
             >
               <GridItem>
                 <HStack w="full" width="100%">
-                  <Box w="full" width="100%" pr={6}>
+                  <Box
+                    w="full"
+                    width="100%"
+                    pr={{xl: 6, lg: 6, md: 3, sm: 2, base: 2}}
+                  >
                     <NextLink href="#" passHref>
                       <Link>
                         <TodaysMoney
@@ -209,7 +213,11 @@ const Dashboard = () => {
                       </Link>
                     </NextLink>
                   </Box>
-                  <Box w="full" width="100%" pl={6}>
+                  <Box
+                    w="full"
+                    width="100%"
+                    pl={{xl: 6, lg: 6, md: 3, sm: 2, base: 2}}
+                  >
                     <NextLink href="#" passHref>
                       <Link>
                         <TodaysUsers
@@ -225,7 +233,11 @@ const Dashboard = () => {
                   </Box>
                 </HStack>
                 <HStack w="full" width="100%" pt={12} pb={12}>
-                  <Box w="full" width="100%" pr={6}>
+                  <Box
+                    w="full"
+                    width="100%"
+                    pr={{xl: 6, lg: 6, md: 3, sm: 2, base: 2}}
+                  >
                     <NextLink href="#" passHref>
                       <Link>
                         <NewClients
@@ -239,7 +251,11 @@ const Dashboard = () => {
                       </Link>
                     </NextLink>
                   </Box>
-                  <Box w="full" width="100%" pl={6}>
+                  <Box
+                    w="full"
+                    width="100%"
+                    pl={{xl: 6, lg: 6, md: 3, sm: 2, base: 2}}
+                  >
                     <NextLink href="#" passHref>
                       <Link>
                         <TotalSales
@@ -265,7 +281,7 @@ const Dashboard = () => {
             </SimpleGrid>
             <SimpleGrid
               columns={{xl: 4, lg: 2, md: 2, sm: 1, base: 1}}
-              gap={12}
+              gap={{xl: 12, lg: 8, md: 4, sm: 2, base: 2}}
               mt={4}
               mb={4}
             >

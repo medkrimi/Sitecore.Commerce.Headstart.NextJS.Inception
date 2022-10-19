@@ -4,7 +4,9 @@ import {
   useColorMode,
   useColorModeValue,
   Heading,
-  Flex
+  Flex,
+  useMediaQuery,
+  Show
 } from "@chakra-ui/react"
 import HeaderLogo from "lib/components/branding/HeaderLogo"
 import {useOcDispatch, useOcSelector} from "../redux/ocStore"
@@ -32,22 +34,24 @@ const Header = () => {
         as="section"
         w="100%"
         p="2"
-        pl="10"
-        pr="10"
+        pl={{md: "5", lg: "10"}}
+        pr={{md: "5", lg: "10"}}
         maxHeight="100"
         boxShadow="md"
       >
         <HStack justifyContent="space-between" w="100%">
           <HStack justifyContent="flex-start" color={color}>
             <HeaderLogo />
-            <Heading
-              color="gray.500"
-              fontSize="large"
-              pl="10"
-              fontWeight="normal"
-            >
-              Commerce Administration
-            </Heading>
+            <Show breakpoint="(min-width: 900px)">
+              <Heading
+                color="gray.500"
+                fontSize="large"
+                pl="10"
+                fontWeight="normal"
+              >
+                Commerce Administration
+              </Heading>
+            </Show>
           </HStack>
           <HStack justifyContent="flex-end" color={color}>
             <AcountNavigation />

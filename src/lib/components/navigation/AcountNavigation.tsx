@@ -21,7 +21,9 @@ import {
   useDisclosure,
   Tooltip,
   useColorMode,
-  Select
+  Select,
+  useMediaQuery,
+  Show
 } from "@chakra-ui/react"
 import NextLink from "next/link"
 import {BsSun, BsMoonStarsFill} from "react-icons/bs"
@@ -42,7 +44,6 @@ const MobileNavigation = () => {
   const btnRef = React.useRef()
   const {colorMode, toggleColorMode} = useColorMode()
   const [selectedOption, setSelectedOption] = useState<String>()
-
   // This function is triggered when the select changes
   const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value
@@ -103,8 +104,10 @@ const MobileNavigation = () => {
               ml="30px"
               size="sm"
             />
-            <Text fontSize="12px">Chris Janning</Text>
-            <ChevronDownIcon ml="10px" />
+            <Show breakpoint="(min-width: 900px)">
+              <Text fontSize="12px">Chris Janning</Text>
+              <ChevronDownIcon ml="10px" />
+            </Show>
           </HStack>
         </MenuButton>
         <MenuList>
