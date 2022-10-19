@@ -11,25 +11,23 @@ interface ChakraProps {
 
 export const Chakra = ({children}: ChakraProps) => {
   const cookies = new Cookies()
+  let currenttheme
   if (cookies.get("currenttheme") === undefined) {
     cookies.set("currenttheme", "lib/styles/theme/sitecorecommerce/", {
       path: "/"
     })
   }
   if (cookies.get("currenttheme") === "lib/styles/theme/sitecorecommerce/") {
-    // currenttheme from "lib/styles/theme/sitecorecommerce/"
+    currenttheme = sitecorecommerceTheme
   }
   if (cookies.get("currenttheme") === "lib/styles/theme/playsummit/") {
-    // currenttheme from "lib/styles/theme/playsummit/"
+    currenttheme = playsummitTheme
   }
   if (cookies.get("currenttheme") === "lib/styles/theme/industrial/") {
-    // currenttheme from "lib/styles/theme/industrial/"
+    currenttheme = industrialTheme
   }
   return (
-    <ChakraProvider
-      colorModeManager={localStorageManager}
-      theme={sitecorecommerceTheme}
-    >
+    <ChakraProvider colorModeManager={localStorageManager} theme={currenttheme}>
       {children}
     </ChakraProvider>
   )

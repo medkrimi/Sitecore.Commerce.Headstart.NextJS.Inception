@@ -55,6 +55,12 @@ const MobileNavigation = () => {
     //Reload page so the theme takes affect
     window.location.reload()
   }
+  const cookies = new Cookies()
+  let currenttheme
+  let currentthemename
+  if (cookies.get("currenttheme") !== null) {
+    currenttheme = cookies.get("currenttheme")
+  }
   return (
     <HStack>
       <Menu>
@@ -165,8 +171,13 @@ const MobileNavigation = () => {
                 {colorMode === "light" ? <BsMoonStarsFill /> : <BsSun />}
               </Button>
             </Tooltip>
-            <Text mt="20">Change Theme:</Text>
-            <Select id="ThemeDropdown" onChange={selectChange}>
+            <Text mt="10">Change Theme:</Text>
+            <Select
+              id="ThemeDropdown"
+              onChange={selectChange}
+              placeholder="Select a theme"
+              value={currenttheme}
+            >
               <option value="lib/styles/theme/sitecorecommerce/">
                 Sitecore Commerce
               </option>
