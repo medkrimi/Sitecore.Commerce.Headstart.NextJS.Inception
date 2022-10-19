@@ -10,8 +10,14 @@ const customTheme = extendTheme({
   fonts,
   colors,
   config,
-  components
+  components,
   // layouts,
+  breakpoints: {
+    sm: "320px",
+    md: "768px",
+    lg: "960px",
+    xl: "1200px"
+  }
 })
 
 export default customTheme
