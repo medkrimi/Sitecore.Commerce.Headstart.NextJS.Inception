@@ -4,5 +4,6 @@ export interface ProductXPs {
 }
 
 export interface XpImage {
-  url: string
+  Url: string
+  ThumbnailUrl: string
 }

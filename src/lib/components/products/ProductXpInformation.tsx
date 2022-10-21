@@ -57,9 +57,11 @@ export default function BasicProductData({product}: ProductDataProps) {
   const handleInputChange =
     (fieldKey: number) => (e: ChangeEvent<HTMLInputElement>) => {
       var newVal = e.target.value
+      var emptyVal = null
       var tmpImages = [...formValues.images]
       var tmpImage: XpImage = {
-        url: newVal
+        Url: newVal,
+        ThumbnailUrl: emptyVal
       }
 
       tmpImages[fieldKey] = tmpImage
@@ -78,7 +80,7 @@ export default function BasicProductData({product}: ProductDataProps) {
   const onDeleteProductImageClicked = (url: string) => async (e) => {
     setIsLoading(true)
     var tmpImages = [...formValues.images]
-    tmpImages = tmpImages.filter((element) => element.url != url)
+    tmpImages = tmpImages.filter((element) => element.Url != url)
     setFormValues((v) => ({
       ...v,
       ["images"]: tmpImages
@@ -95,7 +97,8 @@ export default function BasicProductData({product}: ProductDataProps) {
     }
 
     var tmpImage: XpImage = {
-      url: ""
+      Url: "",
+      ThumbnailUrl: ""
     }
 
     tmpImages.push(tmpImage)
@@ -112,14 +115,16 @@ export default function BasicProductData({product}: ProductDataProps) {
     const images: XpImage[] = []
     formValues.images.map((item) => {
       const xpImage: XpImage = {
-        url: item.url
+        Url: item.Url,
+        ThumbnailUrl: item.ThumbnailUrl
       }
       images.push(xpImage)
     })
     // For now focus on first image in list
     if (images.length == 0) {
       const xpImage: XpImage = {
-        url: formValues.images[0]?.url ?? ""
+        Url: formValues.images[0]?.Url ?? "",
+        ThumbnailUrl: formValues.images[0]?.ThumbnailUrl ?? ""
       }
       images.push(xpImage)
     }
@@ -200,13 +205,13 @@ export default function BasicProductData({product}: ProductDataProps) {
                       <HStack key={key} mt={3}>
                         <Text>{key + 1}</Text>
                         <Input
-                          value={image.url}
+                          value={image.Url}
                           onChange={handleInputChange(key)}
                         />
                         {key != 0 ? (
                           <Tooltip pt={2} label="Remove Product Image">
                             <Button
-                              onClick={onDeleteProductImageClicked(image.url)}
+                              onClick={onDeleteProductImageClicked(image.Url)}
                               colorScheme={"purple"}
                             >
                               <FiMinus />
@@ -229,7 +234,7 @@ export default function BasicProductData({product}: ProductDataProps) {
                           fontFamily={"body"}
                           fontWeight={500}
                         >
-                          {(image?.url ?? "") == "" ? (
+                          {(image?.Url ?? "") == "" ? (
                             <>No Image</>
                           ) : (
                             <>
@@ -238,7 +243,7 @@ export default function BasicProductData({product}: ProductDataProps) {
                                 objectFit="scale-down"
                                 mt={4}
                                 alt={"Product Image"}
-                                src={image?.url}
+                                src={image?.Url}
                               />
                             </>
                           )}
@@ -249,7 +254,7 @@ export default function BasicProductData({product}: ProductDataProps) {
                     )
                   })}
                   {isEditingBasicData &&
-                  formValues?.images[formValues?.images?.length - 1]?.url !=
+                  formValues?.images[formValues?.images?.length - 1]?.Url !=
                     "" ? (
                     <Tooltip label="Add new Product Image">
                       <Box pt={4}>
