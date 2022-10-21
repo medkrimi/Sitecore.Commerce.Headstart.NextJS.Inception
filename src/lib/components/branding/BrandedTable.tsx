@@ -7,20 +7,20 @@ import {
 } from "@chakra-ui/react"
 
 export default function BrandedTable({children}) {
-  const tableHeaderBg = useColorModeValue("brand.300", "brand.700")
+  const tableHeaderBg = useColorModeValue("gray.100", "gray.900")
   const tableBg = useColorModeValue("brand.300", "brand.500")
   const tableColor = useColorModeValue("textColor.900", "textColor.100")
+  const tableBorder = useColorModeValue("gray.400", "gray.400")
 
   return (
     <TableContainer
       width={"full"}
-      border={"gray"}
       rounded={20}
       boxShadow={"md"}
       bg={tableHeaderBg}
       color={tableColor}
     >
-      <Table variant="striped">{children}</Table>
+      <Table variant="simple">{children}</Table>
     </TableContainer>
   )
 }

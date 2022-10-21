@@ -2,10 +2,12 @@ import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 import {
   Text,
   Button,
+  Center,
   Checkbox,
   FormControl,
   FormLabel,
   Heading,
+  Image,
   HStack,
   IconButton,
   Input,
@@ -56,6 +58,7 @@ import {useState, ChangeEvent, useEffect} from "react"
 import {Product, Products} from "ordercloud-javascript-sdk"
 import {ProductXPs} from "lib/types/ProductXPs"
 import {CalculateEditorialProcess} from "./EditorialProgressBar"
+//import Image from "next/image"
 
 interface ProductSearchProps {
   query: string
@@ -69,13 +72,13 @@ export default function ProductSearch({query}: ProductSearchProps) {
     useState<Product<ProductXPs>[]>(products)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
+  const tableBorderColor = "2px solid lightgray" //useColorModeValue("2px solid black","")
   const bg = useColorModeValue("gray.400", "gray.600")
   const color = useColorModeValue("textColor.900", "textColor.100")
   const sliderColor = useColorModeValue("brand.400", "brand.600")
   const [editorialProgressFilter, setEditorialProgressFilter] = useState(100)
   const [sortBy, setSortBy] = useState("")
   const [sortingChanging, setSortingChanging] = useState(false)
-
   const dispatch = useOcDispatch()
 
   const labelStyles = {
@@ -323,7 +326,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
       {componentProducts ? (
         <VStack p={0} spacing={6} width="full" align="center">
           <NextSeo title="Products Overview" />
-          <Heading color={"black"} as="h1">
+          <Heading color={color} as="h1">
             Products Overview
           </Heading>
           <HStack
@@ -386,7 +389,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
             </Tooltip>
           </HStack>
           <HStack width={"full"} justifyContent={"space-between"}>
-            <Box color={"black"} width={"100%"} pt={8} pb={4} pl={6} pr={6}>
+            <Box color={color} width={"100%"} pt={8} pb={4} pl={6} pr={6}>
               <Slider
                 borderRight={"solid black"}
                 borderLeft={"solid black"}
@@ -430,7 +433,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
                 </SliderTrack>
                 <SliderThumb />
               </Slider>
-              <Text fontWeight={"bold"} pt={5} ml={-2}>
+              <Text fontWeight={"bold"} pt={5} ml={-2} color={color}>
                 Filter by Editorial Progress...
               </Text>
             </Box>
@@ -442,7 +445,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
             <>
               <BrandedTable>
                 <Thead>
-                  <Tr>
+                  <Tr borderBottom={tableBorderColor}>
                     <Tooltip
                       label={"Click here to select / unselect all Products"}
                     >
@@ -454,7 +457,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
                       </Th>
                     </Tooltip>
                     <Th>Product ID</Th>
-
+                    <Th>Image</Th>
                     <Th>
                       <Tooltip label="Sort by Name">
                         <Flex justifyContent={"flex-start"}>
@@ -479,7 +482,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
                         </Flex>
                       </Tooltip>
                     </Th>
-
+                    <Th>Description</Th>
                     {/* <Th color={color}>Description</Th> */}
                     <Th>
                       {" "}
@@ -533,21 +536,48 @@ export default function ProductSearch({query}: ProductSearchProps) {
                         </Flex>
                       </Tooltip>
                     </Th>
-                    <Th>Detail Page</Th>
                   </Tr>
                 </Thead>
                 <Tbody alignContent={"center"}>
                   {componentProducts && componentProducts.length > 0 ? (
                     componentProducts.map((product, index) => (
-                      <Tr key={index}>
+                      <Tr key={index} borderBottom={tableBorderColor}>
                         <Td>
                           <Checkbox
                             onChange={onMassEditCheckboxChanged(product.ID)}
                           />
                         </Td>
-                        <Td>{product.ID}</Td>
-                        <Td>{product.Name}</Td>
-                        {/* <Td>{product.Description}</Td> */}
+                        <Td>
+                          <NextLink href={"/products/" + product.ID} passHref>
+                            <Link>{product.ID}</Link>
+                          </NextLink>
+                        </Td>
+                        <Td>
+                          <Center>
+                            <NextLink href={"/products/" + product.ID} passHref>
+                              <Link>
+                                <Image
+                                  src={
+                                    product?.xp?.Images[0]?.ThumbnailUrl ||
+                                    "https://mss-p-006-delivery.stylelabs.cloud/api/public/content/4fc742feffd14e7686e4820e55dbfbaa"
+                                  }
+                                  alt="product image"
+                                  width="50px"
+                                />
+                              </Link>
+                            </NextLink>
+                          </Center>
+                        </Td>
+                        <Td>
+                          <NextLink href={"/products/" + product.ID} passHref>
+                            <Link>{product.Name}</Link>
+                          </NextLink>
+                        </Td>
+                        <Td>
+                          {product.Description.length > 40
+                            ? product.Description.substring(0, 40) + "..."
+                            : product.Description}
+                        </Td>
                         <Td>
                           {product.Active ? (
                             <CheckIcon boxSize={6} color={okColor} />
@@ -556,11 +586,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           )}
                         </Td>
                         <Td>{CalculateEditorialProcess(product)}%</Td>
-                        <Td>
-                          <NextLink href={"/products/" + product.ID} passHref>
-                            <Link>Open Product</Link>
-                          </NextLink>
-                        </Td>
                       </Tr>
                     ))
                   ) : (
@@ -569,7 +594,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
                 </Tbody>
               </BrandedTable>
               <Box>
-                <Text fontWeight={"bold"} p={3} float={"left"} color={"black"}>
+                <Text fontWeight={"bold"} p={3} float={"left"} color={color}>
                   {componentProducts.length} out of {componentProducts.length}{" "}
                   Products{" "}
                 </Text>

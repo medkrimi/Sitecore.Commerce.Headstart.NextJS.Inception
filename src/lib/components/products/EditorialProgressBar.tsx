@@ -23,7 +23,7 @@ export function CalculateEditorialProcess(
   if (product?.Active ?? false) {
     currentNumberOfEditedFields++
   }
-  if ((product?.xp?.Images[0].url ?? "") != "") {
+  if ((product?.xp?.Images[0].Url ?? "") != "") {
     currentNumberOfEditedFields++
   }
 
