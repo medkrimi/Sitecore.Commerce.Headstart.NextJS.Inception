@@ -80,7 +80,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
   const [sortBy, setSortBy] = useState("")
   const [sortingChanging, setSortingChanging] = useState(false)
   const dispatch = useOcDispatch()
-  const regex = /(&nbsp;|<([^>]+)>)/ig;
+  const regex = /(&nbsp;|<([^>]+)>)/gi
   const labelStyles = {
     mt: "2",
     ml: "-2.5",
@@ -575,7 +575,10 @@ export default function ProductSearch({query}: ProductSearchProps) {
                         </Td>
                         <Td>
                           {product.Description.replace(regex, "").length > 40
-                            ? product.Description.replace(regex, "").substring(0, 40) + "..."
+                            ? product.Description.replace(regex, "").substring(
+                                0,
+                                40
+                              ) + "..."
                             : product.Description.replace(regex, "")}
                         </Td>
                         <Td>
