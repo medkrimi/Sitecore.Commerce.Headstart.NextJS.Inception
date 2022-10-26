@@ -3,6 +3,7 @@ import {
   Flex,
   Heading,
   HStack,
+  VStack,
   Tooltip,
   Grid,
   GridItem,
@@ -108,6 +109,7 @@ const ProductDetails = () => {
 
   return (
     <>
+    <VStack justifyContent={"space-between"} px={6} width={"full"}>
       {/* {prodcutName !== "" ? ( */}
       <>
         {breadcrumb?.items?.length ?? 0 > 0 ? (
@@ -127,6 +129,7 @@ const ProductDetails = () => {
           <></>
         )}
         <NextSeo title="Product Details" />
+
         <Heading
           color={"black"}
           as="h1"
@@ -282,8 +285,9 @@ const ProductDetails = () => {
               <ProductInventoryRecords product={productDetails.product} />
             </GridItem>
           </Grid>
-        </Container>
+        </Container> 
       </>
+      </VStack>
 
       <AlertDialog
         motionPreset="slideInBottom"
