@@ -138,7 +138,7 @@ export default function ProductSpecs({product, specs}: ProductDataProps) {
           <HStack float={"right"}>
             <Tooltip label="Add Product Specification">
               <Button
-                colorScheme="purple"
+                colorScheme="brandButtons"
                 aria-label="Add Product Specification"
                 onClick={onOpen}
               >
@@ -197,7 +197,7 @@ export default function ProductSpecs({product, specs}: ProductDataProps) {
                                 {" "}
                                 <Tooltip label="Remove specification from Product">
                                   <Button
-                                    colorScheme="purple"
+                                    colorScheme="brandButtons"
                                     aria-label="Remove specification from Product"
                                     onClick={onRemoveSpecification}
                                     data-id={item.ID}
@@ -311,7 +311,7 @@ export default function ProductSpecs({product, specs}: ProductDataProps) {
                       float={"right"}
                       width={"45%"}
                       size={"md"}
-                      colorScheme="purple"
+                      colorScheme="brandButtons"
                       onClick={onSpecificationLink}
                       ml={3}
                       disabled={!isSpecChosen}

@@ -1,7 +1,6 @@
 import {Breadcrumb, BreadcrumbItem, BreadcrumbLink} from "@chakra-ui/react"
 
 import {IoIosArrowForward} from "react-icons/io"
-
 const BreadcrumbNavigation = ({breadcrumbs}) => {
   return (
     <Breadcrumb separator={<IoIosArrowForward />}>
@@ -9,10 +8,7 @@ const BreadcrumbNavigation = ({breadcrumbs}) => {
         const current = index === breadcrumbs.length - 1
         return (
           <BreadcrumbItem key={index} isCurrentPage={current}>
-            <BreadcrumbLink
-              href={breadcrumb.url}
-              color={current ? "brand.700" : "unset"}
-            >
+            <BreadcrumbLink href={breadcrumb.url}>
               {breadcrumb.name}
             </BreadcrumbLink>
           </BreadcrumbItem>

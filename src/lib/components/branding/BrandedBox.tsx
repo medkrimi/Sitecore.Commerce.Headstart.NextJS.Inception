@@ -25,8 +25,8 @@ export default function BrandedBox({
   const {colorMode, toggleColorMode} = useColorMode()
   const gradient =
     colorMode === "light"
-      ? "linear(to-t, brand.300, brand.400)"
-      : "linear(to-t, brand.600, brand.500)"
+      ? "linear(to-t, gray.300, gray.400)"
+      : "linear(to-t, gray.600, gray.500)"
   const shadow = "5px 5px 5px #999999"
   const color = useColorModeValue("boxTextColor.900", "boxTextColor.100")
 

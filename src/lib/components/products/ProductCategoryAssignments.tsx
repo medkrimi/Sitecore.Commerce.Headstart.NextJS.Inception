@@ -147,7 +147,7 @@ export default function BasicProductData({product, catalog}: ProductDataProps) {
           <HStack float={"right"}>
             <Tooltip label="Add to Category">
               <Button
-                colorScheme="purple"
+                colorScheme="brandButtons"
                 onClick={onOpen}
                 aria-label="add to category"
               >
@@ -187,7 +187,7 @@ export default function BasicProductData({product, catalog}: ProductDataProps) {
                               {" "}
                               <Tooltip label="Remove from Category">
                                 <Button
-                                  colorScheme="purple"
+                                  colorScheme="brandButtons"
                                   aria-label="remove from category"
                                   onClick={onRemoveCategory}
                                   data-id={item.ID}
@@ -286,7 +286,7 @@ export default function BasicProductData({product, catalog}: ProductDataProps) {
                       float={"right"}
                       width={"45%"}
                       size={"md"}
-                      colorScheme="purple"
+                      colorScheme="brandButtons"
                       onClick={onCategoryLink}
                       ml={3}
                       disabled={!isCategoryChosen}

@@ -36,6 +36,7 @@ export default function ProductData({product}: ProductDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
+  const color = useColorModeValue("textColor.100", "textColor.300")
   const [expanded, setExpanded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const dispatch = useOcDispatch()
@@ -139,7 +140,7 @@ export default function ProductData({product}: ProductDataProps) {
             <HStack float={"right"}>
               <Tooltip label="Save">
                 <Button
-                  colorScheme="purple"
+                  colorScheme="brandButtons"
                   aria-label="Save"
                   onClick={onSaveClicked}
                 >
@@ -148,11 +149,11 @@ export default function ProductData({product}: ProductDataProps) {
               </Tooltip>
               <Tooltip label="Abort">
                 <Button
-                  colorScheme="purple"
+                  colorScheme="brandButtons"
                   aria-label="Abort"
                   onClick={onAbortClicked}
                 >
-                  <FiX />
+                  <FiX color={color} />
                 </Button>
               </Tooltip>
             </HStack>
@@ -160,11 +161,11 @@ export default function ProductData({product}: ProductDataProps) {
             <HStack float={"right"}>
               <Tooltip label="Edit">
                 <Button
-                  colorScheme="purple"
+                  colorScheme="brandButtons"
                   aria-label="Edit"
                   onClick={onEditClicked}
                 >
-                  <FiEdit />
+                  <FiEdit color={color} />
                 </Button>
               </Tooltip>
             </HStack>

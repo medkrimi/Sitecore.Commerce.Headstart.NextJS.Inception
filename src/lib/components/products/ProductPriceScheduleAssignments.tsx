@@ -288,7 +288,7 @@ export default function ProductPriceScheduleAssignments({
           <HStack float={"right"}>
             <Tooltip label="Add Price Schedule to Product">
               <Button
-                colorScheme="purple"
+                colorScheme="brandButtons"
                 aria-label="Add Price Schedule to Product"
                 onClick={onOpen}
               >
@@ -380,7 +380,7 @@ export default function ProductPriceScheduleAssignments({
                                 {" "}
                                 <Tooltip label="Remove Price Schedule from Product">
                                   <Button
-                                    colorScheme="purple"
+                                    colorScheme="brandButtons"
                                     aria-label="Remove Price Schedule from Product"
                                     data-buyerId={item.assignment.BuyerID}
                                     data-userGroupId={
@@ -573,7 +573,7 @@ export default function ProductPriceScheduleAssignments({
                       float={"right"}
                       width={"45%"}
                       size={"md"}
-                      colorScheme="purple"
+                      colorScheme="brandButtons"
                       onClick={onPriceScheduleLink}
                       ml={3}
                       disabled={!isChosen.priceSchedule || !isChosen.buyerGroup}

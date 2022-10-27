@@ -16,13 +16,43 @@ const extendedColors: DeepPartial<
     800: "#234E52",
     900: "#1D4044"
   },
+  brandButtons: {
+    // Teal
+    100: "#B2F5EA",
+    200: "#2C7A7B",
+    300: "#4FD1C5",
+    400: "#38B2AC",
+    500: "#138888",
+    600: "#2C7A7B",
+    700: "#285E61",
+    800: "#234E52",
+    900: "#1D4044"
+  },
   boxTextColor: {
     100: "white",
+    200: "#E2E8F0",
+    300: "#CBD5E0",
+    400: "#A0AEC0",
+    500: "#718096",
+    600: "#4A5568",
+    700: "#2D3748",
+    800: "#1A202C",
     900: "black"
   },
   textColor: {
     100: "white",
+    200: "#E2E8F0",
+    300: "#CBD5E0",
+    400: "#A0AEC0",
+    500: "#718096",
+    600: "#4A5568",
+    700: "#2D3748",
+    800: "#1A202C",
     900: "black"
+  },
+  buttonBg: {
+    100: "teal",
+    900: "teal"
   },
   okColor: {
     200: "#9AE6B4",
@@ -43,6 +73,10 @@ const extendedColors: DeepPartial<
   tileBg: {
     500: "white",
     900: "#4A5568"
+  },
+  bodyBg: {
+    100: "#f4f4f4",
+    900: "#2D3748"
   }
 }
 

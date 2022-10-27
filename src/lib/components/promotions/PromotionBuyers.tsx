@@ -73,7 +73,7 @@ export default function PromotionBuyers({promotion}: PromotionDataProps) {
           <HStack float={"right"}>
             <Tooltip label="Add Buyer to Promotion">
               <Button
-                colorScheme="purple"
+                colorScheme="brandButtons"
                 aria-label="Add Buyer to Promotion"
                 disabled={true}
               >
@@ -111,7 +111,7 @@ export default function PromotionBuyers({promotion}: PromotionDataProps) {
                                 {" "}
                                 <Tooltip label="Remove buyer from Promotion">
                                   <Button
-                                    colorScheme="purple"
+                                    colorScheme="brandButtons"
                                     aria-label="Remove buyer fromPromotion"
                                     onClick={onRemovePromotionAssignment}
                                     data-buyerid={item.BuyerID}

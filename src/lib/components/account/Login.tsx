@@ -135,7 +135,7 @@ const OcLoginForm: FunctionComponent<OcLoginFormProps> = ({
                   size="lg"
                   mx={1}
                   py={2}
-                  colorScheme={"purple"}
+                  colorScheme="brandButtons"
                 />
                 <Text>Keep me logged in</Text>
               </HStack>
@@ -144,7 +144,7 @@ const OcLoginForm: FunctionComponent<OcLoginFormProps> = ({
             <Button
               disabled={loading}
               type="submit"
-              colorScheme={"purple"}
+              colorScheme="brandButtons"
               width="full"
             >
               Sign in

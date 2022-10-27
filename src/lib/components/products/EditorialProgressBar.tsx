@@ -1,4 +1,10 @@
-import {Box, Progress, Heading, Tooltip} from "@chakra-ui/react"
+import {
+  Box,
+  Progress,
+  Heading,
+  Tooltip,
+  useColorModeValue
+} from "@chakra-ui/react"
 import {ProductXPs} from "lib/types/ProductXPs"
 import {Product, RequiredDeep} from "ordercloud-javascript-sdk"
 import {useState, useEffect} from "react"
@@ -23,7 +29,11 @@ export function CalculateEditorialProcess(
   if (product?.Active ?? false) {
     currentNumberOfEditedFields++
   }
-  if ((product?.xp?.Images[0].Url ?? "") != "") {
+  if (
+    (typeof product?.xp?.Images != "undefined"
+      ? product?.xp?.Images[0].Url
+      : "") != ""
+  ) {
     currentNumberOfEditedFields++
   }
 
@@ -37,6 +47,7 @@ export default function EditorialProgressBar({product}: ProductDataProps) {
   const [editorialProgress, setEditorialProgress] = useState(0)
   const [progressColor, setProgressColor] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const color = useColorModeValue("textColor.900", "textColor.100")
 
   useEffect(() => {
     setIsLoading(true)
@@ -77,7 +88,7 @@ export default function EditorialProgressBar({product}: ProductDataProps) {
         colorScheme={product ? progressColor : "blue"}
       />
       <Tooltip label="Please fill out IMAGE, DESCRIPTION, DEFAULTPRICESCHEDULEID and enable ISACTIVE">
-        <Heading mt={2} size={"md"} color={"black"}>
+        <Heading mt={2} size={"md"} color={color}>
           Editorial Progress{" "}
           {product && !isLoading ? ": " + editorialProgress + "%" : "..."}
         </Heading>

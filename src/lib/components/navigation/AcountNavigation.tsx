@@ -43,6 +43,7 @@ const MobileNavigation = () => {
   const {isOpen, onOpen, onClose} = useDisclosure()
   const btnRef = React.useRef()
   const {colorMode, toggleColorMode} = useColorMode()
+  const color = useColorModeValue("textColor.900", "textColor.100")
   const [selectedOption, setSelectedOption] = useState<String>()
   // This function is triggered when the select changes
   const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -152,16 +153,16 @@ const MobileNavigation = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Application Settings</DrawerHeader>
+          <DrawerHeader color={color}>Application Settings</DrawerHeader>
 
-          <DrawerBody>
+          <DrawerBody color={color}>
             <Tooltip
               label={
                 colorMode === "dark" ? "Set Light Model" : "Set Dark Model"
               }
             >
               <Button
-                colorScheme="purple"
+                colorScheme="brandButtons"
                 aria-label="Toggle Color Mode"
                 onClick={toggleColorMode}
                 _focus={{boxShadow: "none"}}

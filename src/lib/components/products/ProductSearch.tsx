@@ -1,4 +1,4 @@
-import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
+import {CheckIcon, CloseIcon, Search2Icon, SearchIcon} from "@chakra-ui/icons"
 import {
   Text,
   Button,
@@ -9,6 +9,7 @@ import {
   Heading,
   Image,
   HStack,
+  Icon,
   IconButton,
   Input,
   Link,
@@ -35,7 +36,9 @@ import {
   SliderThumb,
   SliderTrack,
   Box,
-  SliderMark
+  SliderMark,
+  InputGroup,
+  InputLeftElement
 } from "@chakra-ui/react"
 import {OcProductListOptions, setListOptions} from "lib/redux/ocProductList"
 import {NextSeo} from "next-seo"
@@ -53,6 +56,7 @@ import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 import NextLink from "next/link"
 import useOcProductList from "lib/hooks/useOcProductList"
+import {stripHTML} from "lib/utils/stripHTML"
 import {useOcDispatch, useOcSelector} from "lib/redux/ocStore"
 import {useState, ChangeEvent, useEffect} from "react"
 import {Product, Products} from "ordercloud-javascript-sdk"
@@ -72,7 +76,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
     useState<Product<ProductXPs>[]>(products)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
-  const tableBorderColor = "2px solid lightgray" //useColorModeValue("2px solid black","")
   const bg = useColorModeValue("gray.400", "gray.600")
   const color = useColorModeValue("textColor.900", "textColor.100")
   const sliderColor = useColorModeValue("brand.400", "brand.600")
@@ -80,7 +83,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
   const [sortBy, setSortBy] = useState("")
   const [sortingChanging, setSortingChanging] = useState(false)
   const dispatch = useOcDispatch()
-  const regex = /(&nbsp;|<([^>]+)>)/gi
   const labelStyles = {
     mt: "2",
     ml: "-2.5",
@@ -329,65 +331,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
           <Heading color={color} as="h1">
             Products Overview
           </Heading>
-          <HStack
-            width={{
-              base: "100%",
-              sm: "100%",
-              lg: "70%",
-              md: "100%"
-            }}
-            justifyContent="space-between"
-          >
-            <Input
-              autoComplete="off"
-              placeholder="Enter here ..."
-              aria-label="Enter Search Term"
-              bg={bg}
-              color={color}
-              _placeholder={{color: color}}
-              id={"headerSearchInput"}
-              width={"full"}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
-                  onSearchClicked()
-                }
-              }}
-            />
-            <Tooltip label="Search for Products">
-              <IconButton
-                aria-label="Search"
-                icon={<AiOutlineSearch />}
-                colorScheme={"purple"}
-                onClick={onSearchClicked}
-              />
-            </Tooltip>
-            <Tooltip label="Reset Search Parameters">
-              <IconButton
-                aria-label="Reset all Search Parameters"
-                icon={<FiRotateCcw />}
-                colorScheme={"purple"}
-                onClick={onResetSearch}
-              />
-            </Tooltip>
-            <Tooltip label="Add new Product">
-              <IconButton
-                aria-label="Add new Product"
-                icon={<FiPlus />}
-                colorScheme={"purple"}
-                onClick={onOpenAddProduct}
-              />
-            </Tooltip>
-            <Tooltip label="Mass Edit Products">
-              <IconButton
-                aria-label="Mass Edit Products"
-                icon={<FiList />}
-                colorScheme={"purple"}
-                onClick={onMassEditOpenClicked}
-              />
-            </Tooltip>
-          </HStack>
           <HStack width={"full"} justifyContent={"space-between"}>
             <Box color={color} width={"100%"} pt={8} pb={4} pl={6} pr={6}>
               <Slider
@@ -445,18 +388,79 @@ export default function ProductSearch({query}: ProductSearchProps) {
             <>
               <BrandedTable>
                 <Thead>
-                  <Tr borderBottom={tableBorderColor}>
+                  <Tr>
+                    <Th colSpan={6}>
+                      <Tooltip label="Search for Products">
+                        <IconButton
+                          aria-label="Search"
+                          icon={<SearchIcon />}
+                          colorScheme={"brandButtons"}
+                          onClick={onSearchClicked}
+                          float="right"
+                        />
+                      </Tooltip>
+                      <Tooltip label="Reset Search Parameters">
+                        <IconButton
+                          aria-label="Reset all Search Parameters"
+                          icon={<FiRotateCcw />}
+                          colorScheme={"brandButtons"}
+                          onClick={onResetSearch}
+                          float="right"
+                        />
+                      </Tooltip>
+                      <Tooltip label="Add new Product">
+                        <IconButton
+                          aria-label="Add new Product"
+                          icon={<FiPlus />}
+                          colorScheme={"brandButtons"}
+                          onClick={onOpenAddProduct}
+                          float="right"
+                        />
+                      </Tooltip>
+                      <Tooltip label="Mass Edit Products">
+                        <IconButton
+                          aria-label="Mass Edit Products"
+                          icon={<FiList />}
+                          colorScheme={"brandButtons"}
+                          onClick={onMassEditOpenClicked}
+                          float="right"
+                        />
+                      </Tooltip>
+                      <InputGroup width={"250px"} float="right">
+                        <InputLeftElement>
+                          <AiOutlineSearch />
+                        </InputLeftElement>
+                        <Input
+                          autoComplete="off"
+                          placeholder="Enter here ..."
+                          aria-label="Enter Search Term"
+                          bg={bg}
+                          color={color}
+                          _placeholder={{color: color}}
+                          id={"headerSearchInput"}
+                          width={"100%"}
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          onKeyPress={(e) => {
+                            if (e.key === "Enter") {
+                              onSearchClicked()
+                            }
+                          }}
+                        />
+                      </InputGroup>
+                    </Th>
+                  </Tr>
+                  <Tr>
                     <Tooltip
                       label={"Click here to select / unselect all Products"}
                     >
                       <Th cursor={"pointer"}>
                         <Flex justifyContent={"flex-start"}>
                           <FiCheckSquare />
-                          <Text ml={2}>Mass Edit</Text>
+                          <Text ml={2}>Product ID</Text>
                         </Flex>
                       </Th>
                     </Tooltip>
-                    <Th>Product ID</Th>
                     <Th>Image</Th>
                     <Th>
                       <Tooltip label="Sort by Name">
@@ -541,15 +545,13 @@ export default function ProductSearch({query}: ProductSearchProps) {
                 <Tbody alignContent={"center"}>
                   {componentProducts && componentProducts.length > 0 ? (
                     componentProducts.map((product, index) => (
-                      <Tr key={index} borderBottom={tableBorderColor}>
+                      <Tr key={index}>
                         <Td>
                           <Checkbox
                             onChange={onMassEditCheckboxChanged(product.ID)}
                           />
-                        </Td>
-                        <Td>
                           <NextLink href={"/products/" + product.ID} passHref>
-                            <Link>{product.ID}</Link>
+                            <Link> {product.ID}</Link>
                           </NextLink>
                         </Td>
                         <Td>
@@ -558,8 +560,9 @@ export default function ProductSearch({query}: ProductSearchProps) {
                               <Link>
                                 <Image
                                   src={
-                                    product?.xp?.Images[0]?.ThumbnailUrl ||
-                                    "https://mss-p-006-delivery.stylelabs.cloud/api/public/content/4fc742feffd14e7686e4820e55dbfbaa"
+                                    typeof product?.xp?.Images != "undefined"
+                                      ? product?.xp?.Images[0]?.ThumbnailUrl
+                                      : "https://mss-p-006-delivery.stylelabs.cloud/api/public/content/4fc742feffd14e7686e4820e55dbfbaa"
                                   }
                                   alt="product image"
                                   width="50px"
@@ -574,12 +577,10 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           </NextLink>
                         </Td>
                         <Td>
-                          {product.Description.replace(regex, "").length > 40
-                            ? product.Description.replace(regex, "").substring(
-                                0,
-                                40
-                              ) + "..."
-                            : product.Description.replace(regex, "")}
+                          {stripHTML(product.Description).length > 40
+                            ? stripHTML(product.Description).substring(0, 40) +
+                              "..."
+                            : stripHTML(product.Description)}
                         </Td>
                         <Td>
                           {product.Active ? (
