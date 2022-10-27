@@ -13,7 +13,9 @@ import {
   AlertDialog,
   AlertDialogOverlay,
   AlertDialogHeader,
-  useDisclosure
+  useDisclosure,
+  useColorModeValue,
+  ColorModeScript
 } from "@chakra-ui/react"
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import BreadcrumbNavigation from "lib/components/navigation/BreadcrumbNavigation"
@@ -36,7 +38,7 @@ const PromotionDetails = () => {
   const [breadcrumb, setBreadcrumb] = useState<Breadcrumb>()
   const [isDeleting, setIsDeleting] = useState(false)
   const [promotion, setPromotion] = useState<Promotion<PromotionXPs>>(null)
-
+  const color = useColorModeValue("textColor.900", "textColor.100")
   const {isOpen, onOpen, onClose} = useDisclosure()
   const cancelRef = React.useRef()
 
@@ -114,7 +116,7 @@ const PromotionDetails = () => {
             mb={1}
             p={18}
             w="full"
-            color={"black"}
+            color={color}
           >
             <BreadcrumbNavigation breadcrumbs={breadcrumb?.items ?? null} />
           </Flex>
@@ -154,7 +156,7 @@ const PromotionDetails = () => {
           >
             <Tooltip label="Refresh Promotion Data">
               <Button
-                colorScheme="purple"
+                colorScheme="brandButtons"
                 aria-label="Refresh Promotion Data"
                 width={{
                   base: "50%",
@@ -171,7 +173,7 @@ const PromotionDetails = () => {
             </Tooltip>
             <Tooltip label="Delete Promotion">
               <Button
-                colorScheme="purple"
+                colorScheme="brandButtons"
                 aria-label="Delete Product"
                 width={{
                   base: "50%",

@@ -151,7 +151,7 @@ export default function ProductSuppliers({product}: ProductDataProps) {
           <HStack float={"right"}>
             <Tooltip label="Add Product Supplier">
               <Button
-                colorScheme="purple"
+                colorScheme="brandButtons"
                 aria-label="Add Product Supplier"
                 disabled={true}
                 // onClick={onOpen}
@@ -221,7 +221,7 @@ export default function ProductSuppliers({product}: ProductDataProps) {
                                 {" "}
                                 <Tooltip label="Remove Supplier from Product">
                                   <Button
-                                    colorScheme="purple"
+                                    colorScheme="brandButtons"
                                     aria-label="Remove Supplier from Product"
                                     disabled={true}
                                     // onClick={onRemoveSpecification}
@@ -319,7 +319,7 @@ export default function ProductSuppliers({product}: ProductDataProps) {
                       float={"right"}
                       width={"45%"}
                       size={"md"}
-                      colorScheme="purple"
+                      colorScheme="brandButtons"
                       onClick={onSpecificationLink}
                       ml={3}
                       disabled={!isSpecChosen}

@@ -21,7 +21,7 @@ body {
   height: 200px;
   margin-right: 10px;
   background: #8c8;
-  order-radius: 5px;
+  border-radius: 5px;
   counter-increment: gallery-cell;
 }
 

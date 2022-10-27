@@ -155,7 +155,7 @@ export default function ProductInventoryRecords({product}: ProductDataProps) {
           <HStack float={"right"}>
             <Tooltip label="Add Product Inventory">
               <Button
-                colorScheme="purple"
+                colorScheme="brandButtons"
                 aria-label="Add Product Inventory"
                 disabled={true}
                 // onClick={onOpen}
@@ -242,7 +242,7 @@ export default function ProductInventoryRecords({product}: ProductDataProps) {
                                 {" "}
                                 <Tooltip label="Remove Inventory Record from Product">
                                   <Button
-                                    colorScheme="purple"
+                                    colorScheme="brandButtons"
                                     aria-label="Remove Inventory Record from Product"
                                     disabled={true}
                                     // onClick={onRemoveSpecification}
@@ -340,7 +340,7 @@ export default function ProductInventoryRecords({product}: ProductDataProps) {
                       float={"right"}
                       width={"45%"}
                       size={"md"}
-                      colorScheme="purple"
+                      colorScheme="brandButtons"
                       onClick={onSpecificationLink}
                       ml={3}
                       disabled={!isSpecChosen}

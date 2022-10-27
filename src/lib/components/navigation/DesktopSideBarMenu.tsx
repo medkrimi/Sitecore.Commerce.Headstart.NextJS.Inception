@@ -5,7 +5,8 @@ import {
   Link,
   Button,
   Icon,
-  IconButton
+  IconButton,
+  useColorModeValue
 } from "@chakra-ui/react"
 import React, {useEffect, useState} from "react"
 import NextLink from "next/link"
@@ -20,6 +21,8 @@ import {BsCurrencyDollar} from "react-icons/bs"
 
 const DesktopSideBarMenu = () => {
   const [navSize, changeNavSize] = useState("large")
+  const sidebarBg = useColorModeValue("brand.500", "brand.600")
+  const color = useColorModeValue("textColor.900", "textColor.100")
 
   return (
     <>
@@ -34,8 +37,8 @@ const DesktopSideBarMenu = () => {
         ml={navSize == "small" ? "0" : "25px"}
         flexDir="column"
         justifyContent="space-between"
-        background="brand.500"
-        color="white"
+        background={sidebarBg}
+        color={color}
       >
         <Flex
           p="5%"
@@ -200,7 +203,8 @@ const DesktopSideBarMenu = () => {
             minW="185px"
             m="0"
             fontSize="10px"
-            color="gray.500"
+            color={color}
+            colorScheme="brandButtons"
           >
             Documentation
           </Button>

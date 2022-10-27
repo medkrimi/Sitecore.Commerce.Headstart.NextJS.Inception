@@ -128,7 +128,7 @@ export default function ProductInventoryData({product}: ProductDataProps) {
             <HStack float={"right"}>
               <Tooltip label="Save">
                 <Button
-                  colorScheme="purple"
+                  colorScheme="brandButtons"
                   aria-label="Save"
                   onClick={onSaveClicked}
                 >
@@ -137,7 +137,7 @@ export default function ProductInventoryData({product}: ProductDataProps) {
               </Tooltip>
               <Tooltip label="Abort">
                 <Button
-                  colorScheme="purple"
+                  colorScheme="brandButtons"
                   aria-label="Abort"
                   onClick={onAbortClicked}
                 >
@@ -149,7 +149,7 @@ export default function ProductInventoryData({product}: ProductDataProps) {
             <HStack float={"right"}>
               <Tooltip label="Edit">
                 <Button
-                  colorScheme="purple"
+                  colorScheme="brandButtons"
                   aria-label="Edit"
                   onClick={onEditClicked}
                 >

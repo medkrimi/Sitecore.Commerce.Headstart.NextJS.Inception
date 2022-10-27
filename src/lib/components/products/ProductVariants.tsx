@@ -97,7 +97,7 @@ export default function ProductVariants({product, variants}: ProductDataProps) {
           <HStack float={"right"}>
             <Tooltip label="Generate variants">
               <Button
-                colorScheme="purple"
+                colorScheme="brandButtons"
                 aria-label="Generate Variants"
                 onClick={onOpen}
               >
@@ -151,7 +151,7 @@ export default function ProductVariants({product, variants}: ProductDataProps) {
                                       {item?.Active ?? false ? (
                                         <Tooltip label="Deactivate Variant">
                                           <Button
-                                            colorScheme="purple"
+                                            colorScheme="brandButtons"
                                             aria-label="Deactivate variant"
                                             onClick={onVariantStatusChange}
                                             data-id={item.ID}
@@ -162,7 +162,7 @@ export default function ProductVariants({product, variants}: ProductDataProps) {
                                       ) : (
                                         <Tooltip label="Activate Variant">
                                           <Button
-                                            colorScheme="purple"
+                                            colorScheme="brandButtons"
                                             aria-label="Activate Variant"
                                             onClick={onVariantStatusChange}
                                             data-id={item.ID}
@@ -228,7 +228,7 @@ export default function ProductVariants({product, variants}: ProductDataProps) {
                 <AlertDialogFooter>
                   <Button onClick={onClose}>Cancel</Button>
                   <Button
-                    colorScheme="purple"
+                    colorScheme="brandButtons"
                     onClick={onGenerateVariantsClicked}
                     ml={3}
                   >

@@ -13,7 +13,8 @@ import {
   AlertDialog,
   AlertDialogOverlay,
   AlertDialogHeader,
-  useDisclosure
+  useDisclosure,
+  useColorModeValue
 } from "@chakra-ui/react"
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import BreadcrumbNavigation from "lib/components/navigation/BreadcrumbNavigation"
@@ -42,7 +43,7 @@ const UserDetails = () => {
   const [isDeleting, setIsDeleting] = useState(false)
   const [user, setUser] = useState<User<any>>(null)
   const [cdpGuestData, setCdpGuestData] = useState<CdpGuestModel>(null)
-
+  const color = useColorModeValue("textColor.900", "textColor.100")
   const {isOpen, onOpen, onClose} = useDisclosure()
   const cancelRef = React.useRef()
 
@@ -133,7 +134,7 @@ const UserDetails = () => {
             mb={1}
             p={18}
             w="full"
-            color={"black"}
+            color={color}
           >
             <BreadcrumbNavigation breadcrumbs={breadcrumb?.items ?? null} />
           </Flex>
@@ -171,7 +172,7 @@ const UserDetails = () => {
           >
             <Tooltip label="Refresh User Data">
               <Button
-                colorScheme="purple"
+                colorScheme="brandButtons"
                 aria-label="Refresh User Data"
                 width={{
                   base: "50%",
@@ -188,7 +189,7 @@ const UserDetails = () => {
             </Tooltip>
             <Tooltip label="Delete Promotion">
               <Button
-                colorScheme="purple"
+                colorScheme="brandButtons"
                 aria-label="Delete Product"
                 width={{
                   base: "50%",
