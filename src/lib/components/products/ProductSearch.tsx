@@ -389,7 +389,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
               <BrandedTable>
                 <Thead>
                   <Tr>
-                    <Th colSpan={6}>
+                    <Th colSpan={7}>
                       <Tooltip label="Search for Products">
                         <IconButton
                           aria-label="Search"
@@ -514,6 +514,11 @@ export default function ProductSearch({query}: ProductSearchProps) {
                       </Tooltip>
                     </Th>
                     <Th>
+                      <Flex justifyContent={"center"}>
+                        <Text>Qty</Text>
+                      </Flex>
+                    </Th>
+                    <Th>
                       {" "}
                       <Tooltip label="Sort by Editorial Progress">
                         <Flex justifyContent={"flex-start"}>
@@ -588,6 +593,9 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           ) : (
                             <CloseIcon boxSize={6} color={errorColor} />
                           )}
+                        </Td>
+                        <Td textAlign={"right"}>
+                          {product?.Inventory?.QuantityAvailable}
                         </Td>
                         <Td>{CalculateEditorialProcess(product)}%</Td>
                       </Tr>

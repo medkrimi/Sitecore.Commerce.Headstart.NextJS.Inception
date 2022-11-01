@@ -32,6 +32,18 @@ const extendedColors: DeepPartial<
     100: "white",
     900: "black"
   },
+  boxBgColor: {
+    // Blue
+    100: "#1c80ff",
+    200: "#1c80ff",
+    300: "#1c80ff",
+    400: "#1c80ff",
+    500: "#1c80ff",
+    600: "#1c80ff",
+    700: "#1c80ff",
+    800: "#1c80ff",
+    900: "#1c80ff"
+  },
   textColor: {
     100: "white",
     900: "black"

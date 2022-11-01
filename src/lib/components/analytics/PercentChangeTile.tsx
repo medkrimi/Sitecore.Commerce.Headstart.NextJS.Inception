@@ -1,18 +1,26 @@
-import {Flex, Text, Box, Icon} from "@chakra-ui/react"
+import {Flex, Text, Box, Icon, useColorModeValue} from "@chakra-ui/react"
 import React from "react"
 import Card from "../card/Card"
 
 export default function PercentChangeTitle(prop) {
+  const color = useColorModeValue("textColor.900", "textColor.100")
+  const bgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
+  const headingColor = useColorModeValue("boxTextColor.400", "boxTextColor.300")
   return (
-    <Card p="28px 10px 0px 0px" mb={{sm: "26px", lg: "0px"}}>
+    <Card p="28px 10px 0px 0px" mb={{sm: "26px", lg: "0px"}} bg={bgColor}>
       <Flex direction="column" mb="20px" ps="22px" alignSelf="flex-start">
-        <Text fontSize="lg" mb="6px" textTransform="uppercase" color="gray.400">
+        <Text
+          fontSize="lg"
+          mb="6px"
+          textTransform="uppercase"
+          color={headingColor}
+        >
           {prop.title}
         </Text>
-        <Text fontSize="lg" fontWeight="bold">
+        <Text fontSize="lg" fontWeight="bold" color={color}>
           {prop.totalamount}
         </Text>
-        <Text fontSize="sm" fontWeight="medium" color="gray.400" pt="30px">
+        <Text fontSize="sm" fontWeight="medium" color={color} pt="30px">
           {prop.percentchangetype === "pos" ? (
             <Text as="span" color="green.400" fontWeight="bold" pr="15px">
               + {prop.percentchange}%
