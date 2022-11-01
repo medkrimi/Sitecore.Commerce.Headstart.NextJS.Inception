@@ -23,10 +23,7 @@ export default function BrandedBox({
   setExpanded
 }: BrandedBoxProperties) {
   const {colorMode, toggleColorMode} = useColorMode()
-  const gradient =
-    colorMode === "light"
-      ? "linear(to-t, gray.300, gray.400)"
-      : "linear(to-t, gray.600, gray.500)"
+  const bgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
   const shadow = "5px 5px 5px #999999"
   const color = useColorModeValue("boxTextColor.900", "boxTextColor.100")
 
@@ -40,7 +37,7 @@ export default function BrandedBox({
       rounded={"lg"}
       zIndex={1}
       color={color}
-      bgGradient={gradient}
+      bg={bgColor}
     >
       <Tooltip
         label={

@@ -62,7 +62,7 @@ const Dashboard = () => {
     Supplier: null,
     Orders: null
   })
-
+  const boxBgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
   const {isAnonymous} = useOcSelector((s) => ({
     isAnonymous: s.ocAuth.isAnonymous
   }))
@@ -288,7 +288,12 @@ const Dashboard = () => {
               <GridItem>
                 <NextLink href="/products" passHref>
                   <Link>
-                    <Card p="28px 10px 0px 0px" mb={{sm: "26px", lg: "0px"}}>
+                    <Card
+                      p="28px 10px 0px 0px"
+                      mb={{sm: "26px", lg: "0px"}}
+                      bg={boxBgColor}
+                      color={color}
+                    >
                       <HStack
                         justifyContent="space-around"
                         w="100%"
@@ -318,7 +323,12 @@ const Dashboard = () => {
               <GridItem>
                 <NextLink href="/products" passHref>
                   <Link>
-                    <Card p="28px 10px 0px 0px" mb={{sm: "26px", lg: "0px"}}>
+                    <Card
+                      p="28px 10px 0px 0px"
+                      mb={{sm: "26px", lg: "0px"}}
+                      bg={boxBgColor}
+                      color={color}
+                    >
                       <HStack
                         justifyContent="space-around"
                         w="100%"
@@ -345,7 +355,12 @@ const Dashboard = () => {
               <GridItem>
                 <NextLink href="/users" passHref>
                   <Link>
-                    <Card p="28px 10px 0px 0px" mb={{sm: "26px", lg: "0px"}}>
+                    <Card
+                      p="28px 10px 0px 0px"
+                      mb={{sm: "26px", lg: "0px"}}
+                      bg={boxBgColor}
+                      color={color}
+                    >
                       <HStack
                         justifyContent="space-around"
                         w="100%"
@@ -372,7 +387,12 @@ const Dashboard = () => {
               <GridItem>
                 <NextLink href="/promotions" passHref>
                   <Link>
-                    <Card p="28px 10px 0px 0px" mb={{sm: "26px", lg: "0px"}}>
+                    <Card
+                      p="28px 10px 0px 0px"
+                      mb={{sm: "26px", lg: "0px"}}
+                      bg={boxBgColor}
+                      color={color}
+                    >
                       <HStack
                         justifyContent="space-around"
                         w="100%"

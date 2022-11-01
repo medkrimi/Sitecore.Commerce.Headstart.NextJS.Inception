@@ -24,7 +24,8 @@ const customTheme = extendTheme({
       // styles for the `body`
       body: {
         bg: mode("bodyBg.100", "bodyBg.900")(props),
-        color: "white"
+        color: "white",
+        fontSize: "sm"
       }
     })
   }
