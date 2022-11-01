@@ -265,7 +265,6 @@ const ProductDetails = () => {
                     variants={productDetails.variants}
                   />
                 </GridItem>
-
                 <GridItem rowSpan={1} colSpan={6}>
                   <ProductPriceScheduleAssignments
                     product={productDetails.product}
