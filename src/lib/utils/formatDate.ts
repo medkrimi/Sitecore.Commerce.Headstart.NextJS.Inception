@@ -7,7 +7,7 @@ import {format} from "date-fns"
  *
  * https://date-fns.org/v2.29.2/docs/format
  */
-export function formatDate(isoDateString: string) {
+export function f ormatDate(isoDateString: string) {
   const date = new Date(isoDateString)
   const formattedDate = format(date, "MMMM do 'at' h:mmaaa")
   return formattedDate
