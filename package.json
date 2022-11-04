@@ -16,11 +16,10 @@
     "up-latest": "yarn up --latest",
     "release": "cross-env HUSKY=0 standard-version",
     "push-release": "git push --follow-tags origin main",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "pre-commit": "yarn lint && yarn tsc --noEmit && yarn build"    
   },
-  "pre-commit": {
-    "run": ["lint", "type-check", "build"]    
-  },
+  
   "dependencies": {
     "@chakra-ui/icons": "^2.0.4",
     "@chakra-ui/react": "^2.3.5",
