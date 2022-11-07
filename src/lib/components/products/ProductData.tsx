@@ -15,8 +15,10 @@ import {
   Input,
   Checkbox
 } from "@chakra-ui/react"
-import {setProductId} from "lib/redux/ocProductDetail"
-import {useOcDispatch} from "lib/redux/ocStore"
+import {
+  ComposedProduct,
+  GetComposedProduct
+} from "lib/scripts/OrdercloudService"
 import {
   Inventory,
   Product,
@@ -29,28 +31,31 @@ import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 
 type ProductDataProps = {
-  product: RequiredDeep<Product<any>>
+  composedProduct: ComposedProduct
+  setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductData({product}: ProductDataProps) {
+export default function ProductData({
+  composedProduct,
+  setComposedProduct
+}: ProductDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
   const color = useColorModeValue("textColor.100", "textColor.300")
   const [expanded, setExpanded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const dispatch = useOcDispatch()
   const [formValues, setFormValues] = useState({
-    name: product?.Name,
-    id: product?.ID,
-    description: product?.Description,
-    defaultPriceScheduleId: product?.DefaultPriceScheduleID,
-    quantityMultiplier: product?.QuantityMultiplier,
-    shipFromAddress: product?.ShipFromAddressID,
-    returnable: product?.Returnable,
-    isActive: product?.Active,
-    allSuppliersCanSell: product?.AllSuppliersCanSell,
-    defaultSupplierId: product?.DefaultSupplierID
+    name: composedProduct?.Product?.Name,
+    id: composedProduct?.Product?.ID,
+    description: composedProduct?.Product?.Description,
+    defaultPriceScheduleId: composedProduct?.Product?.DefaultPriceScheduleID,
+    quantityMultiplier: composedProduct?.Product?.QuantityMultiplier,
+    shipFromAddress: composedProduct?.Product?.ShipFromAddressID,
+    returnable: composedProduct?.Product?.Returnable,
+    isActive: composedProduct?.Product?.Active,
+    allSuppliersCanSell: composedProduct?.Product?.AllSuppliersCanSell,
+    defaultSupplierId: composedProduct?.Product?.DefaultSupplierID
   })
 
   const handleInputChange =
@@ -77,15 +82,16 @@ export default function ProductData({product}: ProductDataProps) {
   const onEditClicked = (e) => {
     setFormValues((v) => ({
       ...v,
-      ["name"]: product?.Name,
-      ["id"]: product?.ID,
-      ["description"]: product?.Description,
-      ["defaultPriceScheduleId"]: product?.DefaultPriceScheduleID,
-      ["quantityMultiplier"]: product?.QuantityMultiplier,
-      ["shipFromAddress"]: product?.ShipFromAddressID,
-      ["returnable"]: product?.Returnable,
-      ["isActive"]: product?.Active,
-      ["allSuppliersCanSell"]: product?.AllSuppliersCanSell
+      ["name"]: composedProduct?.Product?.Name,
+      ["id"]: composedProduct?.Product?.ID,
+      ["description"]: composedProduct?.Product?.Description,
+      ["defaultPriceScheduleId"]:
+        composedProduct?.Product?.DefaultPriceScheduleID,
+      ["quantityMultiplier"]: composedProduct?.Product?.QuantityMultiplier,
+      ["shipFromAddress"]: composedProduct?.Product?.ShipFromAddressID,
+      ["returnable"]: composedProduct?.Product?.Returnable,
+      ["isActive"]: composedProduct?.Product?.Active,
+      ["allSuppliersCanSell"]: composedProduct?.Product?.AllSuppliersCanSell
     }))
     setIsEditingBasicData(true)
     setExpanded(true)
@@ -94,15 +100,16 @@ export default function ProductData({product}: ProductDataProps) {
   const onAbortClicked = (e) => {
     setFormValues((v) => ({
       ...v,
-      ["name"]: product?.Name,
-      ["id"]: product?.ID,
-      ["description"]: product?.Description,
-      ["defaultPriceScheduleId"]: product?.DefaultPriceScheduleID,
-      ["quantityMultiplier"]: product?.QuantityMultiplier,
-      ["shipFromAddress"]: product?.ShipFromAddressID,
-      ["returnable"]: product?.Returnable,
-      ["isActive"]: product?.Active,
-      ["allSuppliersCanSell"]: product?.AllSuppliersCanSell
+      ["name"]: composedProduct?.Product?.Name,
+      ["id"]: composedProduct?.Product?.ID,
+      ["description"]: composedProduct?.Product?.Description,
+      ["defaultPriceScheduleId"]:
+        composedProduct?.Product?.DefaultPriceScheduleID,
+      ["quantityMultiplier"]: composedProduct?.Product?.QuantityMultiplier,
+      ["shipFromAddress"]: composedProduct?.Product?.ShipFromAddressID,
+      ["returnable"]: composedProduct?.Product?.Returnable,
+      ["isActive"]: composedProduct?.Product?.Active,
+      ["allSuppliersCanSell"]: composedProduct?.Product?.AllSuppliersCanSell
     }))
     setIsEditingBasicData(false)
   }
@@ -120,11 +127,12 @@ export default function ProductData({product}: ProductDataProps) {
       Returnable: formValues.returnable,
       ShipFromAddressID: formValues.shipFromAddress
     }
-    await Products.Patch(product.ID, patchedProduct)
+    await Products.Patch(composedProduct?.Product?.ID, patchedProduct)
 
     // Hack to ensure Data are loaded before showing -> AWAIT is not enough
-    setTimeout(() => {
-      dispatch(setProductId(product.ID))
+    setTimeout(async () => {
+      var product = await GetComposedProduct(composedProduct?.Product?.ID)
+      setComposedProduct(product)
       setTimeout(() => {
         setIsEditingBasicData(false)
         setIsLoading(false)
@@ -170,7 +178,7 @@ export default function ProductData({product}: ProductDataProps) {
               </Tooltip>
             </HStack>
           )}
-          {(!product || isLoading) && expanded ? (
+          {(!composedProduct?.Product || isLoading) && expanded ? (
             <Box pt={6} textAlign={"center"}>
               Updating... <BrandedSpinner />
             </Box>
@@ -207,7 +215,7 @@ export default function ProductData({product}: ProductDataProps) {
                             fontFamily={"body"}
                             fontWeight={500}
                           >
-                            {product?.Name}
+                            {composedProduct?.Product?.Name}
                           </Heading>
                         )}
                       </Box>
@@ -231,7 +239,7 @@ export default function ProductData({product}: ProductDataProps) {
                             fontFamily={"body"}
                             fontWeight={500}
                           >
-                            {product?.ID}
+                            {composedProduct?.Product?.ID}
                           </Heading>
                         )}
                       </Box>
@@ -251,7 +259,7 @@ export default function ProductData({product}: ProductDataProps) {
                           fontFamily={"body"}
                           fontWeight={500}
                         >
-                          {product?.Description}
+                          {composedProduct?.Product?.Description}
                         </Heading>
                       )}
                     </Box>
@@ -273,7 +281,8 @@ export default function ProductData({product}: ProductDataProps) {
                             fontFamily={"body"}
                             fontWeight={500}
                           >
-                            {product?.DefaultPriceScheduleID ?? "Not set"}
+                            {composedProduct?.Product?.DefaultPriceScheduleID ??
+                              "Not set"}
                           </Heading>
                         )}
                       </Box>
@@ -296,7 +305,8 @@ export default function ProductData({product}: ProductDataProps) {
                             fontFamily={"body"}
                             fontWeight={500}
                           >
-                            {product?.ShipFromAddressID ?? "Not set"}
+                            {composedProduct?.Product?.ShipFromAddressID ??
+                              "Not set"}
                           </Heading>
                         )}
                       </Box>
@@ -317,7 +327,8 @@ export default function ProductData({product}: ProductDataProps) {
                             fontFamily={"body"}
                             fontWeight={500}
                           >
-                            {product?.DefaultSupplierID ?? "Not set"}
+                            {composedProduct?.Product?.DefaultSupplierID ??
+                              "Not set"}
                           </Heading>
                         )}
                       </Box>
@@ -337,7 +348,8 @@ export default function ProductData({product}: ProductDataProps) {
                           fontFamily={"body"}
                           fontWeight={500}
                         >
-                          {product?.AllSuppliersCanSell ?? false ? (
+                          {composedProduct?.Product?.AllSuppliersCanSell ??
+                          false ? (
                             <CheckIcon boxSize={6} color={okColor} />
                           ) : (
                             <CloseIcon boxSize={6} color={errorColor} />
@@ -366,7 +378,8 @@ export default function ProductData({product}: ProductDataProps) {
                             fontFamily={"body"}
                             fontWeight={500}
                           >
-                            {product?.QuantityMultiplier ?? "Not set"}
+                            {composedProduct?.Product?.QuantityMultiplier ??
+                              "Not set"}
                           </Heading>
                         )}
                       </Box>
@@ -386,7 +399,7 @@ export default function ProductData({product}: ProductDataProps) {
                           fontFamily={"body"}
                           fontWeight={500}
                         >
-                          {product?.Returnable ?? false ? (
+                          {composedProduct?.Product?.Returnable ?? false ? (
                             <CheckIcon boxSize={6} color={okColor} />
                           ) : (
                             <CloseIcon boxSize={6} color={errorColor} />
@@ -409,7 +422,7 @@ export default function ProductData({product}: ProductDataProps) {
                           fontFamily={"body"}
                           fontWeight={500}
                         >
-                          {product?.Active ?? false ? (
+                          {composedProduct?.Product?.Active ?? false ? (
                             <CheckIcon boxSize={6} color={okColor} />
                           ) : (
                             <CloseIcon boxSize={6} color={errorColor} />

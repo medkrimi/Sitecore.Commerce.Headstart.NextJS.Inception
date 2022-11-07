@@ -16,14 +16,19 @@ import {
   Collapse,
   Select
 } from "@chakra-ui/react"
-import {setProductId} from "lib/redux/ocProductDetail"
-import {useOcDispatch} from "lib/redux/ocStore"
 import {
   PromotionTier,
   PromotionType,
   PromotionXPs
 } from "lib/types/PromotionXPs"
-import {Promotion, Promotions, PartialDeep} from "ordercloud-javascript-sdk"
+import {
+  Promotion,
+  Promotions,
+  PartialDeep,
+  Products,
+  RequiredDeep,
+  Product
+} from "ordercloud-javascript-sdk"
 import {ChangeEvent, useState} from "react"
 import {FiCheck, FiX, FiEdit} from "react-icons/fi"
 import BrandedBox from "../branding/BrandedBox"
@@ -33,7 +38,9 @@ type PromotionDataProps = {
   promotion: Promotion<PromotionXPs>
 }
 
-export default function BasicProductData({promotion}: PromotionDataProps) {
+export default function PromotionXpInformation({
+  promotion
+}: PromotionDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
@@ -43,8 +50,9 @@ export default function BasicProductData({promotion}: PromotionDataProps) {
     type: promotion?.xp?.Type,
     customer: promotion?.xp?.Customer
   })
-  const dispatch = useOcDispatch()
   const [expanded, setExpanded] = useState(false)
+  const [componentProduct, setComponentProduct] =
+    useState<RequiredDeep<Product<any>>>(null)
 
   const onEditClicked = (e) => {
     e.preventDefault()
@@ -92,8 +100,9 @@ export default function BasicProductData({promotion}: PromotionDataProps) {
     await Promotions.Patch(promotion.ID, newPromotion)
 
     // Hack to ensure Data are loaded before showing -> AWAIT is not enough
-    setTimeout(() => {
-      dispatch(setProductId(promotion.ID))
+    setTimeout(async () => {
+      var product = await Products.Get(product.ID)
+      setComponentProduct(product)
       setTimeout(() => {
         setIsEditingBasicData(false)
         setIsLoading(false)

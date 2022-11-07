@@ -13,22 +13,27 @@ import {Me, Orders} from "ordercloud-javascript-sdk"
 import {useEffect, useState} from "react"
 import Link from "../../lib/components/navigation/Link"
 import {formatDate} from "lib/utils/formatDate"
-import useOcAuth from "lib/hooks/useOcAuth"
 import formatPrice from "lib/utils/formatPrice"
+import {
+  GetAuthenticationStatus,
+  OcAuthState
+} from "lib/scripts/OrdercloudService"
 
 const OrdersPage = () => {
-  const {isAdmin} = useOcAuth()
   const [orders, setOrders] = useState([])
+  const [authState, setAuthState] = useState<OcAuthState>()
 
   useEffect(() => {
     const getOrders = async () => {
-      const ordersList = isAdmin
+      const state = GetAuthenticationStatus()
+      setAuthState(state)
+      const ordersList = state?.isAdmin
         ? await Orders.List("All")
         : await Me.ListOrders()
       setOrders(ordersList.Items)
     }
     getOrders()
-  }, [isAdmin])
+  }, [])
 
   const ordersContent = orders.length ? (
     orders.map((order) => (
@@ -36,7 +41,7 @@ const OrdersPage = () => {
         <Td>
           <Link href={`/orders/${order.ID}`}>{order.ID}</Link>
         </Td>
-        {isAdmin && (
+        {authState?.isAdmin && (
           <Td>
             {order.FromUser.FirstName} {order.FromUser.LastName}
           </Td>
@@ -54,15 +59,15 @@ const OrdersPage = () => {
 
   return (
     <Container maxWidth={"120ch"}>
-      <NextSeo title={isAdmin ? "Orders" : "My Orders"} />
+      <NextSeo title={authState?.isAdmin ? "Orders" : "My Orders"} />
       <Heading as="h2" marginTop={5}>
-        {isAdmin ? "Orders" : "My Orders"}
+        {authState?.isAdmin ? "Orders" : "My Orders"}
       </Heading>
       <Table variant="striped" margin={30}>
         <Thead>
           <Tr>
             <Th>Order Number</Th>
-            {isAdmin && <Th>Submitted By</Th>}
+            {authState?.isAdmin && <Th>Submitted By</Th>}
             <Th>Date Submitted</Th>
             <Th>Total</Th>
             <Th>Item Count</Th>

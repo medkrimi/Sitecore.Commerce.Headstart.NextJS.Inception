@@ -727,7 +727,7 @@
   dependencies:
     "@chakra-ui/utils" "2.0.11"
 
-"@chakra-ui/react@^2.3.5":
+"@chakra-ui/react@^2.3.6":
   "integrity" "sha512-xo43UU+yMqRGHZLU4fSgzojeRl5stlIfT+GLbT9CUVEm0HMJCt2m8RsNPBvGOMzANdC+bzwSiOm+MNzQBi9IBQ=="
   "resolved" "https://registry.npmjs.org/@chakra-ui/react/-/react-2.3.6.tgz"
   "version" "2.3.6"

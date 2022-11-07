@@ -30,7 +30,6 @@ import {
   Suppliers,
   Users
 } from "ordercloud-javascript-sdk"
-import {useOcSelector} from "lib/redux/ocStore"
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import AverageOrderAmount from "lib/components/analytics/AverageOrderAmount"
 import TodaysMoney from "lib/components/analytics/PercentChangeTile"
@@ -45,12 +44,10 @@ import {
   HiOutlineUserCircle
 } from "react-icons/hi"
 import Card from "lib/components/card/Card"
+import {GetAuthenticationStatus} from "lib/scripts/OrdercloudService"
 
 const Dashboard = () => {
   const {push} = useRouter()
-  // const options: OcProductListOptions = {}
-  // const dispatch = useOcDispatch()
-  // const products = useOcProductList(options)
   const {colorMode, toggleColorMode} = useColorMode()
   const [orderCloudData, setOrdercloudData] = useState({
     Products: null,
@@ -63,18 +60,15 @@ const Dashboard = () => {
     Orders: null
   })
   const boxBgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
-  const {isAnonymous} = useOcSelector((s) => ({
-    isAnonymous: s.ocAuth.isAnonymous
-  }))
-
   useEffect(() => {
-    if (isAnonymous) {
+    let state = GetAuthenticationStatus()
+    if (state?.isAnonymous) {
       push("/")
     }
 
     // Can be refactored to use Redux as well like with products
     async function LoadOrdercloudData() {
-      if (!isAnonymous) {
+      if (!state?.isAnonymous) {
         var products = await Products.List()
           .then((response) => {
             return response.Items
@@ -157,7 +151,7 @@ const Dashboard = () => {
 
     // dispatch(setListOptions(options))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAnonymous])
+  }, [])
 
   const shadow = "5px 5px 5px #999999"
   const gradient =
