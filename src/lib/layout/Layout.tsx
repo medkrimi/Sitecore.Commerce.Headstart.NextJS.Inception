@@ -35,7 +35,7 @@ const Layout = ({children}: LayoutProps) => {
         {state?.isAnonymous ?? true ? <></> : <LeftNavigation />}
         {children}
       </HStack>
-      <Footer />
+      {state?.isAnonymous ?? true ? <></> : <Footer />}
     </Box>
   )
 }
