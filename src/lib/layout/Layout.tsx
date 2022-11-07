@@ -17,7 +17,7 @@ const Layout = ({children}: LayoutProps) => {
 
   useEffect(() => {
     setState(GetAuthenticationStatus())
-  }, [])
+  }, [children])
 
   return (
     <Box as="section" w="100%" margin="0 auto" transition="0.5s ease-out">
