@@ -50,7 +50,9 @@ import {
   FiCheckSquare,
   FiArrowDown,
   FiArrowUp,
-  FiArrowRight
+  FiArrowRight,
+  FiGrid,
+  FiEdit
 } from "react-icons/fi"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
@@ -62,6 +64,8 @@ import {useState, ChangeEvent, useEffect} from "react"
 import {Product, Products} from "ordercloud-javascript-sdk"
 import {ProductXPs} from "lib/types/ProductXPs"
 import {CalculateEditorialProcess} from "./EditorialProgressBar"
+import ProductGrid from "./ProductGrid"
+import ProductList from "./ProductList"
 //import Image from "next/image"
 
 interface ProductSearchProps {
@@ -76,8 +80,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
     useState<Product<ProductXPs>[]>(products)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
-  const bg = useColorModeValue("gray.400", "gray.600")
-  const color = useColorModeValue("textColor.900", "textColor.100")
   const sliderColor = useColorModeValue("brand.400", "brand.600")
   const [editorialProgressFilter, setEditorialProgressFilter] = useState(100)
   const [sortBy, setSortBy] = useState("")
@@ -88,6 +90,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
     ml: "-2.5",
     fontSize: "sm"
   }
+  const [toggleViewMode, setToggleViewMode] = useState(false)
 
   useEffect(() => {
     if (query) {
@@ -245,6 +248,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
   }
 
   const onMassEditCheckboxChanged = (productId: string) => (e) => {
+    console.log(productId)
     var product = componentProducts.find((element) => element.ID == productId)
     var isChecked = e.target.checked
     var productsToEdit = massEditProducts
@@ -275,9 +279,10 @@ export default function ProductSearch({query}: ProductSearchProps) {
   }
 
   const onSortByNameClicked = (newVal: string) => async (e) => {
+    console.log("Enter onSoftByNameClicked")
     setSortingChanging(true)
     setSortBy(newVal)
-
+    console.log(newVal)
     if (newVal == "editorialProgress") {
       var tmpComponentProducts = [...componentProducts]
       var newProducts = tmpComponentProducts.sort(
@@ -328,11 +333,9 @@ export default function ProductSearch({query}: ProductSearchProps) {
       {componentProducts ? (
         <VStack p={0} spacing={6} width="full" align="center">
           <NextSeo title="Products Overview" />
-          <Heading color={color} as="h1">
-            Products Overview
-          </Heading>
+          <Heading as="h1">Products Overview</Heading>
           <HStack width={"full"} justifyContent={"space-between"}>
-            <Box color={color} width={"100%"} pt={8} pb={4} pl={6} pr={6}>
+            <Box width={"100%"} pt={8} pb={4} pl={6} pr={6}>
               <Slider
                 borderRight={"solid black"}
                 borderLeft={"solid black"}
@@ -376,7 +379,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
                 </SliderTrack>
                 <SliderThumb />
               </Slider>
-              <Text fontWeight={"bold"} pt={5} ml={-2} color={color}>
+              <Text fontWeight={"bold"} pt={5} ml={-2}>
                 Filter by Editorial Progress...
               </Text>
             </Box>
@@ -394,36 +397,45 @@ export default function ProductSearch({query}: ProductSearchProps) {
                         <IconButton
                           aria-label="Search"
                           icon={<SearchIcon />}
-                          colorScheme={"brandButtons"}
                           onClick={onSearchClicked}
                           float="right"
+                          variant="primary"
                         />
                       </Tooltip>
                       <Tooltip label="Reset Search Parameters">
                         <IconButton
                           aria-label="Reset all Search Parameters"
                           icon={<FiRotateCcw />}
-                          colorScheme={"brandButtons"}
                           onClick={onResetSearch}
                           float="right"
+                          variant="primary"
                         />
                       </Tooltip>
                       <Tooltip label="Add new Product">
                         <IconButton
                           aria-label="Add new Product"
                           icon={<FiPlus />}
-                          colorScheme={"brandButtons"}
                           onClick={onOpenAddProduct}
                           float="right"
+                          variant="primary"
                         />
                       </Tooltip>
                       <Tooltip label="Mass Edit Products">
                         <IconButton
                           aria-label="Mass Edit Products"
-                          icon={<FiList />}
-                          colorScheme={"brandButtons"}
+                          icon={<FiEdit />}
                           onClick={onMassEditOpenClicked}
                           float="right"
+                          variant="primary"
+                        />
+                      </Tooltip>
+                      <Tooltip label="Switch List/Grid View">
+                        <IconButton
+                          aria-label="Switch List/Grid View"
+                          icon={toggleViewMode ? <FiGrid /> : <FiList />}
+                          onClick={() => setToggleViewMode(!toggleViewMode)}
+                          float="right"
+                          variant="primary"
                         />
                       </Tooltip>
                       <InputGroup width={"250px"} float="right">
@@ -434,9 +446,8 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           autoComplete="off"
                           placeholder="Enter here ..."
                           aria-label="Enter Search Term"
-                          bg={bg}
-                          color={color}
-                          _placeholder={{color: color}}
+                          //_placeholder={{color: color}}
+                          variant="primary"
                           id={"headerSearchInput"}
                           width={"100%"}
                           value={searchQuery}
@@ -450,163 +461,26 @@ export default function ProductSearch({query}: ProductSearchProps) {
                       </InputGroup>
                     </Th>
                   </Tr>
-                  <Tr>
-                    <Tooltip
-                      label={"Click here to select / unselect all Products"}
-                    >
-                      <Th cursor={"pointer"}>
-                        <Flex justifyContent={"flex-start"}>
-                          <FiCheckSquare />
-                          <Text ml={2}>Product ID</Text>
-                        </Flex>
-                      </Th>
-                    </Tooltip>
-                    <Th>Image</Th>
-                    <Th>
-                      <Tooltip label="Sort by Name">
-                        <Flex justifyContent={"flex-start"}>
-                          {sortBy == "name" ? (
-                            <FiArrowUp
-                              cursor={"pointer"}
-                              onClick={onSortByNameClicked("!name")}
-                            />
-                          ) : sortBy == "!name" ? (
-                            <FiArrowDown
-                              cursor={"pointer"}
-                              onClick={onSortByNameClicked("name")}
-                            />
-                          ) : (
-                            <FiArrowRight
-                              cursor={"pointer"}
-                              onClick={onSortByNameClicked("name")}
-                            />
-                          )}
-
-                          <Text ml={2}>Product Name</Text>
-                        </Flex>
-                      </Tooltip>
-                    </Th>
-                    <Th>Description</Th>
-                    {/* <Th color={color}>Description</Th> */}
-                    <Th>
-                      {" "}
-                      <Tooltip label="Sort by Is Active">
-                        <Flex justifyContent={"flex-start"}>
-                          {sortBy == "Active" ? (
-                            <FiArrowUp
-                              cursor={"pointer"}
-                              onClick={onSortByNameClicked("!Active")}
-                            />
-                          ) : sortBy == "!Active" ? (
-                            <FiArrowDown
-                              cursor={"pointer"}
-                              onClick={onSortByNameClicked("Active")}
-                            />
-                          ) : (
-                            <FiArrowRight
-                              cursor={"pointer"}
-                              onClick={onSortByNameClicked("Active")}
-                            />
-                          )}
-
-                          <Text ml={2}>Active?</Text>
-                        </Flex>
-                      </Tooltip>
-                    </Th>
-                    <Th>
-                      <Flex justifyContent={"center"}>
-                        <Text>Qty</Text>
-                      </Flex>
-                    </Th>
-                    <Th>
-                      {" "}
-                      <Tooltip label="Sort by Editorial Progress">
-                        <Flex justifyContent={"flex-start"}>
-                          {sortBy == "editorialProgress" ? (
-                            <FiArrowUp
-                              cursor={"editorialProgress"}
-                              onClick={onSortByNameClicked(
-                                "!editorialProgress"
-                              )}
-                            />
-                          ) : sortBy == "!editorialProgress" ? (
-                            <FiArrowDown
-                              cursor={"pointer"}
-                              onClick={onSortByNameClicked("editorialProgress")}
-                            />
-                          ) : (
-                            <FiArrowRight
-                              cursor={"pointer"}
-                              onClick={onSortByNameClicked("editorialProgress")}
-                            />
-                          )}
-
-                          <Text ml={2}>Editorial Progress</Text>
-                        </Flex>
-                      </Tooltip>
-                    </Th>
-                  </Tr>
                 </Thead>
-                <Tbody alignContent={"center"}>
-                  {componentProducts && componentProducts.length > 0 ? (
-                    componentProducts.map((product, index) => (
-                      <Tr key={index}>
-                        <Td>
-                          <Checkbox
-                            onChange={onMassEditCheckboxChanged(product.ID)}
-                          />
-                          <NextLink href={"/products/" + product.ID} passHref>
-                            <Link> {product.ID}</Link>
-                          </NextLink>
-                        </Td>
-                        <Td>
-                          <Center>
-                            <NextLink href={"/products/" + product.ID} passHref>
-                              <Link>
-                                <Image
-                                  src={
-                                    typeof product?.xp?.Images != "undefined"
-                                      ? product?.xp?.Images[0]?.ThumbnailUrl
-                                      : "https://mss-p-006-delivery.stylelabs.cloud/api/public/content/4fc742feffd14e7686e4820e55dbfbaa"
-                                  }
-                                  alt="product image"
-                                  width="50px"
-                                />
-                              </Link>
-                            </NextLink>
-                          </Center>
-                        </Td>
-                        <Td>
-                          <NextLink href={"/products/" + product.ID} passHref>
-                            <Link>{product.Name}</Link>
-                          </NextLink>
-                        </Td>
-                        <Td>
-                          {stripHTML(product.Description).length > 40
-                            ? stripHTML(product.Description).substring(0, 40) +
-                              "..."
-                            : stripHTML(product.Description)}
-                        </Td>
-                        <Td>
-                          {product.Active ? (
-                            <CheckIcon boxSize={6} color={okColor} />
-                          ) : (
-                            <CloseIcon boxSize={6} color={errorColor} />
-                          )}
-                        </Td>
-                        <Td textAlign={"right"}>
-                          {product?.Inventory?.QuantityAvailable}
-                        </Td>
-                        <Td>{CalculateEditorialProcess(product)}%</Td>
-                      </Tr>
-                    ))
-                  ) : (
-                    <Text p={3}>No Products found</Text>
-                  )}
-                </Tbody>
+                {toggleViewMode ? (
+                  <ProductList
+                    products={componentProducts}
+                    onCheckChange={(productid) =>
+                      onMassEditCheckboxChanged(productid)
+                    }
+                    onSort={(columnName) => onSortByNameClicked(columnName)}
+                  />
+                ) : (
+                  <ProductGrid
+                    products={componentProducts}
+                    onCheck={(productid) =>
+                      onMassEditCheckboxChanged(productid)
+                    }
+                  />
+                )}
               </BrandedTable>
               <Box>
-                <Text fontWeight={"bold"} p={3} float={"left"} color={color}>
+                <Text fontWeight={"bold"} p={3} float={"left"}>
                   {componentProducts.length} out of {componentProducts.length}{" "}
                   Products{" "}
                 </Text>

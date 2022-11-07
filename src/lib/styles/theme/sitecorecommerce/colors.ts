@@ -88,6 +88,12 @@ const extendedColors: DeepPartial<
   bodyBg: {
     100: "#f4f4f4",
     900: "#2D3748"
+  },
+  inputBg: {
+    100: "#EDF2F7",
+    200: "#E2E8F0",
+    800: "#2D3748",
+    900: "#4A5568"
   }
 }
 

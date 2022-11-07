@@ -1,7 +1,20 @@
-import type {DeepPartial, Theme} from "@chakra-ui/react"
-
-export const Button: DeepPartial<Theme["components"]["Button"]> = {
+export const Button = {
   baseStyle: {
-    borderRadius: "full"
+    borderRadius: "10",
+    margin: "1px"
+  },
+  variants: {
+    primary: {
+      backgroundColor: "brandButtons.500",
+      _hover: {
+        backgroundColor: "brandButtons.600"
+      },
+      _dark: {
+        backgroundColor: "brandButtons.200",
+        _hover: {
+          backgroundColor: "brandButtons.100"
+        }
+      }
+    }
   }
 }
