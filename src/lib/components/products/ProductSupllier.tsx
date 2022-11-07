@@ -12,34 +12,10 @@ import {
   Tr,
   Collapse,
   HStack,
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-  Checkbox,
-  useDisclosure,
-  Input,
-  FormControl,
-  Text,
-  ListItem,
-  UnorderedList,
   Tag
 } from "@chakra-ui/react"
-import {setProductId} from "lib/redux/ocProductDetail"
-import {useOcDispatch} from "lib/redux/ocStore"
-import {
-  ListPage,
-  Product,
-  Products,
-  ProductSupplier,
-  RequiredDeep,
-  Spec,
-  SpecProductAssignment,
-  Specs,
-  Supplier
-} from "ordercloud-javascript-sdk"
+import {ComposedProduct} from "lib/scripts/OrdercloudService"
+import {Products, ProductSupplier} from "ordercloud-javascript-sdk"
 import React, {useEffect} from "react"
 import {useState} from "react"
 import {FiPlus, FiTrash2} from "react-icons/fi"
@@ -48,10 +24,14 @@ import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 
 type ProductDataProps = {
-  product: RequiredDeep<Product<any>>
+  composedProduct: ComposedProduct
+  setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductSuppliers({product}: ProductDataProps) {
+export default function ProductSuppliers({
+  composedProduct,
+  setComposedProduct
+}: ProductDataProps) {
   const color = useColorModeValue("textColor.900", "textColor.100")
   const bg = useColorModeValue("brand.500", "brand.500")
   const okColor = useColorModeValue("okColor.800", "okColor.200")
@@ -62,13 +42,15 @@ export default function ProductSuppliers({product}: ProductDataProps) {
 
   useEffect(() => {
     async function GetProdcutSupplier() {
-      if (product) {
-        var productSupplier = await Products.ListSuppliers(product.ID)
+      if (composedProduct?.Product) {
+        var productSupplier = await Products.ListSuppliers(
+          composedProduct?.Product?.ID
+        )
         setSupplier(productSupplier.Items)
       }
     }
     GetProdcutSupplier()
-  }, [product])
+  }, [composedProduct])
 
   // const dispatch = useOcDispatch()
   // const {isOpen, onOpen, onClose} = useDisclosure()
@@ -176,7 +158,7 @@ export default function ProductSuppliers({product}: ProductDataProps) {
             </Tag>
           </Heading>
 
-          {(isLoading || !product) && expanded ? (
+          {(isLoading || !composedProduct?.Product) && expanded ? (
             <Box pt={6} textAlign={"center"}>
               Updating... <BrandedSpinner />
             </Box>

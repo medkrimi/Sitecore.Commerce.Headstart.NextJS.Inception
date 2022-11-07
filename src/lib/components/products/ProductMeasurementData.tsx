@@ -15,8 +15,10 @@ import {
   Input,
   Checkbox
 } from "@chakra-ui/react"
-import {setProductId} from "lib/redux/ocProductDetail"
-import {useOcDispatch} from "lib/redux/ocStore"
+import {
+  ComposedProduct,
+  GetComposedProduct
+} from "lib/scripts/OrdercloudService"
 import {
   Inventory,
   Product,
@@ -29,21 +31,24 @@ import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 
 type ProductDataProps = {
-  product: RequiredDeep<Product<any>>
+  composedProduct: ComposedProduct
+  setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductMeasurementData({product}: ProductDataProps) {
+export default function ProductMeasurementData({
+  composedProduct,
+  setComposedProduct
+}: ProductDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
   const [expanded, setExpanded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const dispatch = useOcDispatch()
   const [formValues, setFormValues] = useState({
-    shipWeight: product?.ShipWeight,
-    shipHeight: product?.ShipHeight,
-    shipLength: product?.ShipLength,
-    shipWidth: product?.ShipWidth
+    shipWeight: composedProduct?.Product?.ShipWeight,
+    shipHeight: composedProduct?.Product?.ShipHeight,
+    shipLength: composedProduct?.Product?.ShipLength,
+    shipWidth: composedProduct?.Product?.ShipWidth
   })
 
   const handleNumberInputChange =
@@ -57,10 +62,10 @@ export default function ProductMeasurementData({product}: ProductDataProps) {
   const onEditClicked = (e) => {
     setFormValues((v) => ({
       ...v,
-      ["shipWeight"]: product?.ShipWeight,
-      ["shipHeight"]: product?.ShipHeight,
-      ["shipLength"]: product?.ShipLength,
-      ["shipWidth"]: product?.ShipWidth
+      ["shipWeight"]: composedProduct?.Product?.ShipWeight,
+      ["shipHeight"]: composedProduct?.Product?.ShipHeight,
+      ["shipLength"]: composedProduct?.Product?.ShipLength,
+      ["shipWidth"]: composedProduct?.Product?.ShipWidth
     }))
     setIsEditingBasicData(true)
     setExpanded(true)
@@ -69,10 +74,10 @@ export default function ProductMeasurementData({product}: ProductDataProps) {
   const onAbortClicked = (e) => {
     setFormValues((v) => ({
       ...v,
-      ["shipWeight"]: product?.ShipWeight,
-      ["shipHeight"]: product?.ShipHeight,
-      ["shipLength"]: product?.ShipLength,
-      ["shipWidth"]: product?.ShipWidth
+      ["shipWeight"]: composedProduct?.Product?.ShipWeight,
+      ["shipHeight"]: composedProduct?.Product?.ShipHeight,
+      ["shipLength"]: composedProduct?.Product?.ShipLength,
+      ["shipWidth"]: composedProduct?.Product?.ShipWidth
     }))
     setIsEditingBasicData(false)
   }
@@ -80,17 +85,18 @@ export default function ProductMeasurementData({product}: ProductDataProps) {
   const onSaveClicked = async (e) => {
     setIsLoading(true)
     const patchedProduct: Product = {
-      Name: product.Name,
+      Name: composedProduct?.Product?.Name,
       ShipHeight: formValues?.shipHeight,
       ShipLength: formValues.shipLength,
       ShipWeight: formValues.shipWeight,
       ShipWidth: formValues.shipWidth
     }
-    await Products.Patch(product.ID, patchedProduct)
+    await Products.Patch(composedProduct?.Product?.ID, patchedProduct)
 
     // Hack to ensure Data are loaded before showing -> AWAIT is not enough
-    setTimeout(() => {
-      dispatch(setProductId(product.ID))
+    setTimeout(async () => {
+      var product = await GetComposedProduct(composedProduct?.Product?.ID)
+      setComposedProduct(product)
       setTimeout(() => {
         setIsEditingBasicData(false)
         setIsLoading(false)
@@ -136,7 +142,7 @@ export default function ProductMeasurementData({product}: ProductDataProps) {
               </Tooltip>
             </HStack>
           )}
-          {(!product || isLoading) && expanded ? (
+          {(!composedProduct?.Product || isLoading) && expanded ? (
             <Box pt={6} textAlign={"center"}>
               Updating... <BrandedSpinner />
             </Box>
@@ -165,7 +171,7 @@ export default function ProductMeasurementData({product}: ProductDataProps) {
                       fontFamily={"body"}
                       fontWeight={500}
                     >
-                      {product?.ShipWeight ?? "Not set"}
+                      {composedProduct?.Product?.ShipWeight ?? "Not set"}
                     </Heading>
                   )}
                 </Box>
@@ -185,7 +191,7 @@ export default function ProductMeasurementData({product}: ProductDataProps) {
                       fontFamily={"body"}
                       fontWeight={500}
                     >
-                      {product?.ShipHeight ?? "Not set"}
+                      {composedProduct?.Product?.ShipHeight ?? "Not set"}
                     </Heading>
                   )}
                 </Box>
@@ -206,7 +212,7 @@ export default function ProductMeasurementData({product}: ProductDataProps) {
                       fontFamily={"body"}
                       fontWeight={500}
                     >
-                      {product?.ShipLength ?? "Not set"}
+                      {composedProduct?.Product?.ShipLength ?? "Not set"}
                     </Heading>
                   )}
                 </Box>
@@ -227,7 +233,7 @@ export default function ProductMeasurementData({product}: ProductDataProps) {
                       fontFamily={"body"}
                       fontWeight={500}
                     >
-                      {product?.ShipWidth ?? "Not set"}
+                      {composedProduct?.Product?.ShipWidth ?? "Not set"}
                     </Heading>
                   )}
                 </Box>

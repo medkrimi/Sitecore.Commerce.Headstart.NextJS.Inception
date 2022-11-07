@@ -40,7 +40,6 @@ import {
   InputGroup,
   InputLeftElement
 } from "@chakra-ui/react"
-import {OcProductListOptions, setListOptions} from "lib/redux/ocProductList"
 import {NextSeo} from "next-seo"
 import {AiOutlineSearch} from "react-icons/ai"
 import {
@@ -57,9 +56,7 @@ import {
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 import NextLink from "next/link"
-import useOcProductList from "lib/hooks/useOcProductList"
 import {stripHTML} from "lib/utils/stripHTML"
-import {useOcDispatch, useOcSelector} from "lib/redux/ocStore"
 import {useState, ChangeEvent, useEffect} from "react"
 import {Product, Products} from "ordercloud-javascript-sdk"
 import {ProductXPs} from "lib/types/ProductXPs"
@@ -73,18 +70,19 @@ interface ProductSearchProps {
 }
 
 export default function ProductSearch({query}: ProductSearchProps) {
-  const options: OcProductListOptions = {}
+  const options: ProductListOptions = {}
   const toast = useToast()
-  let products = useOcProductList(options)
+  const [products, setProducts] = useState<Product<ProductXPs>[]>(null)
   const [componentProducts, setComponentProducts] =
-    useState<Product<ProductXPs>[]>(products)
+    useState<Product<ProductXPs>[]>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
   const sliderColor = useColorModeValue("brand.400", "brand.600")
   const [editorialProgressFilter, setEditorialProgressFilter] = useState(100)
   const [sortBy, setSortBy] = useState("")
   const [sortingChanging, setSortingChanging] = useState(false)
-  const dispatch = useOcDispatch()
+  const [reload, setReload] = useState(false)
   const labelStyles = {
     mt: "2",
     ml: "-2.5",
@@ -93,16 +91,19 @@ export default function ProductSearch({query}: ProductSearchProps) {
   const [toggleViewMode, setToggleViewMode] = useState(false)
 
   useEffect(() => {
+    async function GetProducts() {
+      var productList = await Products.List<ProductXPs>(options)
+      setComponentProducts(productList.Items)
+      setProducts(productList.Items)
+      setReload(false)
+      setIsLoading(false)
+    }
+
     if (query) {
       setSearchQuery(query)
     }
-
-    setComponentProducts(products)
-  }, [products, query])
-
-  const {isLoading} = useOcSelector((s) => ({
-    isLoading: s.ocProductList.loading
-  }))
+    GetProducts()
+  }, [options, query, reload])
 
   const [searchQuery, setSearchQuery] = useState(query)
   const [selectAllProducts, setSelectAllProducts] = useState(false)
@@ -135,7 +136,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
     options.search = searchQuery
     options.searchOn = ["Name", "Description", "ID"]
     options.searchType = "ExactPhrasePrefix"
-    await dispatch(setListOptions(options))
+    setReload(true)
   }
 
   // TODO Add more properties in Add handling
@@ -172,7 +173,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
 
     setTimeout(() => {
       onCloseAddProduct()
-      dispatch(setListOptions(options))
+      setReload(true)
       setIsAdding(false)
     }, 5000)
   }
@@ -196,7 +197,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
     setSearchQuery("")
     setSortBy("")
     setMassEditProducts([])
-    dispatch(setListOptions(options))
+    setReload(true)
     setEditorialProgressFilter(100)
   }
 
@@ -231,7 +232,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
     setTimeout(() => {
       options.search = searchQuery
       options.searchOn = ["Name", "Description", "ID"]
-      dispatch(setListOptions(options))
+      setReload(true)
       setIsMassEditing(false)
       setMassEditProducts([])
       onCloseMassEditProducts()
@@ -302,7 +303,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
       if (newVal != "") {
         options.sortBy = [newVal]
       }
-      await dispatch(setListOptions(options))
+      setReload(true)
     }
 
     setSortingChanging(false)

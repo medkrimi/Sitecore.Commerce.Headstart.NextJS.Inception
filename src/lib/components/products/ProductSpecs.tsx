@@ -26,8 +26,10 @@ import {
   ListItem,
   UnorderedList
 } from "@chakra-ui/react"
-import {setProductId} from "lib/redux/ocProductDetail"
-import {useOcDispatch} from "lib/redux/ocStore"
+import {
+  ComposedProduct,
+  GetComposedProduct
+} from "lib/scripts/OrdercloudService"
 import {
   ListPage,
   Product,
@@ -45,18 +47,20 @@ import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 
 type ProductDataProps = {
-  product: RequiredDeep<Product<any>>
-  specs: RequiredDeep<Spec<any, any>>[]
+  composedProduct: ComposedProduct
+  setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductSpecs({product, specs}: ProductDataProps) {
+export default function ProductSpecs({
+  composedProduct,
+  setComposedProduct
+}: ProductDataProps) {
   const color = useColorModeValue("textColor.900", "textColor.100")
   const bg = useColorModeValue("brand.500", "brand.500")
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
   const [expanded, setExpanded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const dispatch = useOcDispatch()
   const {isOpen, onOpen, onClose} = useDisclosure()
   const cancelRef = React.useRef()
   const [newSpecifaction, setNewSpecification] = useState("")
@@ -69,16 +73,21 @@ export default function ProductSpecs({product, specs}: ProductDataProps) {
     e.preventDefault()
     setIsLoading(true)
     const specId = e.currentTarget.dataset.id
-    await Specs.DeleteProductAssignment(specId, product.ID)
+    await Specs.DeleteProductAssignment(specId, composedProduct?.Product?.ID)
 
-    var targetSpec = specs.find((innerSpec) => innerSpec.ID == specId)
+    var targetSpec = composedProduct?.Specs?.find(
+      (innerSpec) => innerSpec.ID == specId
+    )
     if (targetSpec.DefinesVariant) {
       // TODO: ASK in Dialog if Variants shall be regenerated and how?
       // In case a variant spec has been deleted, all the variants have to be regenerated
-      await Products.GenerateVariants(product.ID, {overwriteExisting: true})
+      await Products.GenerateVariants(composedProduct?.Product?.ID, {
+        overwriteExisting: true
+      })
     }
 
-    await dispatch(setProductId(product.ID))
+    var product = await GetComposedProduct(composedProduct?.Product?.ID)
+    setComposedProduct(product)
     setIsLoading(false)
   }
 
@@ -86,7 +95,7 @@ export default function ProductSpecs({product, specs}: ProductDataProps) {
     setIsLinking(true)
     e.preventDefault()
     const specProductAssignment: SpecProductAssignment = {
-      ProductID: product.ID,
+      ProductID: composedProduct?.Product?.ID,
       SpecID: newSpecifaction
     }
 
@@ -95,10 +104,13 @@ export default function ProductSpecs({product, specs}: ProductDataProps) {
     if (targetSpec.DefinesVariant && regenerateVariants) {
       // TODO: ASK in Dialog if Variants shall be regenerated and how?
       // In case a variant spec has been deleted, all the variants have to be regenerated
-      await Products.GenerateVariants(product.ID, {overwriteExisting: true})
+      await Products.GenerateVariants(composedProduct?.Product?.ID, {
+        overwriteExisting: true
+      })
     }
 
-    await dispatch(setProductId(product.ID))
+    var product = await GetComposedProduct(composedProduct?.Product?.ID)
+    setComposedProduct(product)
     setIsLinking(false)
     setNewSpecification("")
     setAvailableSpecs(null)
@@ -121,7 +133,7 @@ export default function ProductSpecs({product, specs}: ProductDataProps) {
       searchOn: ["Name", "ID"],
       search: e.target.value
     }).then((innerSpecs) => {
-      const specIds = specs.map((item) => {
+      const specIds = composedProduct?.Specs?.map((item) => {
         return item.ID
       })
       const filteredSpecs = innerSpecs.Items.filter(
@@ -147,7 +159,7 @@ export default function ProductSpecs({product, specs}: ProductDataProps) {
             </Tooltip>
           </HStack>
           <Heading size={{base: "md", md: "lg", lg: "xl"}}>Specs</Heading>{" "}
-          {(isLoading || !product) && expanded ? (
+          {(isLoading || !composedProduct?.Product) && expanded ? (
             <Box pt={6} textAlign={"center"}>
               Updating... <BrandedSpinner />
             </Box>
@@ -155,7 +167,7 @@ export default function ProductSpecs({product, specs}: ProductDataProps) {
             <>
               <Collapse in={expanded}>
                 <Box width="full" pb={2} pt={4}>
-                  {(specs?.length ?? 0) == 0 ? (
+                  {(composedProduct?.Specs?.length ?? 0) == 0 ? (
                     <>No Specs</>
                   ) : (
                     <BrandedTable>
@@ -169,7 +181,7 @@ export default function ProductSpecs({product, specs}: ProductDataProps) {
                         </Tr>
                       </Thead>
                       <Tbody alignContent={"center"}>
-                        {specs?.map((item, index) => {
+                        {composedProduct?.Specs?.map((item, index) => {
                           return (
                             <Tr key={index}>
                               <Td>{item.ID}</Td>
