@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react"
 import useNextRouterMapping, {
   NextQueryMap
-} from "lib/hooks/useNextRouterMapping"
+} from "lib/components/hooks/useNextRouterMapping"
 import {useOcSelector} from "lib/redux/ocStore"
 import formatPrice from "lib/utils/formatPrice"
 import formatPercentChange from "lib/utils/formatPercentChange"

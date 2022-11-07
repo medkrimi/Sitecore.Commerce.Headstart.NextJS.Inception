@@ -5,7 +5,7 @@ import {
   Me,
   RequiredDeep
 } from "ordercloud-javascript-sdk"
-import {OcAddressListOptions} from "../../hooks/useOcAddressBook"
+import {OcAddressListOptions} from "../../components/hooks/useOcAddressBook"
 import {createOcAsyncThunk, OcThrottle} from "../ocReduxHelpers"
 import {OcRootState} from "../ocStore"
 

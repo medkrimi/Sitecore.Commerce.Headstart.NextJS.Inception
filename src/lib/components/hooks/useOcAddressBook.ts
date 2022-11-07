@@ -11,8 +11,8 @@ import {
   listAddresses,
   ocAddressBookSelectors,
   saveAddress
-} from "../redux/ocAddressBook"
-import {useOcDispatch, useOcSelector} from "../redux/ocStore"
+} from "../../redux/ocAddressBook"
+import {useOcDispatch, useOcSelector} from "../../redux/ocStore"
 
 export interface OcAddressListOptions {
   search?: string

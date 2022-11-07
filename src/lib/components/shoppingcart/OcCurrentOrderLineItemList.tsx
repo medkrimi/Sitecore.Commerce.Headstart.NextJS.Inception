@@ -1,5 +1,5 @@
 import {FunctionComponent} from "react"
-import useOcCurrentOrder from "../../hooks/useOcCurrentOrder"
+import useOcCurrentOrder from "../hooks/useOcCurrentOrder"
 import OcLineItemList from "./OcLineItemList"
 
 interface OcCurrentOrderLineItemListProps {

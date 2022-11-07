@@ -321,7 +321,7 @@ const Dashboard = () => {
                 </NextLink>
               </GridItem>
               <GridItem>
-                <NextLink href="/products" passHref>
+                <NextLink href="/orders" passHref>
                   <Link>
                     <Card
                       p="28px 10px 0px 0px"

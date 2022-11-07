@@ -1,8 +1,8 @@
 import {ProductXPs} from "lib/types/ProductXPs"
 import {Product, RequiredDeep} from "ordercloud-javascript-sdk"
 import {useEffect} from "react"
-import {getProduct, ocProductCacheSelectors} from "../redux/ocProductCache"
-import {useOcDispatch, useOcSelector} from "../redux/ocStore"
+import {getProduct, ocProductCacheSelectors} from "../../redux/ocProductCache"
+import {useOcDispatch, useOcSelector} from "../../redux/ocStore"
 
 const useOcProduct = (productId: string): RequiredDeep<Product<ProductXPs>> => {
   const dispatch = useOcDispatch()

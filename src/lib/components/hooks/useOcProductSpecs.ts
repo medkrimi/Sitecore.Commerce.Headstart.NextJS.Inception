@@ -1,10 +1,10 @@
 import {Spec} from "ordercloud-javascript-sdk"
 import {useEffect} from "react"
-import {useOcDispatch, useOcSelector} from "../redux/ocStore"
+import {useOcDispatch, useOcSelector} from "../../redux/ocStore"
 import {
   ocProductSpecsCacheSelectors,
   getProductSpecs
-} from "../redux/ocProductSpecsCache"
+} from "../../redux/ocProductSpecsCache"
 
 const useOcProductSpecs = (productId: string): Spec[] => {
   const dispatch = useOcDispatch()

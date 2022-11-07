@@ -1,8 +1,8 @@
 import {Product} from "ordercloud-javascript-sdk"
 import {useEffect} from "react"
 import {isEqual} from "lodash"
-import {OcProductListOptions, setListOptions} from "../redux/ocProductList"
-import {useOcDispatch, useOcSelector} from "../redux/ocStore"
+import {OcProductListOptions, setListOptions} from "../../redux/ocProductList"
+import {useOcDispatch, useOcSelector} from "../../redux/ocStore"
 import {ProductXPs} from "lib/types/ProductXPs"
 
 const useOcProductList = (

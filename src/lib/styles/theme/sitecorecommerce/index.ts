@@ -22,10 +22,17 @@ const customTheme = extendTheme({
   styles: {
     global: (props: StyleFunctionProps) => ({
       // styles for the `body`
+
       body: {
         bg: mode("bodyBg.100", "bodyBg.900")(props),
-        color: "white",
-        fontSize: "sm"
+
+        color: "textColor.900",
+
+        fontSize: "sm",
+
+        _dark: {
+          color: "textColor.100"
+        }
       }
     })
   }

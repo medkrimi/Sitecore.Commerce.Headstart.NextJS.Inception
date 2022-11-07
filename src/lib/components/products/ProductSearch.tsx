@@ -55,7 +55,7 @@ import {
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 import NextLink from "next/link"
-import useOcProductList from "lib/hooks/useOcProductList"
+import useOcProductList from "lib/components/hooks/useOcProductList"
 import {stripHTML} from "lib/utils/stripHTML"
 import {useOcDispatch, useOcSelector} from "lib/redux/ocStore"
 import {useState, ChangeEvent, useEffect} from "react"

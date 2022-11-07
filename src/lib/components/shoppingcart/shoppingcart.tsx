@@ -11,7 +11,7 @@ import {
   HStack,
   Link
 } from "@chakra-ui/react"
-import useOcCurrentOrder from "../../hooks/useOcCurrentOrder"
+import useOcCurrentOrder from "../hooks/useOcCurrentOrder"
 import {HiChevronDoubleRight} from "react-icons/hi"
 import OcCurrentOrderLineItemList from "./OcCurrentOrderLineItemList"
 

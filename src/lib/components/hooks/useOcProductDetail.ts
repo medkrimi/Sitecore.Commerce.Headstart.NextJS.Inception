@@ -1,8 +1,8 @@
 import {ProductXPs} from "lib/types/ProductXPs"
 import {Product, RequiredDeep, Spec, Variant} from "ordercloud-javascript-sdk"
 import {useEffect, useMemo} from "react"
-import {setProductId} from "../redux/ocProductDetail"
-import {useOcDispatch, useOcSelector} from "../redux/ocStore"
+import {setProductId} from "../../redux/ocProductDetail"
+import {useOcDispatch, useOcSelector} from "../../redux/ocStore"
 
 const useOcProductDetail = (
   productId: string

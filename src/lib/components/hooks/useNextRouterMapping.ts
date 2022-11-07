@@ -2,7 +2,7 @@ import {useRouter} from "next/router"
 import {Filters} from "ordercloud-javascript-sdk"
 import {ParsedUrlQuery} from "querystring"
 import {useCallback, useMemo} from "react"
-import {OcProductListOptions} from "../redux/ocProductList"
+import {OcProductListOptions} from "../../redux/ocProductList"
 
 export interface NextQueryMap {
   [key: string]: string

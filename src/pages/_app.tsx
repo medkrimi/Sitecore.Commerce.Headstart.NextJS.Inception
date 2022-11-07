@@ -9,7 +9,8 @@ import OcProvider from "../lib/redux/ocProvider"
 import {ApiRole} from "ordercloud-javascript-sdk"
 
 const ocConfig = {
-  clientId: "4A9F0BAC-EC1D-4711-B01F-1A394F72F2B6",
+  clientId: "3DA87C8C-FE92-47E7-BBB6-AF88423FD7D4",
+  // clientId: "4A9F0BAC-EC1D-4711-B01F-1A394F72F2B6", Sitecore Commerce
   baseApiUrl: "https://sandboxapi.ordercloud.io",
   scope: [
     "FullAccess",
