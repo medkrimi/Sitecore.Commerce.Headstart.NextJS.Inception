@@ -1,19 +1,27 @@
 import {Box, HStack} from "@chakra-ui/react"
-import type {ReactNode} from "react"
+import {ReactNode, useEffect, useState} from "react"
 import Footer from "./Footer"
 import Header from "./Header"
 import LeftNavigation from "lib/components/navigation/SideNavigation"
-import {GetAuthenticationStatus} from "lib/scripts/OrdercloudService"
+import {
+  GetAuthenticationStatus,
+  OcAuthState
+} from "lib/scripts/OrdercloudService"
 
 type LayoutProps = {
   children: ReactNode
 }
 
 const Layout = ({children}: LayoutProps) => {
-  var state = GetAuthenticationStatus()
+  const [state, setState] = useState<OcAuthState>()
+
+  useEffect(() => {
+    setState(GetAuthenticationStatus())
+  }, [])
+
   return (
     <Box as="section" w="100%" margin="0 auto" transition="0.5s ease-out">
-      <Header />
+      {state?.isAnonymous ?? true ? <></> : <Header />}
       <HStack
         alignItems="flex-start"
         height="100%"
@@ -24,7 +32,7 @@ const Layout = ({children}: LayoutProps) => {
         mt="65px"
         justify="flex-start"
       >
-        <LeftNavigation />
+        {state?.isAnonymous ?? true ? <></> : <LeftNavigation />}
         {children}
       </HStack>
       <Footer />
