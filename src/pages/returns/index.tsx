@@ -64,7 +64,7 @@ const TableRow = (orderReturn: OrderReturn) => {
       <Td>
         {formatTextTruncate(50, orderReturn.ItemsToReturn.toString(), "...")}
       </Td>
-      {/* <Td>{orderReturn.LineItemCount}</Td> */}
+      <Td></Td>
       <Td>{formatPrice(orderReturn.RefundAmount)}</Td>
     </Tr>
   )
