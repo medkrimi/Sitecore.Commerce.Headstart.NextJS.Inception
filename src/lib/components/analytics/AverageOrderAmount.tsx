@@ -3,10 +3,6 @@ import React from "react"
 
 // import LineChart from "../charts/LineChart"
 import Card from "../card/Card"
-import {
-  lineChartDataDefault,
-  lineChartOptionsDefault
-} from "../../variables/charts"
 
 export default function AverageOrderAmount() {
   const boxBgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")

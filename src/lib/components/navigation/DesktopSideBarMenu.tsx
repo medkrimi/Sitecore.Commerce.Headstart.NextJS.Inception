@@ -198,13 +198,12 @@ const DesktopSideBarMenu = () => {
         </Flex>
         <Link href="#">
           <Button
+            variant="tertiaryButton"
             size="sm"
             fontWeight="bold"
             minW="185px"
             m="0"
             fontSize="10px"
-            color={color}
-            colorScheme="brandButtons"
           >
             Documentation
           </Button>

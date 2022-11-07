@@ -9,9 +9,16 @@ import {
   Grid,
   GridItem,
   Heading,
-  Spacer
+  HStack,
+  IconButton,
+  Link,
+  Spacer,
+  useColorMode,
+  useColorModeValue,
+  Text
 } from "@chakra-ui/react"
 import {NextSeo} from "next-seo"
+import NextLink from "next/link"
 import {useRouter} from "next/router"
 import formatPrice from "lib/utils/formatPrice"
 import {
@@ -23,11 +30,31 @@ import {
 import {FunctionComponent, useEffect, useState} from "react"
 import {formatDate} from "lib/utils/formatDate"
 import OcOrderReturnItemList from "lib/components/returns/OcOrderReturnItem"
+import {HiOutlineMinusSm} from "react-icons/hi"
+import Card from "lib/components/card/Card"
 
 const OrderReturnDetailPage: FunctionComponent = () => {
   const router = useRouter()
   const [orderReturn, setOrderReturn] = useState({} as OrderReturn)
   const [itemsToReturn, setItemsToReturn] = useState([])
+  const boxBgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
+  const buttonPrimary = useColorModeValue("black", "brand.500")
+  const buttonSecondary = useColorModeValue("white", "black")
+  const {colorMode, toggleColorMode} = useColorMode()
+  const shadow = "5px 5px 5px #999999"
+  const gradient =
+    colorMode === "light"
+      ? "linear(to-t, brand.300, brand.400)"
+      : "linear(to-t, brand.600, brand.500)"
+  const hoverColor = useColorModeValue("brand.300", "brand.400")
+  const focusColor = useColorModeValue("brand.300", "brand.400")
+  const colorSheme = "gray"
+  const colorPrimary = useColorModeValue("white", "black")
+  const colorSecondary = useColorModeValue(
+    "boxTextColor.900",
+    "boxTextColor.100"
+  )
+  const tileBg = useColorModeValue("tileBg.500", "tileBg.900")
 
   useEffect(() => {
     const getOrderReturn = async () => {
@@ -84,93 +111,118 @@ const OrderReturnDetailPage: FunctionComponent = () => {
   }
   return (
     <>
-      <Container maxW="container.lg" padding="4">
-        <Box>
-          <NextSeo title="Order Return Detail" />
-          <Heading as="h2">Order Return</Heading>
-          <Heading as="h4" size="md">
-            {orderReturn.ID}
-          </Heading>
-          <Badge variant="outline" color={getStatusColor()}>
-            {/* Space before capital letters */}
-            {orderReturn.Status.replace(/[A-Z]/g, " $&").trim()}
-          </Badge>
-          <Divider m="3" />
-          <Flex minWidth="max-content" alignItems="center" gap="2" mb="4">
+      <Container maxW="full" marginTop={30} marginBottom={30}>
+        <NextSeo title="Order Return Detail" />
+        <Heading as="h2" mt="40px">
+          Order Return
+        </Heading>
+        <Heading as="h4" size="md">
+          <HStack mb="20px">
+            <Text>Return ID:</Text> <Text>{orderReturn.ID}</Text>
+          </HStack>
+        </Heading>
+        <HStack justifyContent="space-between" w="100%">
+          <NextLink href="new" passHref>
+            <Link pl="2" pr="2">
+              <Button variant="primaryButton">New Return</Button>
+            </Link>
+          </NextLink>
+          <HStack>
+            <Button variant="secondaryButton">Print Shipping Label</Button>
+            <Button variant="secondaryButton">Export PDF</Button>
+            <Button variant="secondaryButton">Export CSV</Button>
+          </HStack>
+        </HStack>
+        <Card variant="primaryCard">
+          <IconButton
+            variant="closePanelButton"
+            aria-label="close panel"
+            icon={<HiOutlineMinusSm />}
+          ></IconButton>
+          <Flex flexDirection="column" p="10">
             <Box>
-              <Heading size="md">
-                Refund Amount: {formatPrice(orderReturn.RefundAmount)}
-              </Heading>
-            </Box>
-            <Spacer />
-            <ButtonGroup gap="2">
-              {orderReturn.Status === "Open" && (
-                <>
-                  <Button
-                    colorScheme="teal"
-                    variant="solid"
-                    onClick={handleCompleteAnOrderReturn}
-                  >
-                    Complete
-                  </Button>
-                  <Button
-                    colorScheme="red"
-                    variant="solid"
-                    onClick={handleCancelAnOrderReturn}
-                  >
-                    Cancel
-                  </Button>
-                </>
-              )}
-            </ButtonGroup>
-          </Flex>
+              <Badge variant="outline" color={getStatusColor()}>
+                {/* Space before capital letters */}
+                {orderReturn.Status.replace(/[A-Z]/g, " $&").trim()}
+              </Badge>
+              <Divider m="3" />
+              <Flex minWidth="max-content" alignItems="center" gap="2" mb="4">
+                <Box>
+                  <Heading size="md">
+                    Refund Amount: {formatPrice(orderReturn.RefundAmount)}
+                  </Heading>
+                </Box>
+                <Spacer />
+                <ButtonGroup gap="2">
+                  {orderReturn.Status === "Open" && (
+                    <>
+                      <Button
+                        colorScheme="teal"
+                        variant="solid"
+                        onClick={handleCompleteAnOrderReturn}
+                      >
+                        Complete
+                      </Button>
+                      <Button
+                        colorScheme="red"
+                        variant="solid"
+                        onClick={handleCancelAnOrderReturn}
+                      >
+                        Cancel
+                      </Button>
+                    </>
+                  )}
+                </ButtonGroup>
+              </Flex>
 
-          <Grid templateColumns="repeat(3, 1fr)" gap={6} mt={6}>
-            <GridItem w="100%" h="10">
-              <Heading as="h5" size="sm">
-                Order ID
+              <Grid templateColumns="repeat(3, 1fr)" gap={6} mt={6}>
+                <GridItem w="100%" h="10">
+                  <Heading as="h5" size="sm">
+                    Order ID
+                  </Heading>
+                  {orderReturn.OrderID}
+                </GridItem>
+                <GridItem w="100%" h="10">
+                  <Heading as="h5" size="sm">
+                    Request Submitted
+                  </Heading>
+                  {formatDate(orderReturn.DateSubmitted)}
+                </GridItem>
+                {orderReturn.DateCanceled && (
+                  <GridItem w="100%" h="10">
+                    <Heading as="h5" size="sm">
+                      Date Canceled
+                    </Heading>
+                    {formatDate(orderReturn.DateCanceled)}
+                  </GridItem>
+                )}
+                {orderReturn.DateCompleted && (
+                  <GridItem w="100%" h="10">
+                    <Heading as="h5" size="sm">
+                      Date Completed
+                    </Heading>
+                    {formatDate(orderReturn.DateCompleted)}
+                  </GridItem>
+                )}
+                {orderReturn.Comments && (
+                  <GridItem w="100%" h="10">
+                    <Heading as="h5" size="sm">
+                      Comments
+                    </Heading>
+                    {orderReturn.Comments}
+                  </GridItem>
+                )}
+              </Grid>
+            </Box>
+            <Box mt="6">
+              <Heading as="h3" size="lg">
+                Return Items
               </Heading>
-              {orderReturn.OrderID}
-            </GridItem>
-            <GridItem w="100%" h="10">
-              <Heading as="h5" size="sm">
-                Request Submitted
-              </Heading>
-              {formatDate(orderReturn.DateSubmitted)}
-            </GridItem>
-            {orderReturn.DateCanceled && (
-              <GridItem w="100%" h="10">
-                <Heading as="h5" size="sm">
-                  Date Canceled
-                </Heading>
-                {formatDate(orderReturn.DateCanceled)}
-              </GridItem>
-            )}
-            {orderReturn.DateCompleted && (
-              <GridItem w="100%" h="10">
-                <Heading as="h5" size="sm">
-                  Date Completed
-                </Heading>
-                {formatDate(orderReturn.DateCompleted)}
-              </GridItem>
-            )}
-            {orderReturn.Comments && (
-              <GridItem w="100%" h="10">
-                <Heading as="h5" size="sm">
-                  Comments
-                </Heading>
-                {orderReturn.Comments}
-              </GridItem>
-            )}
-          </Grid>
-        </Box>
-        <Box mt="6">
-          <Heading as="h3" size="lg">
-            Return Items
-          </Heading>
-          <Divider m="3" />
-          <OcOrderReturnItemList itemsToReturn={itemsToReturn} />
-        </Box>
+              <Divider m="3" />
+              <OcOrderReturnItemList itemsToReturn={itemsToReturn} />
+            </Box>
+          </Flex>
+        </Card>
       </Container>
     </>
   )
