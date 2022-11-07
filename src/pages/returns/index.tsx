@@ -72,20 +72,6 @@ const TableRow = (orderReturn: OrderReturn) => {
 
 const ReturnsPage = () => {
   const [returns, setReturns] = useState([])
-  const {colorMode, toggleColorMode} = useColorMode()
-  const shadow = "5px 5px 5px #999999"
-  const gradient =
-    colorMode === "light"
-      ? "linear(to-t, brand.300, brand.400)"
-      : "linear(to-t, brand.600, brand.500)"
-  const hoverColor = useColorModeValue("brand.300", "brand.400")
-  const focusColor = useColorModeValue("brand.300", "brand.400")
-  const colorSheme = "gray"
-  const color = useColorModeValue("boxTextColor.900", "boxTextColor.100")
-  const tileBg = useColorModeValue("tileBg.500", "tileBg.900")
-  const [sliderValue, setSliderValue] = React.useState(50)
-  const [showTooltip, setShowTooltip] = React.useState(false)
-  const boxBgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
   const getReturns = async () => {
     const returnsList = await OrderReturns.List({sortBy: ["DateSubmitted"]})
     setReturns(returnsList.Items)
@@ -108,9 +94,7 @@ const ReturnsPage = () => {
       <NextSeo title="Returns" />
       <Heading as="h2">Returns List</Heading>
       <HStack justifyContent="space-between" w="100%">
-        <Button size="md" variant="primary">
-          New Return
-        </Button>
+        <Button variant="primaryButton">New Return</Button>
         <HStack>
           <Menu>
             <MenuButton
@@ -150,10 +134,10 @@ const ReturnsPage = () => {
                   </CheckboxGroup>
                   <Divider />
                   <HStack>
-                    {/* <Button size="md" bg={boxBgColor} color={color}>
+                    {/* <Button variant="secondaryButton">
                       Clear
                     </Button>
-                    <Button size="md" bg={boxBgColor} color={color}>
+                    <Button variant="secondaryButton">
                       Submit
                     </Button> */}
                   </HStack>
@@ -161,25 +145,16 @@ const ReturnsPage = () => {
               </MenuItem>
             </MenuList>
           </Menu>
-          <Button size="md" bg={boxBgColor} color={color}>
-            Export CSV
-          </Button>
+          <Button variant="secondaryButton">Export CSV</Button>
         </HStack>
       </HStack>
-      <Card
-        p="28px 10px 0px 0px"
-        mb={{sm: "26px", lg: "0px"}}
-        bg={boxBgColor}
-        color={color}
-      >
+      <Card variant="primaryCard">
         <IconButton
-          position="absolute"
-          right="20px"
-          top="20px"
+          variant="closePanelButton"
           aria-label="close panel"
           icon={<HiOutlineMinusSm />}
         ></IconButton>
-        <Table variant="striped" margin={30}>
+        <Table margin={30}>
           <Thead>
             <Tr>
               <Th>ID</Th>
@@ -193,7 +168,7 @@ const ReturnsPage = () => {
           </Thead>
           <Tbody>{returnsContent}</Tbody>
         </Table>
-        <Button size="md" bg={boxBgColor} color={color}>
+        <Button variant="tertiaryButton">
           Scroll down to load more returns
         </Button>
       </Card>

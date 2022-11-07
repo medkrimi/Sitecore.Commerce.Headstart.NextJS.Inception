@@ -7,7 +7,16 @@ import {
   useState
 } from "react"
 import OcQuantityInput from "./OcQuantityInput"
-import {Button, HStack, Text, VStack, Image, Box} from "@chakra-ui/react"
+import {
+  Button,
+  HStack,
+  Text,
+  VStack,
+  Image,
+  Box,
+  Tr,
+  Th
+} from "@chakra-ui/react"
 import formatPrice from "lib/utils/formatPrice"
 import {
   ComposedProduct,

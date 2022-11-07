@@ -33,6 +33,7 @@ import {
 import {formatDate} from "lib/utils/formatDate"
 import {NextSeo} from "next-seo"
 import {useRouter} from "next/router"
+import NextLink from "next/link"
 import {
   IntegrationEvents,
   OrderReturn,
@@ -41,13 +42,16 @@ import {
   Orders
 } from "ordercloud-javascript-sdk"
 import React, {FunctionComponent, useEffect, useRef, useState} from "react"
-import AddressCard from "../../lib/components/orders/AddressCard"
+import AddressCard from "../../lib/components/card/AddressCard"
 import formatPrice from "lib/utils/formatPrice"
 import {
   GetAuthenticationStatus,
   OcAuthState
 } from "lib/scripts/OrdercloudService"
 import OcLineItemList from "lib/components/shoppingcart/OcLineItemList"
+import {HiOutlineMinusSm} from "react-icons/hi"
+import Card from "lib/components/card/Card"
+import LettersCard from "lib/components/card/LettersCard"
 
 const OrderConfirmationPage: FunctionComponent = () => {
   const [authState, setAuthState] = useState<OcAuthState>()
@@ -61,26 +65,6 @@ const OrderConfirmationPage: FunctionComponent = () => {
   const [loading, setLoading] = useState(false)
   const cancelRef = useRef()
   const toast = useToast()
-  const boxBgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
-  const buttonPrimary = useColorModeValue("black", "brand.500")
-  const buttonSecondary = useColorModeValue("white", "black")
-  const {colorMode, toggleColorMode} = useColorMode()
-  const shadow = "5px 5px 5px #999999"
-  const gradient =
-    colorMode === "light"
-      ? "linear(to-t, brand.300, brand.400)"
-      : "linear(to-t, brand.600, brand.500)"
-  const hoverColor = useColorModeValue("brand.300", "brand.400")
-  const focusColor = useColorModeValue("brand.300", "brand.400")
-  const colorSheme = "gray"
-  const colorPrimary = useColorModeValue("white", "black")
-  const colorSecondary = useColorModeValue(
-    "boxTextColor.900",
-    "boxTextColor.100"
-  )
-  const tileBg = useColorModeValue("tileBg.500", "tileBg.900")
-  const [sliderValue, setSliderValue] = React.useState(50)
-  const [showTooltip, setShowTooltip] = React.useState(false)
 
   const requestRefund = () => {
     setOrderReturn({
@@ -211,34 +195,18 @@ const OrderConfirmationPage: FunctionComponent = () => {
         <HStack justifyContent="space-between" w="100%">
           <NextLink href="new" passHref>
             <Link pl="2" pr="2">
-              <Button size="md" bg={buttonPrimary} color={colorPrimary}>
-                New Order
-              </Button>
+              <Button variant="primaryButton">New Order</Button>
             </Link>
           </NextLink>
           <HStack>
-            <Button size="md" bg={buttonSecondary} color={colorSecondary}>
-              Print Shipping Label
-            </Button>
-            <Button size="md" bg={buttonSecondary} color={colorSecondary}>
-              Export PDF
-            </Button>
-            <Button size="md" bg={buttonSecondary} color={colorSecondary}>
-              Export CSV
-            </Button>
+            <Button variant="secondaryButton">Print Shipping Label</Button>
+            <Button variant="secondaryButton">Export PDF</Button>
+            <Button variant="secondaryButton">Export CSV</Button>
           </HStack>
         </HStack>
-        <Card
-          p="28px 10px 0px 0px"
-          mb={{sm: "26px", lg: "0px"}}
-          mt={{sm: "10px", lg: "20px"}}
-          bg={boxBgColor}
-          color={colorSecondary}
-        >
+        <Card variant="primaryCard">
           <IconButton
-            position="absolute"
-            right="20px"
-            top="20px"
+            variant="closePanelButton"
             aria-label="close panel"
             icon={<HiOutlineMinusSm />}
           ></IconButton>
@@ -393,17 +361,9 @@ const OrderConfirmationPage: FunctionComponent = () => {
           </Flex>
         </Card>
         {actionButtons}
-        <Card
-          p="28px 10px 0px 0px"
-          mb={{sm: "26px", lg: "50px"}}
-          mt={{sm: "26px", lg: "26px"}}
-          bg={boxBgColor}
-          color={colorSecondary}
-        >
+        <Card variant="primaryCard">
           <IconButton
-            position="absolute"
-            right="20px"
-            top="20px"
+            variant="closePanelButton"
             aria-label="close panel"
             icon={<HiOutlineMinusSm />}
           ></IconButton>
@@ -448,13 +408,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
               >
                 Cancel
               </Button>
-              <Button
-                marginLeft={5}
-                bgColor="brand.500"
-                color="white"
-                onClick={requestRefund}
-                disabled={loading}
-              >
+              <Button onClick={requestRefund} disabled={loading}>
                 {loading ? <Spinner color="brand.500" /> : "Request Refund"}
               </Button>
             </AlertDialogFooter>
