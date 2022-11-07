@@ -1,7 +1,5 @@
 import NextLink from "next/link"
-import {FunctionComponent} from "react"
-import {deleteCurrentOrder} from "../../redux/ocCurrentOrder"
-import {useOcDispatch} from "../../redux/ocStore"
+import {FunctionComponent, useEffect, useState} from "react"
 import {
   VStack,
   Heading,
@@ -11,13 +9,26 @@ import {
   HStack,
   Link
 } from "@chakra-ui/react"
-import useOcCurrentOrder from "../../hooks/useOcCurrentOrder"
 import {HiChevronDoubleRight} from "react-icons/hi"
 import OcCurrentOrderLineItemList from "./OcCurrentOrderLineItemList"
+import {ComposedOrder, GetCurrentOrder} from "lib/scripts/OrdercloudService"
+import {Orders} from "ordercloud-javascript-sdk"
 
 const ShoppingCart: FunctionComponent = () => {
-  const dispatch = useOcDispatch()
-  const {lineItems} = useOcCurrentOrder()
+  const [currentOrder, setCurrentOrder] = useState<ComposedOrder>()
+
+  useEffect(() => {
+    async function GetCart() {
+      const cart = await GetCurrentOrder()
+      setCurrentOrder(cart)
+    }
+
+    GetCart()
+  }, [])
+
+  const DeleteCurrentOrder = () => {
+    Orders.Delete("Outgoing", currentOrder?.Order?.Order?.ID)
+  }
 
   return (
     <VStack
@@ -31,7 +42,8 @@ const ShoppingCart: FunctionComponent = () => {
     >
       <Heading as="h1">Shopping Cart</Heading>
 
-      {lineItems && lineItems.length ? (
+      {currentOrder?.Order?.LineItems &&
+      currentOrder?.Order?.LineItems?.length ? (
         <VStack w="100%" width="full" justifyContent="flex-end">
           <HStack w="100%" width="full" justifyContent="space-between">
             <Button
@@ -47,7 +59,7 @@ const ShoppingCart: FunctionComponent = () => {
             </Button>
             <Button
               type="button"
-              onClick={() => dispatch(deleteCurrentOrder())}
+              onClick={DeleteCurrentOrder}
               border="1px"
               bgColor="white"
               borderColor="red.500"

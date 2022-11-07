@@ -9,7 +9,6 @@ import {
 import useNextRouterMapping, {
   NextQueryMap
 } from "lib/hooks/useNextRouterMapping"
-import {useOcSelector} from "lib/redux/ocStore"
 import formatPrice from "lib/utils/formatPrice"
 import formatPercentChange from "lib/utils/formatPercentChange"
 import {Filters} from "ordercloud-javascript-sdk"
@@ -17,7 +16,6 @@ import React, {FormEvent, useCallback, useState} from "react"
 import IconBox from "../icons/IconBox"
 import {CartIcon, DocumentIcon, GlobeIcon, WalletIcon} from "../icons/Icons"
 import Card from "../card/Card"
-import {OcProductListOptions} from "lib/redux/ocProductList"
 
 const queryMap: NextQueryMap = {
   monthLabels: "string[]",
@@ -40,12 +38,6 @@ export default function RecapSnapShot() {
   const [orderstatusdata, setOrderStatusData] = useState([
     0, 1, 2, 3, 4, 5, 6, 7
   ])
-
-  const orders = useOcOrders(options)
-  //const orders = useOcSelector((s) => s.ocOrdersList.items)
-  const productName = useOcSelector(
-    (s) => s.ocProductDetail.product && s.ocProductDetail.product.Name
-  )
 
   const curMonth = new Date().getMonth() + 1
   var prevMonth = new Date().getMonth()
@@ -230,7 +222,4 @@ export default function RecapSnapShot() {
       </SimpleGrid>
     </Flex>
   )
-}
-function useOcOrders(options: OcProductListOptions) {
-  throw new Error("Function not implemented.")
 }

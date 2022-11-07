@@ -28,8 +28,7 @@ import {
   Tag,
   Divider
 } from "@chakra-ui/react"
-import {setProductId} from "lib/redux/ocProductDetail"
-import {useOcDispatch} from "lib/redux/ocStore"
+import {ComposedProduct} from "lib/scripts/OrdercloudService"
 import {
   InventoryRecord,
   InventoryRecords,
@@ -51,10 +50,14 @@ import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 
 type ProductDataProps = {
-  product: RequiredDeep<Product<any>>
+  composedProduct: ComposedProduct
+  setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductInventoryRecords({product}: ProductDataProps) {
+export default function ProductInventoryRecords({
+  composedProduct,
+  setComposedProduct
+}: ProductDataProps) {
   const color = useColorModeValue("textColor.900", "textColor.100")
   const bg = useColorModeValue("brand.500", "brand.500")
   const okColor = useColorModeValue("okColor.800", "okColor.200")
@@ -66,13 +69,15 @@ export default function ProductInventoryRecords({product}: ProductDataProps) {
 
   useEffect(() => {
     async function GetProdcutSupplier() {
-      if (product) {
-        var productSupplier = await InventoryRecords.List(product.ID)
+      if (composedProduct?.Product) {
+        var productSupplier = await InventoryRecords.List(
+          composedProduct?.Product?.ID
+        )
         setInventoryRecords(productSupplier.Items)
       }
     }
     GetProdcutSupplier()
-  }, [product])
+  }, [composedProduct])
 
   // const dispatch = useOcDispatch()
   // const {isOpen, onOpen, onClose} = useDisclosure()
@@ -180,7 +185,7 @@ export default function ProductInventoryRecords({product}: ProductDataProps) {
             </Tag>
           </Heading>
 
-          {(isLoading || !product) && expanded ? (
+          {(isLoading || !composedProduct?.Product) && expanded ? (
             <Box pt={6} textAlign={"center"}>
               Updating... <BrandedSpinner />
             </Box>
@@ -228,7 +233,7 @@ export default function ProductInventoryRecords({product}: ProductDataProps) {
 
                               <Td>
                                 {new Date(
-                                  product?.Inventory?.LastUpdated
+                                  composedProduct?.Product?.Inventory?.LastUpdated
                                 )?.toLocaleString()}
                               </Td>
                               <Td>

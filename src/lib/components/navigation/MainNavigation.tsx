@@ -1,11 +1,8 @@
 import NextLink from "next/link"
 import {Box, Flex, HStack, Link} from "@chakra-ui/react"
-import logout from "../../redux/ocAuth/logout"
-import {useOcDispatch, useOcSelector} from "../../redux/ocStore"
+import {Logout} from "lib/scripts/OrdercloudService"
 
 const MainNavigation = () => {
-  const dispatch = useOcDispatch()
-
   return (
     <HStack width="full" align="center">
       <NextLink href="/products" passHref>
@@ -24,7 +21,7 @@ const MainNavigation = () => {
         </Link>
       </NextLink>
       <NextLink href="/logoff" passHref>
-        <Link pl="2" pr="2" onClick={() => dispatch(logout())}>
+        <Link pl="2" pr="2" onClick={() => Logout()}>
           Log out
         </Link>
       </NextLink>

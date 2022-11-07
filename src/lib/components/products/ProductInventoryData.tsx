@@ -15,8 +15,10 @@ import {
   Input,
   Checkbox
 } from "@chakra-ui/react"
-import {setProductId} from "lib/redux/ocProductDetail"
-import {useOcDispatch} from "lib/redux/ocStore"
+import {
+  ComposedProduct,
+  GetComposedProduct
+} from "lib/scripts/OrdercloudService"
 import {
   Inventory,
   Product,
@@ -29,23 +31,27 @@ import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 
 type ProductDataProps = {
-  product: RequiredDeep<Product<any>>
+  composedProduct: ComposedProduct
+  setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductInventoryData({product}: ProductDataProps) {
+export default function ProductInventoryData({
+  composedProduct,
+  setComposedProduct
+}: ProductDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
   const [expanded, setExpanded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const dispatch = useOcDispatch()
   const [formValues, setFormValues] = useState({
-    inventoryEnabled: product?.Inventory?.Enabled,
-    lastUpdated: product?.Inventory?.LastUpdated,
-    notificationPoint: product?.Inventory?.NotificationPoint,
-    orderCanExceed: product?.Inventory?.OrderCanExceed,
-    variantLevelTracking: product?.Inventory?.VariantLevelTracking,
-    quantityAvailable: product?.Inventory?.QuantityAvailable
+    inventoryEnabled: composedProduct?.Product?.Inventory?.Enabled,
+    lastUpdated: composedProduct?.Product?.Inventory?.LastUpdated,
+    notificationPoint: composedProduct?.Product?.Inventory?.NotificationPoint,
+    orderCanExceed: composedProduct?.Product?.Inventory?.OrderCanExceed,
+    variantLevelTracking:
+      composedProduct?.Product?.Inventory?.VariantLevelTracking,
+    quantityAvailable: composedProduct?.Product?.Inventory?.QuantityAvailable
   })
 
   const handleInputChange =
@@ -69,12 +75,15 @@ export default function ProductInventoryData({product}: ProductDataProps) {
   const onEditClicked = (e) => {
     setFormValues((v) => ({
       ...v,
-      ["inventoryEnabled"]: product?.Inventory?.Enabled,
-      ["lastUpdated"]: product?.Inventory?.LastUpdated,
-      ["notificationPoint"]: product?.Inventory?.NotificationPoint,
-      ["orderCanExceed"]: product?.Inventory?.OrderCanExceed,
-      ["variantLevelTracking"]: product?.Inventory?.VariantLevelTracking,
-      ["quantityAvailable"]: product?.Inventory?.QuantityAvailable
+      ["inventoryEnabled"]: composedProduct?.Product?.Inventory?.Enabled,
+      ["lastUpdated"]: composedProduct?.Product?.Inventory?.LastUpdated,
+      ["notificationPoint"]:
+        composedProduct?.Product?.Inventory?.NotificationPoint,
+      ["orderCanExceed"]: composedProduct?.Product?.Inventory?.OrderCanExceed,
+      ["variantLevelTracking"]:
+        composedProduct?.Product?.Inventory?.VariantLevelTracking,
+      ["quantityAvailable"]:
+        composedProduct?.Product?.Inventory?.QuantityAvailable
     }))
     setIsEditingBasicData(true)
     setExpanded(true)
@@ -83,12 +92,15 @@ export default function ProductInventoryData({product}: ProductDataProps) {
   const onAbortClicked = (e) => {
     setFormValues((v) => ({
       ...v,
-      ["inventoryEnabled"]: product?.Inventory?.Enabled,
-      ["lastUpdated"]: product?.Inventory?.LastUpdated,
-      ["notificationPoint"]: product?.Inventory?.NotificationPoint,
-      ["orderCanExceed"]: product?.Inventory?.OrderCanExceed,
-      ["variantLevelTracking"]: product?.Inventory?.VariantLevelTracking,
-      ["quantityAvailable"]: product?.Inventory?.QuantityAvailable
+      ["inventoryEnabled"]: composedProduct?.Product?.Inventory?.Enabled,
+      ["lastUpdated"]: composedProduct?.Product?.Inventory?.LastUpdated,
+      ["notificationPoint"]:
+        composedProduct?.Product?.Inventory?.NotificationPoint,
+      ["orderCanExceed"]: composedProduct?.Product?.Inventory?.OrderCanExceed,
+      ["variantLevelTracking"]:
+        composedProduct?.Product?.Inventory?.VariantLevelTracking,
+      ["quantityAvailable"]:
+        composedProduct?.Product?.Inventory?.QuantityAvailable
     }))
     setIsEditingBasicData(false)
   }
@@ -105,14 +117,15 @@ export default function ProductInventoryData({product}: ProductDataProps) {
     }
 
     const patchedProduct: Product = {
-      Name: product.Name,
+      Name: composedProduct?.Product?.Name,
       Inventory: patchedInventory
     }
-    await Products.Patch(product.ID, patchedProduct)
+    await Products.Patch(composedProduct?.Product?.ID, patchedProduct)
 
     // Hack to ensure Data are loaded before showing -> AWAIT is not enough
-    setTimeout(() => {
-      dispatch(setProductId(product.ID))
+    setTimeout(async () => {
+      var product = await GetComposedProduct(composedProduct?.Product?.ID)
+      setComposedProduct(product)
       setTimeout(() => {
         setIsEditingBasicData(false)
         setIsLoading(false)
@@ -158,7 +171,7 @@ export default function ProductInventoryData({product}: ProductDataProps) {
               </Tooltip>
             </HStack>
           )}
-          {(!product || isLoading) && expanded ? (
+          {(!composedProduct?.Product || isLoading) && expanded ? (
             <Box pt={6} textAlign={"center"}>
               Updating... <BrandedSpinner />
             </Box>
@@ -188,7 +201,8 @@ export default function ProductInventoryData({product}: ProductDataProps) {
                           fontFamily={"body"}
                           fontWeight={500}
                         >
-                          {product?.Inventory?.Enabled ?? false ? (
+                          {composedProduct?.Product?.Inventory?.Enabled ??
+                          false ? (
                             <CheckIcon boxSize={6} color={okColor} />
                           ) : (
                             <CloseIcon boxSize={6} color={errorColor} />
@@ -220,7 +234,7 @@ export default function ProductInventoryData({product}: ProductDataProps) {
                             fontWeight={500}
                           >
                             {new Date(
-                              product?.Inventory?.LastUpdated
+                              composedProduct?.Product?.Inventory?.LastUpdated
                             )?.toLocaleString() ?? "Not set"}
                           </Heading>
                         )}
@@ -244,7 +258,8 @@ export default function ProductInventoryData({product}: ProductDataProps) {
                           fontFamily={"body"}
                           fontWeight={500}
                         >
-                          {product?.Inventory?.NotificationPoint ?? "Not set"}
+                          {composedProduct?.Product?.Inventory
+                            ?.NotificationPoint ?? "Not set"}
                         </Heading>
                       )}
                     </Box>
@@ -263,7 +278,8 @@ export default function ProductInventoryData({product}: ProductDataProps) {
                           fontFamily={"body"}
                           fontWeight={500}
                         >
-                          {product?.Inventory?.OrderCanExceed ?? false ? (
+                          {composedProduct?.Product?.Inventory
+                            ?.OrderCanExceed ?? false ? (
                             <CheckIcon boxSize={6} color={okColor} />
                           ) : (
                             <CloseIcon boxSize={6} color={errorColor} />
@@ -290,7 +306,8 @@ export default function ProductInventoryData({product}: ProductDataProps) {
                           fontFamily={"body"}
                           fontWeight={500}
                         >
-                          {product?.Inventory?.VariantLevelTracking ?? false ? (
+                          {composedProduct?.Product?.Inventory
+                            ?.VariantLevelTracking ?? false ? (
                             <CheckIcon boxSize={6} color={okColor} />
                           ) : (
                             <CloseIcon boxSize={6} color={errorColor} />
@@ -321,7 +338,8 @@ export default function ProductInventoryData({product}: ProductDataProps) {
                             fontFamily={"body"}
                             fontWeight={500}
                           >
-                            {product?.Inventory?.QuantityAvailable ?? "Not set"}
+                            {composedProduct?.Product?.Inventory
+                              ?.QuantityAvailable ?? "Not set"}
                           </Heading>
                         )}
                       </Box>
