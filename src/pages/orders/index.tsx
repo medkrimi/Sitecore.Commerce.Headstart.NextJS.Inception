@@ -28,27 +28,27 @@ import {Me, Orders} from "ordercloud-javascript-sdk"
 import {useEffect, useState} from "react"
 import Link from "../../lib/components/navigation/Link"
 import {formatDate} from "lib/utils/formatDate"
-import useOcAuth from "lib/components/hooks/useOcAuth"
 import formatPrice from "lib/utils/formatPrice"
-import formatStatus from "lib/utils/formatStatus"
-import LettersCard from "lib/components/card/LettersCard"
-import formatTextTruncate from "lib/utils/formatTextTruncate"
-import Card from "lib/components/card/Card"
-import {ChevronDownIcon} from "@chakra-ui/icons"
-import React from "react"
-import ReactHtmlParser from "react-html-parser"
-import {HiOutlineMinusSm} from "react-icons/hi"
+import {
+  GetAuthenticationStatus,
+  OcAuthState
+} from "lib/scripts/OrdercloudService"
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([])
+  const [authState, setAuthState] = useState<OcAuthState>()
 
   useEffect(() => {
     const getOrders = async () => {
-      const ordersList = await Orders.List("All")
+      const state = GetAuthenticationStatus()
+      setAuthState(state)
+      const ordersList = state?.isAdmin
+        ? await Orders.List("All")
+        : await Me.ListOrders()
       setOrders(ordersList.Items)
     }
     getOrders()
-  })
+  }, [])
 
   const ordersContent = orders.length ? (
     orders.map((order) => (
@@ -102,8 +102,8 @@ const OrdersPage = () => {
   const [sliderValue, setSliderValue] = React.useState(50)
   const [showTooltip, setShowTooltip] = React.useState(false)
   return (
-    <Container maxW="full">
-      <NextSeo title="Orders List" />
+    <Container maxWidth={"120ch"}>
+      <NextSeo title={authState?.isAdmin ? "Orders" : "My Orders"} />
       <Heading as="h2" marginTop={5}>
         Orders List
       </Heading>

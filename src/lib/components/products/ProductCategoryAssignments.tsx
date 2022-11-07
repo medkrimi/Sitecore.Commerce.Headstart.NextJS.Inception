@@ -23,14 +23,13 @@ import {
   useColorModeValue,
   useDisclosure
 } from "@chakra-ui/react"
-import {setProductId} from "lib/redux/ocProductDetail"
-import {useOcDispatch} from "lib/redux/ocStore"
 import {
   Catalog,
   Categories,
   Category,
   CategoryProductAssignment,
   Product,
+  Products,
   RequiredDeep
 } from "ordercloud-javascript-sdk"
 import React from "react"
@@ -45,16 +44,20 @@ type ProductDataProps = {
   catalog: Catalog
 }
 
-export default function BasicProductData({product, catalog}: ProductDataProps) {
+export default function ProductCategoryAssignments({
+  product,
+  catalog
+}: ProductDataProps) {
   const [productCategoryAssignments, setProductCategoryAssignments] =
     useState<Category[]>(null)
+  const [componentProduct, setComponentProduct] =
+    useState<RequiredDeep<Product<any>>>(product)
   const [isLoading, setIsLoading] = useState(false)
   const {isOpen, onOpen, onClose} = useDisclosure()
   const cancelRef = React.useRef()
   const [isLinking, setIsLinking] = useState(false)
   const [availableCategories, setAvailableCategories] =
     useState<Category<any>[]>(null)
-  const dispatch = useOcDispatch()
   const [isCategoryChosen, setIsCategoryChosen] = useState(false)
   const [newCategory, setNewCategory] = useState("")
 
@@ -69,7 +72,7 @@ export default function BasicProductData({product, catalog}: ProductDataProps) {
         const categoryAssignments = await Categories.ListProductAssignments(
           catalog?.ID,
           {
-            productID: product.ID
+            productID: componentProduct.ID
           }
         )
 
@@ -92,8 +95,13 @@ export default function BasicProductData({product, catalog}: ProductDataProps) {
     e.preventDefault()
     setIsLoading(true)
     const categoryId = e.currentTarget.dataset.id
-    await Categories.DeleteProductAssignment(catalog.ID, categoryId, product.ID)
-    await dispatch(setProductId(product.ID))
+    await Categories.DeleteProductAssignment(
+      catalog.ID,
+      categoryId,
+      componentProduct.ID
+    )
+    var product = await Products.Get(componentProduct.ID)
+    setComponentProduct(product)
     setNewCategory("")
     setIsLoading(false)
   }
@@ -108,7 +116,8 @@ export default function BasicProductData({product, catalog}: ProductDataProps) {
 
     await Categories.SaveProductAssignment(catalog.ID, categoryAssignment)
 
-    await dispatch(setProductId(product.ID))
+    var product = await Products.Get(componentProduct.ID)
+    setComponentProduct(product)
     setIsLinking(false)
     setNewCategory("")
     setAvailableCategories(null)

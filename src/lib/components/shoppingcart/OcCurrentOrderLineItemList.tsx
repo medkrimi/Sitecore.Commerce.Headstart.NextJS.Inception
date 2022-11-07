@@ -1,5 +1,5 @@
-import {FunctionComponent} from "react"
-import useOcCurrentOrder from "../hooks/useOcCurrentOrder"
+import {ComposedOrder, GetCurrentOrder} from "lib/scripts/OrdercloudService"
+import {FunctionComponent, useEffect, useState} from "react"
 import OcLineItemList from "./OcLineItemList"
 
 interface OcCurrentOrderLineItemListProps {
@@ -10,13 +10,22 @@ interface OcCurrentOrderLineItemListProps {
 const OcCurrentOrderLineItemList: FunctionComponent<
   OcCurrentOrderLineItemListProps
 > = ({emptyMessage, editable}) => {
-  const {lineItems} = useOcCurrentOrder()
+  const [currentOrder, setCurrentOrder] = useState<ComposedOrder>()
+
+  useEffect(() => {
+    async function GetCart() {
+      const cart = await GetCurrentOrder()
+      setCurrentOrder(cart)
+    }
+
+    GetCart()
+  }, [])
 
   return (
     <OcLineItemList
       emptyMessage={emptyMessage}
       editable={editable}
-      lineItems={lineItems}
+      lineItems={currentOrder.Order.LineItems}
     />
   )
 }

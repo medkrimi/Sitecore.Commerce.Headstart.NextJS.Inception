@@ -24,8 +24,10 @@ import {
   useDisclosure,
   Checkbox
 } from "@chakra-ui/react"
-import {setProductId} from "lib/redux/ocProductDetail"
-import {useOcDispatch} from "lib/redux/ocStore"
+import {
+  ComposedProduct,
+  GetComposedProduct
+} from "lib/scripts/OrdercloudService"
 import {
   RequiredDeep,
   Product,
@@ -40,14 +42,16 @@ import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 
 type ProductDataProps = {
-  product: RequiredDeep<Product<any>>
-  variants: RequiredDeep<Variant<any>>[]
+  composedProduct: ComposedProduct
+  setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductVariants({product, variants}: ProductDataProps) {
+export default function ProductVariants({
+  composedProduct,
+  setComposedProduct
+}: ProductDataProps) {
   const {colorMode, toggleColorMode} = useColorMode()
   const color = useColorModeValue("textColor.900", "textColor.100")
-  const dispatch = useOcDispatch()
   const gradient =
     colorMode === "light"
       ? "linear(to-t, brand.300, brand.400)"
@@ -66,10 +70,11 @@ export default function ProductVariants({product, variants}: ProductDataProps) {
   const onGenerateVariantsClicked = async (e) => {
     setIsGenerating(true)
     e.preventDefault()
-    await Products.GenerateVariants(product.ID, {
+    await Products.GenerateVariants(composedProduct?.Product?.ID, {
       overwriteExisting: overwriteExistingVariants
     })
-    await dispatch(setProductId(product.ID))
+    var product = await GetComposedProduct(composedProduct?.Product?.ID)
+    setComposedProduct(product)
     setIsGenerating(false)
     onClose()
     setExpanded(true)
@@ -79,13 +84,20 @@ export default function ProductVariants({product, variants}: ProductDataProps) {
     e.preventDefault()
     setIsLoading(true)
     const variantId = e.currentTarget.dataset.id
-    let variant = variants.find((element) => element.ID == variantId)
+    let variant = composedProduct?.Variants?.find(
+      (element) => element.ID == variantId
+    )
     const newVariant: Variant<any> = {
       Active: !variant.Active,
       ID: variant.ID
     }
-    await Products.PatchVariant(product.ID, variantId, newVariant)
-    await dispatch(setProductId(product.ID))
+    await Products.PatchVariant(
+      composedProduct?.Product?.ID,
+      variantId,
+      newVariant
+    )
+    var product = await GetComposedProduct(composedProduct?.Product?.ID)
+    setComposedProduct(product)
     setIsLoading(false)
   }
 
@@ -106,7 +118,7 @@ export default function ProductVariants({product, variants}: ProductDataProps) {
             </Tooltip>
           </HStack>{" "}
           <Heading size={{base: "md", md: "lg", lg: "xl"}}>Variants</Heading>
-          {(isLoading || !product) && expanded ? (
+          {(isLoading || !composedProduct?.Product) && expanded ? (
             <Box pt={6} textAlign={"center"}>
               Updating... <BrandedSpinner />
             </Box>
@@ -114,7 +126,7 @@ export default function ProductVariants({product, variants}: ProductDataProps) {
             <>
               <Collapse in={expanded}>
                 <Box width="full" pb={2} pt={4}>
-                  {variants?.length ?? 0 > 0 ? (
+                  {composedProduct?.Variants?.length ?? 0 > 0 ? (
                     <>
                       <BrandedTable>
                         <Thead boxShadow={shadow} bgGradient={gradient}>
@@ -126,9 +138,9 @@ export default function ProductVariants({product, variants}: ProductDataProps) {
                           </Tr>
                         </Thead>
                         <Tbody alignContent={"center"}>
-                          {variants ? (
+                          {composedProduct?.Variants ? (
                             <>
-                              {variants.map((item, index) => {
+                              {composedProduct?.Variants.map((item, index) => {
                                 return (
                                   <Tr key={index}>
                                     <Td>{item.ID}</Td>

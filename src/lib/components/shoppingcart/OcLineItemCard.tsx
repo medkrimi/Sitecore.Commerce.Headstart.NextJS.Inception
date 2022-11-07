@@ -1,11 +1,20 @@
 import {LineItem} from "ordercloud-javascript-sdk"
-import {FormEvent, FunctionComponent, useCallback, useState} from "react"
-import useOcProduct from "../hooks/useOcProduct"
-import {removeLineItem, updateLineItem} from "../../redux/ocCurrentOrder"
+import {
+  FormEvent,
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState
+} from "react"
 import OcQuantityInput from "./OcQuantityInput"
-import {useOcDispatch} from "lib/redux/ocStore"
-import {HStack, Text, VStack, Image, Tr, Th} from "@chakra-ui/react"
+import {Button, HStack, Text, VStack, Image, Box} from "@chakra-ui/react"
 import formatPrice from "lib/utils/formatPrice"
+import {
+  ComposedProduct,
+  GetComposedProduct,
+  RemoveLineItem,
+  UpdateLineItem
+} from "lib/scripts/OrdercloudService"
 
 interface OcLineItemCardProps {
   lineItem: LineItem
@@ -24,10 +33,38 @@ const OcLineItemCard: FunctionComponent<OcLineItemCardProps> = ({
   lineItem,
   editable
 }) => {
-  const dispatch = useOcDispatch()
   const [disabled, setDisabled] = useState(false)
   const [quantity, setQuantity] = useState(lineItem.Quantity)
-  const product = useOcProduct(lineItem.ProductID)
+  const [product, setProduct] = useState<ComposedProduct>()
+
+  useEffect(() => {
+    async function GetProduct() {
+      var composedProduct = await GetComposedProduct(lineItem?.Product?.ID)
+      setProduct(composedProduct)
+    }
+
+    GetProduct()
+  }, [lineItem])
+
+  const handleRemoveLineItem = useCallback(async () => {
+    setDisabled(true)
+    await RemoveLineItem(lineItem.ID)
+    setDisabled(false)
+  }, [lineItem])
+
+  const handleUpdateLineItem = useCallback(
+    async (e: FormEvent) => {
+      e.preventDefault()
+      setDisabled(true)
+      await UpdateLineItem({...lineItem, Quantity: quantity})
+      setDisabled(false)
+    },
+    [quantity, lineItem]
+  )
+
+  // const isUpdateDisabled = useMemo(() => {
+  //   return disabled || lineItem.Quantity === quantity
+  // }, [lineItem, disabled, quantity])
 
   return (
     <Tr key={lineItem.ID}>

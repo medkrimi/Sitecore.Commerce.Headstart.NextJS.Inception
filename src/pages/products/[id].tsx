@@ -24,7 +24,6 @@ import BrandedBox from "lib/components/branding/BrandedBox"
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import BreadcrumbNavigation from "lib/components/navigation/BreadcrumbNavigation"
 import EditorialProgressBar from "lib/components/products/EditorialProgressBar"
-import ProductBasicData from "lib/components/products/ProductBasicData"
 import ProductCatalogAssignments from "lib/components/products/ProductCatalogAssignments"
 import ProductCategoryAssignments from "lib/components/products/ProductCategoryAssignments"
 import ProductData from "lib/components/products/ProductData"
@@ -36,26 +35,26 @@ import ProductSpecs from "lib/components/products/ProductSpecs"
 import ProductSuppliers from "lib/components/products/ProductSupllier"
 import ProductVariants from "lib/components/products/ProductVariants"
 import ProductXpInformation from "lib/components/products/ProductXpInformation"
-import useOcProductDetail from "lib/components/hooks/useOcProductDetail"
-import {setProductId} from "lib/redux/ocProductDetail"
-import {OcProductListOptions, setListOptions} from "lib/redux/ocProductList"
-import {useOcDispatch} from "lib/redux/ocStore"
+import {
+  ComposedProduct,
+  GetComposedProduct,
+  ProductListOptions
+} from "lib/scripts/OrdercloudService"
 import {NextSeo} from "next-seo"
 import {useRouter} from "next/router"
-import {Products} from "ordercloud-javascript-sdk"
+import {Product, Products, RequiredDeep} from "ordercloud-javascript-sdk"
 import React from "react"
 import {useEffect, useState} from "react"
 import {FiRefreshCw, FiTrash2} from "react-icons/fi"
 
 const ProductDetails = () => {
   const router = useRouter()
-  const dispatch = useOcDispatch()
   const {id} = router.query
-  const productDetails = useOcProductDetail(id as string)
+  const [composedProduct, setComposedProduct] = useState<ComposedProduct>(null)
   const [prodcutName, setProductName] = useState("")
   const [breadcrumb, setBreadcrumb] = useState<Breadcrumb>()
   const [isDeleting, setIsDeleting] = useState(false)
-  const options: OcProductListOptions = {}
+  const options: ProductListOptions = {}
   const color = useColorModeValue("textColor.900", "textColor.200")
   const {isOpen, onOpen, onClose} = useDisclosure()
   const cancelRef = React.useRef()
@@ -71,16 +70,23 @@ const ProductDetails = () => {
   const onDelete = (e) => {
     setIsDeleting(true)
     e.preventDefault()
-    Products.Delete(productDetails.product.ID)
+    Products.Delete(composedProduct?.Product?.ID)
     setTimeout(() => {
       setIsDeleting(false)
       onClose()
-      dispatch(setListOptions(options))
       router.push("/products")
     }, 4000)
   }
 
   useEffect(() => {
+    async function LoadProduct() {
+      var product = await GetComposedProduct(id as string)
+      if (product?.Product) {
+        setComposedProduct(product)
+      }
+    }
+
+    LoadProduct()
     // TODO: Add 404 Handling if product really does not exist
     const doSetBreadcrumb = () => {
       const breadcrumbItems: BreadcrumbItem[] = [
@@ -93,8 +99,8 @@ const ProductDetails = () => {
           url: "/products"
         },
         {
-          name: productDetails.product?.Name ?? "...",
-          url: "/products/" + productDetails.product?.ID ?? ""
+          name: composedProduct?.Product?.Name ?? "...",
+          url: "/products/" + composedProduct?.Product?.ID ?? ""
         }
       ]
       const tmpbreadcrumb: Breadcrumb = {
@@ -103,9 +109,9 @@ const ProductDetails = () => {
       setBreadcrumb(tmpbreadcrumb)
     }
 
-    setProductName(productDetails.product?.Name ?? "")
+    setProductName(composedProduct?.Product?.Name ?? "")
     doSetBreadcrumb()
-  }, [productDetails])
+  }, [composedProduct, id])
 
   return (
     <VStack w="full">
@@ -171,8 +177,11 @@ const ProductDetails = () => {
                     xl: "30%",
                     "2xl": "15%"
                   }}
-                  onClick={(e) => {
-                    dispatch(setProductId(productDetails.product.ID))
+                  onClick={async (e) => {
+                    var product = await GetComposedProduct(
+                      composedProduct?.Product?.ID
+                    )
+                    setComposedProduct(product)
                   }}
                 >
                   <FiRefreshCw />
@@ -215,72 +224,91 @@ const ProductDetails = () => {
                 mt={8}
                 gridGap={{base: 4, sm: 4, md: 8, lg: 12}}
               >
-                {/* <GridItem rowSpan={1} colSpan={6}>
-              <ProductBasicData product={productDetails.product} />
-            </GridItem> */}
                 <GridItem rowSpan={1} colSpan={6}>
-                  <EditorialProgressBar product={productDetails?.product} />
+                  <EditorialProgressBar product={composedProduct?.Product} />
                 </GridItem>
 
                 <GridItem
                   rowSpan={1}
                   colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 4}}
                 >
-                  <ProductData product={productDetails.product} />
+                  <ProductData
+                    composedProduct={composedProduct}
+                    setComposedProduct={setComposedProduct}
+                  />
                 </GridItem>
 
                 <GridItem
                   rowSpan={1}
                   colSpan={{base: 6, md: 6, sm: 6, lg: 3, xl: 2}}
                 >
-                  <ProductMeasurementData product={productDetails.product} />
+                  <ProductMeasurementData
+                    composedProduct={composedProduct}
+                    setComposedProduct={setComposedProduct}
+                  />
                 </GridItem>
                 <GridItem
                   rowSpan={1}
                   colSpan={{base: 6, md: 6, sm: 6, lg: 3, xl: 3}}
                 >
-                  <ProductInventoryData product={productDetails.product} />
+                  <ProductInventoryData
+                    composedProduct={composedProduct}
+                    setComposedProduct={setComposedProduct}
+                  />
                 </GridItem>
                 <GridItem
                   rowSpan={1}
                   colSpan={{base: 6, md: 6, sm: 6, lg: 2, xl: 3}}
                 >
-                  <ProductXpInformation product={productDetails.product} />
+                  <ProductXpInformation
+                    composedProduct={composedProduct}
+                    setComposedProduct={setComposedProduct}
+                  />
                 </GridItem>
                 <GridItem
                   rowSpan={1}
                   colSpan={{base: 6, md: 6, sm: 6, lg: 4, xl: 6}}
                 >
-                  <ProductCatalogAssignments product={productDetails.product} />
+                  <ProductCatalogAssignments
+                    composedProduct={composedProduct}
+                    setComposedProduct={setComposedProduct}
+                  />
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={6}>
                   <ProductSpecs
-                    product={productDetails.product}
-                    specs={productDetails.specs}
+                    composedProduct={composedProduct}
+                    setComposedProduct={setComposedProduct}
                   />
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={6}>
                   <ProductVariants
-                    product={productDetails.product}
-                    variants={productDetails.variants}
+                    composedProduct={composedProduct}
+                    setComposedProduct={setComposedProduct}
                   />
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={6}>
                   <ProductPriceScheduleAssignments
-                    product={productDetails.product}
+                    composedProduct={composedProduct}
+                    setComposedProduct={setComposedProduct}
                   />
                 </GridItem>
                 <GridItem
                   rowSpan={1}
                   colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 6}}
                 >
-                  <ProductSuppliers product={productDetails.product} />
+                  <ProductSuppliers
+                    composedProduct={composedProduct}
+                    setComposedProduct={setComposedProduct}
+                  />
                 </GridItem>
                 <GridItem
                   rowSpan={1}
                   colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 6}}
                 >
-                  <ProductInventoryRecords product={productDetails.product} />
+                  <ProductInventoryRecords
+                    composedProduct={composedProduct}
+                    setComposedProduct={setComposedProduct}
+                  />
                 </GridItem>
               </Grid>
             </Container>
