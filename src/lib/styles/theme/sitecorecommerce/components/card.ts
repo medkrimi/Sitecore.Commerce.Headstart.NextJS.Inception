@@ -1,6 +1,4 @@
-import {defineStyleConfig} from "@chakra-ui/react"
-
-export const Card = defineStyleConfig({
+export const Card = {
   // The styles all cards have in common
   baseStyle: {
     fontWeight: "regular",
@@ -50,4 +48,4 @@ export const Card = defineStyleConfig({
     size: "md",
     variant: "primaryCard"
   }
-})
+}
