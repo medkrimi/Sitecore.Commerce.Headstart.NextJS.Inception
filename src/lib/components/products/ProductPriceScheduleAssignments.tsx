@@ -27,8 +27,10 @@ import {
   Text,
   Flex
 } from "@chakra-ui/react"
-import {setProductId} from "lib/redux/ocProductDetail"
-import {useOcDispatch} from "lib/redux/ocStore"
+import {
+  ComposedProduct,
+  GetComposedProduct
+} from "lib/scripts/OrdercloudService"
 import {
   RequiredDeep,
   Product,
@@ -49,11 +51,13 @@ import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 
 type ProductDataProps = {
-  product: RequiredDeep<Product<any>>
+  composedProduct: ComposedProduct
+  setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
 export default function ProductPriceScheduleAssignments({
-  product
+  composedProduct,
+  setComposedProduct
 }: ProductDataProps) {
   const {isOpen, onOpen, onClose} = useDisclosure()
   const [isLoading, setIsLoading] = useState(false)
@@ -79,7 +83,6 @@ export default function ProductPriceScheduleAssignments({
     priceSchedule: false,
     buyerGroup: false
   })
-  const dispatch = useOcDispatch()
 
   interface PriceScheduleWithAssignment {
     priceSchedule: PriceSchedule<any>
@@ -88,15 +91,15 @@ export default function ProductPriceScheduleAssignments({
 
   useEffect(() => {
     async function GetProductCatalogAssignments() {
-      if (product) {
+      if (composedProduct?.Product) {
         let priceSchedules: PriceScheduleWithAssignment[] = []
         const assignments = await Products.ListAssignments({
-          productID: product.ID
+          productID: composedProduct?.Product?.ID
         })
 
-        if (product?.DefaultPriceScheduleID) {
+        if (composedProduct?.Product?.DefaultPriceScheduleID) {
           const defaultPriceSchedule = await PriceSchedules.Get(
-            product?.DefaultPriceScheduleID
+            composedProduct?.Product?.DefaultPriceScheduleID
           )
           setDefaultPriceScheduleAssignment(defaultPriceSchedule)
         }
@@ -116,18 +119,19 @@ export default function ProductPriceScheduleAssignments({
       }
     }
     GetProductCatalogAssignments()
-  }, [product])
+  }, [composedProduct])
 
   const onPriceScheduleAssignmentRemove = async (e) => {
     setIsLoading(true)
     e.preventDefault()
     const buyerId = e.currentTarget.dataset.buyerid
     const userGroupId = e.currentTarget.dataset.usergroupid
-    await Products.DeleteAssignment(product.ID, buyerId, {
+    await Products.DeleteAssignment(composedProduct?.Product?.ID, buyerId, {
       userGroupID: userGroupId
     })
 
-    await dispatch(setProductId(product.ID))
+    var product = await GetComposedProduct(composedProduct?.Product?.ID)
+    setComposedProduct(product)
     setIsLoading(false)
   }
 
@@ -135,7 +139,7 @@ export default function ProductPriceScheduleAssignments({
     setIsLinking(true)
     e.preventDefault()
     const specProductAssignment: ProductAssignment = {
-      ProductID: product.ID,
+      ProductID: composedProduct?.Product?.ID,
       PriceScheduleID: newPriceScheduleAssignment.priceSchedule,
       BuyerID: newPriceScheduleAssignment.buyerGroup,
       UserGroupID: newPriceScheduleAssignment.userGroup
@@ -143,7 +147,8 @@ export default function ProductPriceScheduleAssignments({
 
     await Products.SaveAssignment(specProductAssignment)
 
-    await dispatch(setProductId(product.ID))
+    var product = await GetComposedProduct(composedProduct?.Product?.ID)
+    setComposedProduct(product)
     setIsLinking(false)
     setNewPriceScheduleAssignment((v) => ({
       ...v,
@@ -299,7 +304,7 @@ export default function ProductPriceScheduleAssignments({
           <Heading size={{base: "md", md: "lg", lg: "xl"}}>
             Price Schedules
           </Heading>{" "}
-          {(isLoading || !product) && expanded ? (
+          {(isLoading || !composedProduct?.Product) && expanded ? (
             <Box pt={6} textAlign={"center"}>
               Updating... <BrandedSpinner />
             </Box>

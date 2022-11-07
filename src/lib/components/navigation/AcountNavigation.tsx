@@ -27,8 +27,6 @@ import {
 } from "@chakra-ui/react"
 import NextLink from "next/link"
 import {BsSun, BsMoonStarsFill} from "react-icons/bs"
-import logout from "../../redux/ocAuth/logout"
-import {useOcDispatch, useOcSelector} from "../../redux/ocStore"
 import {Me, RequiredDeep} from "ordercloud-javascript-sdk"
 
 import {HiOutlineBell, HiOutlineCog} from "react-icons/hi"
@@ -36,10 +34,10 @@ import {ChevronDownIcon} from "@chakra-ui/icons"
 import {ItemContent} from "../generic/ItemContent"
 import React, {useState} from "react"
 import Cookies from "universal-cookie"
+import {Logout} from "lib/scripts/OrdercloudService"
 
 const MobileNavigation = () => {
   let menuBg = useColorModeValue("white", "navy.800")
-  const dispatch = useOcDispatch()
   const {isOpen, onOpen, onClose} = useDisclosure()
   const btnRef = React.useRef()
   const {colorMode, toggleColorMode} = useColorMode()
@@ -134,7 +132,7 @@ const MobileNavigation = () => {
           </MenuItem>
           <MenuItem>
             <NextLink href="/logoff" passHref>
-              <Link pl="2" pr="2" onClick={() => dispatch(logout())}>
+              <Link pl="2" pr="2" onClick={() => Logout()}>
                 Log out
               </Link>
             </NextLink>

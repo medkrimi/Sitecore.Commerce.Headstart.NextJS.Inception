@@ -27,8 +27,10 @@ import {
   useColorModeValue,
   useDisclosure
 } from "@chakra-ui/react"
-import {setProductId} from "lib/redux/ocProductDetail"
-import {useOcDispatch} from "lib/redux/ocStore"
+import {
+  ComposedProduct,
+  GetComposedProduct
+} from "lib/scripts/OrdercloudService"
 import {
   Catalog,
   CatalogAssignment,
@@ -48,10 +50,14 @@ import BrandedTable from "../branding/BrandedTable"
 import ProductCategoryAssignments from "./ProductCategoryAssignments"
 
 type ProductDataProps = {
-  product: RequiredDeep<Product<any>>
+  composedProduct: ComposedProduct
+  setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function BasicProductData({product}: ProductDataProps) {
+export default function ProductCatalogAssignments({
+  composedProduct,
+  setComposedProduct
+}: ProductDataProps) {
   const [productCatalogAssignments, setProductCatalogAssignments] =
     useState<Catalog[]>(null)
   const [chosenCatalog, setChosenCatalog] = useState<Catalog>(null)
@@ -60,7 +66,6 @@ export default function BasicProductData({product}: ProductDataProps) {
   const [isLinking, setIsLinking] = useState(false)
   const [availableCatalogs, setAvailableCatalogs] =
     useState<Catalog<any>[]>(null)
-  const dispatch = useOcDispatch()
   const [isCatalogChosen, setIsCatalogChosen] = useState(false)
   const [newCatalog, setNewCatalog] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -70,12 +75,12 @@ export default function BasicProductData({product}: ProductDataProps) {
 
   useEffect(() => {
     async function GetProductCatalogAssignments() {
-      if (product) {
+      if (composedProduct?.Product) {
         setIsLoading(true)
         let catalogs: Catalog[] = []
         const assignments = await Catalogs.ListProductAssignments({
           catalogID: "",
-          productID: product?.ID
+          productID: composedProduct.Product?.ID
         })
 
         await Promise.all(
@@ -85,12 +90,12 @@ export default function BasicProductData({product}: ProductDataProps) {
           })
         )
 
-        setIsLoading(false)
         setProductCatalogAssignments(catalogs)
+        setIsLoading(false)
       }
     }
     GetProductCatalogAssignments()
-  }, [product])
+  }, [composedProduct?.Product])
 
   const onCategoriesExpandedClick = async (e) => {
     const chosenCatalogId = e.currentTarget.dataset.id
@@ -108,8 +113,12 @@ export default function BasicProductData({product}: ProductDataProps) {
     e.preventDefault()
     setIsLoading(true)
     const catalogId = e.currentTarget.dataset.id
-    await Catalogs.DeleteProductAssignment(catalogId, product.ID)
-    await dispatch(setProductId(product.ID))
+    await Catalogs.DeleteProductAssignment(
+      catalogId,
+      composedProduct?.Product?.ID
+    )
+    var product = await GetComposedProduct(composedProduct?.Product?.ID)
+    setComposedProduct(product)
     setChosenCatalog(null)
     setIsLoading(false)
   }
@@ -119,12 +128,13 @@ export default function BasicProductData({product}: ProductDataProps) {
     e.preventDefault()
     const catalogAssignment: ProductCatalogAssignment = {
       CatalogID: newCatalog,
-      ProductID: product.ID
+      ProductID: composedProduct?.Product?.ID
     }
 
     await Catalogs.SaveProductAssignment(catalogAssignment)
 
-    await dispatch(setProductId(product.ID))
+    var product = await GetComposedProduct(composedProduct?.Product?.ID)
+    setComposedProduct(product)
     setIsLinking(false)
     setNewCatalog("")
     setAvailableCatalogs(null)
@@ -175,7 +185,7 @@ export default function BasicProductData({product}: ProductDataProps) {
           <Heading size={{base: "md", md: "lg", lg: "xl"}}>
             Catalog Assignments
           </Heading>
-          {isLoading && expanded ? (
+          {!composedProduct && expanded ? (
             <Box pt={6} textAlign={"center"}>
               Updating... <BrandedSpinner />
             </Box>
@@ -243,7 +253,7 @@ export default function BasicProductData({product}: ProductDataProps) {
               </Box>
               {chosenCatalog ? (
                 <ProductCategoryAssignments
-                  product={product}
+                  product={composedProduct?.Product}
                   catalog={chosenCatalog}
                 />
               ) : (

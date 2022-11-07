@@ -2,26 +2,18 @@ import {Box, HStack} from "@chakra-ui/react"
 import type {ReactNode} from "react"
 import Footer from "./Footer"
 import Header from "./Header"
-import {useOcDispatch, useOcSelector} from "../redux/ocStore"
 import LeftNavigation from "lib/components/navigation/SideNavigation"
+import {GetAuthenticationStatus} from "lib/scripts/OrdercloudService"
 
 type LayoutProps = {
   children: ReactNode
 }
 
 const Layout = ({children}: LayoutProps) => {
-  const {user, isAnonymous, loading, lineItemCount} = useOcSelector((s) => ({
-    user: s.ocUser.user,
-    loading: s.ocAuth.loading,
-    isAnonymous: s.ocAuth.isAnonymous,
-    lineItemCount: s.ocCurrentOrder.order
-      ? s.ocCurrentOrder.order.LineItemCount
-      : 0
-  }))
-
+  var state = GetAuthenticationStatus()
   return (
     <Box as="section" w="100%" margin="0 auto" transition="0.5s ease-out">
-      {!isAnonymous ? <Header /> : ""}
+      <Header />
       <HStack
         alignItems="flex-start"
         height="100%"
@@ -32,10 +24,10 @@ const Layout = ({children}: LayoutProps) => {
         mt="65px"
         justify="flex-start"
       >
-        {!isAnonymous ? <LeftNavigation /> : ""}
+        <LeftNavigation />
         {children}
       </HStack>
-      {!isAnonymous ? <Footer /> : ""}
+      <Footer />
     </Box>
   )
 }

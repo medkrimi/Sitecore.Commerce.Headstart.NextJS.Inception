@@ -16,8 +16,6 @@ import {
   Checkbox,
   useToast
 } from "@chakra-ui/react"
-import {setProductId} from "lib/redux/ocProductDetail"
-import {useOcDispatch} from "lib/redux/ocStore"
 import {PromotionXPs} from "lib/types/PromotionXPs"
 import {
   Inventory,
@@ -36,7 +34,7 @@ type PromotionDataProps = {
   promotion: Promotion
 }
 
-export default function ProductBasicData({promotion}: PromotionDataProps) {
+export default function PromotionBasicData({promotion}: PromotionDataProps) {
   const toast = useToast()
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")

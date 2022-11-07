@@ -1,11 +1,20 @@
 import {LineItem} from "ordercloud-javascript-sdk"
-import {FormEvent, FunctionComponent, useCallback, useState} from "react"
-import useOcProduct from "../../hooks/useOcProduct"
-import {removeLineItem, updateLineItem} from "../../redux/ocCurrentOrder"
+import {
+  FormEvent,
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState
+} from "react"
 import OcQuantityInput from "./OcQuantityInput"
-import {useOcDispatch} from "lib/redux/ocStore"
 import {Button, HStack, Text, VStack, Image, Box} from "@chakra-ui/react"
 import formatPrice from "lib/utils/formatPrice"
+import {
+  ComposedProduct,
+  GetComposedProduct,
+  RemoveLineItem,
+  UpdateLineItem
+} from "lib/scripts/OrdercloudService"
 
 interface OcLineItemCardProps {
   lineItem: LineItem
@@ -16,25 +25,33 @@ const OcLineItemCard: FunctionComponent<OcLineItemCardProps> = ({
   lineItem,
   editable
 }) => {
-  const dispatch = useOcDispatch()
   const [disabled, setDisabled] = useState(false)
   const [quantity, setQuantity] = useState(lineItem.Quantity)
-  const product = useOcProduct(lineItem.ProductID)
+  const [product, setProduct] = useState<ComposedProduct>()
+
+  useEffect(() => {
+    async function GetProduct() {
+      var composedProduct = await GetComposedProduct(lineItem?.Product?.ID)
+      setProduct(composedProduct)
+    }
+
+    GetProduct()
+  }, [lineItem])
 
   const handleRemoveLineItem = useCallback(async () => {
     setDisabled(true)
-    await dispatch(removeLineItem(lineItem.ID))
+    await RemoveLineItem(lineItem.ID)
     setDisabled(false)
-  }, [dispatch, lineItem])
+  }, [lineItem])
 
   const handleUpdateLineItem = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
       setDisabled(true)
-      await dispatch(updateLineItem({...lineItem, Quantity: quantity}))
+      await UpdateLineItem({...lineItem, Quantity: quantity})
       setDisabled(false)
     },
-    [dispatch, quantity, lineItem]
+    [quantity, lineItem]
   )
 
   // const isUpdateDisabled = useMemo(() => {

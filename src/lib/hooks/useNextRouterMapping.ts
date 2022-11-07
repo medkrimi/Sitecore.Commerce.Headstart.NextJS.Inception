@@ -1,8 +1,8 @@
+import {ProductListOptions} from "lib/scripts/OrdercloudService"
 import {useRouter} from "next/router"
 import {Filters} from "ordercloud-javascript-sdk"
 import {ParsedUrlQuery} from "querystring"
 import {useCallback, useMemo} from "react"
-import {OcProductListOptions} from "../redux/ocProductList"
 
 export interface NextQueryMap {
   [key: string]: string
@@ -22,7 +22,7 @@ const mapQueryParamsToFilters = (
 const mapQueryParamsToOptions = (
   map: NextQueryMap,
   query: ParsedUrlQuery
-): OcProductListOptions => {
+): ProductListOptions => {
   const {search, page, pageSize, searchOn, sortBy, ...rest} = map
   const searchOnValue = query[searchOn]
   const sortByValue = query[sortBy]
@@ -39,7 +39,7 @@ const mapQueryParamsToOptions = (
 
 const mapOptionsToQueryParams = (
   map: NextQueryMap,
-  options: OcProductListOptions
+  options: ProductListOptions
 ): ParsedUrlQuery => {
   const result = {}
   Object.entries(options).forEach((entry) => {
@@ -60,8 +60,8 @@ const useNextRouterMapping = (
   map: NextQueryMap
 ): {
   isReady: boolean
-  options: OcProductListOptions
-  updateQuery: (options: OcProductListOptions) => void
+  options: ProductListOptions
+  updateQuery: (options: ProductListOptions) => void
 } => {
   const {isReady, query, push, pathname} = useRouter()
 
@@ -71,7 +71,7 @@ const useNextRouterMapping = (
   }, [query, map])
 
   const updateQuery = useCallback(
-    (o: OcProductListOptions) => {
+    (o: ProductListOptions) => {
       push({
         pathname,
         query: mapOptionsToQueryParams(map, o)

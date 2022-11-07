@@ -1,4 +1,5 @@
 export interface ProductXPs {
+  Name: string
   Images: XpImage[]
   SomeAdditionalCheckbox: boolean
 }
