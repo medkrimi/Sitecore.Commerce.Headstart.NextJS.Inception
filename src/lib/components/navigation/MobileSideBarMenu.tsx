@@ -1,23 +1,24 @@
 import {
-  Flex,
-  Image,
-  Text,
-  Link,
   Button,
+  Flex,
   Icon,
   IconButton,
+  Image,
+  Link,
+  Text,
   useDisclosure
 } from "@chakra-ui/react"
-import React, {useEffect, useState} from "react"
-import NextLink from "next/link"
+import {FiMenu, FiSettings, FiStar} from "react-icons/fi"
 import {
   HiOutlineChartBar,
   HiOutlineEmojiSad,
   HiOutlineQrcode,
   HiOutlineUser
 } from "react-icons/hi"
-import {FiStar, FiSettings, FiMenu} from "react-icons/fi"
+import React, {useEffect, useState} from "react"
+
 import {BsCurrencyDollar} from "react-icons/bs"
+import NextLink from "next/link"
 
 const MobileSideBarMenu = () => {
   return (
@@ -74,7 +75,7 @@ const MobileSideBarMenu = () => {
               ></Icon>
             </Link>
           </NextLink>
-          <NextLink href="/users" passHref>
+          <NextLink href="/buyers" passHref>
             <Link pl="2" pr="2" pb="15px">
               <Icon as={HiOutlineUser} fontSize="30px"></Icon>
             </Link>

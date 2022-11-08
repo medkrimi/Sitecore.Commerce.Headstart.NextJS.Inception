@@ -1,7 +1,8 @@
-import NextLink from "next/link"
 import {Box, Flex, HStack, Link} from "@chakra-ui/react"
-import logout from "../../redux/ocAuth/logout"
 import {useOcDispatch, useOcSelector} from "../../redux/ocStore"
+
+import NextLink from "next/link"
+import logout from "../../redux/ocAuth/logout"
 
 const MainNavigation = () => {
   const dispatch = useOcDispatch()
@@ -18,7 +19,7 @@ const MainNavigation = () => {
           Orders
         </Link>
       </NextLink>
-      <NextLink href="/users" passHref>
+      <NextLink href="/buyers" passHref>
         <Link pl="2" pr="2">
           Users
         </Link>

@@ -17,22 +17,21 @@
     "release": "cross-env HUSKY=0 standard-version",
     "push-release": "git push --follow-tags origin main",
     "prepare": "husky install",
-    "pre-commit": "yarn lint && yarn tsc --noEmit && yarn build"    
+    "pre-commit": "yarn lint && yarn tsc --noEmit && yarn build"
   },
-  
   "dependencies": {
     "@chakra-ui/icons": "^2.0.4",
     "@chakra-ui/react": "^2.3.5",
     "@date-io/date-fns": "^2.16.0",
     "@emotion/react": "^11.9.3",
-    "@emotion/styled": "^11.9.3",
+    "@emotion/styled": "^11.10.5",
     "@reduxjs/toolkit": "^1.8.3",
     "@types/date-fns": "^2.6.0",
     "apexcharts": "^3.36.0",
     "axios": "^0.27.2",
     "chart.js": "^3.9.1",
     "formik": "^2.2.9",
-    "framer-motion": "^6.5.1",
+    "framer-motion": "^7.6.4",
     "next": "12.2.0",
     "next-seo": "^5.4.0",
     "ordercloud-javascript-sdk": "^4.10.1",

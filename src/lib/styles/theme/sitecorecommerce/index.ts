@@ -1,10 +1,11 @@
-import {extendTheme} from "@chakra-ui/react"
+import type {StyleFunctionProps} from "@chakra-ui/styled-system"
 import {colors} from "./colors"
 import {components} from "./components"
 import {config} from "./config"
+import {extendTheme} from "@chakra-ui/react"
 import {fonts} from "./fonts"
 import {mode} from "@chakra-ui/theme-tools"
-import type {StyleFunctionProps} from "@chakra-ui/styled-system"
+
 // import { layouts } from "./layouts";
 
 const customTheme = extendTheme({
@@ -22,10 +23,17 @@ const customTheme = extendTheme({
   styles: {
     global: (props: StyleFunctionProps) => ({
       // styles for the `body`
+
       body: {
         bg: mode("bodyBg.100", "bodyBg.900")(props),
-        color: "white",
-        fontSize: "sm"
+
+        color: "textColor.900",
+
+        fontSize: "sm",
+
+        _dark: {
+          color: "textColor.100"
+        }
       }
     })
   }
