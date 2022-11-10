@@ -1,10 +1,11 @@
-import {extendTheme} from "@chakra-ui/react"
+import type {StyleFunctionProps} from "@chakra-ui/styled-system"
 import {colors} from "./colors"
 import {components} from "./components"
 import {config} from "./config"
+import {extendTheme} from "@chakra-ui/react"
 import {fonts} from "./fonts"
 import {mode} from "@chakra-ui/theme-tools"
-import type {StyleFunctionProps} from "@chakra-ui/styled-system"
+
 // import { layouts } from "./layouts";
 
 const customTheme = extendTheme({
