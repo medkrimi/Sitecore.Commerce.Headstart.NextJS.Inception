@@ -16,7 +16,6 @@ function Card(props) {
       width="full"
       position="relative"
       _hover={{
-        bg: "gray.200",
         textDecoration: "none",
         borderRadius: "10px"
       }}

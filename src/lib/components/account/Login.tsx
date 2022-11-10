@@ -6,8 +6,6 @@ import {
   useEffect,
   useState
 } from "react"
-import login from "../../redux/ocAuth/login"
-import {useOcDispatch, useOcSelector} from "../../redux/ocStore"
 import {
   Button,
   VStack,
@@ -23,6 +21,11 @@ import {
   AlertIcon
 } from "@chakra-ui/react"
 import HeaderLogo from "../branding/HeaderLogo"
+import {
+  GetAuthenticationStatus,
+  Login,
+  OcAuthState
+} from "lib/scripts/OrdercloudService"
 
 interface OcLoginFormProps {
   title?: string
@@ -33,14 +36,8 @@ const OcLoginForm: FunctionComponent<OcLoginFormProps> = ({
   title = "Sign into your account",
   onLoggedIn
 }) => {
-  const dispatch = useOcDispatch()
-
-  const {loading, error, isAnonymous} = useOcSelector((s) => ({
-    isAnonymous: s.ocAuth.isAnonymous,
-    error: s.ocAuth.error,
-    loading: s.ocAuth.loading
-  }))
-
+  const [authState, setAuthState] = useState<OcAuthState>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const [formValues, setFormValues] = useState({
     identifier: "",
     password: "",
@@ -59,23 +56,29 @@ const OcLoginForm: FunctionComponent<OcLoginFormProps> = ({
 
   const handleSubmit = useCallback(
     (e: FormEvent) => {
+      setIsLoading(true)
       e.preventDefault()
-      dispatch(
-        login({
-          username: formValues.identifier,
-          password: formValues.password,
-          remember: formValues.remember
-        })
-      )
+      Login(formValues.identifier, formValues.password, formValues.remember)
+      setIsLoading(false)
+      onLoggedIn()
     },
-    [formValues, dispatch]
+    [
+      formValues.identifier,
+      formValues.password,
+      formValues.remember,
+      onLoggedIn
+    ]
   )
 
   useEffect(() => {
-    if (!isAnonymous) {
+    var authState = GetAuthenticationStatus()
+    setAuthState(authState)
+    if (!authState?.isAnonymous) {
       onLoggedIn()
     }
-  }, [isAnonymous, onLoggedIn])
+
+    setIsLoading(false)
+  }, [onLoggedIn])
 
   const {colorMode, toggleColorMode} = useColorMode()
   const bg = useColorModeValue("gray.400", "gray.600")
@@ -83,7 +86,7 @@ const OcLoginForm: FunctionComponent<OcLoginFormProps> = ({
 
   return (
     <>
-      {isAnonymous ? (
+      {authState?.isAnonymous ? (
         <form name="ocLoginForm" onSubmit={handleSubmit}>
           <VStack width="full" bg={bg} color={color} p={10} rounded={10}>
             <HeaderLogo />
@@ -91,12 +94,13 @@ const OcLoginForm: FunctionComponent<OcLoginFormProps> = ({
               {title}
             </Heading>
 
-            {error && (
+            {/* TODO Get Errors on Login */}
+            {/* {error && (
               <Alert status="error" variant="solid">
                 <AlertIcon />
                 {error.message}{" "}
               </Alert>
-            )}
+            )} */}
 
             <Box width="full">
               <Text fontWeight={"bold"}>Username</Text>
@@ -142,10 +146,11 @@ const OcLoginForm: FunctionComponent<OcLoginFormProps> = ({
             </Box>
 
             <Button
-              disabled={loading}
+              disabled={isLoading}
               type="submit"
               colorScheme="brandButtons"
               width="full"
+              onClick={handleSubmit}
             >
               Sign in
             </Button>

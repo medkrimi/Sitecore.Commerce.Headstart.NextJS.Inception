@@ -13,8 +13,10 @@ import {
   Collapse,
   Center
 } from "@chakra-ui/react"
-import {setProductId} from "lib/redux/ocProductDetail"
-import {useOcDispatch} from "lib/redux/ocStore"
+import {
+  ComposedProduct,
+  GetComposedProduct
+} from "lib/scripts/OrdercloudService"
 import {ProductXPs, XpImage} from "lib/types/ProductXPs"
 import {RequiredDeep, Product, Products} from "ordercloud-javascript-sdk"
 import {ChangeEvent, useState} from "react"
@@ -23,27 +25,32 @@ import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 
 type ProductDataProps = {
-  product: RequiredDeep<Product<ProductXPs>>
+  composedProduct: ComposedProduct
+  setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function BasicProductData({product}: ProductDataProps) {
+export default function ProductXpInformation({
+  composedProduct,
+  setComposedProduct
+}: ProductDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
   const [formValues, setFormValues] = useState({
-    someAdditionalCheckbox: product?.xp?.SomeAdditionalCheckbox,
-    images: product?.xp?.Images
+    someAdditionalCheckbox:
+      composedProduct?.Product?.xp?.SomeAdditionalCheckbox,
+    images: composedProduct?.Product?.xp?.Images
   })
-  const dispatch = useOcDispatch()
   const [expanded, setExpanded] = useState(false)
 
   const onEditClicked = (e) => {
     e.preventDefault()
     setFormValues((v) => ({
       ...v,
-      ["someAdditionalCheckbox"]: product?.xp?.SomeAdditionalCheckbox,
-      ["images"]: product?.xp?.Images ?? []
+      ["someAdditionalCheckbox"]:
+        composedProduct?.Product?.xp?.SomeAdditionalCheckbox,
+      ["images"]: composedProduct?.Product?.xp?.Images ?? []
     }))
     setIsEditingBasicData(true)
     setExpanded(true)
@@ -130,18 +137,20 @@ export default function BasicProductData({product}: ProductDataProps) {
     }
 
     const newProduct: Product<ProductXPs> = {
-      Name: product.Name,
+      Name: composedProduct?.Product?.Name,
       xp: {
+        Name: "Test",
         Images: images,
         SomeAdditionalCheckbox: formValues.someAdditionalCheckbox
       }
     }
 
-    await Products.Patch(product.ID, newProduct)
+    await Products.Patch(composedProduct?.Product?.ID, newProduct)
 
     // Hack to ensure Data are loaded before showing -> AWAIT is not enough
-    setTimeout(() => {
-      dispatch(setProductId(product.ID))
+    setTimeout(async () => {
+      var product = await GetComposedProduct(composedProduct?.Product?.ID)
+      setComposedProduct(product)
       setTimeout(() => {
         setIsEditingBasicData(false)
         setIsLoading(false)
@@ -188,7 +197,7 @@ export default function BasicProductData({product}: ProductDataProps) {
         )}
         <Heading size={{base: "md", md: "lg", lg: "xl"}}>Media</Heading>
 
-        {(isLoading || !product) && expanded ? (
+        {(isLoading || !composedProduct?.Product) && expanded ? (
           <Box pt={6} textAlign={"center"}>
             Updating... <BrandedSpinner />
           </Box>
@@ -225,7 +234,7 @@ export default function BasicProductData({product}: ProductDataProps) {
                       <></>
                     )
                   })}
-                  {product?.xp?.Images?.map((image, key) => {
+                  {composedProduct?.Product?.xp?.Images?.map((image, key) => {
                     return !isEditingBasicData ? (
                       <HStack key={key} mt={4}>
                         <Text>{key + 1}</Text>
@@ -289,7 +298,8 @@ export default function BasicProductData({product}: ProductDataProps) {
                     fontFamily={"body"}
                     fontWeight={500}
                   >
-                    {product?.xp?.SomeAdditionalCheckbox ?? false ? (
+                    {composedProduct?.Product?.xp?.SomeAdditionalCheckbox ??
+                    false ? (
                       <CheckIcon boxSize={6} color={okColor} />
                     ) : (
                       <CloseIcon boxSize={6} color={errorColor} />

@@ -9,11 +9,9 @@ import {
   Show
 } from "@chakra-ui/react"
 import HeaderLogo from "lib/components/branding/HeaderLogo"
-import {useOcDispatch, useOcSelector} from "../redux/ocStore"
 import AcountNavigation from "lib/components/navigation/AcountNavigation"
 
 const Header = () => {
-  const dispatch = useOcDispatch()
   const {colorMode, toggleColorMode} = useColorMode()
   const bg = useColorModeValue("headerBg.500", "headerBg.900")
   const color = useColorModeValue("textColor.900", "textColor.100")

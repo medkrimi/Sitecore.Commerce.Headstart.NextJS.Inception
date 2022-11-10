@@ -4,7 +4,7 @@ import {
   Flex,
   Text,
   Divider,
-  Spacer,
+  IconButton,
   Box,
   Tbody,
   Table,
@@ -19,11 +19,21 @@ import {
   AlertDialogFooter,
   Textarea,
   useToast,
-  Spinner
+  Spinner,
+  useColorModeValue,
+  useColorMode,
+  HStack,
+  Heading,
+  Grid,
+  GridItem,
+  VStack,
+  Input,
+  Link
 } from "@chakra-ui/react"
 import {formatDate} from "lib/utils/formatDate"
 import {NextSeo} from "next-seo"
 import {useRouter} from "next/router"
+import NextLink from "next/link"
 import {
   IntegrationEvents,
   OrderReturn,
@@ -32,13 +42,19 @@ import {
   Orders
 } from "ordercloud-javascript-sdk"
 import React, {FunctionComponent, useEffect, useRef, useState} from "react"
-import AddressCard from "../../lib/components/orders/AddressCard"
-import OcLineItemList from "lib/components/shoppingcart/OcLineItemList"
+import AddressCard from "../../lib/components/card/AddressCard"
 import formatPrice from "lib/utils/formatPrice"
-import useOcAuth from "lib/hooks/useOcAuth"
+import {
+  GetAuthenticationStatus,
+  OcAuthState
+} from "lib/scripts/OrdercloudService"
+import OcLineItemList from "lib/components/shoppingcart/OcLineItemList"
+import {HiOutlineMinusSm} from "react-icons/hi"
+import Card from "lib/components/card/Card"
+import LettersCard from "lib/components/card/LettersCard"
 
 const OrderConfirmationPage: FunctionComponent = () => {
-  const {isAdmin} = useOcAuth()
+  const [authState, setAuthState] = useState<OcAuthState>()
   const router = useRouter()
   const [orderWorksheet, setOrderWorksheet] = useState({} as OrderWorksheet)
   const [orderReturns, setOrderReturns] = useState({} as OrderReturn[])
@@ -65,6 +81,9 @@ const OrderConfirmationPage: FunctionComponent = () => {
   }
 
   useEffect(() => {
+    let authState = GetAuthenticationStatus()
+    setAuthState(authState)
+
     const getOrder = async () => {
       const orderId = router.query.orderid as string
       if (!orderId) {
@@ -134,11 +153,12 @@ const OrderConfirmationPage: FunctionComponent = () => {
   }
 
   const showRefundBtn =
-    !isAdmin &&
+    !authState?.isAdmin &&
     orderWorksheet.Order.Status === "Completed" &&
     !orderReturns.length
 
-  const showShipBtn = isAdmin && orderWorksheet.Order.Status === "Open"
+  const showShipBtn =
+    authState?.isAdmin && orderWorksheet.Order.Status === "Open"
 
   const refundBtn = showRefundBtn && (
     <Button onClick={() => setRefundDialogOpen(true)}>Request Refund</Button>
@@ -167,113 +187,193 @@ const OrderConfirmationPage: FunctionComponent = () => {
   return (
     <>
       <NextSeo title={`Order ${orderWorksheet.Order.ID}`} />
-      <Container maxWidth={"120ch"} marginTop={30} marginBottom={30}>
-        <Flex flexDirection="column">
-          <Flex marginBottom={showRefundBtn ? 5 : 10}>
-            <Flex flexDirection="column">
-              <Badge
-                style={{fontSize: "large"}}
-                fontWeight="bold"
-                color="brand.500"
-              >
-                Order# {orderWorksheet.Order.ID}
-              </Badge>
-              <Text>
-                Placed on {formatDate(orderWorksheet.Order.DateSubmitted)}
-              </Text>
+      <Container maxW="full" marginTop={30} marginBottom={30}>
+        <NextSeo title="Order Details" />
+        <Heading as="h2" marginTop={5}>
+          Order Details
+        </Heading>
+        <HStack justifyContent="space-between" w="100%">
+          <NextLink href="new" passHref>
+            <Link pl="2" pr="2">
+              <Button variant="primaryButton">New Order</Button>
+            </Link>
+          </NextLink>
+          <HStack>
+            <Button variant="secondaryButton">Print Shipping Label</Button>
+            <Button variant="secondaryButton">Export PDF</Button>
+            <Button variant="secondaryButton">Export CSV</Button>
+          </HStack>
+        </HStack>
+        <Card variant="primaryCard">
+          <IconButton
+            variant="closePanelButton"
+            aria-label="close panel"
+            icon={<HiOutlineMinusSm />}
+          ></IconButton>
+          <Flex flexDirection="column" p="10">
+            <HStack justifyContent="space-between" w="100%">
+              <Heading pb="20px">Order Information</Heading>
               <Text>Status: {orderStatus}</Text>
-            </Flex>
-            <Spacer />
-            <Flex>
-              <Flex flexDirection="column">
-                <Text fontWeight="bold">Ship To</Text>
-                <AddressCard
-                  address={orderWorksheet.LineItems[0].ShippingAddress}
-                />
-              </Flex>
-              <Divider orientation="vertical" marginLeft={5} marginRight={5} />
-              <Flex flexDirection="column">
-                <Text fontWeight="bold">Bill To</Text>
-                <AddressCard address={orderWorksheet.Order.BillingAddress} />
-              </Flex>
-            </Flex>
+            </HStack>
+
+            <HStack>
+              <LettersCard
+                FirstName={orderWorksheet.Order.FromUser.FirstName}
+                LastName={orderWorksheet.Order.FromUser.LastName}
+              />
+              <VStack textAlign="left" w="100%">
+                <HStack textAlign="left" w="100%">
+                  <Text textAlign="left">
+                    {orderWorksheet.Order.FromUser.FirstName}
+                  </Text>
+                  <Text textAlign="left">
+                    {orderWorksheet.Order.FromUser.LastName}
+                  </Text>
+                </HStack>
+                <Text textAlign="left" w="100%">
+                  {orderWorksheet.Order.FromUser.Phone}
+                </Text>
+                <Text textAlign="left" w="100%">
+                  {orderWorksheet.Order.FromUser.Email}
+                </Text>
+              </VStack>
+            </HStack>
+            <Grid templateColumns="repeat(3, 1fr)" gap={20} pt="20">
+              <GridItem w="100%">
+                <VStack>
+                  <Text width="full">Invoice Number</Text>
+                  <Input
+                    placeholder="Invoice Number"
+                    defaultValue={orderWorksheet.Order.ID}
+                  ></Input>
+                  <Text width="full">Billing Address</Text>
+                  <AddressCard
+                    Street1={orderWorksheet.Order.BillingAddress.Street1}
+                    Street2={orderWorksheet.Order.BillingAddress.Street2}
+                    City={orderWorksheet.Order.BillingAddress.City}
+                    State={orderWorksheet.Order.BillingAddress.State}
+                    Zip={orderWorksheet.Order.BillingAddress.Zip}
+                  />
+                  <Text width="full" pt="20px">
+                    Buyer Comments
+                  </Text>
+                  <Textarea defaultValue={orderWorksheet.Order.Comments} />
+                </VStack>
+              </GridItem>
+              <GridItem w="100%">
+                <VStack>
+                  <Text width="full">Order Placed</Text>
+                  <Input
+                    placeholder="Order Placed"
+                    defaultValue={formatDate(
+                      orderWorksheet.Order.DateSubmitted
+                    )}
+                  ></Input>
+                  <Text width="full">Shipping Address</Text>
+                  <AddressCard
+                    Street1={
+                      orderWorksheet.LineItems[0].ShippingAddress.Street1
+                    }
+                    Street2={
+                      orderWorksheet.LineItems[0].ShippingAddress.Street2
+                    }
+                    City={orderWorksheet.LineItems[0].ShippingAddress.City}
+                    State={orderWorksheet.LineItems[0].ShippingAddress.State}
+                    Zip={orderWorksheet.LineItems[0].ShippingAddress.Zip}
+                  />
+                </VStack>
+              </GridItem>
+              <GridItem w="100%" justifyContent="center">
+                <Box
+                  border="1px"
+                  borderColor="gray.200"
+                  padding="20px"
+                  w="100%"
+                  maxW="450px"
+                >
+                  <VStack>
+                    <Text>Order Recap</Text>
+                    <Divider border="1px" borderColor="gray.200" />
+                    <Flex
+                      flexDirection="column"
+                      marginLeft={10}
+                      w="full"
+                      pr="10"
+                      pl="10"
+                    >
+                      <Table
+                        size="sm"
+                        width="full"
+                        maxWidth="100%"
+                        marginBottom={5}
+                      >
+                        <Tbody>
+                          <Tr>
+                            <Td>Subtotal</Td>
+                            <Td textAlign="right">
+                              <Text fontWeight="bold">
+                                {formatPrice(orderWorksheet.Order.Subtotal)}
+                              </Text>
+                            </Td>
+                          </Tr>
+                          <Tr>
+                            <Td>Promotion Discount</Td>
+                            <Td textAlign="right">
+                              <Text fontWeight="bold">
+                                -
+                                {formatPrice(
+                                  orderWorksheet.Order.PromotionDiscount
+                                )}
+                              </Text>
+                            </Td>
+                          </Tr>
+                          <Tr>
+                            <Td>Shipping</Td>
+                            <Td textAlign="right">
+                              <Text fontWeight="bold">
+                                {formatPrice(orderWorksheet.Order.ShippingCost)}
+                              </Text>
+                            </Td>
+                          </Tr>
+                          <Tr>
+                            <Td>Tax</Td>
+                            <Td textAlign="right">
+                              <Text fontWeight="bold">
+                                {formatPrice(orderWorksheet.Order.TaxCost)}
+                              </Text>
+                            </Td>
+                          </Tr>
+                          <Tr>
+                            <Td>Order Total</Td>
+                            <Td textAlign="right">
+                              <Text fontWeight="bold">
+                                {formatPrice(orderWorksheet.Order.Total)}
+                              </Text>
+                            </Td>
+                          </Tr>
+                        </Tbody>
+                      </Table>
+                    </Flex>
+                  </VStack>
+                </Box>
+              </GridItem>
+            </Grid>
           </Flex>
-          {actionButtons}
-          <Box
-            bgColor="whitesmoke"
-            w="100%"
-            padding={5}
-            border="1px"
-            borderColor="lightgray"
-            marginBottom={5}
-          >
-            <Text fontSize="xx-large" display="inline" marginRight={5}>
-              Order Summary
-            </Text>
-            <Text fontSize="md" display="inline">
-              <Badge
-                fontWeight="bold"
-                color="brand.500"
-                style={{fontSize: "large"}}
-                marginRight={1}
-              >
-                {orderWorksheet.Order.LineItemCount}
-              </Badge>
-              {orderWorksheet.Order.LineItemCount > 1 ? "Items" : "Item"}
-            </Text>
-          </Box>
-          <Flex>
+        </Card>
+        {actionButtons}
+        <Card variant="primaryCard">
+          <IconButton
+            variant="closePanelButton"
+            aria-label="close panel"
+            icon={<HiOutlineMinusSm />}
+          ></IconButton>
+          <Flex flexDirection="column" p="10">
             <OcLineItemList
               lineItems={orderWorksheet.LineItems}
               editable={false}
             />
-            <Spacer />
-            <Flex flexDirection="column" marginLeft={10}>
-              <Table size="sm" minWidth={350} maxHeight={150} marginBottom={5}>
-                <Tbody>
-                  <Tr>
-                    <Td>Subtotal</Td>
-                    <Td>
-                      <Text fontWeight="bold">
-                        {formatPrice(orderWorksheet.Order.Subtotal)}
-                      </Text>
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td>Promotion Discount</Td>
-                    <Td>
-                      <Text fontWeight="bold">
-                        -{formatPrice(orderWorksheet.Order.PromotionDiscount)}
-                      </Text>
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td>Shipping</Td>
-                    <Td>
-                      <Text fontWeight="bold">
-                        {formatPrice(orderWorksheet.Order.ShippingCost)}
-                      </Text>
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td>Tax</Td>
-                    <Td>
-                      <Text fontWeight="bold">
-                        {formatPrice(orderWorksheet.Order.TaxCost)}
-                      </Text>
-                    </Td>
-                  </Tr>
-                </Tbody>
-              </Table>
-              <Box bgColor="brand.500" width="100%" padding={4} color="white">
-                <Flex justifyContent="space-between">
-                  <Text>Order Total</Text>
-                  <Text>{formatPrice(orderWorksheet.Order.Total)}</Text>
-                </Flex>
-              </Box>
-            </Flex>
           </Flex>
-        </Flex>
+        </Card>
       </Container>
       <AlertDialog
         isOpen={isRefundDialogOpen}
@@ -296,7 +396,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
               <Textarea
                 marginTop={8}
                 placeholder="Optional comments"
-                value={returnComments}
+                defaultValue={returnComments}
                 onChange={handleReturnCommentChange}
               />
             </AlertDialogBody>
@@ -308,13 +408,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
               >
                 Cancel
               </Button>
-              <Button
-                marginLeft={5}
-                bgColor="brand.500"
-                color="white"
-                onClick={requestRefund}
-                disabled={loading}
-              >
+              <Button onClick={requestRefund} disabled={loading}>
                 {loading ? <Spinner color="brand.500" /> : "Request Refund"}
               </Button>
             </AlertDialogFooter>
