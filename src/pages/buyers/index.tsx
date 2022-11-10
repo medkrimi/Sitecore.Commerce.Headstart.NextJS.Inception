@@ -11,19 +11,17 @@ import {
   Thead,
   Tr
 } from "@chakra-ui/react"
-import {Buyers, Catalogs, Me, Users} from "ordercloud-javascript-sdk"
+import {Buyers, Catalogs, Users} from "ordercloud-javascript-sdk"
 import {MdCheck, MdReplay} from "react-icons/md"
 import {useEffect, useState} from "react"
 
 import {IoMdClose} from "react-icons/io"
 import Link from "../../lib/components/navigation/Link"
 import {NextSeo} from "next-seo"
-import {formatDate} from "lib/utils/formatDate"
-import formatPrice from "lib/utils/formatPrice"
-import useOcAuth from "lib/hooks/useOcAuth"
+import React from "react"
+import {formatDate} from "../../lib/utils/formatDate"
 
 const BuyersPage = () => {
-  const {isAdmin} = useOcAuth()
   const [buyers, setBuyers] = useState([])
   const [usersTotalCount, setusersTotalCount] = useState<number>(0)
   const [catalogTotalCount, setcatalogTotalCount] = useState<number>(0)
@@ -34,7 +32,7 @@ const BuyersPage = () => {
       setBuyers(buyersList.Items)
     }
     getBuyers()
-  }, [isAdmin])
+  })
 
   function getUsersTotalCount({buyerID}): number {
     Users.List(buyerID).then((userList) =>
@@ -121,5 +119,4 @@ const BuyersPage = () => {
     </Container>
   )
 }
-
 export default BuyersPage
