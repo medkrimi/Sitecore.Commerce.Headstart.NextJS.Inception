@@ -1,14 +1,19 @@
 import {Text, Tbody, Td, Tr, Box, Grid, GridItem} from "@chakra-ui/react"
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import {Product} from "ordercloud-javascript-sdk"
 import {ProductXPs} from "lib/types/ProductXPs"
 import ProductCard from "./ProductCard"
 //import Image from "next/image"
 
 const ProductGrid = (props) => {
-  const products = props.products
-  const [componentProducts, setComponentProducts] =
-    useState<Product<ProductXPs>[]>(products)
+  //const products = props.products
+  const [componentProducts, setComponentProducts] = useState<
+    Product<ProductXPs>[]
+  >(props.products)
+
+  useEffect(() => {
+    setComponentProducts(props.products)
+  }, [props.products])
 
   return (
     <>

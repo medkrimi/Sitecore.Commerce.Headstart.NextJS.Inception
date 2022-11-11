@@ -23,11 +23,15 @@ import {
 import BrandedSpinner from "../branding/BrandedSpinner"
 import NextLink from "next/link"
 import {stripHTML} from "lib/utils/stripHTML"
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import {Product} from "ordercloud-javascript-sdk"
 import {ProductXPs} from "lib/types/ProductXPs"
 import {CalculateEditorialProcess} from "./EditorialProgressBar"
 
+interface TableProps {
+  labels: string[]
+  contents: {value: string[]}[]
+}
 const ProductList = (props) => {
   const [componentProducts, setComponentProducts] = useState<
     Product<ProductXPs>[]
@@ -39,8 +43,12 @@ const ProductList = (props) => {
     setSortBy(columnName)
     props.onSort(columnName)
     console.log("Inside ProductList " + columnName)
-    console.log(props.onSort)
   }
+  useEffect(() => {
+    setComponentProducts(props.products)
+    setSortBy(props.sortBy)
+  }, [props.products, props.sortBy])
+
   return (
     <>
       {componentProducts ? (
@@ -52,6 +60,22 @@ const ProductList = (props) => {
                   <Flex justifyContent={"flex-start"}>
                     <FiCheckSquare />
                     <Text ml={2}>Product ID</Text>
+                    {sortBy == "ID" ? (
+                      <FiArrowUp
+                        cursor={"ID"}
+                        onClick={() => onSortByNameClickedInside("!ID")}
+                      />
+                    ) : sortBy == "!ID" ? (
+                      <FiArrowDown
+                        cursor={"pointer"}
+                        onClick={() => onSortByNameClickedInside("ID")}
+                      />
+                    ) : (
+                      <FiArrowRight
+                        cursor={"pointer"}
+                        onClick={() => onSortByNameClickedInside("ID")}
+                      />
+                    )}
                   </Flex>
                 </Tooltip>
               </Th>
@@ -59,24 +83,23 @@ const ProductList = (props) => {
               <Th>
                 <Tooltip label="Sort by Name">
                   <Flex justifyContent={"flex-start"}>
+                    <Text ml={2}>Product Name</Text>
                     {sortBy == "name" ? (
                       <FiArrowUp
                         cursor={"pointer"}
-                        onClick={() => props.onSort("!name")}
+                        onClick={() => onSortByNameClickedInside("!name")}
                       />
                     ) : sortBy == "!name" ? (
                       <FiArrowDown
                         cursor={"pointer"}
-                        onClick={() => props.onSort("name")}
+                        onClick={() => onSortByNameClickedInside("name")}
                       />
                     ) : (
                       <FiArrowRight
                         cursor={"pointer"}
-                        onClick={() => props.onSort("name")}
+                        onClick={() => onSortByNameClickedInside("name")}
                       />
                     )}
-
-                    <Text ml={2}>Product Name</Text>
                   </Flex>
                 </Tooltip>
               </Th>
@@ -85,6 +108,7 @@ const ProductList = (props) => {
               <Th>
                 <Tooltip label="Sort by Is Active">
                   <Flex justifyContent={"flex-start"}>
+                    <Text ml={2}>Active?</Text>
                     {sortBy == "Active" ? (
                       <FiArrowUp
                         cursor={"pointer"}
@@ -101,8 +125,6 @@ const ProductList = (props) => {
                         onClick={() => onSortByNameClickedInside("Active")}
                       />
                     )}
-
-                    <Text ml={2}>Active?</Text>
                   </Flex>
                 </Tooltip>
               </Th>
@@ -114,30 +136,29 @@ const ProductList = (props) => {
               <Th>
                 <Tooltip label="Sort by Editorial Progress">
                   <Flex justifyContent={"flex-start"}>
-                    {sortBy == "editorialProgress" ? (
+                    <Text ml={2}>Editorial Progress</Text>
+                    {sortBy == "editorialProcess" ? (
                       <FiArrowUp
-                        cursor={"editorialProgress"}
+                        cursor={"editorialProcess"}
                         onClick={() =>
-                          onSortByNameClickedInside("!editorialProgress")
+                          onSortByNameClickedInside("!editorialProcess")
                         }
                       />
-                    ) : sortBy == "!editorialProgress" ? (
+                    ) : sortBy == "!editorialProcess" ? (
                       <FiArrowDown
                         cursor={"pointer"}
                         onClick={() =>
-                          onSortByNameClickedInside("editorialProgress")
+                          onSortByNameClickedInside("editorialProcess")
                         }
                       />
                     ) : (
                       <FiArrowRight
                         cursor={"pointer"}
                         onClick={() =>
-                          onSortByNameClickedInside("editorialProgress")
+                          onSortByNameClickedInside("editorialProcess")
                         }
                       />
                     )}
-
-                    <Text ml={2}>Editorial Progress</Text>
                   </Flex>
                 </Tooltip>
               </Th>

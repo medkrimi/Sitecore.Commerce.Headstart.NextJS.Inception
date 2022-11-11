@@ -9,7 +9,8 @@ import {
   useColorModeValue,
   HStack,
   Flex,
-  Spacer
+  Spacer,
+  Tooltip
 } from "@chakra-ui/react"
 import {stripHTML} from "lib/utils/stripHTML"
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
@@ -52,9 +53,13 @@ const ProductCard = (props) => {
         p={[4, 2, 20, 6]}
       >
         {/* <Heading fontSize="xx-small" fontWeight='normal' color='gray.300' >NEW ARRIVALS</Heading>  */}
-        <Heading as="h3" fontSize="small">
-          {product.Name}
-        </Heading>
+        <Tooltip label={product.Name}>
+          <Heading as="h3" fontSize="small">
+            {product.Name.length > 39
+              ? product.Name.substring(0, 39) + "..."
+              : product.Name}
+          </Heading>
+        </Tooltip>
         <Text fontSize="small" color="brand.500">
           {stripHTML(product.Description).length > 40
             ? stripHTML(product.Description).substring(0, 40) + "..."
