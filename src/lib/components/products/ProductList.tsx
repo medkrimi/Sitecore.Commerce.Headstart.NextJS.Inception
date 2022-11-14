@@ -28,10 +28,6 @@ import {Product} from "ordercloud-javascript-sdk"
 import {ProductXPs} from "lib/types/ProductXPs"
 import {CalculateEditorialProcess} from "./EditorialProgressBar"
 
-interface TableProps {
-  labels: string[]
-  contents: {value: string[]}[]
-}
 const ProductList = (props) => {
   const [componentProducts, setComponentProducts] = useState<
     Product<ProductXPs>[]
@@ -42,7 +38,7 @@ const ProductList = (props) => {
   const onSortByNameClickedInside = (columnName) => {
     setSortBy(columnName)
     props.onSort(columnName)
-    console.log("Inside ProductList " + columnName)
+    //console.log("Inside ProductList " + columnName)
   }
   useEffect(() => {
     setComponentProducts(props.products)
