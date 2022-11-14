@@ -1,6 +1,7 @@
-import NextLink from "next/link"
 import {Box, Flex, HStack, Link} from "@chakra-ui/react"
+
 import {Logout} from "lib/scripts/OrdercloudService"
+import NextLink from "next/link"
 
 const MainNavigation = () => {
   return (
@@ -15,7 +16,7 @@ const MainNavigation = () => {
           Orders
         </Link>
       </NextLink>
-      <NextLink href="/users" passHref>
+      <NextLink href="/buyers" passHref>
         <Link pl="2" pr="2">
           Users
         </Link>
