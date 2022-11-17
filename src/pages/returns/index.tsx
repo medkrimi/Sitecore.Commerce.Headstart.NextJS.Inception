@@ -23,7 +23,14 @@ import {
   Divider,
   useColorMode,
   useColorModeValue,
-  IconButton
+  IconButton,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
+  Spinner
 } from "@chakra-ui/react"
 import Card from "lib/components/card/Card"
 import LettersCard from "lib/components/card/LettersCard"
@@ -38,7 +45,7 @@ import {
   OrderReturn,
   OrderReturnItem
 } from "ordercloud-javascript-sdk"
-import React from "react"
+import React, {useRef} from "react"
 import {useEffect, useState} from "react"
 import {HiOutlineMinusSm} from "react-icons/hi"
 
@@ -77,6 +84,12 @@ const ReturnsPage = () => {
     setReturns(returnsList.Items)
   }
 
+  const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const cancelRef = useRef()
+
+  const requestExportCSV = () => {}
+
   useEffect(() => {
     getReturns()
   }, [])
@@ -88,13 +101,21 @@ const ReturnsPage = () => {
       <Td colSpan={7}>No returns available</Td>
     </Tr>
   )
+  const showInfiniteScrollBtn = returns.length
+  const loadMoreButton = showInfiniteScrollBtn != 0 && (
+    <HStack justifyContent="center">
+      <Button variant="tertiaryButton">Scroll down to load more returns</Button>
+    </HStack>
+  )
 
   return (
     <Container maxW="full">
       <NextSeo title="Returns" />
       <Heading as="h2">Returns List</Heading>
       <HStack justifyContent="space-between" w="100%">
-        <Button variant="primaryButton">New Return</Button>
+        <Link href={`/returns/new`}>
+          <Button variant="primaryButton">New Return</Button>
+        </Link>
         <HStack>
           <Menu>
             <MenuButton
@@ -145,7 +166,12 @@ const ReturnsPage = () => {
               </MenuItem>
             </MenuList>
           </Menu>
-          <Button variant="secondaryButton">Export CSV</Button>
+          <Button
+            variant="secondaryButton"
+            onClick={() => setExportCSVDialogOpen(true)}
+          >
+            Export CSV
+          </Button>
         </HStack>
       </HStack>
       <Card variant="primaryCard">
@@ -168,10 +194,44 @@ const ReturnsPage = () => {
           </Thead>
           <Tbody>{returnsContent}</Tbody>
         </Table>
-        <Button variant="tertiaryButton">
-          Scroll down to load more returns
-        </Button>
+        {loadMoreButton}
       </Card>
+      <AlertDialog
+        isOpen={isExportCSVDialogOpen}
+        onClose={() => setExportCSVDialogOpen(false)}
+        leastDestructiveRef={cancelRef}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Export Selected Returns to CSV
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              <Text display="inline">
+                Export the select returns to a CSV, once the export button is
+                clicked behind the scense a job will be kicked off to create the
+                csv and then will automatically download to your downloads
+                folder in the browser.
+              </Text>
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <HStack justifyContent="space-between" w="100%">
+                <Button
+                  ref={cancelRef}
+                  onClick={() => setExportCSVDialogOpen(false)}
+                  disabled={loading}
+                  variant="secondaryButton"
+                >
+                  Cancel
+                </Button>
+                <Button onClick={requestExportCSV} disabled={loading}>
+                  {loading ? <Spinner color="brand.500" /> : "Export Returns"}
+                </Button>
+              </HStack>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Container>
   )
 }

@@ -292,6 +292,7 @@ const Dashboard = () => {
                         justifyContent="space-around"
                         w="100%"
                         width="full"
+                        p="26px"
                       >
                         <Heading size="md">
                           Products
@@ -327,6 +328,7 @@ const Dashboard = () => {
                         justifyContent="space-around"
                         w="100%"
                         width="full"
+                        p="26px"
                       >
                         <Heading size="md">
                           Orders
@@ -359,6 +361,7 @@ const Dashboard = () => {
                         justifyContent="space-around"
                         w="100%"
                         width="full"
+                        p="26px"
                       >
                         <Heading size="md">
                           Users
@@ -391,6 +394,7 @@ const Dashboard = () => {
                         justifyContent="space-around"
                         w="100%"
                         width="full"
+                        p="26px"
                       >
                         <Heading size="md">
                           Promotions
