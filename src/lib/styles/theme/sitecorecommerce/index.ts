@@ -5,6 +5,8 @@ import {config} from "./config"
 import {extendTheme} from "@chakra-ui/react"
 import {fonts} from "./fonts"
 import {mode} from "@chakra-ui/theme-tools"
+import {MdLabel} from "react-icons/md"
+import {getChartByID} from "apexcharts"
 
 // import { layouts } from "./layouts";
 
@@ -32,6 +34,19 @@ const customTheme = extendTheme({
 
         _dark: {
           color: "textColor.100"
+        }
+      },
+      input: {
+        color: "gray.500",
+        border: "1px",
+        borderColor: "gray.300",
+        p: "5px",
+        mb: {sm: "20px", lg: "20px"},
+        _dark: {
+          border: "1px solid",
+          borderColor: "gray.300",
+          bgColor: "gray.800",
+          color: "white"
         }
       }
     })

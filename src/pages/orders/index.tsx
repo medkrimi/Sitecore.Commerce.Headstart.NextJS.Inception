@@ -21,11 +21,19 @@ import {
   Stack,
   VStack,
   Divider,
-  IconButton
+  IconButton,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  Textarea,
+  AlertDialogFooter,
+  Spinner
 } from "@chakra-ui/react"
 import {NextSeo} from "next-seo"
 import {Me, Orders} from "ordercloud-javascript-sdk"
-import {useEffect, useState} from "react"
+import {useEffect, useRef, useState} from "react"
 import Link from "../../lib/components/navigation/Link"
 import {formatDate} from "lib/utils/formatDate"
 import formatPrice from "lib/utils/formatPrice"
@@ -43,6 +51,19 @@ import {HiOutlineMinusSm} from "react-icons/hi"
 const OrdersPage = () => {
   const [orders, setOrders] = useState([])
   const [authState, setAuthState] = useState<OcAuthState>()
+  const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const cancelRef = useRef()
+
+  const requestExportCSV = () => {}
+
+  const showInfiniteScrollBtn = orders.length
+
+  const loadMoreButton = showInfiniteScrollBtn != 0 && (
+    <HStack justifyContent="center">
+      <Button variant="tertiaryButton">Scroll down to load more orders</Button>
+    </HStack>
+  )
 
   useEffect(() => {
     const getOrders = async () => {
@@ -94,7 +115,9 @@ const OrdersPage = () => {
         Orders List
       </Heading>
       <HStack justifyContent="space-between" w="100%">
-        <Button variant="primaryButton">New Order</Button>
+        <Link href={`/orders/new`}>
+          <Button variant="primaryButton">New Order</Button>
+        </Link>
         <HStack>
           <Menu>
             <MenuButton
@@ -145,7 +168,12 @@ const OrdersPage = () => {
               </MenuItem>
             </MenuList>
           </Menu>
-          <Button variant="secondaryButton">Export CSV</Button>
+          <Button
+            variant="secondaryButton"
+            onClick={() => setExportCSVDialogOpen(true)}
+          >
+            Export CSV
+          </Button>
         </HStack>
       </HStack>
       <Card variant="primaryCard">
@@ -168,10 +196,44 @@ const OrdersPage = () => {
           </Thead>
           <Tbody>{ordersContent}</Tbody>
         </Table>
-        <Button variant="tertiaryButton">
-          Scroll down to load more orders
-        </Button>
+        {loadMoreButton}
       </Card>
+      <AlertDialog
+        isOpen={isExportCSVDialogOpen}
+        onClose={() => setExportCSVDialogOpen(false)}
+        leastDestructiveRef={cancelRef}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Export Selected Orders to CSV
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              <Text display="inline">
+                Export the select orders to a CSV, once the export button is
+                clicked behind the scense a job will be kicked off to create the
+                csv and then will automatically download to your downloads
+                folder in the browser.
+              </Text>
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <HStack justifyContent="space-between" w="100%">
+                <Button
+                  ref={cancelRef}
+                  onClick={() => setExportCSVDialogOpen(false)}
+                  disabled={loading}
+                  variant="secondaryButton"
+                >
+                  Cancel
+                </Button>
+                <Button onClick={requestExportCSV} disabled={loading}>
+                  {loading ? <Spinner color="brand.500" /> : "Export Orders"}
+                </Button>
+              </HStack>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Container>
   )
 }

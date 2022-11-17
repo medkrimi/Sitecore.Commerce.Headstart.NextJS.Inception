@@ -195,7 +195,9 @@ const OrderConfirmationPage: FunctionComponent = () => {
         <HStack justifyContent="space-between" w="100%">
           <NextLink href="new" passHref>
             <Link pl="2" pr="2">
-              <Button variant="primaryButton">New Order</Button>
+              <Link href={`/orders/new`}>
+                <Button variant="primaryButton">New Order</Button>
+              </Link>
             </Link>
           </NextLink>
           <HStack>
