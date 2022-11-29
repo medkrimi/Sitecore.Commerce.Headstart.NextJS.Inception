@@ -6,6 +6,8 @@ import defaultSEOConfig from "../../next-seo.config"
 import {Chakra} from "lib/components/Chakra"
 import Layout from "lib/layout/Layout"
 import {SetConfiguration} from "lib/scripts/OrdercloudService"
+// import * as dotenv from "dotenv"
+// dotenv.config()
 
 const MyApp = ({Component, pageProps}: AppProps) => {
   SetConfiguration()

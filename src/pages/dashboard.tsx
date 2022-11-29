@@ -111,6 +111,7 @@ const Dashboard = () => {
           .catch((error) => {
             console.log(error)
           })
+        // Need to make this the me endpoint if they are a user other than admin
         var orders = await Orders.List("All")
           .then((response) => {
             return response.Items
@@ -153,16 +154,18 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const shadow = "5px 5px 5px #999999"
   const gradient =
     colorMode === "light"
       ? "linear(to-t, brand.300, brand.400)"
       : "linear(to-t, brand.600, brand.500)"
-  const hoverColor = useColorModeValue("brand.300", "brand.400")
-  const focusColor = useColorModeValue("brand.300", "brand.400")
-  const colorSheme = "gray"
   const color = useColorModeValue("boxTextColor.900", "boxTextColor.100")
-  const tileBg = useColorModeValue("tileBg.500", "tileBg.900")
+
+  var totalTodaysSales = orderCloudData.Orders
+  var totalSales = orderCloudData.Orders
+  var totalUsers =
+    orderCloudData.Orders * process.env.AnalyticsCostUserMultiplier
+  var totalNewUsers =
+    orderCloudData.Orders * process.env.AnalyticsCostNewUserMultiplier
 
   return (
     <Flex
@@ -198,7 +201,7 @@ const Dashboard = () => {
                       <Link>
                         <TodaysMoney
                           title="todays money"
-                          totalamount={` ${formatShortPrice(53897)}`}
+                          totalamount={` ${formatShortPrice(totalTodaysSales)}`}
                           percentchange="3.48"
                           percentchangetype="pos"
                           percentlabel="Since last month"
@@ -216,7 +219,7 @@ const Dashboard = () => {
                       <Link>
                         <TodaysUsers
                           title="todays users"
-                          totalamount={` ${formatShortPrice(3200)}`}
+                          totalamount={` ${formatShortPrice(totalUsers)}`}
                           percentchange="5.2"
                           percentchangetype="pos"
                           percentlabel="Since last month"
@@ -236,7 +239,7 @@ const Dashboard = () => {
                       <Link>
                         <NewClients
                           title="new clients"
-                          totalamount={` ${formatShortPrice(2503)}`}
+                          totalamount={` ${formatShortPrice(totalNewUsers)}`}
                           percentchange="2.82"
                           percentchangetype="pos"
                           percentlabel="Since last month"
@@ -254,7 +257,7 @@ const Dashboard = () => {
                       <Link>
                         <TotalSales
                           title="total sales"
-                          totalamount={` ${formatShortPrice(173000)}`}
+                          totalamount={` ${formatShortPrice(totalSales)}`}
                           percentchange="8.12"
                           percentchangetype="pos"
                           percentlabel="Compared to last year"
