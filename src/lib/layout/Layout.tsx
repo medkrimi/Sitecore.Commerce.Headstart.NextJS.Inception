@@ -29,7 +29,7 @@ const Layout = ({children}: LayoutProps) => {
         w="100%"
         width="full"
         as="section"
-        mt="65px"
+        mt="89px"
         justify="flex-start"
       >
         {state?.isAnonymous ?? true ? <></> : <LeftNavigation />}

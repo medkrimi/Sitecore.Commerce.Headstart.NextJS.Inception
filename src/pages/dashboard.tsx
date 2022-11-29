@@ -62,6 +62,7 @@ const Dashboard = () => {
   const boxBgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
   useEffect(() => {
     let state = GetAuthenticationStatus()
+
     if (state?.isAnonymous) {
       push("/")
     }
@@ -149,7 +150,6 @@ const Dashboard = () => {
     }
 
     LoadOrdercloudData()
-
     // dispatch(setListOptions(options))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -160,12 +160,30 @@ const Dashboard = () => {
       : "linear(to-t, brand.600, brand.500)"
   const color = useColorModeValue("boxTextColor.900", "boxTextColor.100")
 
+  const d = new Date()
+  let month = d.getMonth()
+  let year = d.getFullYear()
+
   var totalTodaysSales = orderCloudData.Orders
+  var percentTodaysSales = orderCloudData.Orders
+  var percentTodaysSalesChange =
+    orderCloudData.Orders > orderCloudData.Orders ? "pos" : "neg"
   var totalSales = orderCloudData.Orders
+  var percentSales = orderCloudData.Orders
+  var percentSalesChange =
+    orderCloudData.Orders > orderCloudData.Orders ? "pos" : "neg"
   var totalUsers =
-    orderCloudData.Orders * process.env.AnalyticsCostUserMultiplier
+    orderCloudData.Orders *
+    parseInt(process.env.NEXT_PUBLIC_AnalyticsCostUserMultiplier)
+  var percentTotalUsers = orderCloudData.Orders
+  var percentTotalUsersChange =
+    orderCloudData.Orders > orderCloudData.Orders ? "pos" : "neg"
   var totalNewUsers =
-    orderCloudData.Orders * process.env.AnalyticsCostNewUserMultiplier
+    orderCloudData.Orders *
+    parseInt(process.env.NEXT_PUBLIC_AnalyticsCostNewUserMultiplier)
+  var percentNewUsers = orderCloudData.Orders
+  var percentNewUsersChange =
+    orderCloudData.Orders > orderCloudData.Orders ? "pos" : "neg"
 
   return (
     <Flex
@@ -202,8 +220,8 @@ const Dashboard = () => {
                         <TodaysMoney
                           title="todays money"
                           totalamount={` ${formatShortPrice(totalTodaysSales)}`}
-                          percentchange="3.48"
-                          percentchangetype="pos"
+                          percentchange={percentTodaysSales}
+                          percentchangetype={percentTodaysSalesChange}
                           percentlabel="Since last month"
                           icon={<Icon as={HiOutlineFolderOpen} />}
                         />
@@ -220,8 +238,8 @@ const Dashboard = () => {
                         <TodaysUsers
                           title="todays users"
                           totalamount={` ${formatShortPrice(totalUsers)}`}
-                          percentchange="5.2"
-                          percentchangetype="pos"
+                          percentchange={percentTotalUsers}
+                          percentchangetype={percentTotalUsersChange}
                           percentlabel="Since last month"
                           icon={<Icon as={HiOutlineUserCircle} />}
                         />
@@ -240,8 +258,8 @@ const Dashboard = () => {
                         <NewClients
                           title="new clients"
                           totalamount={` ${formatShortPrice(totalNewUsers)}`}
-                          percentchange="2.82"
-                          percentchangetype="pos"
+                          percentchange={percentNewUsers}
+                          percentchangetype={percentNewUsersChange}
                           percentlabel="Since last month"
                           icon={<Icon as={HiOutlineUserAdd} />}
                         />
@@ -258,8 +276,8 @@ const Dashboard = () => {
                         <TotalSales
                           title="total sales"
                           totalamount={` ${formatShortPrice(totalSales)}`}
-                          percentchange="8.12"
-                          percentchangetype="pos"
+                          percentchange={percentSales}
+                          percentchangetype={percentSalesChange}
                           percentlabel="Compared to last year"
                           icon={<Icon as={HiOutlineCurrencyDollar} />}
                         />

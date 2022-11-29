@@ -18,8 +18,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "baseUrl": "src",
-    "incremental": true,
-    "typeRoots": ["./node_modules/@types", "./src/types"]
+    "incremental": true
   },
   "include": [
     "next-env.d.ts",
