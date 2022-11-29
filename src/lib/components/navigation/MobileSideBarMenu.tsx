@@ -44,6 +44,7 @@ const MobileSideBarMenu = () => {
                 as={HiOutlineChartBar}
                 fontSize="30px"
                 title="Dashboard"
+                color="white"
               ></Icon>
             </Link>
           </NextLink>
@@ -53,6 +54,7 @@ const MobileSideBarMenu = () => {
                 as={HiOutlineQrcode}
                 fontSize="30px"
                 title="Products"
+                color="white"
               ></Icon>
             </Link>
           </NextLink>
@@ -72,6 +74,7 @@ const MobileSideBarMenu = () => {
                 as={HiOutlineEmojiSad}
                 fontSize="30px"
                 title="Returns"
+                color="white"
               ></Icon>
             </Link>
           </NextLink>
@@ -82,7 +85,12 @@ const MobileSideBarMenu = () => {
           </NextLink>
           <NextLink href="/settings" passHref>
             <Link pl="2" pr="2" pb="15px">
-              <Icon as={FiSettings} fontSize="30px" title="Settings"></Icon>
+              <Icon
+                as={FiSettings}
+                fontSize="30px"
+                title="Settings"
+                color="white"
+              ></Icon>
             </Link>
           </NextLink>
         </Flex>
