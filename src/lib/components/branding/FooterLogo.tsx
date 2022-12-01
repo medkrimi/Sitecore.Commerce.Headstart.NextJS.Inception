@@ -10,19 +10,17 @@ const FooterLogo = () => {
       <Link>
         {colorMode === "dark" ? (
           <Image
-            boxSize="250px"
             objectFit="inherit"
             src="/Brand_Logo_White.png"
             alt="Sitecore"
-            maxHeight="50"
+            maxW="200px"
           />
         ) : (
           <Image
-            boxSize="250px"
             objectFit="inherit"
             src="/Brand_Logo.png"
             alt="Sitecore"
-            maxHeight="50"
+            maxW="200px"
           />
         )}
       </Link>
