@@ -1,19 +1,9 @@
 import * as Yup from "yup"
 
-import {
-  Button,
-  Container,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Heading,
-  Input
-} from "@chakra-ui/react"
+import {Button, Container, Heading} from "@chakra-ui/react"
 import {alertService, buyerService} from "../../services"
-import {useMemo, useState} from "react"
 
 import Card from "../card/Card"
-import {Link} from "../../components/Link"
 import {NextSeo} from "next-seo"
 import {useForm} from "react-hook-form"
 import {useRouter} from "next/router"
@@ -81,27 +71,8 @@ function AddEditForm({buyer}) {
             <div className="form-group col-5">
               <label>Name</label>
               <input name="Name" type="text" {...register("Name")} />
-              <div className="invalid-feedback">{formState.Name?.message}</div>
+              <div className="invalid-feedback">{errors.Name?.message}</div>
             </div>
-            {/* This Form Control does not load existing data, bug to be investiguated later */}
-            {/* <FormControl isInvalid={formState.errors.Name}>
-              <FormLabel htmlFor="Name">Name</FormLabel>
-              <Input
-                id="Name"                
-                type="text"
-                placeholder="Buyer name"
-                {...register("name", {
-                  required: "Buyer name is required",
-                  maxLength: {
-                    value: 100,
-                    message: "Buyer Name Maximum length should be 100"
-                  }
-                })}
-              />
-              <FormErrorMessage>
-                {formState.errors.Name && formState.errors.Name.message}
-              </FormErrorMessage>
-            </FormControl> */}
             <Button type="submit" isLoading={formState.isSubmitting}>
               Save
             </Button>
