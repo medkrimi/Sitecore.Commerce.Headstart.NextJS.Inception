@@ -18,16 +18,6 @@ async function getById(id) {
   return await Buyers.Get(id)
     .then((buyer) => buyer)
     .catch((error) => handleOrderCloudErrors(error))
-
-  /* let buyer: Buyer
-  try {
-    buyer = await Buyers.Get(id)
-    console.log(JSON.stringify(buyer))
-    return buyer as Buyer
-  } catch (error) {
-    handleOrderCloudResponse(error)
-  }
-  */
 }
 
 function create(params) {
