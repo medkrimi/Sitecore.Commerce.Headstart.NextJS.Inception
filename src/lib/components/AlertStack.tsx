@@ -2,21 +2,24 @@ import {AlertType, alertService} from "../services"
 import {useEffect, useState} from "react"
 
 import PropTypes from "prop-types"
+import {string} from "yup"
 import {useRouter} from "next/router"
 
-export {Alert}
+export {AlertStack}
 
-Alert.propTypes = {
+AlertStack.propTypes = {
   id: PropTypes.string,
-  fade: PropTypes.bool
+  fade: PropTypes.bool,
+  message: string
 }
 
-Alert.defaultProps = {
+AlertStack.defaultProps = {
   id: "default-alert",
-  fade: true
+  fade: true,
+  message: ""
 }
 
-function Alert({id, fade}) {
+function AlertStack({id, fade}) {
   const router = useRouter()
   const [alerts, setAlerts] = useState([])
 

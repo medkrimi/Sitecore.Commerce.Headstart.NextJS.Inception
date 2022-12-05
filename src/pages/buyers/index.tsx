@@ -43,15 +43,13 @@ import router from "next/router"
 
 //import {Link} from "../../lib/components/Link"
 
-const BuyersPage = () => {
+const BuyersList = () => {
   const [buyers, setBuyers] = useState([])
   const [usersTotalCount, setusersTotalCount] = useState<number>(0)
   const [catalogTotalCount, setcatalogTotalCount] = useState<number>(0)
   const [authState, setAuthState] = useState<OcAuthState>()
 
   useEffect(() => {
-    let authState = GetAuthenticationStatus()
-    setAuthState(authState)
     buyerService.getAll().then((buyers) => {
       setBuyers(buyers.Items)
     })
@@ -238,4 +236,4 @@ const BuyersPage = () => {
     </Container>
   )
 }
-export default BuyersPage
+export default BuyersList

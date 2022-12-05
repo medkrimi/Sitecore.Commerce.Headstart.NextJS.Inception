@@ -10,35 +10,35 @@ import {
   Input
 } from "@chakra-ui/react"
 import {alertService, buyerService} from "../../services"
+import {useMemo, useState} from "react"
 
 import Card from "../card/Card"
 import {Link} from "../../components/Link"
 import {NextSeo} from "next-seo"
 import {useForm} from "react-hook-form"
 import {useRouter} from "next/router"
-import {useState} from "react"
 import {yupResolver} from "@hookform/resolvers/yup"
 
 export {AddEditForm}
 
-function AddEditForm(props) {
-  const buyer = props?.buyer
+function AddEditForm(buyer) {
   const isAddMode = !buyer
   const router = useRouter()
-
   // form validation rules
   const validationSchema = Yup.object().shape({
     Name: Yup.string().required("Name is required")
   })
   const formOptions = {
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema, {
+      stripUnknown: true,
+      abortEarly: false
+    }),
     defaultValues: {}
   }
 
   // set default form values if user passed in props
   if (!isAddMode) {
-    const {...defaultValues} = buyer
-    formOptions.defaultValues = defaultValues
+    formOptions.defaultValues = buyer
   }
 
   // get functions to build form with useForm() hook
@@ -78,10 +78,17 @@ function AddEditForm(props) {
         </Heading>
         <Card variant="primaryCard">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl isInvalid={formState.errors.Name}>
+            <div className="form-group col-5">
+              <label>Name</label>
+              <input name="Name" type="text" {...register("Name")} />
+              <div className="invalid-feedback">{formState.Name?.message}</div>
+            </div>
+            {/* This Form Control does not load existing data, bug to be investiguated later */}
+            {/* <FormControl isInvalid={formState.errors.Name}>
               <FormLabel htmlFor="Name">Name</FormLabel>
               <Input
-                id="Name"
+                id="Name"                
+                type="text"
                 placeholder="Buyer name"
                 {...register("name", {
                   required: "Buyer name is required",
@@ -94,7 +101,7 @@ function AddEditForm(props) {
               <FormErrorMessage>
                 {formState.errors.Name && formState.errors.Name.message}
               </FormErrorMessage>
-            </FormControl>
+            </FormControl> */}
             <Button type="submit" isLoading={formState.isSubmitting}>
               Save
             </Button>

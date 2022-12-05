@@ -1,11 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import {DefaultSeo} from "next-seo"
+
+import {AlertStack} from "lib/components/AlertStack"
 import type {AppProps} from "next/app"
-import Head from "next/head"
-import defaultSEOConfig from "../../next-seo.config"
 import {Chakra} from "lib/components/Chakra"
+import {DefaultSeo} from "next-seo"
+import Head from "next/head"
 import Layout from "lib/layout/Layout"
 import {SetConfiguration} from "lib/scripts/OrdercloudService"
+import defaultSEOConfig from "../../next-seo.config"
 
 const MyApp = ({Component, pageProps}: AppProps) => {
   SetConfiguration()

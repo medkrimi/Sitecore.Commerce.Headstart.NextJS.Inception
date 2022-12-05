@@ -47,6 +47,7 @@ function warn(message, options) {
 function alert(alert) {
   alert.id = alert.id || defaultId
   alert.autoClose = alert.autoClose === undefined ? true : alert.autoClose
+  alert.message = alert.message || "..."
   alertSubject.next(alert)
 }
 

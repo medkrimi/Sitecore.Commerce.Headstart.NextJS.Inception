@@ -15,7 +15,19 @@ async function getAll() {
 
 async function getById(id) {
   console.log("buyerService::getById")
-  return Buyers.Get(id)
+  return await Buyers.Get(id)
+    .then((buyer) => buyer)
+    .catch((error) => handleOrderCloudErrors(error))
+
+  /* let buyer: Buyer
+  try {
+    buyer = await Buyers.Get(id)
+    console.log(JSON.stringify(buyer))
+    return buyer as Buyer
+  } catch (error) {
+    handleOrderCloudResponse(error)
+  }
+  */
 }
 
 function create(params) {
@@ -35,24 +47,19 @@ function _delete(id) {
 }
 
 // helper function
-function handleResponse(response) {
-  debugger
-  console.log(response)
-  return response.catch((error) => {
-    if (error.isOrderCloudError) {
-      // the request was made and the API responded with a status code
-      // that falls outside of the range of 2xx, the error will be of type OrderCloudError
-      // https://ordercloud-api.github.io/ordercloud-javascript-sdk/classes/orderclouderror
-      console.log(error.message)
-      console.log(JSON.stringify(error.errors, null, 4))
-    } else if (error.request) {
-      // the request was made but no response received
-      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in node.js
-      console.log(error.request)
-    } else {
-      // Something happened in setting up the request that triggered an Error
-      console.log("Error", error.message)
-    }
-    return Promise.reject(error)
-  })
+function handleOrderCloudErrors(error) {
+  if (error.isOrderCloudError) {
+    // the request was made and the API responded with a status code
+    // that falls outside of the range of 2xx, the error will be of type OrderCloudError
+    // https://ordercloud-api.github.io/ordercloud-javascript-sdk/classes/orderclouderror
+    console.log(error.message)
+    console.log(JSON.stringify(error.errors, null, 4))
+  } else if (error.request) {
+    // the request was made but no response received
+    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in node.js
+    console.log(error.request)
+  } else {
+    // Something happened in setting up the request that triggered an Error
+    console.log("Error", error.message)
+  }
 }
