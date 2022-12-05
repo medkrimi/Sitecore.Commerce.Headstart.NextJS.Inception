@@ -210,7 +210,7 @@ const OrdersPage = () => {
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text display="inline">
-                Export the select orders to a CSV, once the export button is
+                Export the selected orders to a CSV, once the export button is
                 clicked behind the scense a job will be kicked off to create the
                 csv and then will automatically download to your downloads
                 folder in the browser.

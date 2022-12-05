@@ -164,26 +164,20 @@ const Dashboard = () => {
   let month = d.getMonth()
   let year = d.getFullYear()
 
-  var totalTodaysSales = orderCloudData.Orders
-  var percentTodaysSales = orderCloudData.Orders
-  var percentTodaysSalesChange =
-    orderCloudData.Orders > orderCloudData.Orders ? "pos" : "neg"
-  var totalSales = orderCloudData.Orders
-  var percentSales = orderCloudData.Orders
-  var percentSalesChange =
-    orderCloudData.Orders > orderCloudData.Orders ? "pos" : "neg"
+  var totalTodaysSales = 0
+  var percentTodaysSales = 0
+  var percentTodaysSalesChange = 0 > 0 ? "pos" : "neg"
+  var totalSales = 0
+  var percentSales = 0
+  var percentSalesChange = 0 > 0 ? "pos" : "neg"
   var totalUsers =
-    orderCloudData.Orders *
-    parseInt(process.env.NEXT_PUBLIC_AnalyticsCostUserMultiplier)
-  var percentTotalUsers = orderCloudData.Orders
-  var percentTotalUsersChange =
-    orderCloudData.Orders > orderCloudData.Orders ? "pos" : "neg"
+    0 * parseInt(process.env.NEXT_PUBLIC_AnalyticsCostUserMultiplier)
+  var percentTotalUsers = 0
+  var percentTotalUsersChange = 0 > 0 ? "pos" : "neg"
   var totalNewUsers =
-    orderCloudData.Orders *
-    parseInt(process.env.NEXT_PUBLIC_AnalyticsCostNewUserMultiplier)
-  var percentNewUsers = orderCloudData.Orders
-  var percentNewUsersChange =
-    orderCloudData.Orders > orderCloudData.Orders ? "pos" : "neg"
+    0 * parseInt(process.env.NEXT_PUBLIC_AnalyticsCostNewUserMultiplier)
+  var percentNewUsers = 0
+  var percentNewUsersChange = 0 > 0 ? "pos" : "neg"
 
   return (
     <Flex

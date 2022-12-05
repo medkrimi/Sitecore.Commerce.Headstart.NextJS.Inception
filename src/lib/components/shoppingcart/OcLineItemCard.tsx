@@ -81,9 +81,9 @@ const OcLineItemCard: FunctionComponent<OcLineItemCardProps> = ({
         <HStack>
           <VStack>
             <Image src={lineItem.xp?.proofUrl} maxW="125" alt=""></Image>
-            <a href={lineItem.xp?.pdfUrl} target="_blank" rel="noreferrer">
+            {/* <a href={lineItem.xp?.pdfUrl} target="_blank" rel="noreferrer">
               /<Text fontSize="xs">View proof</Text>
-            </a>
+            </a> */}
           </VStack>
           <Text>{`# ${lineItem.ID}`}</Text>
         </HStack>
