@@ -23,7 +23,7 @@ const NewOrdersPage = () => {
     <Container maxW="full">
       <NextSeo title="New Order" />
       <Heading as="h2" marginTop={5}>
-        New Order
+        New Return
       </Heading>
       <Card variant="primaryCard">
         <IconButton

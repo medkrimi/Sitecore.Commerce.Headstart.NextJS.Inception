@@ -47,7 +47,6 @@ export interface OcConfig {
   allowAnonymous?: boolean
   cookieOptions?: CookieOptions
 }
-
 export interface LoginActionRequest {
   username: string
   password: string

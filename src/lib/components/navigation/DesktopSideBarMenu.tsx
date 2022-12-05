@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react"
 import {FiMenu, FiSettings, FiStar} from "react-icons/fi"
 import {
+  HiChevronDoubleLeft,
   HiOutlineChartBar,
   HiOutlineEmojiSad,
   HiOutlineQrcode,
@@ -53,7 +54,11 @@ const DesktopSideBarMenu = () => {
             background="none"
             mt={5}
             _hover={{background: "none"}}
-            icon={<FiMenu fontSize={navSize == "small" ? "30px" : "25px"} />}
+            icon={
+              <HiChevronDoubleLeft
+                fontSize={navSize == "small" ? "30px" : "25px"}
+              />
+            }
             onClick={() => {
               if (navSize == "small") changeNavSize("large")
               else changeNavSize("small")
@@ -65,11 +70,13 @@ const DesktopSideBarMenu = () => {
                 as={HiOutlineChartBar}
                 fontSize={navSize == "small" ? "30px" : "25px"}
                 title="Dashboard"
+                color="white"
               ></Icon>
               <Text
                 as="span"
                 pl="20px"
                 hidden={navSize == "small" ? true : false}
+                color="white"
               >
                 Dashboard
               </Text>
@@ -81,11 +88,13 @@ const DesktopSideBarMenu = () => {
                 as={HiOutlineQrcode}
                 fontSize={navSize == "small" ? "30px" : "25px"}
                 title="Products"
+                color="white"
               ></Icon>
               <Text
                 as="span"
                 pl="20px"
                 hidden={navSize == "small" ? true : false}
+                color="white"
               >
                 Products
               </Text>
@@ -97,11 +106,13 @@ const DesktopSideBarMenu = () => {
                 as={FiStar}
                 fontSize={navSize == "small" ? "30px" : "25px"}
                 title="Promotions"
+                color="white"
               ></Icon>
               <Text
                 as="span"
                 pl="20px"
                 hidden={navSize == "small" ? true : false}
+                color="white"
               >
                 Promotions
               </Text>
@@ -113,11 +124,13 @@ const DesktopSideBarMenu = () => {
                 as={BsCurrencyDollar}
                 fontSize={navSize == "small" ? "30px" : "25px"}
                 title="Orders"
+                color="white"
               ></Icon>
               <Text
                 as="span"
                 pl="20px"
                 hidden={navSize == "small" ? true : false}
+                color="white"
               >
                 Orders
               </Text>
@@ -129,11 +142,13 @@ const DesktopSideBarMenu = () => {
                 as={HiOutlineEmojiSad}
                 fontSize={navSize == "small" ? "30px" : "25px"}
                 title="Returns"
+                color="white"
               ></Icon>
               <Text
                 as="span"
                 pl="20px"
                 hidden={navSize == "small" ? true : false}
+                color="white"
               >
                 Returns
               </Text>
@@ -144,12 +159,14 @@ const DesktopSideBarMenu = () => {
               <Icon
                 as={HiOutlineUser}
                 fontSize={navSize == "small" ? "30px" : "25px"}
+                color="white"
               ></Icon>
               <Text
                 as="span"
                 pl="20px"
                 hidden={navSize == "small" ? true : false}
                 title="Buyers"
+                color="white"
               >
                 Buyers
               </Text>
@@ -161,11 +178,13 @@ const DesktopSideBarMenu = () => {
                 as={FiSettings}
                 fontSize={navSize == "small" ? "30px" : "25px"}
                 title="Settings"
+                color="white"
               ></Icon>
               <Text
                 as="span"
                 pl="20px"
                 hidden={navSize == "small" ? true : false}
+                color="white"
               >
                 Settings
               </Text>
