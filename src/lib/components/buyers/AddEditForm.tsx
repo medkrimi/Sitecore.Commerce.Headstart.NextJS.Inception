@@ -21,7 +21,7 @@ import {yupResolver} from "@hookform/resolvers/yup"
 
 export {AddEditForm}
 
-function AddEditForm(buyer) {
+function AddEditForm({buyer}) {
   const isAddMode = !buyer
   const router = useRouter()
   // form validation rules

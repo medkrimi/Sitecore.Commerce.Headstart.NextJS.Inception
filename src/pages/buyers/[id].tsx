@@ -3,17 +3,17 @@ import {useEffect, useState} from "react"
 import {AddEditForm} from "../../lib/components/buyers/AddEditForm"
 import {buyerService} from "../../lib/services"
 import {useRouter} from "next/router"
+import {Buyer} from "ordercloud-javascript-sdk"
 
 const BuyerListItem = () => {
   const router = useRouter()
-  const {id} = router.query
-  const [buyer, setBuyer] = useState({})
+  const [buyer, setBuyer] = useState({} as Buyer)
   useEffect(() => {
-    buyerService.getById(id).then((buyer) => setBuyer(buyer))
-  }, [])
-  console.log("buyer")
-  //console.log(buyer)
-  return <AddEditForm props={buyer} />
+    if (router.query.id) {
+      buyerService.getById(router.query.id).then((buyer) => setBuyer(buyer))
+    }
+  }, [router.query.id])
+  return <>{buyer.ID ? <AddEditForm buyer={buyer} /> : <div> Loading</div>}</>
 }
 
 export default BuyerListItem
