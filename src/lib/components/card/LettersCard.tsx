@@ -22,7 +22,7 @@ export default function LettersCard(props) {
         borderRadius: "10px"
       }}
     >
-      <HStack w="full" color="white" position="absolute" top="10px" left="6px">
+      <HStack w="full" color="white" position="absolute" top="10px" left="11px">
         <Text fontSize="18px">
           {firstnameletter}
           {lastnameletter}
