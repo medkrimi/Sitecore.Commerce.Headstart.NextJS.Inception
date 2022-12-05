@@ -23,11 +23,6 @@ import {
   Tr,
   VStack
 } from "@chakra-ui/react"
-import {Buyers, Catalogs, Users} from "ordercloud-javascript-sdk"
-import {
-  GetAuthenticationStatus,
-  OcAuthState
-} from "lib/scripts/OrdercloudService"
 import {useEffect, useState} from "react"
 
 import Card from "lib/components/card/Card"
@@ -41,32 +36,27 @@ import {buyerService} from "../../lib/services"
 import {formatDate} from "../../lib/utils/formatDate"
 import router from "next/router"
 
-//import {Link} from "../../lib/components/Link"
-
 const BuyersList = () => {
   const [buyers, setBuyers] = useState([])
-  const [usersTotalCount, setusersTotalCount] = useState<number>(0)
-  const [catalogTotalCount, setcatalogTotalCount] = useState<number>(0)
-  const [authState, setAuthState] = useState<OcAuthState>()
-
+  const [buyersMeta, setBuyersMeta] = useState({})
   useEffect(() => {
-    buyerService.getAll().then((buyers) => {
-      setBuyers(buyers.Items)
-    })
+    initBuyersData()
   }, [])
 
-  function getUsersTotalCount({buyerID}): number {
-    Users.List(buyerID).then((userList) =>
-      setusersTotalCount(userList.Meta.TotalCount)
-    )
-    return usersTotalCount
-  }
+  async function initBuyersData() {
+    let _buyerListMeta = {}
+    const buyersList = await buyerService.getAll()
 
-  function getCatalogTotalCount({buyerID}): number {
-    Catalogs.List().then((catalogList) =>
-      setcatalogTotalCount(catalogList.Meta.TotalCount)
-    )
-    return catalogTotalCount
+    const requests = buyersList.Items.map(async (buyer) => {
+      _buyerListMeta[buyer.ID] = {}
+      _buyerListMeta[buyer.ID]["usersCount"] =
+        await buyerService.getUsersCountById(buyer.ID)
+      _buyerListMeta[buyer.ID]["catalogsCount"] =
+        await buyerService.getCatalogsCountById(buyer.ID)
+    })
+    await Promise.all(requests)
+    setBuyersMeta(_buyerListMeta)
+    setBuyers(buyersList.Items)
   }
 
   function deleteUser(id) {
@@ -104,7 +94,7 @@ const BuyersList = () => {
         <Td>
           <Link href={`/buyers/${buyer.ID}/users`}>
             <Button variant="secondaryButton">
-              Manage Users ({getUsersTotalCount({buyerID: buyer.ID})})
+              Manage Users ({buyersMeta[buyer.ID]["usersCount"]})
             </Button>
           </Link>
         </Td>
@@ -113,12 +103,12 @@ const BuyersList = () => {
             onClick={() => router.push("/catalogs/${buyer.ID}")}
             variant="secondaryButton"
           >
-            Manage Catalogs ({getCatalogTotalCount({buyerID: buyer.ID})})
+            Manage Catalogs ({buyersMeta[buyer.ID]["catalogsCount"]})
           </Button>
         </Td>
         <Td>
           <Button
-            onClick={() => router.push("/buyers/${buyer.ID}/users")}
+            onClick={() => router.push("/catagories")}
             variant="secondaryButton"
           >
             Manage Categories

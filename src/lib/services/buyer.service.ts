@@ -1,11 +1,13 @@
-import {Buyer, Buyers} from "ordercloud-javascript-sdk"
+import {Buyer, Buyers, Catalogs, Users} from "ordercloud-javascript-sdk"
 
 export const buyerService = {
   getAll,
   getById,
   create,
   update,
-  delete: _delete
+  delete: _delete,
+  getUsersCountById,
+  getCatalogsCountById
 }
 
 async function getAll() {
@@ -20,20 +22,39 @@ async function getById(id) {
     .catch((error) => handleOrderCloudErrors(error))
 }
 
-function create(params) {
+async function create(buyer: Buyer) {
   console.log("buyerService::create")
-  return Promise<any>
+  Buyers.Create(buyer)
 }
 
-function update(id, params) {
+async function getUsersCountById(buyerId) {
+  console.log("buyerService::getUsersCountById")
+  if (buyerId) {
+    const usersList = await Users.List(buyerId)
+    return usersList?.Meta?.TotalCount
+  } else return "-"
+}
+
+async function getCatalogsCountById(buyerId) {
+  console.log("buyerService::getCatalogsCountById")
+  if (buyerId) {
+    const catalogsList = await Catalogs.ListAssignments({buyerID: buyerId})
+    return catalogsList?.Meta?.TotalCount
+  } else return "-"
+}
+
+async function update(id, params) {
   console.log("buyerService::update")
   return Promise<any>
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
-function _delete(id) {
-  console.log("buyerService::deleteAll")
-  return Promise<any>
+function _delete(buyerId) {
+  console.log("buyerService::_delete")
+  if (buyerId)
+  return await Buyers.Delete(buyerId)
+  else 
+
 }
 
 // helper function
