@@ -74,7 +74,7 @@ function AddEditForm(buyer) {
       <Container maxW="full">
         <NextSeo title="Buyers" />
         <Heading as="h2" marginTop={5}>
-          <h1>{isAddMode ? "Add Buyer" : "Edit Buyer"}</h1>
+          <span>{isAddMode ? "Add Buyer" : "Edit Buyer"}</span>
         </Heading>
         <Card variant="primaryCard">
           <form onSubmit={handleSubmit(onSubmit)}>
