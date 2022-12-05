@@ -49,12 +49,11 @@ async function update(id, params) {
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
-function _delete(buyerId) {
+async function _delete(buyerId) {
   console.log("buyerService::_delete")
-  if (buyerId)
-  return await Buyers.Delete(buyerId)
-  else 
-
+  if (buyerId) {
+    return await Buyers.Delete(buyerId)
+  }
 }
 
 // helper function
