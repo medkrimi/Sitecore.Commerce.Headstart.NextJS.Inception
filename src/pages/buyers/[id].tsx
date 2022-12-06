@@ -13,7 +13,7 @@ const BuyerListItem = () => {
       buyerService.getById(router.query.id).then((buyer) => setBuyer(buyer))
     }
   }, [router.query.id])
-  return <>{buyer.ID ? <AddEditForm buyer={buyer} /> : <div> Loading</div>}</>
+  return <>{buyer?.ID ? <AddEditForm buyer={buyer} /> : <div> Loading</div>}</>
 }
 
 export default BuyerListItem
