@@ -1,6 +1,17 @@
 import * as Yup from "yup"
 
-import {Button, Container, Heading} from "@chakra-ui/react"
+import {
+  Button,
+  Container,
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  FormLabel,
+  Heading,
+  Input,
+  Stack,
+  Switch
+} from "@chakra-ui/react"
 import {alertService, buyerService} from "../../services"
 
 import Card from "../card/Card"
@@ -14,10 +25,12 @@ export {AddEditForm}
 function AddEditForm({buyer}) {
   const isAddMode = !buyer
   const router = useRouter()
+
   // form validation rules
   const validationSchema = Yup.object().shape({
     Name: Yup.string().required("Name is required")
   })
+
   const formOptions = {
     resolver: yupResolver(validationSchema, {
       stripUnknown: true,
@@ -68,11 +81,28 @@ function AddEditForm({buyer}) {
         </Heading>
         <Card variant="primaryCard">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-group col-5">
-              <label>Name</label>
-              <input name="Name" type="text" {...register("Name")} />
-              <div className="invalid-feedback">{errors.Name?.message}</div>
-            </div>
+            <Stack spacing={2}>
+              <FormControl isInvalid={errors.Name}>
+                <FormLabel htmlFor="Name">Buyer Name</FormLabel>
+                <Input
+                  id="Name"
+                  name="Name"
+                  type="text"
+                  placeholder="Enter your buyer name"
+                  {...register("Name")}
+                />
+                <FormHelperText>Helper message</FormHelperText>
+                <FormErrorMessage>
+                  {errors.Name && errors.Name.message}
+                </FormErrorMessage>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Active</FormLabel>
+                <Switch />
+                <FormHelperText>Helper message</FormHelperText>
+                <FormErrorMessage>Error message</FormErrorMessage>
+              </FormControl>
+            </Stack>
             <Button type="submit" isLoading={formState.isSubmitting}>
               Save
             </Button>

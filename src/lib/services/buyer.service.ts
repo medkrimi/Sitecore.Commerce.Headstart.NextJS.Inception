@@ -27,6 +27,19 @@ async function create(buyer: Buyer) {
   Buyers.Create(buyer)
 }
 
+async function update(id, params) {
+  console.log("buyerService::update")
+  return Promise<any>
+}
+
+// prefixed with underscored because delete is a reserved word in javascript
+async function _delete(buyerId) {
+  console.log("buyerService::_delete")
+  if (buyerId) {
+    return await Buyers.Delete(buyerId)
+  }
+}
+
 async function getUsersCountById(buyerId) {
   console.log("buyerService::getUsersCountById")
   if (buyerId) {
@@ -41,19 +54,6 @@ async function getCatalogsCountById(buyerId) {
     const catalogsList = await Catalogs.ListAssignments({buyerID: buyerId})
     return catalogsList?.Meta?.TotalCount
   } else return "-"
-}
-
-async function update(id, params) {
-  console.log("buyerService::update")
-  return Promise<any>
-}
-
-// prefixed with underscored because delete is a reserved word in javascript
-async function _delete(buyerId) {
-  console.log("buyerService::_delete")
-  if (buyerId) {
-    return await Buyers.Delete(buyerId)
-  }
 }
 
 // helper function

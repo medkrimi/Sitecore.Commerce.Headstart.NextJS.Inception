@@ -59,7 +59,7 @@ const BuyersList = () => {
     setBuyers(buyersList.Items)
   }
 
-  function deleteUser(id) {
+  async function deleteUser(id) {
     setBuyers(
       buyers.map((x) => {
         if (x.id === id) {
@@ -68,9 +68,7 @@ const BuyersList = () => {
         return x
       })
     )
-    buyerService.delete(id).then(() => {
-      setBuyers((buyers) => buyers.filter((x) => x.id !== id))
-    })
+    await buyerService.delete(id)
   }
 
   const buyersContent = buyers.length ? (
