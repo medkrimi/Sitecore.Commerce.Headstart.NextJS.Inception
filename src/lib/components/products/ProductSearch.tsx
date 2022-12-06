@@ -38,7 +38,8 @@ import {
   Box,
   SliderMark,
   InputGroup,
-  InputLeftElement
+  InputLeftElement,
+  Select
 } from "@chakra-ui/react"
 import {NextSeo} from "next-seo"
 import {AiOutlineSearch} from "react-icons/ai"
@@ -49,16 +50,20 @@ import {
   FiCheckSquare,
   FiArrowDown,
   FiArrowUp,
-  FiArrowRight
+  FiArrowRight,
+  FiGrid,
+  FiEdit,
+  FiChevronDown,
+  FiChevronUp
 } from "react-icons/fi"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
-import NextLink from "next/link"
-import {stripHTML} from "lib/utils/stripHTML"
 import {useState, ChangeEvent, useEffect} from "react"
 import {Product, Products} from "ordercloud-javascript-sdk"
 import {ProductXPs} from "lib/types/ProductXPs"
 import {CalculateEditorialProcess} from "./EditorialProgressBar"
+import ProductGrid from "./ProductGrid"
+import ProductList from "./ProductList"
 import {ProductListOptions} from "lib/scripts/OrdercloudService"
 //import Image from "next/image"
 
@@ -67,41 +72,47 @@ interface ProductSearchProps {
 }
 
 export default function ProductSearch({query}: ProductSearchProps) {
-  const options: ProductListOptions = {}
+  //const options: ProductListOptions = {}
+  //const optionsSearchOn = ["Name", "Description", "ID"]
+  const optionsSearchOnID = "ID"
+  const optionsSearchType = "ExactPhrasePrefix"
+  const [optionsSearch, setOptionsSearch] = useState("")
+  const [optionsSortBy, setOptionsSortBy] = useState("name")
   const toast = useToast()
   const [products, setProducts] = useState<Product<ProductXPs>[]>(null)
   const [componentProducts, setComponentProducts] =
     useState<Product<ProductXPs>[]>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const okColor = useColorModeValue("okColor.800", "okColor.200")
-  const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
-  const bg = useColorModeValue("gray.400", "gray.600")
-  const color = useColorModeValue("textColor.900", "textColor.100")
   const sliderColor = useColorModeValue("brand.400", "brand.600")
   const [editorialProgressFilter, setEditorialProgressFilter] = useState(100)
-  const [sortBy, setSortBy] = useState("")
+  const [sortBy, setSortBy] = useState("name")
   const [sortingChanging, setSortingChanging] = useState(false)
-  const [reload, setReload] = useState(false)
+  const [sortDesc, setSortDesc] = useState(false)
+  //const [reload, setReload] = useState(false)
   const labelStyles = {
     mt: "2",
     ml: "-2.5",
     fontSize: "sm"
   }
+  const [toggleViewMode, setToggleViewMode] = useState(false)
 
   useEffect(() => {
     async function GetProducts() {
+      const options: ProductListOptions = {}
+      options.search = optionsSearch
+      options.searchOn = ["Name", "Description", "ID"]
+      options.searchType = optionsSearchType
+      options.sortBy = [optionsSortBy]
       var productList = await Products.List<ProductXPs>(options)
-      setComponentProducts(productList.Items)
-      setProducts(productList.Items)
-      setReload(false)
+      let productItems = productList.Items
+      setComponentProducts(productItems)
+      setProducts(productItems)
+      //setReload(false)
       setIsLoading(false)
     }
 
-    if (query) {
-      setSearchQuery(query)
-    }
     GetProducts()
-  }, [options, query, reload])
+  }, [optionsSearch, optionsSearchType, optionsSortBy])
 
   const [searchQuery, setSearchQuery] = useState(query)
   const [selectAllProducts, setSelectAllProducts] = useState(false)
@@ -129,12 +140,12 @@ export default function ProductSearch({query}: ProductSearchProps) {
   })
 
   const onSearchClicked = async () => {
-    setSortBy("")
+    console.log("onSearchClicked")
+    setOptionsSortBy("name")
+    setSortBy("name")
     setEditorialProgressFilter(100)
-    options.search = searchQuery
-    options.searchOn = ["Name", "Description", "ID"]
-    options.searchType = "ExactPhrasePrefix"
-    setReload(true)
+    setOptionsSearch(searchQuery)
+    //setReload(true)
   }
 
   // TODO Add more properties in Add handling
@@ -171,7 +182,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
 
     setTimeout(() => {
       onCloseAddProduct()
-      setReload(true)
+      //setReload(true)
       setIsAdding(false)
     }, 5000)
   }
@@ -192,11 +203,14 @@ export default function ProductSearch({query}: ProductSearchProps) {
     }
 
   const onResetSearch = (e) => {
+    console.log("onResetSearch")
     setSearchQuery("")
-    setSortBy("")
+    setOptionsSortBy("name")
+    setSortBy("name")
     setMassEditProducts([])
-    setReload(true)
+    //setReload(true)
     setEditorialProgressFilter(100)
+    setSortDesc(false)
   }
 
   const onExecuteMassEdit = async () => {
@@ -228,9 +242,8 @@ export default function ProductSearch({query}: ProductSearchProps) {
     )
 
     setTimeout(() => {
-      options.search = searchQuery
-      options.searchOn = ["Name", "Description", "ID"]
-      setReload(true)
+      setOptionsSearch(searchQuery)
+      //setReload(true)
       setIsMassEditing(false)
       setMassEditProducts([])
       onCloseMassEditProducts()
@@ -247,6 +260,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
   }
 
   const onMassEditCheckboxChanged = (productId: string) => (e) => {
+    console.log(productId)
     var product = componentProducts.find((element) => element.ID == productId)
     var isChecked = e.target.checked
     var productsToEdit = massEditProducts
@@ -276,33 +290,34 @@ export default function ProductSearch({query}: ProductSearchProps) {
     }
   }
 
-  const onSortByNameClicked = (newVal: string) => async (e) => {
+  const onSortByNameClicked = (newVal: string) => {
     setSortingChanging(true)
-    setSortBy(newVal)
-
-    if (newVal == "editorialProgress") {
+    if (newVal == "editorialProcess") {
       var tmpComponentProducts = [...componentProducts]
       var newProducts = tmpComponentProducts.sort(
         (a, b) => CalculateEditorialProcess(a) - CalculateEditorialProcess(b)
       )
       setComponentProducts(newProducts)
-    } else if (newVal == "!editorialProgress") {
+    } else if (newVal == "!editorialProcess") {
       var tmpComponentProducts = [...componentProducts]
       var newProducts = tmpComponentProducts.sort(
         (a, b) => CalculateEditorialProcess(b) - CalculateEditorialProcess(a)
       )
       setComponentProducts(newProducts)
     } else {
-      options.search = searchQuery
-      options.searchOn = ["Name", "Description", "ID"]
-      options.searchType = "ExactPhrasePrefix"
+      setOptionsSearch(searchQuery)
+      //setReload(true)
       if (newVal != "") {
-        options.sortBy = [newVal]
+        setOptionsSortBy(newVal)
       }
-      setReload(true)
     }
-
+    setSortBy(newVal)
+    setSortDesc(newVal.substring(0, 1) == "!")
     setSortingChanging(false)
+  }
+
+  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    onSortByNameClicked(e.target.value)
   }
 
   const onEditorialProgressFilterChanged = async (e) => {
@@ -310,12 +325,12 @@ export default function ProductSearch({query}: ProductSearchProps) {
       return CalculateEditorialProcess(element) <= e
     })
 
-    if (sortBy == "editorialProgress") {
+    if (optionsSortBy == "editorialProcess") {
       var tmpComponentProducts = [...newProducts]
       newProducts = tmpComponentProducts.sort(
         (a, b) => CalculateEditorialProcess(a) - CalculateEditorialProcess(b)
       )
-    } else if (sortBy == "!editorialProgress") {
+    } else if (optionsSortBy == "!editorialProcess") {
       var tmpComponentProducts = [...newProducts]
       newProducts = tmpComponentProducts.sort(
         (a, b) => CalculateEditorialProcess(b) - CalculateEditorialProcess(a)
@@ -330,11 +345,9 @@ export default function ProductSearch({query}: ProductSearchProps) {
       {componentProducts ? (
         <VStack p={0} spacing={6} width="full" align="center">
           <NextSeo title="Products Overview" />
-          <Heading color={color} as="h1">
-            Products Overview
-          </Heading>
+          <Heading as="h1">Products Overview</Heading>
           <HStack width={"full"} justifyContent={"space-between"}>
-            <Box color={color} width={"100%"} pt={8} pb={4} pl={6} pr={6}>
+            <Box width={"100%"} pt={8} pb={4} pl={6} pr={6}>
               <Slider
                 borderRight={"solid black"}
                 borderLeft={"solid black"}
@@ -378,7 +391,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
                 </SliderTrack>
                 <SliderThumb />
               </Slider>
-              <Text fontWeight={"bold"} pt={5} ml={-2} color={color}>
+              <Text fontWeight={"bold"} pt={5} ml={-2}>
                 Filter by Editorial Progress...
               </Text>
             </Box>
@@ -396,39 +409,48 @@ export default function ProductSearch({query}: ProductSearchProps) {
                         <IconButton
                           aria-label="Search"
                           icon={<SearchIcon />}
-                          colorScheme={"brandButtons"}
                           onClick={onSearchClicked}
                           float="right"
+                          variant="primary"
                         />
                       </Tooltip>
                       <Tooltip label="Reset Search Parameters">
                         <IconButton
                           aria-label="Reset all Search Parameters"
                           icon={<FiRotateCcw />}
-                          colorScheme={"brandButtons"}
                           onClick={onResetSearch}
                           float="right"
+                          variant="primary"
                         />
                       </Tooltip>
                       <Tooltip label="Add new Product">
                         <IconButton
                           aria-label="Add new Product"
                           icon={<FiPlus />}
-                          colorScheme={"brandButtons"}
                           onClick={onOpenAddProduct}
                           float="right"
+                          variant="primary"
                         />
                       </Tooltip>
                       <Tooltip label="Mass Edit Products">
                         <IconButton
                           aria-label="Mass Edit Products"
-                          icon={<FiList />}
-                          colorScheme={"brandButtons"}
+                          icon={<FiEdit />}
                           onClick={onMassEditOpenClicked}
                           float="right"
+                          variant="primary"
                         />
                       </Tooltip>
-                      <InputGroup width={"250px"} float="right">
+                      <Tooltip label="Switch List/Grid View">
+                        <IconButton
+                          aria-label="Switch List/Grid View"
+                          icon={toggleViewMode ? <FiGrid /> : <FiList />}
+                          onClick={() => setToggleViewMode(!toggleViewMode)}
+                          float="right"
+                          variant="primary"
+                        />
+                      </Tooltip>
+                      <InputGroup width={"450px"} float="right">
                         <InputLeftElement>
                           <AiOutlineSearch />
                         </InputLeftElement>
@@ -436,9 +458,8 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           autoComplete="off"
                           placeholder="Enter here ..."
                           aria-label="Enter Search Term"
-                          bg={bg}
-                          color={color}
-                          _placeholder={{color: color}}
+                          //_placeholder={{color: color}}
+                          variant="primary"
                           id={"headerSearchInput"}
                           width={"100%"}
                           value={searchQuery}
@@ -449,166 +470,94 @@ export default function ProductSearch({query}: ProductSearchProps) {
                             }
                           }}
                         />
+                        <Select
+                          onChange={handleSelectChange}
+                          w={"60%"}
+                          value={
+                            sortBy.substring(0, 1) == "!"
+                              ? sortBy.substring(1)
+                              : sortBy
+                          }
+                        >
+                          <option
+                            value="name"
+                            /* selected={
+                              optionsSortBy == "name" ||
+                              optionsSortBy == "!name"
+                            } */
+                          >
+                            Name
+                          </option>
+                          <option
+                            value="ID"
+                            /* selected={
+                              optionsSortBy == "ID" || optionsSortBy == "!ID"
+                            } */
+                          >
+                            Product ID
+                          </option>
+                          <option
+                            value="editorialProcess"
+                            /* selected={
+                              optionsSortBy == "editorialProcess" ||
+                              optionsSortBy == "!editorialProcess"
+                            } */
+                          >
+                            Progress
+                          </option>
+                          <option
+                            value="Active"
+                            /* selected={
+                              optionsSortBy == "Active" ||
+                              optionsSortBy == "!Active"
+                            } */
+                          >
+                            Active
+                          </option>
+                        </Select>
+                        <Tooltip label="Sort Asc/Desc">
+                          <IconButton
+                            aria-label="Sort Asc/Desc"
+                            icon={
+                              sortDesc ? <FiChevronDown /> : <FiChevronUp />
+                            }
+                            onClick={() => {
+                              setSortDesc(!sortDesc)
+                              sortBy.substring(0, 1) == "!"
+                                ? setSortBy(sortBy.substring(1))
+                                : setSortBy("!" + sortBy)
+                              optionsSortBy.substring(0, 1) == "!"
+                                ? setOptionsSortBy(optionsSortBy.substring(1))
+                                : setOptionsSortBy("!" + optionsSortBy)
+                            }}
+                            float="right"
+                            variant="primary"
+                          />
+                        </Tooltip>
                       </InputGroup>
                     </Th>
                   </Tr>
-                  <Tr>
-                    <Tooltip
-                      label={"Click here to select / unselect all Products"}
-                    >
-                      <Th cursor={"pointer"}>
-                        <Flex justifyContent={"flex-start"}>
-                          <FiCheckSquare />
-                          <Text ml={2}>Product ID</Text>
-                        </Flex>
-                      </Th>
-                    </Tooltip>
-                    <Th>Image</Th>
-                    <Th>
-                      <Tooltip label="Sort by Name">
-                        <Flex justifyContent={"flex-start"}>
-                          {sortBy == "name" ? (
-                            <FiArrowUp
-                              cursor={"pointer"}
-                              onClick={onSortByNameClicked("!name")}
-                            />
-                          ) : sortBy == "!name" ? (
-                            <FiArrowDown
-                              cursor={"pointer"}
-                              onClick={onSortByNameClicked("name")}
-                            />
-                          ) : (
-                            <FiArrowRight
-                              cursor={"pointer"}
-                              onClick={onSortByNameClicked("name")}
-                            />
-                          )}
-
-                          <Text ml={2}>Product Name</Text>
-                        </Flex>
-                      </Tooltip>
-                    </Th>
-                    <Th>Description</Th>
-                    {/* <Th color={color}>Description</Th> */}
-                    <Th>
-                      {" "}
-                      <Tooltip label="Sort by Is Active">
-                        <Flex justifyContent={"flex-start"}>
-                          {sortBy == "Active" ? (
-                            <FiArrowUp
-                              cursor={"pointer"}
-                              onClick={onSortByNameClicked("!Active")}
-                            />
-                          ) : sortBy == "!Active" ? (
-                            <FiArrowDown
-                              cursor={"pointer"}
-                              onClick={onSortByNameClicked("Active")}
-                            />
-                          ) : (
-                            <FiArrowRight
-                              cursor={"pointer"}
-                              onClick={onSortByNameClicked("Active")}
-                            />
-                          )}
-
-                          <Text ml={2}>Active?</Text>
-                        </Flex>
-                      </Tooltip>
-                    </Th>
-                    <Th>
-                      <Flex justifyContent={"center"}>
-                        <Text>Qty</Text>
-                      </Flex>
-                    </Th>
-                    <Th>
-                      {" "}
-                      <Tooltip label="Sort by Editorial Progress">
-                        <Flex justifyContent={"flex-start"}>
-                          {sortBy == "editorialProgress" ? (
-                            <FiArrowUp
-                              cursor={"editorialProgress"}
-                              onClick={onSortByNameClicked(
-                                "!editorialProgress"
-                              )}
-                            />
-                          ) : sortBy == "!editorialProgress" ? (
-                            <FiArrowDown
-                              cursor={"pointer"}
-                              onClick={onSortByNameClicked("editorialProgress")}
-                            />
-                          ) : (
-                            <FiArrowRight
-                              cursor={"pointer"}
-                              onClick={onSortByNameClicked("editorialProgress")}
-                            />
-                          )}
-
-                          <Text ml={2}>Editorial Progress</Text>
-                        </Flex>
-                      </Tooltip>
-                    </Th>
-                  </Tr>
                 </Thead>
-                <Tbody alignContent={"center"}>
-                  {componentProducts && componentProducts.length > 0 ? (
-                    componentProducts.map((product, index) => (
-                      <Tr key={index}>
-                        <Td>
-                          <Checkbox
-                            onChange={onMassEditCheckboxChanged(product.ID)}
-                          />
-                          <NextLink href={"/products/" + product.ID} passHref>
-                            <Link> {product.ID}</Link>
-                          </NextLink>
-                        </Td>
-                        <Td>
-                          <Center>
-                            <NextLink href={"/products/" + product.ID} passHref>
-                              <Link>
-                                <Image
-                                  src={
-                                    typeof product?.xp?.Images != "undefined"
-                                      ? product?.xp?.Images[0]?.ThumbnailUrl
-                                      : "https://mss-p-006-delivery.stylelabs.cloud/api/public/content/4fc742feffd14e7686e4820e55dbfbaa"
-                                  }
-                                  alt="product image"
-                                  width="50px"
-                                />
-                              </Link>
-                            </NextLink>
-                          </Center>
-                        </Td>
-                        <Td>
-                          <NextLink href={"/products/" + product.ID} passHref>
-                            <Link>{product.Name}</Link>
-                          </NextLink>
-                        </Td>
-                        <Td>
-                          {stripHTML(product.Description).length > 40
-                            ? stripHTML(product.Description).substring(0, 40) +
-                              "..."
-                            : stripHTML(product.Description)}
-                        </Td>
-                        <Td>
-                          {product.Active ? (
-                            <CheckIcon boxSize={6} color={okColor} />
-                          ) : (
-                            <CloseIcon boxSize={6} color={errorColor} />
-                          )}
-                        </Td>
-                        <Td textAlign={"right"}>
-                          {product?.Inventory?.QuantityAvailable}
-                        </Td>
-                        <Td>{CalculateEditorialProcess(product)}%</Td>
-                      </Tr>
-                    ))
-                  ) : (
-                    <Text p={3}>No Products found</Text>
-                  )}
-                </Tbody>
+                {toggleViewMode ? (
+                  <ProductList
+                    products={componentProducts}
+                    onCheckChange={(productid) =>
+                      onMassEditCheckboxChanged(productid)
+                    }
+                    onSort={(columnName) => onSortByNameClicked(columnName)}
+                    sortBy={sortBy}
+                  />
+                ) : (
+                  <ProductGrid
+                    products={componentProducts}
+                    onCheck={(productid) =>
+                      onMassEditCheckboxChanged(productid)
+                    }
+                  />
+                )}
               </BrandedTable>
               <Box>
-                <Text fontWeight={"bold"} p={3} float={"left"} color={color}>
+                <Text fontWeight={"bold"} p={3} float={"left"}>
                   {componentProducts.length} out of {componentProducts.length}{" "}
                   Products{" "}
                 </Text>
