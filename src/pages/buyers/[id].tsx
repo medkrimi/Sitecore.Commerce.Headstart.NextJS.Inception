@@ -14,7 +14,7 @@ const BuyerListItem = () => {
     }
     alertService.success("Success Get Buyer", {keepAfterRouteChange: true})
   }, [router.query.id])
-  return <>{buyer.ID ? <AddEditForm buyer={buyer} /> : <div> Loading</div>}</>
+  return <>{buyer?.ID ? <AddEditForm buyer={buyer} /> : <div> Loading</div>}</>
 }
 
 export default BuyerListItem

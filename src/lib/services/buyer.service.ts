@@ -24,7 +24,14 @@ async function getById(id) {
 
 async function create(buyer: Buyer) {
   console.log("buyerService::create")
-  buyer.ID = buyer.Name
+  //Demo sample : By default OrderCloud will assign a unique ID to the new created buyer.
+  //We are customizing the ID generation business logic here.
+  buyer.ID = buyer.Name.toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+
   Buyers.Create(buyer)
 }
 
