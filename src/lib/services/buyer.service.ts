@@ -24,6 +24,7 @@ async function getById(id) {
 
 async function create(buyer: Buyer) {
   console.log("buyerService::create")
+  buyer.ID = buyer.Name
   Buyers.Create(buyer)
 }
 

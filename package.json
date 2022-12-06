@@ -31,6 +31,7 @@
     "axios": "^1.2.0",
     "chart.js": "^3.9.1",
     "dotenv": "^16.0.3",
+    "flatten-anything": "^3.0.3",
     "formik": "^2.2.9",
     "formik-chakra-ui": "^1.6.1",
     "framer-motion": "^7.6.4",

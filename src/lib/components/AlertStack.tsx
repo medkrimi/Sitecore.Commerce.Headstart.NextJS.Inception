@@ -1,4 +1,6 @@
+import {Alert, AlertDescription, AlertIcon, AlertTitle} from "@chakra-ui/alert"
 import {AlertType, alertService} from "../services"
+import {Box, CloseButton, Fade} from "@chakra-ui/react"
 import {useEffect, useState} from "react"
 
 import PropTypes from "prop-types"
@@ -77,41 +79,28 @@ function AlertStack({id, fade}) {
     }
   }
 
-  function cssClasses(alert) {
-    if (!alert) return
-
-    const classes = ["alert", "alert-dismissable"]
-
-    const alertTypeClass = {
-      [AlertType.Success]: "alert-success",
-      [AlertType.Error]: "alert-danger",
-      [AlertType.Info]: "alert-info",
-      [AlertType.Warning]: "alert-warning"
-    }
-
-    classes.push(alertTypeClass[alert.type])
-
-    if (alert.fade) {
-      classes.push("fade")
-    }
-
-    return classes.join(" ")
-  }
-
   if (!alerts.length) return null
 
   return (
-    <div className="container">
-      <div className="m-3">
-        {alerts.map((alert, index) => (
-          <div key={index} className={cssClasses(alert)}>
-            <a className="close" onClick={() => removeAlert(alert)}>
-              &times;
-            </a>
-            <span dangerouslySetInnerHTML={{__html: alert.message}}></span>
-          </div>
-        ))}
-      </div>
-    </div>
+    <>
+      {alerts.map((alert, index) => (
+        <Alert key={index} status="info">
+          <AlertIcon />
+          <Box>
+            <AlertTitle>Success!</AlertTitle>
+            <AlertDescription>
+              <span dangerouslySetInnerHTML={{__html: alert.message}}></span>
+            </AlertDescription>
+          </Box>
+          <CloseButton
+            alignSelf="flex-start"
+            position="relative"
+            right={-1}
+            top={-1}
+            onClick={() => removeAlert(alert)}
+          />
+        </Alert>
+      ))}
+    </>
   )
 }

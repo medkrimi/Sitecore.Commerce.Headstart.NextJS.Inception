@@ -1,7 +1,9 @@
 import * as Yup from "yup"
 
 import {
+  Box,
   Button,
+  ButtonGroup,
   Container,
   FormControl,
   FormErrorMessage,
@@ -12,11 +14,21 @@ import {
   Stack,
   Switch
 } from "@chakra-ui/react"
+import {ErrorMessage, Field, Form, Formik} from "formik"
+import {
+  InputControl,
+  NumberInputControl,
+  PercentComplete,
+  SelectControl,
+  SwitchControl
+} from "formik-chakra-ui"
 import {alertService, buyerService} from "../../services"
 
 import Card from "../card/Card"
 import {NextSeo} from "next-seo"
-import {useForm} from "react-hook-form"
+import {XpIndices} from "ordercloud-javascript-sdk"
+import {flatten} from "flatten-anything"
+import flattenObject from "lib/utils/flattenObject"
 import {useRouter} from "next/router"
 import {yupResolver} from "@hookform/resolvers/yup"
 
@@ -41,35 +53,43 @@ function AddEditForm({buyer}) {
 
   // set default form values if user passed in props
   if (!isAddMode) {
-    formOptions.defaultValues = buyer
+    formOptions.defaultValues = flattenObject(buyer, "_")
+    console.log(formOptions.defaultValues)
   }
 
-  // get functions to build form with useForm() hook
-  const {register, handleSubmit, reset, formState} = useForm(formOptions)
-  const {errors} = formState
-
-  function onSubmit(data) {
-    return isAddMode ? createBuyer(data) : updateBuyer(buyer.id, data)
+  function onSubmit(fields, {setStatus, setSubmitting}) {
+    setStatus()
+    if (isAddMode) {
+      createBuyer(fields, setSubmitting)
+    } else {
+      updateBuyer(buyer.ID, fields, setSubmitting)
+    }
   }
 
-  function createBuyer(data) {
-    return buyerService
-      .create(data)
+  function createBuyer(fields, setSubmitting) {
+    buyerService
+      .create(fields)
       .then(() => {
         alertService.success("Buyer added", {keepAfterRouteChange: true})
         router.push(".")
       })
-      .catch(alertService.error)
+      .catch(() => {
+        setSubmitting(false)
+        alertService.error
+      })
   }
 
-  function updateBuyer(id, data) {
-    return buyerService
-      .update(id, data)
+  function updateBuyer(id, fields, setSubmitting) {
+    buyerService
+      .update(id, fields)
       .then(() => {
         alertService.success("Buyer updated", {keepAfterRouteChange: true})
-        router.push("..")
+        router.push(".")
       })
-      .catch(alertService.error)
+      .catch(() => {
+        setSubmitting(false)
+        alertService.error
+      })
   }
 
   return (
@@ -80,47 +100,78 @@ function AddEditForm({buyer}) {
           <span>{isAddMode ? "Add Buyer" : "Edit Buyer"}</span>
         </Heading>
         <Card variant="primaryCard">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing={2}>
-              <FormControl isInvalid={errors.Name}>
-                <FormLabel htmlFor="Name">Buyer Name</FormLabel>
-                <Input
-                  id="Name"
-                  name="Name"
-                  type="text"
-                  placeholder="Enter your buyer name"
-                  {...register("Name")}
-                />
-                <FormHelperText>Helper message</FormHelperText>
-                <FormErrorMessage>
-                  {errors.Name && errors.Name.message}
-                </FormErrorMessage>
-              </FormControl>
-              <FormControl>
-                <FormLabel>Active</FormLabel>
-                <Switch />
-                <FormHelperText>Helper message</FormHelperText>
-                <FormErrorMessage>Error message</FormErrorMessage>
-              </FormControl>
-            </Stack>
-            <Button type="submit" isLoading={formState.isSubmitting}>
-              Save
-            </Button>
-            <Button
-              onClick={() => reset(formOptions.defaultValues)}
-              variant="secondaryButton"
-              isDisabled={formState.isSubmitting}
-            >
-              Reset
-            </Button>
-            <Button
-              onClick={() => router.push("/buyers")}
-              variant="secondaryButton"
-              isDisabled={formState.isSubmitting}
-            >
-              Cancel
-            </Button>
-          </form>
+          <Formik
+            initialValues={formOptions.defaultValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            {({
+              // most of the usefull available Formik props
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              isSubmitting,
+              setFieldValue,
+              resetForm
+            }) => {
+              return (
+                <Box as="form" onSubmit={handleSubmit as any}>
+                  <Stack spacing={5}>
+                    <InputControl name="Name" label="Buyer Name" />
+                    <SwitchControl name="Active" label="Active" />
+                    {/* Complete this with getCatalogList one we create the catalog.service*/}
+                    <SelectControl
+                      name="DefaultCatalogID"
+                      label="Default Catalog"
+                      selectProps={{placeholder: "Select option"}}
+                    >
+                      <option value="PlayShop">PlayShop</option>
+                      <option value="PlayShop1">catalog 2</option>
+                      <option value="PlayShop2">catalog 3</option>
+                    </SelectControl>
+                    <NumberInputControl
+                      name="xp_MarkupPercent"
+                      label="Markup percent"
+                    />
+                    <InputControl name="xp_URL" label="Url" />
+
+                    {isAddMode ? (
+                      <PercentComplete />
+                    ) : (
+                      <InputControl
+                        name="DateCreated"
+                        label="Date created"
+                        isReadOnly
+                      />
+                    )}
+                    <ButtonGroup>
+                      <Button type="submit" isLoading={isSubmitting}>
+                        Save
+                      </Button>
+                      <Button
+                        onClick={resetForm}
+                        type="reset"
+                        variant="secondaryButton"
+                        isDisabled={isSubmitting}
+                      >
+                        Reset
+                      </Button>
+                      <Button
+                        onClick={() => router.push("/buyers")}
+                        variant="secondaryButton"
+                        isDisabled={isSubmitting}
+                      >
+                        Cancel
+                      </Button>
+                    </ButtonGroup>
+                  </Stack>
+                </Box>
+              )
+            }}
+          </Formik>
         </Card>
       </Container>
     </>

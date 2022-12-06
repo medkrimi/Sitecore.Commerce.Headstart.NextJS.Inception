@@ -1,27 +1,18 @@
-import {AddIcon, ChevronDownIcon, DeleteIcon} from "@chakra-ui/icons"
+import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
 import {
   Button,
-  Checkbox,
-  CheckboxGroup,
   Container,
-  Divider,
   HStack,
   Heading,
   Icon,
   IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Stack,
   Table,
   Tbody,
   Td,
   Text,
   Th,
   Thead,
-  Tr,
-  VStack
+  Tr
 } from "@chakra-ui/react"
 import {useEffect, useState} from "react"
 
@@ -106,13 +97,10 @@ const BuyersList = () => {
         </Td>
         <Td>
           <Button
-            onClick={() => router.push("/catagories")}
+            onClick={() => router.push(`/buyers/${buyer.ID}`)}
             variant="secondaryButton"
-          >
-            Manage Categories
-          </Button>
-        </Td>
-        <Td>
+            leftIcon={<EditIcon />}
+          ></Button>
           <Button
             onClick={() => deleteUser(buyer.ID)}
             variant="secondaryButton"
@@ -143,55 +131,6 @@ const BuyersList = () => {
         </Button>
 
         <HStack>
-          <Menu>
-            <MenuButton
-              px={4}
-              py={2}
-              transition="all 0.2s"
-              borderRadius="md"
-              borderWidth="1px"
-              _hover={{bg: "gray.400"}}
-              _expanded={{bg: "blue.400"}}
-              _focus={{boxShadow: "outline"}}
-            >
-              Filters <ChevronDownIcon />
-            </MenuButton>
-            <MenuList>
-              <MenuItem>
-                <VStack>
-                  <Text>Product Status</Text>
-                  <CheckboxGroup>
-                    <Stack spacing={[1, 3]} direction={["column", "row"]}>
-                      <Checkbox value="Completed" defaultChecked>
-                        Completed
-                      </Checkbox>
-                      <Checkbox value="AwaitingApproval" defaultChecked>
-                        Awaiting Approval
-                      </Checkbox>
-                      <Checkbox value="Canceled" defaultChecked>
-                        Canceled
-                      </Checkbox>
-                      <Checkbox value="Declined" defaultChecked>
-                        Declined
-                      </Checkbox>
-                      <Checkbox value="Open" defaultChecked>
-                        Open
-                      </Checkbox>
-                    </Stack>
-                  </CheckboxGroup>
-                  <Divider />
-                  <HStack>
-                    {/*<Button size="md" bg={boxBgColor} color={color}>
-                      Clear
-                    </Button>
-                  <Button size="md" bg={boxBgColor} color={color}>
-                      Submit
-                    </Button> */}
-                  </HStack>
-                </VStack>
-              </MenuItem>
-            </MenuList>
-          </Menu>
           <Button variant="secondaryButton">Export CSV</Button>
         </HStack>
       </HStack>
@@ -211,7 +150,6 @@ const BuyersList = () => {
               <Th>Created</Th>
               <Th>Users</Th>
               <Th>Catalogs</Th>
-              <Th>Categories</Th>
               <Th>Actions</Th>
             </Tr>
           </Thead>
