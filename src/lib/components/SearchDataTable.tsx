@@ -29,10 +29,9 @@ import {useGlobalFilter, usePagination, useSortBy, useTable} from "react-table"
 
 function SearchDataTable(props) {
   const {columnsData, tableData} = props
+  const columns = useMemo(() => columnsData, [columnsData])
+  const data = useMemo(() => tableData, [tableData])
   console.log(tableData)
-  const columns = useMemo(() => columnsData, [])
-  const data = useMemo(() => tableData, [])
-
   const tableInstance = useTable(
     {
       columns,

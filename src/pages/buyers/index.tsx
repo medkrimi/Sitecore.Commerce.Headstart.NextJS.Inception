@@ -12,6 +12,7 @@ import {
   Text,
   Th,
   Thead,
+  Toast,
   Tr
 } from "@chakra-ui/react"
 import {useEffect, useState} from "react"
@@ -34,8 +35,6 @@ const BuyersList = () => {
   useEffect(() => {
     initBuyersData()
   }, [])
-
-  console.log(buyers)
   const columnsData = [
     {
       Header: "BUYER ID",
@@ -51,11 +50,52 @@ const BuyersList = () => {
     },
     {
       Header: "STATUS",
-      accessor: "Active"
+      accessor: "Active",
+      Cell: (props) => (
+        <>
+          <Icon
+            as={props.row.original.Active === true ? MdCheck : IoMdClose}
+            color={props.row.original.Active === true ? "green.400" : "red.400"}
+            w="20px"
+            h="20px"
+          />
+          <Text>{props.row.original.Active ? "Active" : "Non active"}</Text>
+        </>
+      )
     },
     {
       Header: "CREATED DATE",
-      accessor: "DateCreated"
+      accessor: "DateCreated",
+      Cell: ({value}) => formatDate(value)
+    },
+    {
+      Header: "USERS",
+      Cell: ({row}) => (
+        <Link href={`/buyers/${row.original.ID}/users`}>
+          <Button variant="secondaryButton">
+            Manage Users ({buyersMeta[row.original.ID]["usersCount"]})
+          </Button>
+        </Link>
+      )
+    },
+    {
+      Header: "CATALOGS",
+      Cell: ({row}) => (
+        <Link href={`/catalogs/${row.original.ID}/`}>
+          <Button variant="secondaryButton">
+            Manage Catalogs ({buyersMeta[row.original.ID]["usersCount"]})
+          </Button>
+        </Link>
+      )
+    },
+    {
+      Header: "ACTIONS",
+      Cell: ({row}) => (
+        <Button
+          onClick={() => deleteUser(row.original.ID)}
+          leftIcon={<DeleteIcon />}
+        ></Button>
+      )
     }
   ]
   async function initBuyersData() {
@@ -85,11 +125,6 @@ const BuyersList = () => {
     )
     await buyerService.delete(id)
   }
-
-  //function loadMoreBuyers() {
-  //POC for infinite scroll - we need to call api insted of this
-  //setBuyers(newdata)
-  //}
 
   const buyersContent = buyers.length ? (
     buyers.map((buyer) => (
