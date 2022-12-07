@@ -14,7 +14,6 @@ import {
 } from "lib/scripts/OrdercloudService"
 import {ReactNode, useEffect, useState} from "react"
 
-import {AlertStack} from "lib/components/AlertStack"
 import Footer from "./Footer"
 import Header from "./Header"
 import LeftNavigation from "lib/components/navigation/SideNavigation"
@@ -45,9 +44,6 @@ const Layout = ({children}: LayoutProps) => {
       >
         {state?.isAnonymous ?? true ? <></> : <LeftNavigation />}
         <VStack spacing={5}>
-          <Box>
-            <AlertStack />
-          </Box>
           <Box>{children}</Box>
         </VStack>
       </HStack>

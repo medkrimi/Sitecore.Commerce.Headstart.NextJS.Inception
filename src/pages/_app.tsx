@@ -6,8 +6,8 @@ import {DefaultSeo} from "next-seo"
 import Head from "next/head"
 import Layout from "lib/layout/Layout"
 import {SetConfiguration} from "lib/scripts/OrdercloudService"
-import defaultSEOConfig from "../../next-seo.config"
 import {axiosService} from "lib/services/axios.service"
+import defaultSEOConfig from "../../next-seo.config"
 
 axiosService.initializeInterceptors()
 

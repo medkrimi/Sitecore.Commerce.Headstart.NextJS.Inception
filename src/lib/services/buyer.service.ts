@@ -18,26 +18,26 @@ async function getAll() {
 async function getById(id) {
   console.log("buyerService::getById")
   return await Buyers.Get(id)
-    .then((buyer) => buyer)
-    .catch((error) => handleOrderCloudErrors(error))
 }
 
-async function create(buyer: Buyer) {
+async function create(fields) {
   console.log("buyerService::create")
+  console.log(fields)
   //Demo sample : By default OrderCloud will assign a unique ID to the new created buyer.
-  //We are customizing the ID generation business logic here.
-  buyer.ID = buyer.Name.toLowerCase()
+  //Customizing the ID generation business logic here for Demo purpose.
+  fields.ID = fields.Name.toLowerCase()
     .trim()
     .replace(/[^\w\s-]/g, "")
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "")
 
-  Buyers.Create(buyer)
+  Buyers.Create(fields)
 }
 
-async function update(id, params) {
+async function update(fields) {
   console.log("buyerService::update")
-  return Promise<any>
+  console.log(fields)
+  Buyers.Patch(fields.ID, fields)
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
@@ -62,22 +62,4 @@ async function getCatalogsCountById(buyerId) {
     const catalogsList = await Catalogs.ListAssignments({buyerID: buyerId})
     return catalogsList?.Meta?.TotalCount
   } else return "-"
-}
-
-// helper function
-function handleOrderCloudErrors(error) {
-  if (error.isOrderCloudError) {
-    // the request was made and the API responded with a status code
-    // that falls outside of the range of 2xx, the error will be of type OrderCloudError
-    // https://ordercloud-api.github.io/ordercloud-javascript-sdk/classes/orderclouderror
-    console.log(error.message)
-    console.log(JSON.stringify(error.errors, null, 4))
-  } else if (error.request) {
-    // the request was made but no response received
-    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in node.js
-    console.log(error.request)
-  } else {
-    // Something happened in setting up the request that triggered an Error
-    console.log("Error", error.message)
-  }
 }

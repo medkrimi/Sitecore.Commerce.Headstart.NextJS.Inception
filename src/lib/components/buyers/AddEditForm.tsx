@@ -5,16 +5,10 @@ import {
   Button,
   ButtonGroup,
   Container,
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  FormLabel,
   Heading,
-  Input,
   Stack,
-  Switch
+  createStandaloneToast
 } from "@chakra-ui/react"
-import {ErrorMessage, Field, Form, Formik} from "formik"
 import {
   InputControl,
   NumberInputControl,
@@ -22,15 +16,17 @@ import {
   SelectControl,
   SwitchControl
 } from "formik-chakra-ui"
-import {alertService, buyerService} from "../../services"
 
 import Card from "../card/Card"
+import {Formik} from "formik"
 import {NextSeo} from "next-seo"
-import {XpIndices} from "ordercloud-javascript-sdk"
-import {flatten} from "flatten-anything"
+import {buyerService} from "../../services"
 import flattenObject from "lib/utils/flattenObject"
+import theme from "../../styles/theme/sitecorecommerce/"
 import {useRouter} from "next/router"
 import {yupResolver} from "@hookform/resolvers/yup"
+
+const {toast} = createStandaloneToast({theme})
 
 export {AddEditForm}
 
@@ -62,34 +58,39 @@ function AddEditForm({buyer}) {
     if (isAddMode) {
       createBuyer(fields, setSubmitting)
     } else {
-      updateBuyer(buyer.ID, fields, setSubmitting)
+      updateBuyer(fields, setSubmitting)
     }
   }
 
   function createBuyer(fields, setSubmitting) {
-    buyerService
-      .create(fields)
-      .then(() => {
-        alertService.success("Buyer added", {keepAfterRouteChange: true})
-        router.push(".")
+    try {
+      buyerService.create(fields)
+      toast({
+        id: fields.ID + "-created",
+        title: "Success",
+        description: "Buyer created successfully.",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top"
       })
-      .catch(() => {
-        setSubmitting(false)
-        alertService.error
-      })
+      router.push(".")
+    } catch (e) {}
   }
 
-  function updateBuyer(id, fields, setSubmitting) {
-    buyerService
-      .update(id, fields)
-      .then(() => {
-        alertService.success("Buyer updated", {keepAfterRouteChange: true})
-        router.push(".")
+  function updateBuyer(fields, setSubmitting) {
+    buyerService.update(fields).then(() => {
+      toast({
+        id: fields.ID + "-updated",
+        title: "Success",
+        description: "Buyer updated successfully.",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top"
       })
-      .catch(() => {
-        setSubmitting(false)
-        alertService.error
-      })
+      router.push(".")
+    })
   }
 
   return (
