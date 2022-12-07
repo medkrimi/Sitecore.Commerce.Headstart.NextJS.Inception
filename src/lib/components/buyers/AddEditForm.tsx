@@ -119,61 +119,59 @@ function AddEditForm({buyer}) {
               isSubmitting,
               setFieldValue,
               resetForm
-            }) => {
-              return (
-                <Box as="form" onSubmit={handleSubmit as any}>
-                  <Stack spacing={5}>
-                    <InputControl name="Name" label="Buyer Name" />
-                    <SwitchControl name="Active" label="Active" />
-                    {/* Complete this with getCatalogList one we create the catalog.service*/}
-                    <SelectControl
-                      name="DefaultCatalogID"
-                      label="Default Catalog"
-                      selectProps={{placeholder: "Select option"}}
-                    >
-                      <option value="PlayShop">PlayShop</option>
-                      <option value="PlayShop1">catalog 2</option>
-                      <option value="PlayShop2">catalog 3</option>
-                    </SelectControl>
-                    <NumberInputControl
-                      name="xp_MarkupPercent"
-                      label="Markup percent"
-                    />
-                    <InputControl name="xp_URL" label="Url" />
+            }) => (
+              <Box as="form" onSubmit={handleSubmit as any}>
+                <Stack spacing={5}>
+                  <InputControl name="Name" label="Buyer Name" />
+                  <SwitchControl name="Active" label="Active" />
+                  {/* Complete this with getCatalogList one we create the catalog.service*/}
+                  <SelectControl
+                    name="DefaultCatalogID"
+                    label="Default Catalog"
+                    selectProps={{placeholder: "Select option"}}
+                  >
+                    <option value="PlayShop">PlayShop</option>
+                    <option value="PlayShop1">catalog 2</option>
+                    <option value="PlayShop2">catalog 3</option>
+                  </SelectControl>
+                  <NumberInputControl
+                    name="xp_MarkupPercent"
+                    label="Markup percent"
+                  />
+                  <InputControl name="xp_URL" label="Url" />
 
-                    {isAddMode ? (
-                      <PercentComplete />
-                    ) : (
-                      <InputControl
-                        name="DateCreated"
-                        label="Date created"
-                        isReadOnly
-                      />
-                    )}
-                    <ButtonGroup>
-                      <Button type="submit" isLoading={isSubmitting}>
-                        Save
-                      </Button>
-                      <Button
-                        onClick={resetForm}
-                        type="reset"
-                        variant="secondaryButton"
-                        isDisabled={isSubmitting}
-                      >
-                        Reset
-                      </Button>
-                      <Button
-                        onClick={() => router.push("/buyers")}
-                        variant="secondaryButton"
-                        isDisabled={isSubmitting}
-                      >
-                        Cancel
-                      </Button>
-                    </ButtonGroup>
-                  </Stack>
-                </Box>
-              )
-            }}
+                  {isAddMode ? (
+                    <PercentComplete />
+                  ) : (
+                    <InputControl
+                      name="DateCreated"
+                      label="Date created"
+                      isReadOnly
+                    />
+                  )}
+                  <ButtonGroup>
+                    <Button type="submit" isLoading={isSubmitting}>
+                      Save
+                    </Button>
+                    <Button
+                      onClick={() => resetForm}
+                      type="reset"
+                      variant="secondaryButton"
+                      isLoading={isSubmitting}
+                    >
+                      Reset
+                    </Button>
+                    <Button
+                      onClick={() => router.push("/buyers")}
+                      variant="secondaryButton"
+                      isLoading={isSubmitting}
+                    >
+                      Cancel
+                    </Button>
+                  </ButtonGroup>
+                </Stack>
+              </Box>
+            )}
           </Formik>
         </Card>
       </Container>

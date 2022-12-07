@@ -35,8 +35,6 @@ async function create(fields) {
 
 async function update(fields) {
   console.log("buyerService::update")
-  console.log(fields)
-  //PrepareData(fields) - xp_strong
   return await Buyers.Patch(fields.ID, fields)
 }
 
