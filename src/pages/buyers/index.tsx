@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react"
 import {useEffect, useState} from "react"
 
+import BuyersDataTable from "../../lib/components/SearchDataTable"
 import Card from "lib/components/card/Card"
 import {HiOutlineMinusSm} from "react-icons/hi"
 import {IoMdClose} from "react-icons/io"
@@ -34,6 +35,29 @@ const BuyersList = () => {
     initBuyersData()
   }, [])
 
+  console.log(buyers)
+  const columnsData = [
+    {
+      Header: "BUYER ID",
+      accessor: "ID"
+    },
+    {
+      Header: "Name",
+      accessor: "Name"
+    },
+    {
+      Header: "DEFAULT CATALOG ID",
+      accessor: "DefaultCatalogID"
+    },
+    {
+      Header: "STATUS",
+      accessor: "Active"
+    },
+    {
+      Header: "CREATED DATE",
+      accessor: "DateCreated"
+    }
+  ]
   async function initBuyersData() {
     let _buyerListMeta = {}
     const buyersList = await buyerService.getAll()
@@ -61,6 +85,11 @@ const BuyersList = () => {
     )
     await buyerService.delete(id)
   }
+
+  //function loadMoreBuyers() {
+  //POC for infinite scroll - we need to call api insted of this
+  //setBuyers(newdata)
+  //}
 
   const buyersContent = buyers.length ? (
     buyers.map((buyer) => (
@@ -158,6 +187,9 @@ const BuyersList = () => {
         <Button variant="tertiaryButton">
           Scroll down to load more orders
         </Button>
+      </Card>
+      <Card variant="primaryCard">
+        <BuyersDataTable tableData={buyers} columnsData={columnsData} />
       </Card>
     </Container>
   )

@@ -62,9 +62,9 @@ function AddEditForm({buyer}) {
     }
   }
 
-  function createBuyer(fields, setSubmitting) {
+  async function createBuyer(fields, setSubmitting) {
     try {
-      buyerService.create(fields)
+      await buyerService.create(fields)
       toast({
         id: fields.ID + "-created",
         title: "Success",
@@ -75,7 +75,9 @@ function AddEditForm({buyer}) {
         position: "top"
       })
       router.push(".")
-    } catch (e) {}
+    } catch (e) {
+      setSubmitting(false)
+    }
   }
 
   function updateBuyer(fields, setSubmitting) {

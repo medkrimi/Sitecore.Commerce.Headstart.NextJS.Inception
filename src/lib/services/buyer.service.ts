@@ -22,7 +22,6 @@ async function getById(id) {
 
 async function create(fields) {
   console.log("buyerService::create")
-  console.log(fields)
   //Demo sample : By default OrderCloud will assign a unique ID to the new created buyer.
   //Customizing the ID generation business logic here for Demo purpose.
   fields.ID = fields.Name.toLowerCase()
@@ -31,13 +30,14 @@ async function create(fields) {
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "")
 
-  Buyers.Create(fields)
+  return await Buyers.Create(fields)
 }
 
 async function update(fields) {
   console.log("buyerService::update")
   console.log(fields)
-  Buyers.Patch(fields.ID, fields)
+  //PrepareData(fields) - xp_strong
+  return await Buyers.Patch(fields.ID, fields)
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
