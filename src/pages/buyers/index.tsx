@@ -1,51 +1,129 @@
+import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
 import {
   Button,
   Container,
+  HStack,
   Heading,
   Icon,
+  IconButton,
   Table,
   Tbody,
   Td,
   Text,
   Th,
   Thead,
+  Toast,
   Tr
 } from "@chakra-ui/react"
-import {Buyers, Catalogs, Users} from "ordercloud-javascript-sdk"
-import {MdCheck, MdReplay} from "react-icons/md"
 import {useEffect, useState} from "react"
 
+import BuyersDataTable from "../../lib/components/SearchDataTable"
+import Card from "lib/components/card/Card"
+import {HiOutlineMinusSm} from "react-icons/hi"
 import {IoMdClose} from "react-icons/io"
 import Link from "../../lib/components/navigation/Link"
+import {MdCheck} from "react-icons/md"
 import {NextSeo} from "next-seo"
 import React from "react"
+import {buyerService} from "../../lib/services"
 import {formatDate} from "../../lib/utils/formatDate"
+import router from "next/router"
 
-const BuyersPage = () => {
+const BuyersList = () => {
   const [buyers, setBuyers] = useState([])
-  const [usersTotalCount, setusersTotalCount] = useState<number>(0)
-  const [catalogTotalCount, setcatalogTotalCount] = useState<number>(0)
-
+  const [buyersMeta, setBuyersMeta] = useState({})
   useEffect(() => {
-    const getBuyers = async () => {
-      const buyersList = await Buyers.List()
-      setBuyers(buyersList.Items)
+    initBuyersData()
+  }, [])
+  const columnsData = [
+    {
+      Header: "BUYER ID",
+      accessor: "ID"
+    },
+    {
+      Header: "Name",
+      accessor: "Name"
+    },
+    {
+      Header: "DEFAULT CATALOG ID",
+      accessor: "DefaultCatalogID"
+    },
+    {
+      Header: "STATUS",
+      accessor: "Active",
+      Cell: (props) => (
+        <>
+          <Icon
+            as={props.row.original.Active === true ? MdCheck : IoMdClose}
+            color={props.row.original.Active === true ? "green.400" : "red.400"}
+            w="20px"
+            h="20px"
+          />
+          <Text>{props.row.original.Active ? "Active" : "Non active"}</Text>
+        </>
+      )
+    },
+    {
+      Header: "CREATED DATE",
+      accessor: "DateCreated",
+      Cell: ({value}) => formatDate(value)
+    },
+    {
+      Header: "USERS",
+      Cell: ({row}) => (
+        <Link href={`/buyers/${row.original.ID}/users`}>
+          <Button variant="secondaryButton">
+            Manage Users ({buyersMeta[row.original.ID]["usersCount"]})
+          </Button>
+        </Link>
+      )
+    },
+    {
+      Header: "CATALOGS",
+      Cell: ({row}) => (
+        <Link href={`/catalogs/${row.original.ID}/`}>
+          <Button variant="secondaryButton">
+            Manage Catalogs ({buyersMeta[row.original.ID]["usersCount"]})
+          </Button>
+        </Link>
+      )
+    },
+    {
+      Header: "ACTIONS",
+      Cell: ({row}) => (
+        <Button
+          onClick={() => deleteUser(row.original.ID)}
+          leftIcon={<DeleteIcon />}
+        ></Button>
+      )
     }
-    getBuyers()
-  })
+  ]
+  async function initBuyersData() {
+    let _buyerListMeta = {}
+    const buyersList = await buyerService.getAll()
 
-  function getUsersTotalCount({buyerID}): number {
-    Users.List(buyerID).then((userList) =>
-      setusersTotalCount(userList.Meta.TotalCount)
-    )
-    return usersTotalCount
+    const requests = buyersList.Items.map(async (buyer) => {
+      _buyerListMeta[buyer.ID] = {}
+      _buyerListMeta[buyer.ID]["usersCount"] =
+        await buyerService.getUsersCountById(buyer.ID)
+      _buyerListMeta[buyer.ID]["catalogsCount"] =
+        await buyerService.getCatalogsCountById(buyer.ID)
+    })
+    await Promise.all(requests)
+    setBuyersMeta(_buyerListMeta)
+    setBuyers(buyersList.Items)
   }
 
-  function getCatalogTotalCount({buyerID}): number {
-    Catalogs.List().then((catalogList) =>
-      setcatalogTotalCount(catalogList.Meta.TotalCount)
+  async function deleteUser(id) {
+    setBuyers(
+      buyers.map((x) => {
+        if (x.id === id) {
+          x.isDeleting = true
+        }
+        return x
+      })
     )
-    return catalogTotalCount
+    await buyerService.delete(id)
   }
 
   const buyersContent = buyers.length ? (
@@ -68,24 +146,30 @@ const BuyersPage = () => {
         <Td>{formatDate(buyer.DateCreated)}</Td>
         <Td>
           <Link href={`/buyers/${buyer.ID}/users`}>
-            <Button variant="outline" colorScheme="dark">
-              Manage Users ({getUsersTotalCount({buyerID: buyer.ID})})
+            <Button variant="secondaryButton">
+              Manage Users ({buyersMeta[buyer.ID]["usersCount"]})
             </Button>
           </Link>
         </Td>
         <Td>
-          <Link href={`/buyers/${buyer.ID}/users`}>
-            <Button variant="outline" colorScheme="dark">
-              Manage Catalogs ({getCatalogTotalCount({buyerID: buyer.ID})})
-            </Button>
-          </Link>
+          <Button
+            onClick={() => router.push("/catalogs/${buyer.ID}")}
+            variant="secondaryButton"
+          >
+            Manage Catalogs ({buyersMeta[buyer.ID]["catalogsCount"]})
+          </Button>
         </Td>
         <Td>
-          <Link href="/categories">
-            <Button variant="outline" colorScheme="dark">
-              Manage Categories
-            </Button>
-          </Link>
+          <Button
+            onClick={() => router.push(`/buyers/${buyer.ID}`)}
+            variant="secondaryButton"
+            leftIcon={<EditIcon />}
+          ></Button>
+          <Button
+            onClick={() => deleteUser(buyer.ID)}
+            variant="secondaryButton"
+            leftIcon={<DeleteIcon />}
+          ></Button>
         </Td>
       </Tr>
     ))
@@ -96,27 +180,53 @@ const BuyersPage = () => {
   )
 
   return (
-    <Container maxWidth={"120ch"}>
+    <Container maxW="full">
       <NextSeo title="Buyers" />
       <Heading as="h2" marginTop={5}>
-        Buyers{" "}
+        Buyers List
       </Heading>
-      <Table variant="striped" margin={30}>
-        <Thead>
-          <Tr>
-            <Th>Buyer ID</Th>
-            <Th>Name</Th>
-            <Th>Default Catalog ID</Th>
-            <Th>Status</Th>
-            <Th>Created</Th>
-            <Th>Users</Th>
-            <Th>Catalogs</Th>
-            <Th>Categories</Th>
-          </Tr>
-        </Thead>
-        <Tbody>{buyersContent}</Tbody>
-      </Table>
+      <HStack justifyContent="space-between" w="100%">
+        <Button
+          onClick={() => router.push("/buyers/add")}
+          variant="primaryButton"
+          leftIcon={<AddIcon />}
+        >
+          Create new buyer
+        </Button>
+
+        <HStack>
+          <Button variant="secondaryButton">Export CSV</Button>
+        </HStack>
+      </HStack>
+      <Card variant="primaryCard">
+        <IconButton
+          variant="closePanelButton"
+          aria-label="close panel"
+          icon={<HiOutlineMinusSm />}
+        ></IconButton>
+        <Table margin={30}>
+          <Thead>
+            <Tr>
+              <Th>Buyer ID</Th>
+              <Th>Name</Th>
+              <Th>Default Catalog ID</Th>
+              <Th>Status</Th>
+              <Th>Created</Th>
+              <Th>Users</Th>
+              <Th>Catalogs</Th>
+              <Th>Actions</Th>
+            </Tr>
+          </Thead>
+          <Tbody>{buyersContent}</Tbody>
+        </Table>
+        <Button variant="tertiaryButton">
+          Scroll down to load more orders
+        </Button>
+      </Card>
+      <Card variant="primaryCard">
+        <BuyersDataTable tableData={buyers} columnsData={columnsData} />
+      </Card>
     </Container>
   )
 }
-export default BuyersPage
+export default BuyersList

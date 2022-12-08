@@ -31,9 +31,20 @@ yarn dev
 Use Yarn to do your development. This will help when you checkin, we are pushing to Vercel and they will run "yarn run build" to check if the project will build
 
 Before checking in verify that the new code passes.
-yarn lint
+```yarn lint
 yarn tsc --noEmit
 yarn run build
+```
+
+A script called pre-commit to run those 3 commands. 
+
+```yarn pre-commit. 
+```
+
+Also used in Git Commit Hook. 
+If you need to ignore and force your commit (For team review purpose for example) simply do 
+```git commit --no-verify -m "commit message"
+```
 
 If it passes these three commands it should be ready to be checked in.
 

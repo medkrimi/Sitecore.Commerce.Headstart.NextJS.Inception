@@ -1,12 +1,22 @@
-import {Box, HStack} from "@chakra-ui/react"
-import {ReactNode, useEffect, useState} from "react"
-import Footer from "./Footer"
-import Header from "./Header"
-import LeftNavigation from "lib/components/navigation/SideNavigation"
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Box,
+  HStack,
+  StackDivider,
+  VStack
+} from "@chakra-ui/react"
 import {
   GetAuthenticationStatus,
   OcAuthState
 } from "lib/scripts/OrdercloudService"
+import {ReactNode, useEffect, useState} from "react"
+
+import Footer from "./Footer"
+import Header from "./Header"
+import LeftNavigation from "lib/components/navigation/SideNavigation"
 
 type LayoutProps = {
   children: ReactNode
@@ -33,7 +43,9 @@ const Layout = ({children}: LayoutProps) => {
         justify="flex-start"
       >
         {state?.isAnonymous ?? true ? <></> : <LeftNavigation />}
-        {children}
+        <VStack spacing={5}>
+          <Box>{children}</Box>
+        </VStack>
       </HStack>
       {state?.isAnonymous ?? true ? <></> : <Footer />}
     </Box>
