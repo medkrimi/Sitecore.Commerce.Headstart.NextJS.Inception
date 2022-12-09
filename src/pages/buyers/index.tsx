@@ -10,7 +10,6 @@ import {
   useToast
 } from "@chakra-ui/react"
 import {useEffect, useState} from "react"
-
 import BuyersDataTable from "../../lib/components/datatable/datatable"
 import Card from "lib/components/card/Card"
 import {IoMdClose} from "react-icons/io"

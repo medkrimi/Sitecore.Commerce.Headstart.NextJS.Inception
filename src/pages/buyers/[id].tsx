@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react"
-
 import {AddEditForm} from "../../lib/components/buyers/AddEditForm"
 import {Buyer} from "ordercloud-javascript-sdk"
 import {buyersService} from "../../lib/api"

@@ -31,8 +31,9 @@ function SearchDataTable(props) {
   const {columnsData, tableData} = props
   const columns = useMemo(() => columnsData, [columnsData])
   const data = useMemo(() => tableData, [tableData])
-  console.log(tableData)
   const tableInstance = useTable(
+    // The type definition for react-table is dependent upon which options
+    // are passed in, if you change the options make sure to update types/react-table.config.d.ts accordingly
     {
       columns,
       data
@@ -59,17 +60,14 @@ function SearchDataTable(props) {
     state
   } = tableInstance
 
-  const createPages = (count) => {
-    let arrPageCount = []
-
-    for (let i = 1; i <= count; i++) {
-      arrPageCount.push(i)
-    }
-
-    return arrPageCount
+  const buildPagesArray = (count) => {
+    // count 3 returns [0, 1, 2]
+    return Array(count)
+      .fill(null)
+      .map((value, index) => index)
   }
 
-  const {pageIndex, pageSize, globalFilter} = state
+  const {pageIndex, pageSize} = state
   return (
     <>
       <Flex
@@ -224,7 +222,7 @@ function SearchDataTable(props) {
                   w="75px"
                   mx="6px"
                   defaultValue="1"
-                  onChange={(e) => gotoPage(e)}
+                  onChange={(e) => gotoPage(parseInt(e))}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -233,7 +231,7 @@ function SearchDataTable(props) {
                   </NumberInputStepper>
                 </NumberInput>
               ) : (
-                createPages(pageCount).map((pageNumber, index) => {
+                buildPagesArray(pageCount).map((pageNumber, index) => {
                   return (
                     <Button
                       variant="no-effects"
