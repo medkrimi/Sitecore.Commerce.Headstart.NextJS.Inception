@@ -186,10 +186,10 @@ function SearchDataTable(props) {
               cursor="pointer"
             >
               <option>5</option>
-              <option>10</option>
-              <option>15</option>
-              <option>20</option>
-              <option>25</option>
+              {tableData.length > 10 && <option>10</option>}
+              {tableData.length > 15 && <option>15</option>}
+              {tableData.length > 20 && <option>20</option>}
+              {tableData.length > 25 && <option>25</option>}=
             </Select>
             <Text fontSize="xs" color="gray.400" fontWeight="normal">
               entries per page
