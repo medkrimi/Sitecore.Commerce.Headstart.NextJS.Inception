@@ -63,26 +63,19 @@ export interface OcAuthState {
   initialized: boolean
 }
 
-const ocConfig = {
-  clientId: process.env.NEXT_PUBLIC_OC_CLIENT_ID,
-  baseApiUrl: process.env.NEXT_PUBLIC_OC_API_URL,
+const ocConfig: OcConfig = {
+  clientId:
+    process.env.NEXT_PUBLIC_OC_CLIENT_ID ||
+    "4A9F0BAC-EC1D-4711-B01F-1A394F72F2B6",
+  baseApiUrl:
+    process.env.NEXT_PUBLIC_OC_API_URL || "https://sandboxapi.ordercloud.io",
   scope: [
     "FullAccess",
     "Shopper",
     "MeAddressAdmin",
     "CategoryReader"
   ] as ApiRole[] /* Default user role */,
-  allowAnonymous:
-    Boolean("false") /* Whether anonymous product browsing is allowed */,
-  hostedApp: true,
-  marketplaceID: process.env.NEXT_PUBLIC_OC_MARKETPLACE_ID,
-  marketplaceName: process.env.NEXT_PUBLIC_OC_MARKETPLACE_NAME,
-  appname: process.env.NEXT_PUBLIC_APP_NAME,
-  middlewareUrl: "https://localhost:5001", //Currently not referenced.
-  translateBlobUrl:
-    "https://sitecorecommerce.blob.core.windows.net/ngx-translate/i18n/", //Currently not referenced.
-  blobStorageUrl: "https://sitecorecommerce.blob.core.windows.net", //Currently not referenced.
-  orderCloudApiUrl: process.env.NEXT_PUBLIC_OC_API_URL,
+  allowAnonymous: false,
   cookieOptions: null
 }
 
