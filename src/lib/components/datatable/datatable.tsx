@@ -167,7 +167,7 @@ function SearchDataTable(props) {
             })}
           </Tbody>
         </Table>
-        {tableData.length > 5 && (
+        {tableData.length > 10 && (
           <Flex
             direction={{sm: "column", md: "row"}}
             justify="space-between"
@@ -186,7 +186,7 @@ function SearchDataTable(props) {
               cursor="pointer"
             >
               <option>5</option>
-              {tableData.length > 10 && <option>10</option>}
+              <option>10</option>
               {tableData.length > 15 && <option>15</option>}
               {tableData.length > 20 && <option>20</option>}
               {tableData.length > 25 && <option>25</option>}=
