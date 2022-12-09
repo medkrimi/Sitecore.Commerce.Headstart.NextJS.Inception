@@ -9,8 +9,8 @@ import {
   Button,
   Collapse,
   FormControl,
-  Heading,
   HStack,
+  Heading,
   Input,
   ListItem,
   Table,
@@ -28,10 +28,6 @@ import {
   useDisclosure
 } from "@chakra-ui/react"
 import {
-  ComposedProduct,
-  GetComposedProduct
-} from "lib/scripts/OrdercloudService"
-import {
   Catalog,
   CatalogAssignment,
   Catalogs,
@@ -41,13 +37,18 @@ import {
   Products,
   RequiredDeep
 } from "ordercloud-javascript-sdk"
-import React from "react"
-import {useEffect, useState} from "react"
+import {
+  ComposedProduct,
+  GetComposedProduct
+} from "../../services/ordercloud.service"
 import {FiEdit, FiPlus, FiTrash2} from "react-icons/fi"
+import {useEffect, useState} from "react"
+
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 import ProductCategoryAssignments from "./ProductCategoryAssignments"
+import React from "react"
 
 type ProductDataProps = {
   composedProduct: ComposedProduct

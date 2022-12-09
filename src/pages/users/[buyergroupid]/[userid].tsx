@@ -1,38 +1,39 @@
 import {
-  Flex,
-  Heading,
-  HStack,
-  Tooltip,
-  Grid,
-  GridItem,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Button,
   Container,
-  AlertDialogFooter,
-  AlertDialogContent,
-  AlertDialogBody,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogHeader,
-  useDisclosure,
-  useColorModeValue
+  Flex,
+  Grid,
+  GridItem,
+  HStack,
+  Heading,
+  Tooltip,
+  useColorModeValue,
+  useDisclosure
 } from "@chakra-ui/react"
+import {CdpGuestModel, getGuestContext} from "../../../lib/services/cdp.service"
+import {FiRefreshCw, FiTrash2} from "react-icons/fi"
+import {Promotion, Promotions, User, Users} from "ordercloud-javascript-sdk"
+import {useEffect, useState} from "react"
+
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import BreadcrumbNavigation from "lib/components/navigation/BreadcrumbNavigation"
+import {NextSeo} from "next-seo"
 import PromotionBasicData from "lib/components/promotions/PromotionBasicData"
 import PromotionBuyers from "lib/components/promotions/PromotionBuyers"
+import {PromotionXPs} from "lib/types/PromotionXPs"
 import PromotionXpInformation from "lib/components/promotions/PromotionXpInformation"
+import React from "react"
 import UserBasicData from "lib/components/users/UserBasicData"
 import UserCdpData from "lib/components/users/UserCdpData"
 import UserCdpSessionData from "lib/components/users/UserCdpSessionData"
 import UserOrderData from "lib/components/users/UserOrderData"
-import {CdpGuestModel, getGuestContext} from "lib/scripts/CDPService"
-import {PromotionXPs} from "lib/types/PromotionXPs"
-import {NextSeo} from "next-seo"
 import {useRouter} from "next/router"
-import {Promotion, Promotions, User, Users} from "ordercloud-javascript-sdk"
-import React from "react"
-import {useEffect, useState} from "react"
-import {FiRefreshCw, FiTrash2} from "react-icons/fi"
 
 const UserDetails = () => {
   const router = useRouter()

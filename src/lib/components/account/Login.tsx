@@ -1,4 +1,18 @@
 import {
+  Alert,
+  AlertIcon,
+  Box,
+  Button,
+  Checkbox,
+  FormControl,
+  FormLabel,
+  HStack,
+  Heading,
+  Input,
+  Text,
+  VStack
+} from "@chakra-ui/react"
+import {
   ChangeEvent,
   FormEvent,
   FunctionComponent,
@@ -7,26 +21,13 @@ import {
   useState
 } from "react"
 import {
-  Button,
-  VStack,
-  HStack,
-  Input,
-  Text,
-  Heading,
-  Box,
-  Checkbox,
-  Alert,
-  AlertIcon,
-  FormControl,
-  FormLabel
-} from "@chakra-ui/react"
-import HeaderLogo from "../branding/HeaderLogo"
-import {
   GetAuthenticationStatus,
   Login,
   OcAuthState
-} from "lib/scripts/OrdercloudService"
+} from "../../services/ordercloud.service"
+
 import Card from "../card/Card"
+import HeaderLogo from "../branding/HeaderLogo"
 
 interface OcLoginFormProps {
   title?: string

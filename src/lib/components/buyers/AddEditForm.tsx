@@ -6,8 +6,7 @@ import {
   ButtonGroup,
   Container,
   Heading,
-  Stack,
-  createStandaloneToast
+  Stack
 } from "@chakra-ui/react"
 import {
   InputControl,
@@ -20,23 +19,22 @@ import {
 import Card from "../card/Card"
 import {Formik} from "formik"
 import {NextSeo} from "next-seo"
-import {buyerService} from "../../services"
-import flattenObject from "lib/utils/flattenObject"
-import theme from "../../styles/theme/sitecorecommerce/"
+import {buyersService} from "../../api"
 import {useRouter} from "next/router"
+import {useToast} from "@chakra-ui/react"
+import {xpHelper} from "../../utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
-
-const {toast} = createStandaloneToast({theme})
 
 export {AddEditForm}
 
 function AddEditForm({buyer}) {
   const isAddMode = !buyer
   const router = useRouter()
-
+  const toast = useToast()
   // form validation rules
   const validationSchema = Yup.object().shape({
-    Name: Yup.string().required("Name is required")
+    Name: Yup.string().required("Name is required"),
+    xp_MarkupPercent: Yup.number()
   })
 
   const formOptions = {
@@ -49,22 +47,25 @@ function AddEditForm({buyer}) {
 
   // set default form values if user passed in props
   if (!isAddMode) {
-    formOptions.defaultValues = flattenObject(buyer, "_")
-    console.log(formOptions.defaultValues)
+    formOptions.defaultValues = xpHelper.flattenXpObject(buyer, "_")
   }
 
   function onSubmit(fields, {setStatus, setSubmitting}) {
     setStatus()
     if (isAddMode) {
-      createBuyer(fields, setSubmitting)
+      const buyer = xpHelper.unflattenXpObject(fields, "_")
+      console.log(buyer)
+      createBuyer(buyer, setSubmitting)
     } else {
-      updateBuyer(fields, setSubmitting)
+      const buyer = xpHelper.unflattenXpObject(fields, "_")
+      console.log(buyer)
+      updateBuyer(buyer, setSubmitting)
     }
   }
 
   async function createBuyer(fields, setSubmitting) {
     try {
-      await buyerService.create(fields)
+      await buyersService.create(fields)
       toast({
         id: fields.ID + "-created",
         title: "Success",
@@ -80,8 +81,9 @@ function AddEditForm({buyer}) {
     }
   }
 
-  function updateBuyer(fields, setSubmitting) {
-    buyerService.update(fields).then(() => {
+  async function updateBuyer(fields, setSubmitting) {
+    try {
+      await buyersService.update(fields)
       toast({
         id: fields.ID + "-updated",
         title: "Success",
@@ -92,7 +94,9 @@ function AddEditForm({buyer}) {
         position: "top"
       })
       router.push(".")
-    })
+    } catch (e) {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -150,11 +154,17 @@ function AddEditForm({buyer}) {
                     />
                   )}
                   <ButtonGroup>
-                    <Button type="submit" isLoading={isSubmitting}>
+                    <Button
+                      variant="primaryButton"
+                      type="submit"
+                      isLoading={isSubmitting}
+                    >
                       Save
                     </Button>
                     <Button
-                      onClick={() => resetForm}
+                      onClick={() => {
+                        resetForm()
+                      }}
                       type="reset"
                       variant="secondaryButton"
                       isLoading={isSubmitting}

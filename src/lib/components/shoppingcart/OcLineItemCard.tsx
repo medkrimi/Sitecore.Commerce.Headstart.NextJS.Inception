@@ -1,4 +1,19 @@
-import {LineItem} from "ordercloud-javascript-sdk"
+import {
+  Box,
+  Button,
+  HStack,
+  Image,
+  Text,
+  Th,
+  Tr,
+  VStack
+} from "@chakra-ui/react"
+import {
+  ComposedProduct,
+  GetComposedProduct,
+  RemoveLineItem,
+  UpdateLineItem
+} from "../../services/ordercloud.service"
 import {
   FormEvent,
   FunctionComponent,
@@ -6,24 +21,10 @@ import {
   useEffect,
   useState
 } from "react"
+
+import {LineItem} from "ordercloud-javascript-sdk"
 import OcQuantityInput from "./OcQuantityInput"
-import {
-  Button,
-  HStack,
-  Text,
-  VStack,
-  Image,
-  Box,
-  Tr,
-  Th
-} from "@chakra-ui/react"
-import formatPrice from "lib/utils/formatPrice"
-import {
-  ComposedProduct,
-  GetComposedProduct,
-  RemoveLineItem,
-  UpdateLineItem
-} from "lib/scripts/OrdercloudService"
+import {priceHelper} from "../../utils/price.utils"
 
 interface OcLineItemCardProps {
   lineItem: LineItem
@@ -103,8 +104,8 @@ const OcLineItemCard: FunctionComponent<OcLineItemCardProps> = ({
       <Th>
         <p>{lineItem.Quantity}</p>
       </Th>
-      <Th>{formatPrice(lineItem.UnitPrice)}</Th>
-      <Th>{formatPrice(lineItem.LineSubtotal)}</Th>
+      <Th>{priceHelper.formatPrice(lineItem.UnitPrice)}</Th>
+      <Th>{priceHelper.formatPrice(lineItem.LineSubtotal)}</Th>
     </Tr>
   )
 }

@@ -1,52 +1,50 @@
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Button,
   Checkbox,
+  CheckboxGroup,
   Container,
-  Heading,
+  Divider,
   HStack,
+  Heading,
+  IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  Spinner,
+  Stack,
   Table,
   Tbody,
   Td,
+  Text,
+  Textarea,
   Th,
   Thead,
   Tr,
-  useColorMode,
-  useColorModeValue,
-  Text,
-  CheckboxGroup,
-  Stack,
   VStack,
-  Divider,
-  IconButton,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  Textarea,
-  AlertDialogFooter,
-  Spinner
+  useColorMode,
+  useColorModeValue
 } from "@chakra-ui/react"
-import {NextSeo} from "next-seo"
-import {Promotion, Promotions} from "ordercloud-javascript-sdk"
-import {useEffect, useRef, useState} from "react"
-import Link from "../../lib/components/navigation/Link"
-import {formatDate} from "lib/utils/formatDate"
-import formatPrice from "lib/utils/formatPrice"
 import {
   GetAuthenticationStatus,
   OcAuthState
-} from "lib/scripts/OrdercloudService"
-import formatStatus from "lib/utils/formatStatus"
-import LettersCard from "lib/components/card/LettersCard"
-import formatTextTruncate from "lib/utils/formatTextTruncate"
-import {ChevronDownIcon} from "@chakra-ui/icons"
+} from "../../lib/services/ordercloud.service"
+import {Promotion, Promotions} from "ordercloud-javascript-sdk"
+import {dateHelper, priceHelper, textHelper} from "lib/utils/"
+import {useEffect, useRef, useState} from "react"
+
 import Card from "lib/components/card/Card"
+import {ChevronDownIcon} from "@chakra-ui/icons"
 import {HiOutlineMinusSm} from "react-icons/hi"
+import LettersCard from "lib/components/card/LettersCard"
+import Link from "../../lib/components/navigation/Link"
+import {NextSeo} from "next-seo"
 
 const PromotionsPage = () => {
   const [promotions, setPromotions] = useState([])
@@ -87,9 +85,9 @@ const PromotionsPage = () => {
         <Td>{promotion.Description}</Td>
         <Td>{promotion.Type}</Td>
         <Td>{promotion.Elgibility}</Td>
-        <Td>{formatStatus(promotion.Status)}</Td>
-        <Td>{formatDate(promotion.StartDate)}</Td>
-        <Td>{formatDate(promotion.ExpirationDate)}</Td>
+        <Td>{textHelper.formatStatus(promotion.Status)}</Td>
+        <Td>{dateHelper.formatDate(promotion.StartDate)}</Td>
+        <Td>{dateHelper.formatDate(promotion.ExpirationDate)}</Td>
       </Tr>
     ))
   ) : (

@@ -1,53 +1,53 @@
-import {ChevronDownIcon} from "@chakra-ui/icons"
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Button,
+  Checkbox,
   CheckboxGroup,
   Container,
-  Heading,
+  Divider,
   HStack,
+  Heading,
+  IconButton,
   Link,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  Spinner,
   Stack,
   Table,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
   VStack,
-  Text,
-  Checkbox,
-  Divider,
   useColorMode,
-  useColorModeValue,
-  IconButton,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  AlertDialogFooter,
-  Spinner
+  useColorModeValue
 } from "@chakra-ui/react"
-import Card from "lib/components/card/Card"
-import LettersCard from "lib/components/card/LettersCard"
-import formatTextTruncate from "lib/utils/formatTextTruncate"
-import {formatDate} from "lib/utils/formatDate"
-import formatPrice from "lib/utils/formatPrice"
-import formatStatus from "lib/utils/formatStatus"
-import {NextSeo} from "next-seo"
-import NextLink from "next/link"
 import {
-  OrderReturns,
   OrderReturn,
-  OrderReturnItem
+  OrderReturnItem,
+  OrderReturns
 } from "ordercloud-javascript-sdk"
 import React, {useRef} from "react"
 import {useEffect, useState} from "react"
+
+import Card from "lib/components/card/Card"
+import {ChevronDownIcon} from "@chakra-ui/icons"
 import {HiOutlineMinusSm} from "react-icons/hi"
+import LettersCard from "lib/components/card/LettersCard"
+import NextLink from "next/link"
+import {NextSeo} from "next-seo"
+import {dateHelper} from "lib/utils/date.utils"
+import {priceHelper} from "lib/utils/price.utils"
+import {textHelper} from "lib/utils/text.utils"
 
 const TableRow = (orderReturn: OrderReturn) => {
   let currentItems: OrderReturnItem[] = orderReturn.ItemsToReturn
@@ -59,8 +59,8 @@ const TableRow = (orderReturn: OrderReturn) => {
           <Link>{orderReturn.ID}</Link>
         </NextLink>
       </Td>
-      <Td>{formatDate(orderReturn.DateCreated)}</Td>
-      <Td>{formatStatus(orderReturn.Status)}</Td>
+      <Td>{dateHelper.formatDate(orderReturn.DateCreated)}</Td>
+      <Td>{textHelper.formatStatus(orderReturn.Status)}</Td>
       <Td>
         {/* <LettersCard>
           firstname={orderReturn.FromUser.FirstName}, lastname=
@@ -69,10 +69,14 @@ const TableRow = (orderReturn: OrderReturn) => {
         {orderReturn.FromUser.FirstName} {orderReturn.FromUser.LastName} */}
       </Td>
       <Td>
-        {formatTextTruncate(50, orderReturn.ItemsToReturn.toString(), "...")}
+        {textHelper.formatTextTruncate(
+          50,
+          orderReturn.ItemsToReturn.toString(),
+          "..."
+        )}
       </Td>
       <Td></Td>
-      <Td>{formatPrice(orderReturn.RefundAmount)}</Td>
+      <Td>{priceHelper.formatPrice(orderReturn.RefundAmount)}</Td>
     </Tr>
   )
 }
