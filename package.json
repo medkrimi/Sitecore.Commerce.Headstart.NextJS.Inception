@@ -19,6 +19,10 @@
     "prepare": "husky install",
     "pre-commit": "yarn lint && yarn tsc --noEmit && yarn build"
   },
+  "engines": {
+    "npm": "Please use yarn",
+    "yarn": ">=1.0.0"
+  },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.4",
     "@chakra-ui/react": "^2.3.6",
