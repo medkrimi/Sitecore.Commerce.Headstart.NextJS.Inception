@@ -1,4 +1,4 @@
-import {Buyer, Buyers, Catalogs, Users} from "ordercloud-javascript-sdk"
+import {Buyers, Catalogs, UserGroups, Users} from "ordercloud-javascript-sdk"
 
 export const buyersService = {
   list,
@@ -7,7 +7,8 @@ export const buyersService = {
   update,
   delete: _delete,
   getUsersCountById,
-  getCatalogsCountById
+  getCatalogsCountById,
+  getUserGroupsCountById
 }
 
 async function list() {
@@ -24,8 +25,6 @@ async function create(buyer) {
   console.log("buyersService::create")
   //Demo sample : By default OrderCloud will assign a unique ID to the new created buyer.
   //Customizing the ID generation business logic here for Demo purpose.
-  debugger
-  console.log(buyer)
   buyer.ID = buyer.Name.toLowerCase()
     .trim()
     .replace(/[^\w\s-]/g, "")
@@ -53,6 +52,14 @@ async function getUsersCountById(buyerID) {
   if (buyerID) {
     const usersList = await Users.List(buyerID)
     return usersList?.Meta?.TotalCount
+  } else return "-"
+}
+
+async function getUserGroupsCountById(buyerID) {
+  console.log("buyersService::getUserGroupsCountById")
+  if (buyerID) {
+    const userGroupsList = await UserGroups.List(buyerID)
+    return userGroupsList?.Meta?.TotalCount
   } else return "-"
 }
 

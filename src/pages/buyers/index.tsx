@@ -10,6 +10,7 @@ import {
   useToast
 } from "@chakra-ui/react"
 import {useEffect, useState} from "react"
+
 import BuyersDataTable from "../../lib/components/datatable/datatable"
 import Card from "lib/components/card/Card"
 import {IoMdClose} from "react-icons/io"
@@ -35,6 +36,8 @@ const BuyersList = () => {
 
     const requests = buyersList.Items.map(async (buyer) => {
       _buyerListMeta[buyer.ID] = {}
+      _buyerListMeta[buyer.ID]["userGroupsCount"] =
+        await buyersService.getUserGroupsCountById(buyer.ID)
       _buyerListMeta[buyer.ID]["usersCount"] =
         await buyersService.getUsersCountById(buyer.ID)
       _buyerListMeta[buyer.ID]["catalogsCount"] =
@@ -111,13 +114,22 @@ const BuyersList = () => {
       Cell: ({value}) => dateHelper.formatDate(value)
     },
     {
-      Header: "USERS",
+      Header: "USER GROUPS / USERS",
       Cell: ({row}) => (
-        <Link href={`/buyers/${row.original.ID}/users`}>
-          <Button variant="secondaryButton">
-            Manage Users ({buyersMeta[row.original.ID]["usersCount"]})
+        <ButtonGroup>
+          <Button
+            onClick={() => router.push(`/buyers/${row.original.ID}/usergroups`)}
+            variant="secondaryButton"
+          >
+            User Groups ({buyersMeta[row.original.ID]["userGroupsCount"]})
           </Button>
-        </Link>
+          <Button
+            onClick={() => router.push(`/buyers/${row.original.ID}/users`)}
+            variant="secondaryButton"
+          >
+            Users ({buyersMeta[row.original.ID]["usersCount"]})
+          </Button>
+        </ButtonGroup>
       )
     },
     {
