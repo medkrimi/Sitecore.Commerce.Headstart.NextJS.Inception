@@ -1,40 +1,40 @@
 import {
-  Menu,
-  Text,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  HStack,
-  Flex,
-  useColorModeValue,
-  Icon,
   Avatar,
-  Link,
   Button,
   Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
   DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
   DrawerFooter,
-  useDisclosure,
+  DrawerHeader,
+  DrawerOverlay,
+  Flex,
+  HStack,
+  Icon,
+  Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Select,
+  Show,
+  Text,
   Tooltip,
   useColorMode,
-  Select,
-  useMediaQuery,
-  Show
+  useColorModeValue,
+  useDisclosure,
+  useMediaQuery
 } from "@chakra-ui/react"
-import NextLink from "next/link"
-import {BsSun, BsMoonStarsFill} from "react-icons/bs"
-import {Me, RequiredDeep} from "ordercloud-javascript-sdk"
-
+import {BsMoonStarsFill, BsSun} from "react-icons/bs"
 import {HiOutlineBell, HiOutlineCog} from "react-icons/hi"
-import {ChevronDownIcon} from "@chakra-ui/icons"
-import {ItemContent} from "../generic/ItemContent"
+import {Me, RequiredDeep} from "ordercloud-javascript-sdk"
 import React, {useState} from "react"
+
+import {ChevronDownIcon} from "@chakra-ui/icons"
 import Cookies from "universal-cookie"
-import {Logout} from "lib/scripts/OrdercloudService"
+import {ItemContent} from "../generic/ItemContent"
+import {Logout} from "../../services/ordercloud.service"
+import NextLink from "next/link"
 
 const MobileNavigation = () => {
   let menuBg = useColorModeValue("white", "navy.800")

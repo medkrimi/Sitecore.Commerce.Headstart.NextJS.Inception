@@ -1,17 +1,18 @@
-import NextLink from "next/link"
-import {FunctionComponent, useEffect, useState} from "react"
 import {
-  VStack,
-  Heading,
-  Text,
   Button,
-  Icon,
   HStack,
-  Link
+  Heading,
+  Icon,
+  Link,
+  Text,
+  VStack
 } from "@chakra-ui/react"
+import {ComposedOrder, GetCurrentOrder} from "../../services/ordercloud.service"
+import {FunctionComponent, useEffect, useState} from "react"
+
 import {HiChevronDoubleRight} from "react-icons/hi"
+import NextLink from "next/link"
 import OcCurrentOrderLineItemList from "./OcCurrentOrderLineItemList"
-import {ComposedOrder, GetCurrentOrder} from "lib/scripts/OrdercloudService"
 import {Orders} from "ordercloud-javascript-sdk"
 
 const ShoppingCart: FunctionComponent = () => {

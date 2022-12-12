@@ -1,5 +1,6 @@
-import {ComposedOrder, GetCurrentOrder} from "lib/scripts/OrdercloudService"
+import {ComposedOrder, GetCurrentOrder} from "../../services/ordercloud.service"
 import {FunctionComponent, useEffect, useState} from "react"
+
 import OcLineItemList from "./OcLineItemList"
 
 interface OcCurrentOrderLineItemListProps {

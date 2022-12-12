@@ -1,7 +1,45 @@
 import {PriceBreak, SpecOption} from "ordercloud-javascript-sdk"
+
 import {minBy as _minBy} from "lodash"
 
-export default function calcPrice(
+export const priceHelper = {
+  formatShortPrice,
+  formatPrice,
+  formatPercentChange,
+  calcPrice
+}
+
+function formatPrice(amount: number): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    currencyDisplay: "symbol"
+  }).format(amount)
+}
+
+function formatShortPrice(amount: number): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    currencyDisplay: "symbol"
+  })
+    .format(amount)
+    .replace(/\D00(?=\D*$)/, "")
+}
+
+function formatPercentChange(amount: number): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    currencyDisplay: "symbol"
+  }).format(amount)
+}
+
+//<Text as="span" color="green.400" fontWeight="bold">
+//+5.2%
+//</Text>
+
+function calcPrice(
   priceBreaks: PriceBreak[],
   selectedSpecOptions: SpecOption[],
   quantity: number

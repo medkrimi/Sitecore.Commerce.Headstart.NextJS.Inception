@@ -1,24 +1,21 @@
 /* eslint-disable react/jsx-no-undef */
+
 import {
   Box,
-  Flex,
-  Heading,
-  Text,
   Container,
-  SimpleGrid,
+  Flex,
   GridItem,
-  useColorModeValue,
   HStack,
-  VStack,
-  useColorMode,
+  Heading,
+  Icon,
   Image,
   Link,
-  Icon
+  SimpleGrid,
+  Text,
+  VStack,
+  useColorMode,
+  useColorModeValue
 } from "@chakra-ui/react"
-import {NextSeo} from "next-seo"
-import {useRouter} from "next/router"
-import NextLink from "next/link"
-import {useEffect, useState} from "react"
 import {
   Buyers,
   Catalogs,
@@ -30,21 +27,26 @@ import {
   Suppliers,
   Users
 } from "ordercloud-javascript-sdk"
-import BrandedSpinner from "lib/components/branding/BrandedSpinner"
-import AverageOrderAmount from "lib/components/analytics/AverageOrderAmount"
-import TodaysMoney from "lib/components/analytics/PercentChangeTile"
-import TodaysUsers from "lib/components/analytics/PercentChangeTile"
-import NewClients from "lib/components/analytics/PercentChangeTile"
-import TotalSales from "lib/components/analytics/PercentChangeTile"
-import formatShortPrice from "lib/utils/formatShortPrice"
 import {
   HiOutlineCurrencyDollar,
   HiOutlineFolderOpen,
   HiOutlineUserAdd,
   HiOutlineUserCircle
 } from "react-icons/hi"
+import {useEffect, useState} from "react"
+
+import AverageOrderAmount from "lib/components/analytics/AverageOrderAmount"
+import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import Card from "lib/components/card/Card"
-import {GetAuthenticationStatus} from "lib/scripts/OrdercloudService"
+import {GetAuthenticationStatus} from "../lib/services/ordercloud.service"
+import NewClients from "lib/components/analytics/PercentChangeTile"
+import NextLink from "next/link"
+import {NextSeo} from "next-seo"
+import TodaysMoney from "lib/components/analytics/PercentChangeTile"
+import TodaysUsers from "lib/components/analytics/PercentChangeTile"
+import TotalSales from "lib/components/analytics/PercentChangeTile"
+import {priceHelper} from "lib/utils/price.utils"
+import {useRouter} from "next/router"
 
 const Dashboard = () => {
   const {push} = useRouter()
@@ -213,7 +215,9 @@ const Dashboard = () => {
                       <Link>
                         <TodaysMoney
                           title="todays money"
-                          totalamount={` ${formatShortPrice(totalTodaysSales)}`}
+                          totalamount={` ${priceHelper.formatShortPrice(
+                            totalTodaysSales
+                          )}`}
                           percentchange={percentTodaysSales}
                           percentchangetype={percentTodaysSalesChange}
                           percentlabel="Since last month"
@@ -231,7 +235,9 @@ const Dashboard = () => {
                       <Link>
                         <TodaysUsers
                           title="todays users"
-                          totalamount={` ${formatShortPrice(totalUsers)}`}
+                          totalamount={` ${priceHelper.formatShortPrice(
+                            totalUsers
+                          )}`}
                           percentchange={percentTotalUsers}
                           percentchangetype={percentTotalUsersChange}
                           percentlabel="Since last month"
@@ -251,7 +257,9 @@ const Dashboard = () => {
                       <Link>
                         <NewClients
                           title="new clients"
-                          totalamount={` ${formatShortPrice(totalNewUsers)}`}
+                          totalamount={` ${priceHelper.formatShortPrice(
+                            totalNewUsers
+                          )}`}
                           percentchange={percentNewUsers}
                           percentchangetype={percentNewUsersChange}
                           percentlabel="Since last month"
@@ -269,7 +277,9 @@ const Dashboard = () => {
                       <Link>
                         <TotalSales
                           title="total sales"
-                          totalamount={` ${formatShortPrice(totalSales)}`}
+                          totalamount={` ${priceHelper.formatShortPrice(
+                            totalSales
+                          )}`}
                           percentchange={percentSales}
                           percentchangetype={percentSalesChange}
                           percentlabel="Compared to last year"

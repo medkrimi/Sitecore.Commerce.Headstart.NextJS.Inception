@@ -11,7 +11,7 @@ import {
 import {
   GetAuthenticationStatus,
   OcAuthState
-} from "lib/scripts/OrdercloudService"
+} from "../../lib/services/ordercloud.service"
 import {ReactNode, useEffect, useState} from "react"
 
 import Footer from "./Footer"

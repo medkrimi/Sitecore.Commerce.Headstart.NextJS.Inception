@@ -1,29 +1,39 @@
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Box,
-  Flex,
-  Heading,
-  HStack,
-  VStack,
-  Tooltip,
-  Grid,
-  GridItem,
   Button,
   Container,
-  AlertDialogFooter,
-  AlertDialogContent,
-  AlertDialogBody,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogHeader,
-  useDisclosure,
+  Flex,
+  Grid,
+  GridItem,
+  HStack,
+  Heading,
   Progress,
   Text,
-  useColorModeValue
+  Tooltip,
+  VStack,
+  useColorModeValue,
+  useDisclosure
 } from "@chakra-ui/react"
+import {
+  ComposedProduct,
+  GetComposedProduct,
+  ProductListOptions
+} from "../../lib/services/ordercloud.service"
+import {FiRefreshCw, FiTrash2} from "react-icons/fi"
+import {Product, Products, RequiredDeep} from "ordercloud-javascript-sdk"
+import {useEffect, useState} from "react"
+
 import BrandedBox from "lib/components/branding/BrandedBox"
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import BreadcrumbNavigation from "lib/components/navigation/BreadcrumbNavigation"
 import EditorialProgressBar from "lib/components/products/EditorialProgressBar"
+import {NextSeo} from "next-seo"
 import ProductCatalogAssignments from "lib/components/products/ProductCatalogAssignments"
 import ProductCategoryAssignments from "lib/components/products/ProductCategoryAssignments"
 import ProductData from "lib/components/products/ProductData"
@@ -35,17 +45,8 @@ import ProductSpecs from "lib/components/products/ProductSpecs"
 import ProductSuppliers from "lib/components/products/ProductSupllier"
 import ProductVariants from "lib/components/products/ProductVariants"
 import ProductXpInformation from "lib/components/products/ProductXpInformation"
-import {
-  ComposedProduct,
-  GetComposedProduct,
-  ProductListOptions
-} from "lib/scripts/OrdercloudService"
-import {NextSeo} from "next-seo"
-import {useRouter} from "next/router"
-import {Product, Products, RequiredDeep} from "ordercloud-javascript-sdk"
 import React from "react"
-import {useEffect, useState} from "react"
-import {FiRefreshCw, FiTrash2} from "react-icons/fi"
+import {useRouter} from "next/router"
 
 const ProductDetails = () => {
   const router = useRouter()

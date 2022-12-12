@@ -1,11 +1,16 @@
-import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 import {
-  useColorMode,
-  useColorModeValue,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Box,
-  Heading,
   Button,
+  Checkbox,
+  Collapse,
   HStack,
+  Heading,
   Table,
   TableContainer,
   Tbody,
@@ -14,32 +19,28 @@ import {
   Thead,
   Tooltip,
   Tr,
-  Collapse,
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-  useDisclosure,
-  Checkbox
+  useColorMode,
+  useColorModeValue,
+  useDisclosure
 } from "@chakra-ui/react"
+import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 import {
   ComposedProduct,
   GetComposedProduct
-} from "lib/scripts/OrdercloudService"
-import {
-  RequiredDeep,
-  Product,
-  Variant,
-  Products
-} from "ordercloud-javascript-sdk"
-import React from "react"
-import {useState} from "react"
+} from "../../services/ordercloud.service"
 import {FiMinus, FiPlus, FiRefreshCw, FiTrash2, FiZap} from "react-icons/fi"
+import {
+  Product,
+  Products,
+  RequiredDeep,
+  Variant
+} from "ordercloud-javascript-sdk"
+
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
+import React from "react"
+import {useState} from "react"
 
 type ProductDataProps = {
   composedProduct: ComposedProduct
