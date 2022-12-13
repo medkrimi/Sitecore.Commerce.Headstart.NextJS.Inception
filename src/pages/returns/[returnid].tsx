@@ -16,7 +16,6 @@ import {
   Text,
   useColorMode,
   useColorModeValue
-  Text
 } from "@chakra-ui/react"
 import {FunctionComponent, useEffect, useState} from "react"
 import {

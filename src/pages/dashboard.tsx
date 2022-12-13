@@ -16,18 +16,6 @@ import {
   useColorMode,
   useColorModeValue
 } from "@chakra-ui/react"
-import {NextSeo} from "next-seo"
-import {useRouter} from "next/router"
-import NextLink from "next/link"
-import {SetStateAction, useEffect, useState} from "react"
-
-import BrandedSpinner from "lib/components/branding/BrandedSpinner"
-import AverageOrderAmount from "lib/components/analytics/AverageOrderAmount"
-import TodaysMoney from "lib/components/analytics/PercentChangeTile"
-import TodaysUsers from "lib/components/analytics/PercentChangeTile"
-import NewClients from "lib/components/analytics/PercentChangeTile"
-import TotalSales from "lib/components/analytics/PercentChangeTile"
-import formatShortPrice from "lib/utils/formatShortPrice"
 import {
   HiOutlineCurrencyDollar,
   HiOutlineFolderOpen,
@@ -35,15 +23,25 @@ import {
   HiOutlineUserCircle
 } from "react-icons/hi"
 import {useEffect, useState} from "react"
-
 import AverageOrderAmount from "lib/components/analytics/AverageOrderAmount"
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import Card from "lib/components/card/Card"
-import {GetAuthenticationStatus} from "lib/scripts/OrdercloudService"
-import {dashboardService} from "lib/services/dashboard.service"
-import {ordersService} from "lib/services/orders.service"
-import {productsService} from "lib/services/products.service"
-import {promotionsService} from "lib/services/promotions.service"
+import {GetAuthenticationStatus} from "../lib/services/ordercloud.service"
+import NewClients from "lib/components/analytics/PercentChangeTile"
+import NextLink from "next/link"
+import {NextSeo} from "next-seo"
+import TodaysMoney from "lib/components/analytics/PercentChangeTile"
+import TodaysUsers from "lib/components/analytics/PercentChangeTile"
+import TotalSales from "lib/components/analytics/PercentChangeTile"
+import {priceHelper} from "lib/utils/price.utils"
+import {useRouter} from "next/router"
+
+import {
+  dashboardService,
+  ordersService,
+  productsService,
+  promotionsService
+} from "lib/api"
 
 const Dashboard = () => {
   const {push} = useRouter()
@@ -198,7 +196,7 @@ const Dashboard = () => {
                         <Link>
                           <TodaysMoney
                             title="todays money"
-                            totalamount={` ${formatShortPrice(
+                            totalamount={` ${priceHelper.formatShortPrice(
                               totalTodaysSales
                             )}`}
                             percentchange={previousTodaysSales}
@@ -220,7 +218,9 @@ const Dashboard = () => {
                         <Link>
                           <TotalSales
                             title="total sales"
-                            totalamount={` ${formatShortPrice(totalSales)}`}
+                            totalamount={` ${priceHelper.formatShortPrice(
+                              totalSales
+                            )}`}
                             percentchange={percentSales}
                             percentchangetype={percentSalesChange}
                             percentlabel="Compared to last year  (ytd)"

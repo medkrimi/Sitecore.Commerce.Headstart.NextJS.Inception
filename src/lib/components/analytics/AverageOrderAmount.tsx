@@ -107,7 +107,7 @@ export default function AverageOrderAmount() {
         </Text>
       </Flex>
       <Box w="100%" h={{sm: "100%", xl: "330px"}} ps="8px">
-        {/* <LineChart chartData={series} chartOptions={options} /> */}
+        <LineChart chartData={series} chartOptions={options} />
       </Box>
     </Card>
   )

@@ -1,35 +1,15 @@
 import React from "react"
 import dynamic from "next/dynamic"
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {ssr: false})
-//import { Props as ApexChartProps } from "react-apexcharts";
-class LineChart extends React.Component {
-  constructor(props) {
-    super(props)
 
-    this.state = {
-      chartData: [],
-      chartOptions: {}
-    }
-  }
-
-  componentDidMount() {
-    this.setState({
-      chartData: (this.props as any).chartData,
-      chartOptions: (this.props as any).chartOptions
-    })
-  }
-
-  render() {
-    return (
-      <ReactApexChart
-        options={(this.state as any).chartOptions}
-        series={(this.state as any).chartData}
-        type="line"
-        width="100%"
-        height="100%"
-      />
-    )
-  }
+export default function LineChart(props) {
+  return (
+    <ReactApexChart
+      options={props.chartOptions}
+      series={props.chartData}
+      type="line"
+      width="100%"
+      height="100%"
+    />
+  )
 }
-
-export default LineChart
