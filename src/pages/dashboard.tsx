@@ -18,18 +18,8 @@ import {
 import {NextSeo} from "next-seo"
 import {useRouter} from "next/router"
 import NextLink from "next/link"
-import {useEffect, useState} from "react"
-import {
-  Buyers,
-  Catalogs,
-  Orders,
-  PriceSchedules,
-  Products,
-  Promotions,
-  Specs,
-  Suppliers,
-  Users
-} from "ordercloud-javascript-sdk"
+import {SetStateAction, useEffect, useState} from "react"
+
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import AverageOrderAmount from "lib/components/analytics/AverageOrderAmount"
 import TodaysMoney from "lib/components/analytics/PercentChangeTile"
@@ -45,21 +35,37 @@ import {
 } from "react-icons/hi"
 import Card from "lib/components/card/Card"
 import {GetAuthenticationStatus} from "lib/scripts/OrdercloudService"
+import {dashboardService} from "lib/services/dashboard.service"
+import {ordersService} from "lib/services/orders.service"
+import {productsService} from "lib/services/products.service"
+import {promotionsService} from "lib/services/promotions.service"
 
 const Dashboard = () => {
   const {push} = useRouter()
   const {colorMode, toggleColorMode} = useColorMode()
-  const [orderCloudData, setOrdercloudData] = useState({
-    Products: null,
-    Catalogs: null,
-    Promotions: null,
-    Buyers: -1,
-    Prices: null,
-    Specs: null,
-    Supplier: null,
-    Orders: null
-  })
+
+  const [orders, setOrders] = useState([])
+  const [products, setProducts] = useState([])
+  const [promotions, setPromotions] = useState([])
+
+  const [totalTodaysSales, settotalTodaysSales] = useState(Number)
+  const [previousTodaysSales, setpreviousTodaysSales] = useState(Number)
+  const [percentTodaysSalesChange, setpercentTodaysSalesChange] =
+    useState(String)
+  const [totalSales, settotalSales] = useState(Number)
+  const [percentSales, setpercentSales] = useState(Number)
+  const [percentSalesChange, setpercentSalesChange] = useState(String)
+  const [totalUsers, settotalUsers] = useState(Number)
+  const [percentTotalUsers, setpercentTotalUsers] = useState(Number)
+  const [percentTotalUsersChange, setpercentTotalUsersChange] = useState(String)
+  const [totalNewUsers, settotalNewUsers] = useState(Number)
+  const [percentNewUsers, setpercentNewUsers] = useState(Number)
+  const [percentNewUsersChange, setpercentNewUsersChange] = useState(String)
+
+  const [dashboardListMeta, setDashboardMeta] = useState({})
+
   const boxBgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
+
   useEffect(() => {
     let state = GetAuthenticationStatus()
 
@@ -67,117 +73,87 @@ const Dashboard = () => {
       push("/")
     }
 
-    // Can be refactored to use Redux as well like with products
-    async function LoadOrdercloudData() {
-      if (!state?.isAnonymous) {
-        var products = await Products.List()
-          .then((response) => {
-            return response.Items
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-        var promotions = await Promotions.List()
-          .then((response) => {
-            return response.Items
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-        var prices = await PriceSchedules.List()
-          .then((response) => {
-            return response.Items
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-        var catalogs = await Catalogs.List()
-          .then((response) => {
-            return response.Items
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-        var specs = await Specs.List()
-          .then((response) => {
-            return response.Items
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-        var supplier = await Suppliers.List()
-          .then((response) => {
-            return response.Items
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-        // Need to make this the me endpoint if they are a user other than admin
-        var orders = await Orders.List("All")
-          .then((response) => {
-            return response.Items
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-        var buyers = await Buyers.List()
-          .then(async (response) => {
-            var sumBuyerSeller = 0
-            await Promise.all(
-              response.Items.map(async (element, key) => {
-                var buserSeller = await Users.List(element.ID)
-                sumBuyerSeller += buserSeller.Items.length
-              })
-            )
-            return sumBuyerSeller
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-
-        setOrdercloudData((v) => ({
-          ...v,
-          ["Products"]: products,
-          ["Promotions"]: promotions,
-          ["Prices"]: prices,
-          ["Catalogs"]: catalogs,
-          ["Specs"]: specs,
-          ["Supplier"]: supplier,
-          ["Orders"]: orders,
-          ["Buyers"]: buyers as number
-        }))
-      }
-    }
-
-    LoadOrdercloudData()
-    // dispatch(setListOptions(options))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    initDashboardData()
   }, [])
+
+  async function initDashboardData() {
+    let _dashboardListMeta = {}
+    const ordersList = await ordersService.getAll()
+    const productsList = await productsService.getAll()
+    const promotionsList = await promotionsService.getAll()
+
+    //Todays Sales
+    const todaysSales = await dashboardService.getTodaysSales()
+    settotalTodaysSales(todaysSales)
+    const previousTodaysSales = await dashboardService.getPreviousTodaysSales()
+    const percentChange =
+      ((todaysSales - previousTodaysSales) / todaysSales) * 100.0
+    setpreviousTodaysSales(percentChange)
+
+    let percentChangeToday = "pos"
+    if (todaysSales < previousTodaysSales) {
+      percentChangeToday = "neg"
+    }
+    setpercentTodaysSalesChange(percentChangeToday)
+
+    //Total Sales
+    const totalSales = await dashboardService.getTotalSales()
+    settotalSales(totalSales)
+
+    const previousTotalSales = await dashboardService.getPreviousTotalSales()
+    const percentChangeTotalSales =
+      ((totalSales - previousTotalSales) / totalSales) * 100.0
+    setpercentSales(percentChangeTotalSales)
+
+    let percentChangeTotal = "pos"
+    if (totalSales < previousTotalSales) {
+      percentChangeTotal = "neg"
+    }
+    setpercentSalesChange(percentChangeTotal)
+
+    //Total Users
+    const totalUsers = await dashboardService.getTotalUsers()
+    settotalUsers(totalUsers)
+
+    const previousTotalUsers = await dashboardService.getPreviousTotalUsers()
+    const percentChangeTotalUsers =
+      ((totalUsers - previousTotalUsers) / totalUsers) * 100.0
+    setpercentTotalUsers(percentChangeTotalUsers)
+
+    let percentChangeUsers = "pos"
+    if (totalUsers < previousTotalUsers) {
+      percentChangeUsers = "neg"
+    }
+    setpercentTotalUsersChange(percentChangeUsers)
+
+    //Total New Users
+    const totalNewUsers = await dashboardService.getTotalNewUsers()
+    settotalNewUsers(totalNewUsers)
+
+    const previousTotalNewUsers =
+      await dashboardService.getPreviousTotalNewUsers()
+    const percentChangeTotalNewUsers =
+      ((totalNewUsers - previousTotalNewUsers) / totalNewUsers) * 100.0
+    setpercentNewUsers(percentChangeTotalNewUsers)
+
+    let percentChangeNewUsers = "pos"
+    if (totalNewUsers < previousTotalNewUsers) {
+      percentChangeNewUsers = "neg"
+    }
+    setpercentNewUsersChange(percentChangeNewUsers)
+
+    setDashboardMeta(_dashboardListMeta)
+    //setBuyers(buyersList.Items)
+    setOrders(ordersList.Items)
+    setProducts(productsList.Items)
+    setPromotions(promotionsList.Items)
+  }
 
   const gradient =
     colorMode === "light"
       ? "linear(to-t, brand.300, brand.400)"
       : "linear(to-t, brand.600, brand.500)"
   const color = useColorModeValue("boxTextColor.900", "boxTextColor.100")
-
-  const d = new Date()
-  let month = d.getMonth()
-  let year = d.getFullYear()
-
-  var totalTodaysSales = 0
-  var percentTodaysSales = 0
-  var percentTodaysSalesChange = 0 > 0 ? "pos" : "neg"
-  var totalSales = 0
-  var percentSales = 0
-  var percentSalesChange = 0 > 0 ? "pos" : "neg"
-  var totalUsers =
-    0 * parseInt(process.env.NEXT_PUBLIC_AnalyticsCostUserMultiplier)
-  var percentTotalUsers = 0
-  var percentTotalUsersChange = 0 > 0 ? "pos" : "neg"
-  var totalNewUsers =
-    0 * parseInt(process.env.NEXT_PUBLIC_AnalyticsCostNewUserMultiplier)
-  var percentNewUsers = 0
-  var percentNewUsersChange = 0 > 0 ? "pos" : "neg"
 
   return (
     <Flex
@@ -191,96 +167,117 @@ const Dashboard = () => {
       width="100%"
     >
       <NextSeo title="Dashboard" />
-      <VStack as="header" width="full" align="center">
+      <VStack as="section" width="full" align="center">
         <HStack as="section" w="100%" p="3">
           <Container maxW="full" fontSize="x-small" fontWeight="normal">
-            <HStack as="section" w="100%" p="2"></HStack>
-
             <SimpleGrid
               columns={{xl: 2, lg: 2, md: 1, sm: 1, base: 1}}
-              gap={{xl: 12, lg: 8, md: 4, sm: 2, base: 2}}
-              mt={4}
-              mb={4}
+              gap={{xl: 6, lg: 4, md: 2, sm: 1, base: 1}}
+              mt={{xl: 4, lg: 4, md: 2, sm: 0, base: 0}}
+              mb={0}
             >
               <GridItem>
-                <HStack w="full" width="100%">
-                  <Box
-                    w="full"
-                    width="100%"
-                    pr={{xl: 6, lg: 6, md: 3, sm: 2, base: 2}}
-                  >
-                    <NextLink href="#" passHref>
-                      <Link>
-                        <TodaysMoney
-                          title="todays money"
-                          totalamount={` ${formatShortPrice(totalTodaysSales)}`}
-                          percentchange={percentTodaysSales}
-                          percentchangetype={percentTodaysSalesChange}
-                          percentlabel="Since last month"
-                          icon={<Icon as={HiOutlineFolderOpen} />}
-                        />
-                      </Link>
-                    </NextLink>
-                  </Box>
-                  <Box
-                    w="full"
-                    width="100%"
-                    pl={{xl: 6, lg: 6, md: 3, sm: 2, base: 2}}
-                  >
-                    <NextLink href="#" passHref>
-                      <Link>
-                        <TodaysUsers
-                          title="todays users"
-                          totalamount={` ${formatShortPrice(totalUsers)}`}
-                          percentchange={percentTotalUsers}
-                          percentchangetype={percentTotalUsersChange}
-                          percentlabel="Since last month"
-                          icon={<Icon as={HiOutlineUserCircle} />}
-                        />
-                      </Link>
-                    </NextLink>
-                  </Box>
-                </HStack>
-                <HStack w="full" width="100%" pt={12} pb={12}>
-                  <Box
-                    w="full"
-                    width="100%"
-                    pr={{xl: 6, lg: 6, md: 3, sm: 2, base: 2}}
-                  >
-                    <NextLink href="#" passHref>
-                      <Link>
-                        <NewClients
-                          title="new clients"
-                          totalamount={` ${formatShortPrice(totalNewUsers)}`}
-                          percentchange={percentNewUsers}
-                          percentchangetype={percentNewUsersChange}
-                          percentlabel="Since last month"
-                          icon={<Icon as={HiOutlineUserAdd} />}
-                        />
-                      </Link>
-                    </NextLink>
-                  </Box>
-                  <Box
-                    w="full"
-                    width="100%"
-                    pl={{xl: 6, lg: 6, md: 3, sm: 2, base: 2}}
-                  >
-                    <NextLink href="#" passHref>
-                      <Link>
-                        <TotalSales
-                          title="total sales"
-                          totalamount={` ${formatShortPrice(totalSales)}`}
-                          percentchange={percentSales}
-                          percentchangetype={percentSalesChange}
-                          percentlabel="Compared to last year"
-                          icon={<Icon as={HiOutlineCurrencyDollar} />}
-                        />
-                      </Link>
-                    </NextLink>
-                  </Box>
-                </HStack>
+                <SimpleGrid
+                  columns={{xl: 2, lg: 2, md: 1, sm: 1, base: 1}}
+                  gap={{xl: 6, lg: 4, md: 2, sm: 0, base: 0}}
+                  mt={{xl: 4, lg: 4, md: 2, sm: 0, base: 0}}
+                  mb={0}
+                >
+                  <GridItem>
+                    <Box
+                      w="full"
+                      width="100%"
+                      pr={{xl: 2, lg: 2, md: 0, sm: 0, base: 0}}
+                    >
+                      <NextLink href="#" passHref>
+                        <Link>
+                          <TodaysMoney
+                            title="todays money"
+                            totalamount={` ${formatShortPrice(
+                              totalTodaysSales
+                            )}`}
+                            percentchange={previousTodaysSales}
+                            percentchangetype={percentTodaysSalesChange}
+                            percentlabel="Compared to last month (mtd)"
+                            icon={<Icon as={HiOutlineFolderOpen} />}
+                          />
+                        </Link>
+                      </NextLink>
+                    </Box>
+                  </GridItem>
+                  <GridItem>
+                    <Box
+                      w="full"
+                      width="100%"
+                      pl={{xl: 2, lg: 2, md: 0, sm: 0, base: 0}}
+                    >
+                      <NextLink href="#" passHref>
+                        <Link>
+                          <TotalSales
+                            title="total sales"
+                            totalamount={` ${formatShortPrice(totalSales)}`}
+                            percentchange={percentSales}
+                            percentchangetype={percentSalesChange}
+                            percentlabel="Compared to last year  (ytd)"
+                            icon={<Icon as={HiOutlineCurrencyDollar} />}
+                          />
+                        </Link>
+                      </NextLink>
+                    </Box>
+                  </GridItem>
+                </SimpleGrid>
+                <SimpleGrid
+                  columns={{xl: 2, lg: 2, md: 1, sm: 1, base: 1}}
+                  gap={{xl: 6, lg: 4, md: 2, sm: 0, base: 0}}
+                  mt={{xl: 4, lg: 4, md: 2, sm: 0, base: 0}}
+                  mb={0}
+                >
+                  <GridItem>
+                    <Box
+                      w="full"
+                      width="100%"
+                      pr={{xl: 2, lg: 2, md: 0, sm: 0, base: 0}}
+                    >
+                      <NextLink href="#" passHref>
+                        <Link>
+                          <NewClients
+                            title="new users"
+                            totalamount={totalNewUsers}
+                            percentchange={percentNewUsers}
+                            percentchangetype={percentNewUsersChange}
+                            percentlabel="Compared to last month (mtd)"
+                            icon={<Icon as={HiOutlineUserAdd} />}
+                          />
+                        </Link>
+                      </NextLink>
+                    </Box>
+                  </GridItem>
+                  <GridItem>
+                    <Box
+                      w="full"
+                      width="100%"
+                      pl={{xl: 2, lg: 2, md: 0, sm: 0, base: 0}}
+                    >
+                      <NextLink href="#" passHref>
+                        <Link>
+                          <TodaysUsers
+                            title="total users"
+                            totalamount={totalUsers}
+                            percentchange={percentTotalUsers}
+                            percentchangetype={percentTotalUsersChange}
+                            percentlabel="Compared to last year  (ytd)"
+                            icon={<Icon as={HiOutlineUserCircle} />}
+                          />
+                        </Link>
+                      </NextLink>
+                    </Box>
+                  </GridItem>
+                </SimpleGrid>
               </GridItem>
-              <GridItem pb={12}>
+              <GridItem
+                mt={{xl: 4, lg: 4, md: 2, sm: 0, base: 0}}
+                mb={{xl: 4, lg: 4, md: 2, sm: 4, base: 4}}
+              >
                 <NextLink href="#" passHref>
                   <Link>
                     <AverageOrderAmount />
@@ -290,11 +287,11 @@ const Dashboard = () => {
             </SimpleGrid>
             <SimpleGrid
               columns={{xl: 4, lg: 2, md: 2, sm: 1, base: 1}}
-              gap={{xl: 12, lg: 8, md: 4, sm: 2, base: 2}}
-              mt={4}
-              mb={4}
+              gap={{xl: 6, lg: 4, md: 2, sm: 1, base: 1}}
+              mt={0}
+              mb={{xl: 4, lg: 4, md: 2, sm: 0, base: 0}}
             >
-              <GridItem>
+              <GridItem mb={{xl: 0, lg: 0, md: 2, sm: 2, base: 2}}>
                 <NextLink href="/products" passHref>
                   <Link>
                     <Card
@@ -311,9 +308,18 @@ const Dashboard = () => {
                       >
                         <Heading size="md">
                           Products
-                          <Text as="span" pl="8px">
-                            {orderCloudData.Products != null ? (
-                              <i>({orderCloudData.Products.length})</i>
+                          <Text
+                            as="span"
+                            pl={{
+                              xl: "8px",
+                              lg: "8px",
+                              md: "0px",
+                              sm: "0px",
+                              base: "0px"
+                            }}
+                          >
+                            {products != null ? (
+                              <i>({products.length})</i>
                             ) : (
                               <Box pt={2}>
                                 <BrandedSpinner />
@@ -330,7 +336,7 @@ const Dashboard = () => {
                   </Link>
                 </NextLink>
               </GridItem>
-              <GridItem>
+              <GridItem mb={{xl: 0, lg: 0, md: 2, sm: 2, base: 2}}>
                 <NextLink href="/orders" passHref>
                   <Link>
                     <Card
@@ -347,9 +353,18 @@ const Dashboard = () => {
                       >
                         <Heading size="md">
                           Orders
-                          <Text as="span" pl="8px">
-                            {orderCloudData.Orders != null ? (
-                              <i>({orderCloudData.Orders.length})</i>
+                          <Text
+                            as="span"
+                            pl={{
+                              xl: "8px",
+                              lg: "8px",
+                              md: "0px",
+                              sm: "0px",
+                              base: "0px"
+                            }}
+                          >
+                            {orders != null ? (
+                              <i>({orders.length})</i>
                             ) : (
                               <Box pt={2}>
                                 <BrandedSpinner />
@@ -363,7 +378,7 @@ const Dashboard = () => {
                   </Link>
                 </NextLink>
               </GridItem>
-              <GridItem>
+              <GridItem mb={{xl: 0, lg: 0, md: 2, sm: 2, base: 2}}>
                 <NextLink href="/users" passHref>
                   <Link>
                     <Card
@@ -377,12 +392,22 @@ const Dashboard = () => {
                         w="100%"
                         width="full"
                         p="26px"
+                        direction={{base: "column", md: "row"}}
                       >
                         <Heading size="md">
                           Users
-                          <Text as="span" pl="8px">
-                            {orderCloudData.Buyers != -1 ? (
-                              <i>({orderCloudData.Buyers})</i>
+                          <Text
+                            as="span"
+                            pl={{
+                              xl: "8px",
+                              lg: "8px",
+                              md: "0px",
+                              sm: "0px",
+                              base: "0px"
+                            }}
+                          >
+                            {totalUsers != null ? (
+                              <i>({totalUsers})</i>
                             ) : (
                               <Box pt={2}>
                                 <BrandedSpinner />
@@ -396,7 +421,7 @@ const Dashboard = () => {
                   </Link>
                 </NextLink>
               </GridItem>
-              <GridItem>
+              <GridItem mb={{xl: 0, lg: 0, md: 2, sm: 2, base: 2}}>
                 <NextLink href="/promotions" passHref>
                   <Link>
                     <Card
@@ -413,9 +438,18 @@ const Dashboard = () => {
                       >
                         <Heading size="md">
                           Promotions
-                          <Text as="span" pl="8px">
-                            {orderCloudData.Promotions != null ? (
-                              <i>({orderCloudData.Promotions.length})</i>
+                          <Text
+                            as="span"
+                            pl={{
+                              xl: "8px",
+                              lg: "8px",
+                              md: "0px",
+                              sm: "0px",
+                              base: "0px"
+                            }}
+                          >
+                            {promotions != null ? (
+                              <i>({promotions.length})</i>
                             ) : (
                               <Box pt={2}>
                                 <BrandedSpinner />

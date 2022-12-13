@@ -141,6 +141,12 @@ export async function Login(
   if (remember && response.refresh_token) {
     Tokens.SetRefreshToken(response.refresh_token)
   }
+
+  const user = Me.Get()
+  localStorage.setItem(
+    "usersname",
+    JSON.stringify((await user).FirstName + " " + (await user).LastName)
+  )
 }
 
 export async function Logout() {

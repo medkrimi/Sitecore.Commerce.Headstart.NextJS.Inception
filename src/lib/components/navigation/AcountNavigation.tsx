@@ -27,7 +27,6 @@ import {
 } from "@chakra-ui/react"
 import NextLink from "next/link"
 import {BsSun, BsMoonStarsFill} from "react-icons/bs"
-import {Me, RequiredDeep} from "ordercloud-javascript-sdk"
 
 import {HiOutlineBell, HiOutlineCog} from "react-icons/hi"
 import {ChevronDownIcon} from "@chakra-ui/icons"
@@ -37,6 +36,7 @@ import Cookies from "universal-cookie"
 import {Logout} from "lib/scripts/OrdercloudService"
 
 const MobileNavigation = () => {
+  let usersName = JSON.parse(localStorage.getItem("usersname"))
   let menuBg = useColorModeValue("white", "navy.800")
   const {isOpen, onOpen, onClose} = useDisclosure()
   const btnRef = React.useRef()
@@ -102,15 +102,16 @@ const MobileNavigation = () => {
         <MenuButton>
           <HStack>
             <Avatar
-              name="Chris Janning"
-              src="/images/avatars/avatar1.png"
+              name={usersName}
+              src={`https://robohash.org/{usersName}.png`}
               borderRadius="50%"
-              mr="10px"
-              ml="30px"
-              size="sm"
+              mr="0"
+              ml="15px"
+              size="md"
+              border=".5px solid #ccc"
             />
             <Show breakpoint="(min-width: 900px)">
-              <Text fontSize="12px">Chris Janning</Text>
+              <Text fontSize="12px">{usersName}</Text>
               <ChevronDownIcon ml="10px" />
             </Show>
           </HStack>

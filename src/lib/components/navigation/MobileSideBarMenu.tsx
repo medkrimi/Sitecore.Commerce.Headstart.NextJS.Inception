@@ -24,7 +24,7 @@ const MobileSideBarMenu = () => {
   return (
     <>
       <Flex
-        pos="sticky"
+        //pos="sticky"
         left="0"
         h="95vh"
         marginTop="5px"
@@ -33,7 +33,7 @@ const MobileSideBarMenu = () => {
         w="75px"
         ml="0"
         flexDir="column"
-        justifyContent="space-between"
+        justifyContent="flex-start"
         background="brand.500"
         color="white"
       >

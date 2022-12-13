@@ -196,7 +196,7 @@ const OrdersPage = () => {
           </Thead>
           <Tbody>{ordersContent}</Tbody>
         </Table>
-        {loadMoreButton}
+        {/* {loadMoreButton} */}
       </Card>
       <AlertDialog
         isOpen={isExportCSVDialogOpen}

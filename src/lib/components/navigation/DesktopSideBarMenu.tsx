@@ -29,7 +29,7 @@ const DesktopSideBarMenu = () => {
   return (
     <>
       <Flex
-        pos="sticky"
+        //pos="sticky"
         left="0"
         h="95vh"
         marginTop="5px"
@@ -38,7 +38,7 @@ const DesktopSideBarMenu = () => {
         w={navSize == "small" ? "75px" : "220px"}
         ml={navSize == "small" ? "0" : "25px"}
         flexDir="column"
-        justifyContent="space-between"
+        justifyContent="flex-start"
         background={sidebarBg}
         color={color}
       >

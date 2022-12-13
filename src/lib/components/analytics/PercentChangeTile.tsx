@@ -7,7 +7,7 @@ export default function PercentChangeTitle(prop) {
   const bgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
   const headingColor = useColorModeValue("boxTextColor.400", "boxTextColor.300")
   return (
-    <Card p="28px 10px 0px 0px" mb={{sm: "26px", lg: "0px"}} bg={bgColor}>
+    <Card p="28px 10px 0px 0px" mb={{sm: "0px", lg: "0px"}} bg={bgColor}>
       <Flex direction="column" mb="20px" p="22px" alignSelf="flex-start">
         <Text
           fontSize="lg"

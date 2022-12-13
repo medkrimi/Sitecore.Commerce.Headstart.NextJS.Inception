@@ -14,7 +14,6 @@ import {
   Link,
   Spacer,
   useColorMode,
-  useColorModeValue,
   Text
 } from "@chakra-ui/react"
 import {NextSeo} from "next-seo"
@@ -37,24 +36,6 @@ const OrderReturnDetailPage: FunctionComponent = () => {
   const router = useRouter()
   const [orderReturn, setOrderReturn] = useState({} as OrderReturn)
   const [itemsToReturn, setItemsToReturn] = useState([])
-  const boxBgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
-  const buttonPrimary = useColorModeValue("black", "brand.500")
-  const buttonSecondary = useColorModeValue("white", "black")
-  const {colorMode, toggleColorMode} = useColorMode()
-  const shadow = "5px 5px 5px #999999"
-  const gradient =
-    colorMode === "light"
-      ? "linear(to-t, brand.300, brand.400)"
-      : "linear(to-t, brand.600, brand.500)"
-  const hoverColor = useColorModeValue("brand.300", "brand.400")
-  const focusColor = useColorModeValue("brand.300", "brand.400")
-  const colorSheme = "gray"
-  const colorPrimary = useColorModeValue("white", "black")
-  const colorSecondary = useColorModeValue(
-    "boxTextColor.900",
-    "boxTextColor.100"
-  )
-  const tileBg = useColorModeValue("tileBg.500", "tileBg.900")
 
   useEffect(() => {
     const getOrderReturn = async () => {

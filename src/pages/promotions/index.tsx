@@ -42,8 +42,6 @@ import {
   OcAuthState
 } from "lib/scripts/OrdercloudService"
 import formatStatus from "lib/utils/formatStatus"
-import LettersCard from "lib/components/card/LettersCard"
-import formatTextTruncate from "lib/utils/formatTextTruncate"
 import {ChevronDownIcon} from "@chakra-ui/icons"
 import Card from "lib/components/card/Card"
 import {HiOutlineMinusSm} from "react-icons/hi"
@@ -183,7 +181,7 @@ const PromotionsPage = () => {
           </Thead>
           <Tbody>{promotionsContent}</Tbody>
         </Table>
-        {loadMoreButton}
+        {/* {loadMoreButton} */}
       </Card>
       <AlertDialog
         isOpen={isExportCSVDialogOpen}
