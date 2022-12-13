@@ -1,39 +1,39 @@
 import {
-  Badge,
-  Container,
-  Flex,
-  Text,
-  Divider,
-  IconButton,
-  Box,
-  Tbody,
-  Table,
-  Td,
-  Tr,
-  Button,
   AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
   AlertDialogBody,
+  AlertDialogContent,
   AlertDialogFooter,
-  Textarea,
-  useToast,
-  Spinner,
-  useColorModeValue,
-  useColorMode,
-  HStack,
-  Heading,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Badge,
+  Box,
+  Button,
+  Container,
+  Divider,
+  Flex,
   Grid,
   GridItem,
-  VStack,
+  HStack,
+  Heading,
+  IconButton,
   Input,
-  Link
+  Link,
+  Spinner,
+  Table,
+  Tbody,
+  Td,
+  Text,
+  Textarea,
+  Tr,
+  VStack,
+  useColorMode,
+  useColorModeValue,
+  useToast
 } from "@chakra-ui/react"
-import {formatDate} from "lib/utils/formatDate"
-import {NextSeo} from "next-seo"
-import {useRouter} from "next/router"
-import NextLink from "next/link"
+import {
+  GetAuthenticationStatus,
+  OcAuthState
+} from "../../lib/services/ordercloud.service"
 import {
   IntegrationEvents,
   OrderReturn,
@@ -42,16 +42,16 @@ import {
   Orders
 } from "ordercloud-javascript-sdk"
 import React, {FunctionComponent, useEffect, useRef, useState} from "react"
+import {dateHelper, priceHelper} from "lib/utils/"
+
 import AddressCard from "../../lib/components/card/AddressCard"
-import formatPrice from "lib/utils/formatPrice"
-import {
-  GetAuthenticationStatus,
-  OcAuthState
-} from "lib/scripts/OrdercloudService"
-import OcLineItemList from "lib/components/shoppingcart/OcLineItemList"
-import {HiOutlineMinusSm} from "react-icons/hi"
 import Card from "lib/components/card/Card"
+import {HiOutlineMinusSm} from "react-icons/hi"
 import LettersCard from "lib/components/card/LettersCard"
+import NextLink from "next/link"
+import {NextSeo} from "next-seo"
+import OcLineItemList from "lib/components/shoppingcart/OcLineItemList"
+import {useRouter} from "next/router"
 
 const OrderConfirmationPage: FunctionComponent = () => {
   const [authState, setAuthState] = useState<OcAuthState>()
@@ -267,7 +267,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
                   <Text width="full">Order Placed</Text>
                   <Input
                     placeholder="Order Placed"
-                    defaultValue={formatDate(
+                    defaultValue={dateHelper.formatDate(
                       orderWorksheet.Order.DateSubmitted
                     )}
                   ></Input>
@@ -314,7 +314,9 @@ const OrderConfirmationPage: FunctionComponent = () => {
                             <Td>Subtotal</Td>
                             <Td textAlign="right">
                               <Text fontWeight="bold">
-                                {formatPrice(orderWorksheet.Order.Subtotal)}
+                                {priceHelper.formatPrice(
+                                  orderWorksheet.Order.Subtotal
+                                )}
                               </Text>
                             </Td>
                           </Tr>
@@ -323,7 +325,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
                             <Td textAlign="right">
                               <Text fontWeight="bold">
                                 -
-                                {formatPrice(
+                                {priceHelper.formatPrice(
                                   orderWorksheet.Order.PromotionDiscount
                                 )}
                               </Text>
@@ -333,7 +335,9 @@ const OrderConfirmationPage: FunctionComponent = () => {
                             <Td>Shipping</Td>
                             <Td textAlign="right">
                               <Text fontWeight="bold">
-                                {formatPrice(orderWorksheet.Order.ShippingCost)}
+                                {priceHelper.formatPrice(
+                                  orderWorksheet.Order.ShippingCost
+                                )}
                               </Text>
                             </Td>
                           </Tr>
@@ -341,7 +345,9 @@ const OrderConfirmationPage: FunctionComponent = () => {
                             <Td>Tax</Td>
                             <Td textAlign="right">
                               <Text fontWeight="bold">
-                                {formatPrice(orderWorksheet.Order.TaxCost)}
+                                {priceHelper.formatPrice(
+                                  orderWorksheet.Order.TaxCost
+                                )}
                               </Text>
                             </Td>
                           </Tr>
@@ -349,7 +355,9 @@ const OrderConfirmationPage: FunctionComponent = () => {
                             <Td>Order Total</Td>
                             <Td textAlign="right">
                               <Text fontWeight="bold">
-                                {formatPrice(orderWorksheet.Order.Total)}
+                                {priceHelper.formatPrice(
+                                  orderWorksheet.Order.Total
+                                )}
                               </Text>
                             </Td>
                           </Tr>
@@ -393,7 +401,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
                 refund the balance of
               </Text>{" "}
               <Text display="inline" color="brand.500" fontWeight="bold">
-                {formatPrice(orderWorksheet.Order.Total)}
+                {priceHelper.formatPrice(orderWorksheet.Order.Total)}
               </Text>
               <Textarea
                 marginTop={8}

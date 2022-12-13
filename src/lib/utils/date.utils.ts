@@ -1,5 +1,10 @@
 import {format} from "date-fns"
 
+export const dateHelper = {
+  formatDate,
+  formatCreditCardDate
+}
+
 /**
  * Formats an iso date (such as one from OrderCloud)
  * to a user friendly date/time
@@ -7,7 +12,7 @@ import {format} from "date-fns"
  *
  * https://date-fns.org/v2.29.2/docs/format
  */
-export function formatDate(isoDateString: string) {
+function formatDate(isoDateString: string) {
   const date = new Date(isoDateString)
   const formattedDate = format(date, "MMMM do 'at' h:mmaaa")
   return formattedDate
@@ -20,7 +25,7 @@ export function formatDate(isoDateString: string) {
  *
  * https://date-fns.org/v2.29.2/docs/format
  */
-export function formatCreditCardDate(isoDateString: string) {
+function formatCreditCardDate(isoDateString: string) {
   const date = new Date(isoDateString)
   const formattedDate = format(date, "MM/yy")
   return formattedDate

@@ -1,6 +1,6 @@
 import {Box, Flex, HStack, Link} from "@chakra-ui/react"
 
-import {Logout} from "lib/scripts/OrdercloudService"
+import {Logout} from "../../services/ordercloud.service"
 import NextLink from "next/link"
 
 const MainNavigation = () => {

@@ -1,7 +1,8 @@
-import {FunctionComponent} from "react"
 import {Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react"
+
+import {FunctionComponent} from "react"
 import {OrderReturnItem} from "ordercloud-javascript-sdk"
-import formatPrice from "lib/utils/formatPrice"
+import {priceHelper} from "../../utils/price.utils"
 
 interface OcOrderReturnItemListProps {
   itemsToReturn: OrderReturnItem[]
@@ -26,7 +27,7 @@ const OcOrderReturnItemList: FunctionComponent<OcOrderReturnItemListProps> = ({
             <Tr key={item.LineItemID}>
               <Td>{item.LineItemID}</Td>
               <Td>{item.Quantity}</Td>
-              <Td>{formatPrice(item.RefundAmount)}</Td>
+              <Td>{priceHelper.formatPrice(item.RefundAmount)}</Td>
               <Td>{item.Comments}</Td>
             </Tr>
           ))}

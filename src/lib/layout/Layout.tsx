@@ -1,12 +1,22 @@
-import {Box, HStack, Flex} from "@chakra-ui/react"
-import {ReactNode, useEffect, useState} from "react"
-import Footer from "./Footer"
-import Header from "./Header"
-import LeftNavigation from "lib/components/navigation/SideNavigation"
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Box,
+  HStack,
+  StackDivider,
+  VStack
+} from "@chakra-ui/react"
 import {
   GetAuthenticationStatus,
   OcAuthState
-} from "lib/scripts/OrdercloudService"
+} from "../../lib/services/ordercloud.service"
+import {ReactNode, useEffect, useState} from "react"
+
+import Footer from "./Footer"
+import Header from "./Header"
+import LeftNavigation from "lib/components/navigation/SideNavigation"
 
 type LayoutProps = {
   children: ReactNode

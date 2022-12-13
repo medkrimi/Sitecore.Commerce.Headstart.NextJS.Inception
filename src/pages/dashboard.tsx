@@ -1,19 +1,20 @@
 /* eslint-disable react/jsx-no-undef */
+
 import {
   Box,
-  Flex,
-  Heading,
-  Text,
   Container,
-  SimpleGrid,
+  Flex,
   GridItem,
-  useColorModeValue,
   HStack,
-  VStack,
-  useColorMode,
+  Heading,
+  Icon,
   Image,
   Link,
-  Icon
+  SimpleGrid,
+  Text,
+  VStack,
+  useColorMode,
+  useColorModeValue
 } from "@chakra-ui/react"
 import {NextSeo} from "next-seo"
 import {useRouter} from "next/router"
@@ -33,6 +34,10 @@ import {
   HiOutlineUserAdd,
   HiOutlineUserCircle
 } from "react-icons/hi"
+import {useEffect, useState} from "react"
+
+import AverageOrderAmount from "lib/components/analytics/AverageOrderAmount"
+import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import Card from "lib/components/card/Card"
 import {GetAuthenticationStatus} from "lib/scripts/OrdercloudService"
 import {dashboardService} from "lib/services/dashboard.service"

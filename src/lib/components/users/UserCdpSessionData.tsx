@@ -1,28 +1,10 @@
-import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 import {
   Box,
   Button,
-  Heading,
-  HStack,
-  Tooltip,
-  useColorModeValue,
-  Text,
-  Container,
-  Flex,
-  Collapse,
-  Input,
-  Checkbox,
-  useToast,
-  ListItem,
-  UnorderedList,
-  OrderedList,
-  color,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
   Center,
+  Collapse,
+  Flex,
+  Heading,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -30,22 +12,24 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tooltip,
+  Tr,
+  useColorModeValue,
   useDisclosure
 } from "@chakra-ui/react"
-import {
-  getGuestContext,
-  getGuestRefByEmail,
-  CdpGuestModel
-} from "lib/scripts/CDPService"
-import {JsonLd} from "next-seo/lib/jsonld/jsonld"
-import Link from "next/link"
-import {User, Users} from "ordercloud-javascript-sdk"
-import React from "react"
-import {ChangeEvent, useEffect, useState} from "react"
-import {FiCheck, FiEdit, FiX} from "react-icons/fi"
+import {useEffect, useState} from "react"
+
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
+import {CdpGuestModel} from "../../services/cdp.service"
+import React from "react"
+import {User} from "ordercloud-javascript-sdk"
 
 type UserDataProps = {
   user: User

@@ -1,31 +1,32 @@
-import {ProductXPs} from "lib/types/ProductXPs"
 import {
-  Product,
-  Filters,
-  ListPageWithFacets,
-  Me,
-  Products,
-  MetaWithFacets,
-  RequiredDeep,
-  SearchType,
   ApiRole,
+  Auth,
   Configuration,
   CookieOptions,
-  Auth,
-  Tokens,
   DecodedToken,
-  Spec,
-  Specs,
-  Variant,
+  Filters,
   IntegrationEvents,
-  Payments,
+  LineItems,
+  ListPageWithFacets,
+  Me,
+  MetaWithFacets,
   Order,
   OrderWorksheet,
+  Orders,
   Payment,
-  LineItems,
-  Orders
+  Payments,
+  Product,
+  Products,
+  RequiredDeep,
+  SearchType,
+  Spec,
+  Specs,
+  Tokens,
+  Variant
 } from "ordercloud-javascript-sdk"
-import parseJwt from "../../lib/utils/parseJwt"
+
+import {ProductXPs} from "lib/types/ProductXPs"
+import parseJwt from "../utils/parseJwt"
 
 export interface ProductListOptions {
   catalogID?: string
@@ -62,26 +63,19 @@ export interface OcAuthState {
   initialized: boolean
 }
 
-const ocConfig = {
-  clientId: "4A9F0BAC-EC1D-4711-B01F-1A394F72F2B6",
-  baseApiUrl: "https://sandboxapi.ordercloud.io",
+const ocConfig: OcConfig = {
+  clientId:
+    process.env.NEXT_PUBLIC_OC_CLIENT_ID ||
+    "4A9F0BAC-EC1D-4711-B01F-1A394F72F2B6",
+  baseApiUrl:
+    process.env.NEXT_PUBLIC_OC_API_URL || "https://sandboxapi.ordercloud.io",
   scope: [
     "FullAccess",
     "Shopper",
     "MeAddressAdmin",
     "CategoryReader"
   ] as ApiRole[] /* Default user role */,
-  allowAnonymous:
-    Boolean("false") /* Whether anonymous product browsing is allowed */,
-  hostedApp: true,
-  marketplaceID: "SitecoreCommerce",
-  marketplaceName: "Sitecore Commerce",
-  appname: "Sitecore Commerce",
-  middlewareUrl: "https://localhost:5001",
-  translateBlobUrl:
-    "https://sitecorecommerce.blob.core.windows.net/ngx-translate/i18n/",
-  blobStorageUrl: "https://sitecorecommerce.blob.core.windows.net",
-  orderCloudApiUrl: "https://sandboxapi.ordercloud.io",
+  allowAnonymous: false,
   cookieOptions: null
 }
 
@@ -141,12 +135,6 @@ export async function Login(
   if (remember && response.refresh_token) {
     Tokens.SetRefreshToken(response.refresh_token)
   }
-
-  const user = Me.Get()
-  localStorage.setItem(
-    "usersname",
-    JSON.stringify((await user).FirstName + " " + (await user).LastName)
-  )
 }
 
 export async function Logout() {

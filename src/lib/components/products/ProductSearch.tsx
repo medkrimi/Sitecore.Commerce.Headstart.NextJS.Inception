@@ -1,17 +1,19 @@
-import {CheckIcon, CloseIcon, Search2Icon, SearchIcon} from "@chakra-ui/icons"
 import {
-  Text,
+  Box,
   Button,
   Center,
   Checkbox,
+  Flex,
   FormControl,
   FormLabel,
-  Heading,
-  Image,
   HStack,
+  Heading,
   Icon,
   IconButton,
+  Image,
   Input,
+  InputGroup,
+  InputLeftElement,
   Link,
   Modal,
   ModalBody,
@@ -20,51 +22,51 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
+  Slider,
+  SliderFilledTrack,
+  SliderMark,
+  SliderThumb,
+  SliderTrack,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tooltip,
   Tr,
+  VStack,
   useColorModeValue,
   useDisclosure,
-  useToast,
-  VStack,
-  Flex,
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack,
-  Box,
-  SliderMark,
-  InputGroup,
-  InputLeftElement,
-  Select
+  useToast
 } from "@chakra-ui/react"
-import {NextSeo} from "next-seo"
-import {AiOutlineSearch} from "react-icons/ai"
+import {ChangeEvent, useEffect, useState} from "react"
+import {CheckIcon, CloseIcon, Search2Icon, SearchIcon} from "@chakra-ui/icons"
 import {
-  FiRotateCcw,
-  FiPlus,
-  FiList,
-  FiCheckSquare,
   FiArrowDown,
-  FiArrowUp,
   FiArrowRight,
-  FiGrid,
-  FiEdit,
+  FiArrowUp,
+  FiCheckSquare,
   FiChevronDown,
-  FiChevronUp
+  FiChevronUp,
+  FiEdit,
+  FiGrid,
+  FiList,
+  FiPlus,
+  FiRotateCcw
 } from "react-icons/fi"
+import {Product, Products} from "ordercloud-javascript-sdk"
+
+import {AiOutlineSearch} from "react-icons/ai"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
-import {useState, ChangeEvent, useEffect} from "react"
-import {Product, Products} from "ordercloud-javascript-sdk"
-import {ProductXPs} from "lib/types/ProductXPs"
 import {CalculateEditorialProcess} from "./EditorialProgressBar"
+import {NextSeo} from "next-seo"
 import ProductGrid from "./ProductGrid"
 import ProductList from "./ProductList"
-import {ProductListOptions} from "lib/scripts/OrdercloudService"
+import {ProductListOptions} from "../../services/ordercloud.service"
+import {ProductXPs} from "lib/types/ProductXPs"
+
 //import Image from "next/image"
 
 interface ProductSearchProps {
