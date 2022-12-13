@@ -198,7 +198,7 @@ const ReturnsPage = () => {
           </Thead>
           <Tbody>{returnsContent}</Tbody>
         </Table>
-        {loadMoreButton}
+        {/* {loadMoreButton} */}
       </Card>
       <AlertDialog
         isOpen={isExportCSVDialogOpen}

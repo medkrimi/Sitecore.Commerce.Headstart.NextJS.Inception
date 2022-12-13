@@ -181,7 +181,7 @@ const PromotionsPage = () => {
           </Thead>
           <Tbody>{promotionsContent}</Tbody>
         </Table>
-        {loadMoreButton}
+        {/* {loadMoreButton} */}
       </Card>
       <AlertDialog
         isOpen={isExportCSVDialogOpen}
