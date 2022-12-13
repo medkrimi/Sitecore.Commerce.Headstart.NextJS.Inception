@@ -1,39 +1,39 @@
-import {mode} from "@chakra-ui/theme-tools"
-export const inputStyles = {
-  components: {
-    Input: {
-      baseStyle: {
-        field: {
-          fontWeight: 400,
-          borderRadius: "md"
-        }
-      },
+export const Input = {
+  baseStyle: {
+    field: {
+      fontWeight: 400,
+      borderRadius: "md"
+    }
+  },
 
-      variants: {
-        primaryInput: {
-          border: "1px",
-          bg: "#000"
-        },
-        auth: (props) => ({
-          field: {
-            bg: mode("white", "navy.700")(props),
-            border: "1px solid",
-            borderColor: mode("gray.200", "transparent")(props),
-            _placeholder: {color: mode("gray.300", "gray.400")(props)}
-          }
-        }),
-        search: (props) => ({
-          field: {
-            border: "none",
-            py: "11px",
-            borderRadius: "inherit",
-            _placeholder: {color: mode("gray.300", "gray.400")(props)}
-          }
-        })
-      },
-      defaultProps: {
-        variant: "primaryInput"
+  variants: {
+    primaryInput: {
+      // Need both root and field for Text Area and Input to style
+      bg: "inputBg",
+      border: "1px",
+      field: {
+        bg: "inputBg",
+        border: "1px"
+      }
+    },
+    auth: {
+      field: {
+        bg: "inputBg",
+        border: "1px solid",
+        borderColor: "gray.200",
+        _placeholder: "gray.300"
+      }
+    },
+    search: {
+      field: {
+        border: "none",
+        py: "11px",
+        borderRadius: "inherit",
+        _placeholder: "gray.300"
       }
     }
+  },
+  defaultProps: {
+    variant: "primaryInput"
   }
 }

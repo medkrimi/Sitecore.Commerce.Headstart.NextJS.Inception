@@ -26,15 +26,17 @@ const ProductCard = (props) => {
         <Checkbox onChange={props.onCheck(product.ID)} />
         <Spacer />
         <Spacer />
-        <Image
-          src={
-            typeof product?.xp?.Images != "undefined"
-              ? product?.xp?.Images[0]?.ThumbnailUrl
-              : "https://mss-p-006-delivery.stylelabs.cloud/api/public/content/4fc742feffd14e7686e4820e55dbfbaa"
-          }
-          alt="product image"
-          width="100px"
-        />
+        <Link href={"/products/" + product.ID}>
+          <Image
+            src={
+              typeof product?.xp?.Images != "undefined"
+                ? product?.xp?.Images[0]?.ThumbnailUrl
+                : "https://mss-p-006-delivery.stylelabs.cloud/api/public/content/4fc742feffd14e7686e4820e55dbfbaa"
+            }
+            alt="product image"
+            width="100px"
+          />
+        </Link>
         <Spacer />
         <VStack>
           <p>Active</p>
@@ -54,22 +56,27 @@ const ProductCard = (props) => {
       >
         {/* <Heading fontSize="xx-small" fontWeight='normal' color='gray.300' >NEW ARRIVALS</Heading>  */}
         <Tooltip label={product.Name}>
-          <Heading as="h3" fontSize="small">
-            {product.Name.length > 39
-              ? product.Name.substring(0, 39) + "..."
-              : product.Name}
-          </Heading>
+          <Link href={"/products/" + product.ID}>
+            <Heading as="h3" fontSize="small">
+              {product.Name.length > 39
+                ? product.Name.substring(0, 39) + "..."
+                : product.Name}
+            </Heading>
+          </Link>
         </Tooltip>
-        <Text fontSize="small" color="brand.500">
-          {stripHTML(product.Description).length > 40
-            ? stripHTML(product.Description).substring(0, 40) + "..."
-            : stripHTML(product.Description)}
-        </Text>
         <Link href={"/products/" + product.ID}>
+          <Text fontSize="small" color="brand.500">
+            {stripHTML(product.Description).length > 40
+              ? stripHTML(product.Description).substring(0, 40) + "..."
+              : stripHTML(product.Description)}
+          </Text>
+        </Link>
+        {/*         <Link href={"/products/" + product.ID}>
           <Button bg="brand.500" size="xs">
             Edit Product
           </Button>
         </Link>
+ */}
       </VStack>
     </VStack>
   )

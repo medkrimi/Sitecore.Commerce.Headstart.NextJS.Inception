@@ -34,7 +34,8 @@ import ProductPriceScheduleAssignments from "lib/components/products/ProductPric
 import ProductSpecs from "lib/components/products/ProductSpecs"
 import ProductSuppliers from "lib/components/products/ProductSupllier"
 import ProductVariants from "lib/components/products/ProductVariants"
-import ProductXpInformation from "lib/components/products/ProductXpInformation"
+import ProductXPInformation from "lib/components/products/ProductXPInformation"
+import ProductMediaInformation from "lib/components/products/ProductMediaInformation"
 import {
   ComposedProduct,
   GetComposedProduct,
@@ -55,7 +56,6 @@ const ProductDetails = () => {
   const [breadcrumb, setBreadcrumb] = useState<Breadcrumb>()
   const [isDeleting, setIsDeleting] = useState(false)
   const options: ProductListOptions = {}
-  const color = useColorModeValue("textColor.900", "textColor.200")
   const {isOpen, onOpen, onClose} = useDisclosure()
   const cancelRef = React.useRef()
 
@@ -81,7 +81,10 @@ const ProductDetails = () => {
   useEffect(() => {
     async function LoadProduct() {
       var product = await GetComposedProduct(id as string)
-      if (product?.Product) {
+      if (
+        product?.Product &&
+        composedProduct?.Product?.ID != product.Product.ID
+      ) {
         setComposedProduct(product)
       }
     }
@@ -127,7 +130,7 @@ const ProductDetails = () => {
               mb={1}
               p={18}
               w="full"
-              color={color}
+              //color={color}
             >
               <BreadcrumbNavigation breadcrumbs={breadcrumb?.items ?? null} />
             </Flex>
@@ -136,7 +139,7 @@ const ProductDetails = () => {
           )}
           <NextSeo title="Product Details" />
           <Heading
-            color={color}
+            //color={color}
             as="h1"
             size={{sm: "lg"}}
             pb={2}
@@ -148,7 +151,7 @@ const ProductDetails = () => {
           </Heading>
           <VStack justifyContent={"space-between"} px={6} width={"full"}>
             <Heading
-              color={color}
+              //color={color}
               as="h1"
               width={"full"}
               size={{base: "md", sm: "md", md: "lg", lg: "lg", xl: "xl"}}
@@ -237,7 +240,27 @@ const ProductDetails = () => {
                     setComposedProduct={setComposedProduct}
                   />
                 </GridItem>
-
+                <GridItem
+                  rowSpan={1}
+                  colSpan={{base: 6, md: 6, sm: 6, lg: 2, xl: 2}}
+                >
+                  <ProductMediaInformation
+                    composedProduct={composedProduct}
+                    setComposedProduct={setComposedProduct}
+                  />
+                </GridItem>
+                <GridItem rowSpan={1} colSpan={4}>
+                  <ProductXPInformation
+                    composedProduct={composedProduct}
+                    setComposedProduct={setComposedProduct}
+                  />
+                </GridItem>
+                <GridItem rowSpan={1} colSpan={4}>
+                  <ProductPriceScheduleAssignments
+                    composedProduct={composedProduct}
+                    setComposedProduct={setComposedProduct}
+                  />
+                </GridItem>
                 <GridItem
                   rowSpan={1}
                   colSpan={{base: 6, md: 6, sm: 6, lg: 3, xl: 2}}
@@ -249,7 +272,7 @@ const ProductDetails = () => {
                 </GridItem>
                 <GridItem
                   rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 3, xl: 3}}
+                  colSpan={{base: 6, md: 6, sm: 6, lg: 3, xl: 4}}
                 >
                   <ProductInventoryData
                     composedProduct={composedProduct}
@@ -258,23 +281,23 @@ const ProductDetails = () => {
                 </GridItem>
                 <GridItem
                   rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 2, xl: 3}}
-                >
-                  <ProductXpInformation
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
-                </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 4, xl: 6}}
+                  colSpan={{base: 6, md: 6, sm: 6, lg: 4, xl: 2}}
                 >
                   <ProductCatalogAssignments
                     composedProduct={composedProduct}
                     setComposedProduct={setComposedProduct}
                   />
                 </GridItem>
-                <GridItem rowSpan={1} colSpan={6}>
+                <GridItem
+                  rowSpan={1}
+                  colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 4}}
+                >
+                  <ProductSuppliers
+                    composedProduct={composedProduct}
+                    setComposedProduct={setComposedProduct}
+                  />
+                </GridItem>
+                <GridItem rowSpan={1} colSpan={2}>
                   <ProductSpecs
                     composedProduct={composedProduct}
                     setComposedProduct={setComposedProduct}
@@ -282,21 +305,6 @@ const ProductDetails = () => {
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={6}>
                   <ProductVariants
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
-                </GridItem>
-                <GridItem rowSpan={1} colSpan={6}>
-                  <ProductPriceScheduleAssignments
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
-                </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 6}}
-                >
-                  <ProductSuppliers
                     composedProduct={composedProduct}
                     setComposedProduct={setComposedProduct}
                   />

@@ -103,6 +103,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
       options.searchOn = ["Name", "Description", "ID"]
       options.searchType = optionsSearchType
       options.sortBy = [optionsSortBy]
+      options.pageSize = 100
       var productList = await Products.List<ProductXPs>(options)
       let productItems = productList.Items
       setComponentProducts(productItems)
@@ -411,7 +412,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           icon={<SearchIcon />}
                           onClick={onSearchClicked}
                           float="right"
-                          variant="primary"
                         />
                       </Tooltip>
                       <Tooltip label="Reset Search Parameters">
@@ -420,7 +420,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           icon={<FiRotateCcw />}
                           onClick={onResetSearch}
                           float="right"
-                          variant="primary"
                         />
                       </Tooltip>
                       <Tooltip label="Add new Product">
@@ -429,7 +428,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           icon={<FiPlus />}
                           onClick={onOpenAddProduct}
                           float="right"
-                          variant="primary"
                         />
                       </Tooltip>
                       <Tooltip label="Mass Edit Products">
@@ -438,7 +436,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           icon={<FiEdit />}
                           onClick={onMassEditOpenClicked}
                           float="right"
-                          variant="primary"
                         />
                       </Tooltip>
                       <Tooltip label="Switch List/Grid View">
@@ -447,7 +444,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           icon={toggleViewMode ? <FiGrid /> : <FiList />}
                           onClick={() => setToggleViewMode(!toggleViewMode)}
                           float="right"
-                          variant="primary"
                         />
                       </Tooltip>
                       <InputGroup width={"450px"} float="right">
@@ -459,7 +455,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           placeholder="Enter here ..."
                           aria-label="Enter Search Term"
                           //_placeholder={{color: color}}
-                          variant="primary"
+
                           id={"headerSearchInput"}
                           width={"100%"}
                           value={searchQuery}
@@ -531,7 +527,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
                                 : setOptionsSortBy("!" + optionsSortBy)
                             }}
                             float="right"
-                            variant="primary"
                           />
                         </Tooltip>
                       </InputGroup>

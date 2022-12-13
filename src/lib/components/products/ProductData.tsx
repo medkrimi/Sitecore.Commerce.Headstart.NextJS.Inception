@@ -43,7 +43,7 @@ export default function ProductData({
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
   const color = useColorModeValue("textColor.100", "textColor.300")
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [formValues, setFormValues] = useState({
     name: composedProduct?.Product?.Name,

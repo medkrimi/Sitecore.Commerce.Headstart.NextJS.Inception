@@ -11,7 +11,8 @@ import {
   Input,
   Checkbox,
   Collapse,
-  Center
+  Center,
+  Textarea
 } from "@chakra-ui/react"
 import {
   ComposedProduct,
@@ -20,7 +21,14 @@ import {
 import {ProductXPs, XpImage} from "lib/types/ProductXPs"
 import {RequiredDeep, Product, Products} from "ordercloud-javascript-sdk"
 import {ChangeEvent, useState} from "react"
-import {FiCheck, FiX, FiEdit, FiPlus, FiMinus} from "react-icons/fi"
+import {
+  FiCheck,
+  FiX,
+  FiEdit,
+  FiPlus,
+  FiPlusCircle,
+  FiMinus
+} from "react-icons/fi"
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 
@@ -35,21 +43,19 @@ export default function ProductXpInformation({
 }: ProductDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const okColor = useColorModeValue("okColor.800", "okColor.200")
-  const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
+  const [xps, setXps] = useState({
+    xps: composedProduct?.Product?.xp
+  })
+
   const [formValues, setFormValues] = useState({
-    someAdditionalCheckbox:
-      composedProduct?.Product?.xp?.SomeAdditionalCheckbox,
     images: composedProduct?.Product?.xp?.Images
   })
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(true)
 
   const onEditClicked = (e) => {
     e.preventDefault()
     setFormValues((v) => ({
       ...v,
-      ["someAdditionalCheckbox"]:
-        composedProduct?.Product?.xp?.SomeAdditionalCheckbox,
       ["images"]: composedProduct?.Product?.xp?.Images ?? []
     }))
     setIsEditingBasicData(true)
@@ -68,7 +74,7 @@ export default function ProductXpInformation({
       var tmpImages = [...formValues.images]
       var tmpImage: XpImage = {
         Url: newVal,
-        ThumbnailUrl: emptyVal
+        ThumbnailUrl: newVal
       }
 
       tmpImages[fieldKey] = tmpImage
@@ -140,8 +146,7 @@ export default function ProductXpInformation({
       Name: composedProduct?.Product?.Name,
       xp: {
         Name: "Test",
-        Images: images,
-        SomeAdditionalCheckbox: formValues.someAdditionalCheckbox
+        Images: images
       }
     }
 
@@ -157,18 +162,17 @@ export default function ProductXpInformation({
       }, 1000)
     }, 4500)
   }
-
+  /*   for (const x in composedProduct?.Product?.xp) {
+    console.warn(x + " ," + composedProduct?.Product?.xp[x])
+  } */
+  //console.warn(composedProduct?.Product?.xp)
   return (
     <BrandedBox isExpaned={expanded} setExpanded={setExpanded}>
       <>
         {isEditingBasicData ? (
           <HStack float={"right"}>
             <Tooltip label="Save">
-              <Button
-                colorScheme="brandButtons"
-                aria-label="Save"
-                onClick={onProductSave}
-              >
+              <Button aria-label="Save" onClick={onProductSave}>
                 <FiCheck />
               </Button>
             </Tooltip>
@@ -185,130 +189,94 @@ export default function ProductXpInformation({
         ) : (
           <HStack float={"right"}>
             <Tooltip label="Edit">
-              <Button
-                colorScheme="brandButtons"
-                aria-label="Edit"
-                onClick={onEditClicked}
-              >
+              <Button aria-label="Edit" onClick={onEditClicked}>
                 <FiEdit />
               </Button>
             </Tooltip>
           </HStack>
         )}
-        <Heading size={{base: "md", md: "lg", lg: "xl"}}>Media</Heading>
+        <Heading size={{base: "md", md: "lg", lg: "xl"}}>
+          Extended Properties
+        </Heading>
 
         {(isLoading || !composedProduct?.Product) && expanded ? (
           <Box pt={6} textAlign={"center"}>
             Updating... <BrandedSpinner />
           </Box>
         ) : (
-          <>
-            <Collapse in={expanded}>
-              <Box width="full" pb={2} pt={4}>
-                <>
-                  <Text opacity={0.5} fontWeight={"bold"}>
-                    Images:
-                  </Text>
-                  {formValues?.images?.map((image, key) => {
-                    return isEditingBasicData ? (
-                      <HStack key={key} mt={3}>
-                        <Text>{key + 1}</Text>
-                        <Input
-                          value={image.Url}
-                          onChange={handleInputChange(key)}
-                        />
-                        {key != 0 ? (
-                          <Tooltip pt={2} label="Remove Product Image">
-                            <Button
-                              onClick={onDeleteProductImageClicked(image.Url)}
-                              colorScheme={"purple"}
-                            >
-                              <FiMinus />
-                            </Button>
-                          </Tooltip>
-                        ) : (
-                          <></>
-                        )}
-                      </HStack>
+          <Collapse in={expanded}>
+            <Box width="full" pb={2} pt={4}>
+              <Text opacity={0.5} fontWeight={"bold"}></Text>
+              {Object.keys(composedProduct?.Product?.xp).map((name, key) => {
+                return isEditingBasicData &&
+                  typeof composedProduct?.Product?.xp[name] != "object" ? (
+                  <HStack key={key} mt={3}>
+                    <Text width="25%">{name}</Text>
+                    {composedProduct?.Product?.xp[name].length > 90 ? (
+                      <Textarea
+                        width={"75%"}
+                        resize={"none"}
+                        value={composedProduct?.Product?.xp[name]}
+                        h={"300"}
+                      />
                     ) : (
-                      <></>
-                    )
-                  })}
-                  {composedProduct?.Product?.xp?.Images?.map((image, key) => {
-                    return !isEditingBasicData ? (
-                      <HStack key={key} mt={4}>
-                        <Text>{key + 1}</Text>
-                        <Heading
-                          fontSize={"2xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
-                          {(image?.Url ?? "") == "" ? (
-                            <>No Image</>
-                          ) : (
-                            <>
-                              <Image
-                                boxSize="250px"
-                                objectFit="scale-down"
-                                mt={4}
-                                alt={"Product Image"}
-                                src={image?.Url}
-                              />
-                            </>
-                          )}
-                        </Heading>
-                      </HStack>
-                    ) : (
-                      <></>
-                    )
-                  })}
-                  {isEditingBasicData &&
-                  formValues?.images[formValues?.images?.length - 1]?.Url !=
-                    "" ? (
-                    <Tooltip label="Add new Product Image">
-                      <Box pt={4}>
-                        <Center>
-                          <Button
-                            onClick={onNewProductImageClicked}
-                            width={"10%"}
-                            colorScheme={"purple"}
-                          >
-                            <FiPlus />
-                          </Button>
-                        </Center>
-                      </Box>
-                    </Tooltip>
-                  ) : (
-                    <></>
-                  )}
-                </>
-              </Box>
-              <Box width="full" pb={2} pt={4}>
-                <Text opacity={0.5} fontWeight={"bold"}>
-                  Some Additional Checkbox:
-                </Text>
-                {isEditingBasicData ? (
-                  <Checkbox
-                    isChecked={formValues.someAdditionalCheckbox}
-                    onChange={handleCheckboxChange("someAdditionalCheckbox")}
-                  />
-                ) : (
-                  <Heading
-                    fontSize={"2xl"}
-                    fontFamily={"body"}
-                    fontWeight={500}
-                  >
-                    {composedProduct?.Product?.xp?.SomeAdditionalCheckbox ??
-                    false ? (
-                      <CheckIcon boxSize={6} color={okColor} />
-                    ) : (
-                      <CloseIcon boxSize={6} color={errorColor} />
+                      <Input
+                        width={"75%"}
+                        value={composedProduct?.Product?.xp[name]}
+                        //onChange={handleInputChange(key)}
+                      />
                     )}
-                  </Heading>
-                )}
-              </Box>
-            </Collapse>
-          </>
+                    <Tooltip pt={2} label="Remove Extended Property">
+                      <Button
+                        onClick={onDeleteProductImageClicked(name)}
+                        //colorScheme={"purple"}
+                      >
+                        <FiMinus />
+                      </Button>
+                    </Tooltip>
+                  </HStack>
+                ) : (
+                  <></>
+                )
+              })}
+              {Object.keys(composedProduct?.Product?.xp).map((name, key) => {
+                return !isEditingBasicData &&
+                  typeof composedProduct?.Product?.xp[name] != "object" ? (
+                  <HStack key={key} mt={4}>
+                    <Text width={"25%"}>{name}</Text>
+                    <Heading
+                      fontSize={"2xl"}
+                      fontFamily={"body"}
+                      fontWeight={500}
+                      width={"75%"}
+                    >
+                      <Input
+                        width={"100%"}
+                        value={composedProduct?.Product?.xp[name]}
+                        disabled={true}
+                      />
+                    </Heading>
+                  </HStack>
+                ) : (
+                  <></>
+                )
+              })}
+              {isEditingBasicData &&
+              formValues?.images[formValues?.images?.length - 1]?.Url != "" ? (
+                <Tooltip label="Add new Extended Property">
+                  <Box pt={4}>
+                    <Center>
+                      <Button onClick={onNewProductImageClicked}>
+                        <FiPlus />
+                      </Button>
+                    </Center>
+                  </Box>
+                </Tooltip>
+              ) : (
+                <></>
+              )}
+            </Box>
+          </Collapse>
         )}
       </>
     </BrandedBox>
