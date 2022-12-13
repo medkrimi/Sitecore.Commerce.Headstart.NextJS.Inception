@@ -1,7 +1,7 @@
 import React from "react"
 import dynamic from "next/dynamic"
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {ssr: false})
-
+//import { Props as ApexChartProps } from "react-apexcharts";
 class LineChart extends React.Component {
   constructor(props) {
     super(props)
