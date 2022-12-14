@@ -43,9 +43,6 @@ export default function ProductXpInformation({
 }: ProductDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [xps, setXps] = useState({
-    xps: composedProduct?.Product?.xp
-  })
 
   const [formValues, setFormValues] = useState({
     images: composedProduct?.Product?.xp?.Images
