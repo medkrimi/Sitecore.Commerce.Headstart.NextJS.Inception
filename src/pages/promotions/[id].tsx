@@ -105,7 +105,6 @@ const PromotionDetails = () => {
 
   return (
     <>
-      {/* {prodcutName !== "" ? ( */}
       <>
         {breadcrumb?.items?.length ?? 0 > 0 ? (
           <Flex
@@ -124,28 +123,7 @@ const PromotionDetails = () => {
           <></>
         )}
         <NextSeo title="Promotion Details" />
-        <Heading
-          color={"black"}
-          as="h1"
-          size={{sm: "lg"}}
-          pb={2}
-          ml={5}
-          display={{base: "block", sm: "inline-block", md: "none"}}
-        >
-          Promotion Detail Page: {promotionName == "" ? "..." : null}{" "}
-          <i>{promotionName}</i>
-        </Heading>
         <HStack justifyContent={"space-between"} px={6} width={"full"}>
-          <Heading
-            color={"black"}
-            as="h1"
-            width={"full"}
-            size={{base: "md", sm: "md", md: "lg", lg: "lg", xl: "xl"}}
-            display={{base: "none", sm: "none", md: "block"}}
-          >
-            Promotion Detail Page: {promotionName == "" ? "..." : null}{" "}
-            <i>{promotionName}</i>
-          </Heading>
           <HStack
             justifyContent={{
               base: "flex-start",
@@ -267,3 +245,11 @@ const PromotionDetails = () => {
 }
 
 export default PromotionDetails
+
+// export async function getStaticProps() {
+//   return {
+//     props: {
+//       title: "Promotion Details"
+//     }
+//   }
+// }

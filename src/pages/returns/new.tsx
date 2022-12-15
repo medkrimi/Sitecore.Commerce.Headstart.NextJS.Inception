@@ -18,13 +18,10 @@ import {NextSeo} from "next-seo"
 import React from "react"
 import {HiOutlineMinusSm} from "react-icons/hi"
 
-const NewOrdersPage = () => {
+const NewReturnsPage = () => {
   return (
     <Container maxW="full">
-      <NextSeo title="New Order" />
-      <Heading as="h2" marginTop={5}>
-        New Return
-      </Heading>
+      <NextSeo title="New Return" />
       <Card variant="primaryCard">
         <IconButton
           variant="closePanelButton"
@@ -50,4 +47,12 @@ const NewOrdersPage = () => {
   )
 }
 
-export default NewOrdersPage
+export default NewReturnsPage
+
+export async function getStaticProps() {
+  return {
+    props: {
+      title: "New Return"
+    }
+  }
+}

@@ -115,8 +115,7 @@ const ReturnsPage = () => {
   return (
     <Container maxW="full">
       <NextSeo title="Returns" />
-      <Heading as="h2">Returns List</Heading>
-      <HStack justifyContent="space-between" w="100%">
+      <HStack justifyContent="space-between" w="100%" mb={5}>
         <Link href={`/returns/new`}>
           <Button variant="primaryButton">New Return</Button>
         </Link>
@@ -241,3 +240,11 @@ const ReturnsPage = () => {
 }
 
 export default ReturnsPage
+
+export async function getStaticProps() {
+  return {
+    props: {
+      title: "Returns Listing"
+    }
+  }
+}

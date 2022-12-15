@@ -6,11 +6,11 @@ function Card(props) {
     <Box
       bg="white"
       borderRadius="xl"
-      p="15px"
       __css={styles}
       {...rest}
-      pt="40px"
-      pb="40px"
+      pt="2"
+      pb="2"
+      mb="6"
       shadow="xl"
       w="100%"
       width="full"
