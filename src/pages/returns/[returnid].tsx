@@ -95,15 +95,7 @@ const OrderReturnDetailPage: FunctionComponent = () => {
     <>
       <Container maxW="full" marginTop={30} marginBottom={30}>
         <NextSeo title="Order Return Detail" />
-        <Heading as="h2" mt="40px">
-          Order Return
-        </Heading>
-        <Heading as="h4" size="md">
-          <HStack mb="20px">
-            <Text>Return ID:</Text> <Text>{orderReturn.ID}</Text>
-          </HStack>
-        </Heading>
-        <HStack justifyContent="space-between" w="100%">
+        <HStack justifyContent="space-between" w="100%" mb={5}>
           <NextLink href="new" passHref>
             <Link pl="2" pr="2">
               <Button variant="primaryButton">New Return</Button>
@@ -212,3 +204,11 @@ const OrderReturnDetailPage: FunctionComponent = () => {
 }
 
 export default OrderReturnDetailPage
+
+// export async function getStaticProps() {
+//   return {
+//     props: {
+//       title: "Return Details"
+//     }
+//   }
+// }

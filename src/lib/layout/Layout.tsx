@@ -4,6 +4,7 @@ import {
   AlertIcon,
   AlertTitle,
   Box,
+  Container,
   Flex,
   HStack,
   StackDivider,
@@ -17,13 +18,16 @@ import {ReactNode, useEffect, useState} from "react"
 
 import Footer from "./Footer"
 import Header from "./Header"
+import ContentHeader from "./ContentHeader"
+import ContentFooter from "./ContentFooter"
 import LeftNavigation from "lib/components/navigation/SideNavigation"
 
 type LayoutProps = {
   children: ReactNode
+  title: string
 }
 
-const Layout = ({children}: LayoutProps) => {
+const Layout = ({children, title}: LayoutProps) => {
   const [state, setState] = useState<OcAuthState>()
 
   useEffect(() => {
@@ -34,7 +38,7 @@ const Layout = ({children}: LayoutProps) => {
     <Box as="section" w="100%" margin="0 auto" transition="0.5s ease-out">
       {state?.isAnonymous ?? true ? <></> : <Header />}
       <Flex
-        alignItems="space-between"
+        alignItems="flex-start"
         height="100%"
         w="100%"
         width="full"
@@ -43,7 +47,11 @@ const Layout = ({children}: LayoutProps) => {
         justify="space-between"
       >
         {state?.isAnonymous ?? true ? <></> : <LeftNavigation />}
-        {children}
+        <Container maxW="full">
+          <ContentHeader title={title} />
+          {children}
+          <ContentFooter />
+        </Container>
       </Flex>
       {state?.isAnonymous ?? true ? <></> : <Footer />}
     </Box>

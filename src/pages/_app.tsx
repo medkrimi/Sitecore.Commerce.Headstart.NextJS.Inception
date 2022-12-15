@@ -22,7 +22,7 @@ const MyApp = ({Component, pageProps}: AppProps) => {
         />
       </Head>
       <DefaultSeo {...defaultSEOConfig} />
-      <Layout>
+      <Layout title={pageProps.title}>
         <Component {...pageProps} />
       </Layout>
     </Chakra>

@@ -99,10 +99,7 @@ const PromotionsPage = () => {
   return (
     <Container maxW="full">
       <NextSeo title="Promotions List" />
-      <Heading as="h2" marginTop={5}>
-        Promotions List
-      </Heading>
-      <HStack justifyContent="space-between" w="100%">
+      <HStack justifyContent="space-between" w="100%" mb={5}>
         <Link href={`/promotions/new`}>
           <Button variant="primaryButton">New Promotion</Button>
         </Link>
@@ -228,3 +225,11 @@ const PromotionsPage = () => {
 }
 
 export default PromotionsPage
+
+export async function getStaticProps() {
+  return {
+    props: {
+      title: "Promotions List"
+    }
+  }
+}
