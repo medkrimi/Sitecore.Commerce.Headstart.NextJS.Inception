@@ -1,16 +1,11 @@
 import {
   ApiRole,
-  Auth,
   Configuration,
   CookieOptions,
-  DecodedToken,
   Filters,
   IntegrationEvents,
   LineItems,
-  ListPageWithFacets,
   Me,
-  MetaWithFacets,
-  Order,
   OrderWorksheet,
   Orders,
   Payment,
@@ -20,13 +15,9 @@ import {
   RequiredDeep,
   SearchType,
   Spec,
-  Specs,
-  Tokens,
   Variant
 } from "ordercloud-javascript-sdk"
-
 import {ProductXPs} from "lib/types/ProductXPs"
-import parseJwt from "../utils/parseJwt"
 
 export interface ProductListOptions {
   catalogID?: string
@@ -48,20 +39,6 @@ export interface OcConfig {
   allowAnonymous?: boolean
   cookieOptions?: CookieOptions
 }
-export interface LoginActionRequest {
-  username: string
-  password: string
-  remember?: boolean
-}
-
-export interface OcAuthState {
-  isAuthenticated: boolean
-  isAdmin: boolean
-  decodedToken?: DecodedToken
-  isAnonymous: boolean
-  loading: boolean
-  initialized: boolean
-}
 
 const ocConfig: OcConfig = {
   clientId:
@@ -79,73 +56,12 @@ const ocConfig: OcConfig = {
   cookieOptions: null
 }
 
-// export async function GetProductList(
-//   options: ProductListOptions
-// ): Promise<RequiredDeep<Product<ProductXPs>>> {
-//   var products = await Products.List<ProductXPs>(options)
-//   return products.Items
-// }
-
-export function GetAuthenticationStatus(): OcAuthState {
-  const initialAccessToken = Tokens.GetAccessToken()
-  let isAnonymous = true
-  let isAdmin = false
-  let decodedToken: DecodedToken
-
-  if (initialAccessToken) {
-    decodedToken = parseJwt(initialAccessToken) as DecodedToken
-    isAnonymous = !!decodedToken.orderid
-    isAdmin = decodedToken.usrtype === "admin"
-  }
-
-  var result: OcAuthState = {
-    isAuthenticated: !!initialAccessToken,
-    isAnonymous: isAnonymous,
-    isAdmin: isAdmin,
-    decodedToken: decodedToken,
-    initialized: true,
-    loading: false
-  }
-
-  return result
-}
-
 export function SetConfiguration() {
   Configuration.Set({
     clientID: ocConfig.clientId,
     baseApiUrl: ocConfig.baseApiUrl,
     cookieOptions: ocConfig.cookieOptions
   })
-}
-
-export async function Login(
-  username: string,
-  password: string,
-  remember: boolean
-) {
-  var config = Configuration.Get()
-  const response = await Auth.Login(
-    username,
-    password,
-    config.clientID,
-    ocConfig.scope
-  ).catch()
-
-  Tokens.SetAccessToken(response.access_token)
-  if (remember && response.refresh_token) {
-    Tokens.SetRefreshToken(response.refresh_token)
-  }
-}
-
-export async function Logout() {
-  Tokens.RemoveAccessToken()
-  Tokens.RemoveRefreshToken()
-
-  if (ocConfig.allowAnonymous) {
-    const response = await Auth.Anonymous(ocConfig.clientId, ocConfig.scope)
-    Tokens.SetAccessToken(response.access_token)
-    Tokens.SetRefreshToken(response.refresh_token)
-  }
 }
 
 export interface ComposedProduct {
@@ -180,9 +96,8 @@ export interface ComposedOrder {
 
 export async function GetCurrentOrder() {
   let composedOrder: ComposedOrder
-  const sortBy = "DateCreated" as any // TODO: Not sure how to make this work better... might need a fix in the SDK
   const response = await Me.ListOrders({
-    sortBy,
+    sortBy: ["DateCreated"],
     filters: {Status: "Unsubmitted"}
   })
   const firstOrder = response.Items[0]

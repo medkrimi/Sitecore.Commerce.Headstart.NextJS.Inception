@@ -26,7 +26,6 @@ import {useEffect, useState} from "react"
 import AverageOrderAmount from "lib/components/analytics/AverageOrderAmount"
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import Card from "lib/components/card/Card"
-import {GetAuthenticationStatus} from "../lib/services/ordercloud.service"
 import NewClients from "lib/components/analytics/PercentChangeTile"
 import NextLink from "next/link"
 import {NextSeo} from "next-seo"
@@ -70,12 +69,6 @@ const Dashboard = () => {
   const boxBgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
 
   useEffect(() => {
-    let state = GetAuthenticationStatus()
-
-    if (state?.isAnonymous) {
-      push("/")
-    }
-
     initDashboardData()
   }, [])
 

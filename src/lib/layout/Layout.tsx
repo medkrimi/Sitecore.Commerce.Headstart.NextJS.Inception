@@ -1,38 +1,25 @@
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-  Box,
-  Flex,
-  HStack,
-  StackDivider,
-  VStack
-} from "@chakra-ui/react"
-import {
-  GetAuthenticationStatus,
-  OcAuthState
-} from "../../lib/services/ordercloud.service"
+import {Box, Flex} from "@chakra-ui/react"
 import {ReactNode, useEffect, useState} from "react"
-
 import Footer from "./Footer"
 import Header from "./Header"
 import LeftNavigation from "lib/components/navigation/SideNavigation"
+import {useAuth} from "lib/hooks/useAuth"
 
 type LayoutProps = {
   children: ReactNode
 }
 
 const Layout = ({children}: LayoutProps) => {
-  const [state, setState] = useState<OcAuthState>()
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const auth = useAuth()
 
   useEffect(() => {
-    setState(GetAuthenticationStatus())
-  }, [children])
+    setIsAuthenticated(auth.isAuthenticated)
+  }, [auth.isAuthenticated])
 
   return (
     <Box as="section" w="100%" margin="0 auto" transition="0.5s ease-out">
-      {state?.isAnonymous ?? true ? <></> : <Header />}
+      {isAuthenticated && <Header />}
       <Flex
         alignItems="space-between"
         height="100%"
@@ -42,10 +29,10 @@ const Layout = ({children}: LayoutProps) => {
         mt="89px"
         justify="space-between"
       >
-        {state?.isAnonymous ?? true ? <></> : <LeftNavigation />}
+        {isAuthenticated && <LeftNavigation />}
         {children}
       </Flex>
-      {state?.isAnonymous ?? true ? <></> : <Footer />}
+      {isAuthenticated && <Footer />}
     </Box>
   )
 }

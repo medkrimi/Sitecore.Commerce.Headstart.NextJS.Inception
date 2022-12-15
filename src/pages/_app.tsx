@@ -8,11 +8,13 @@ import Layout from "lib/layout/Layout"
 import {SetConfiguration} from "../lib/services/ordercloud.service"
 import {axiosService} from "lib/services/axios.service"
 import defaultSEOConfig from "../../next-seo.config"
+import {ProtectRoute} from "lib/components/auth/ProtectedRoute"
+import {AuthProvider} from "lib/context/auth-context"
 
 axiosService.initializeInterceptors()
+SetConfiguration()
 
 const MyApp = ({Component, pageProps}: AppProps) => {
-  SetConfiguration()
   return (
     <Chakra>
       <Head>
@@ -22,9 +24,13 @@ const MyApp = ({Component, pageProps}: AppProps) => {
         />
       </Head>
       <DefaultSeo {...defaultSEOConfig} />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <AuthProvider>
+        <ProtectRoute>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ProtectRoute>
+      </AuthProvider>
     </Chakra>
   )
 }

@@ -5,7 +5,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
-  Badge,
   Box,
   Button,
   Container,
@@ -26,14 +25,8 @@ import {
   Textarea,
   Tr,
   VStack,
-  useColorMode,
-  useColorModeValue,
   useToast
 } from "@chakra-ui/react"
-import {
-  GetAuthenticationStatus,
-  OcAuthState
-} from "../../lib/services/ordercloud.service"
 import {
   IntegrationEvents,
   OrderReturn,
@@ -43,7 +36,6 @@ import {
 } from "ordercloud-javascript-sdk"
 import React, {FunctionComponent, useEffect, useRef, useState} from "react"
 import {dateHelper, priceHelper} from "lib/utils/"
-
 import AddressCard from "../../lib/components/card/AddressCard"
 import Card from "lib/components/card/Card"
 import {HiOutlineMinusSm} from "react-icons/hi"
@@ -54,7 +46,6 @@ import OcLineItemList from "lib/components/shoppingcart/OcLineItemList"
 import {useRouter} from "next/router"
 
 const OrderConfirmationPage: FunctionComponent = () => {
-  const [authState, setAuthState] = useState<OcAuthState>()
   const router = useRouter()
   const [orderWorksheet, setOrderWorksheet] = useState({} as OrderWorksheet)
   const [orderReturns, setOrderReturns] = useState({} as OrderReturn[])
@@ -81,9 +72,6 @@ const OrderConfirmationPage: FunctionComponent = () => {
   }
 
   useEffect(() => {
-    let authState = GetAuthenticationStatus()
-    setAuthState(authState)
-
     const getOrder = async () => {
       const orderId = router.query.orderid as string
       if (!orderId) {
@@ -153,12 +141,9 @@ const OrderConfirmationPage: FunctionComponent = () => {
   }
 
   const showRefundBtn =
-    !authState?.isAdmin &&
-    orderWorksheet.Order.Status === "Completed" &&
-    !orderReturns.length
+    orderWorksheet.Order.Status === "Completed" && !orderReturns.length
 
-  const showShipBtn =
-    authState?.isAdmin && orderWorksheet.Order.Status === "Open"
+  const showShipBtn = orderWorksheet.Order.Status === "Open"
 
   const refundBtn = showRefundBtn && (
     <Button onClick={() => setRefundDialogOpen(true)}>Request Refund</Button>

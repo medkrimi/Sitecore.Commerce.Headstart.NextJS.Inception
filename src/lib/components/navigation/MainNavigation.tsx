@@ -1,9 +1,9 @@
-import {Box, Flex, HStack, Link} from "@chakra-ui/react"
-
-import {Logout} from "../../services/ordercloud.service"
+import {HStack, Link} from "@chakra-ui/react"
 import NextLink from "next/link"
+import {useAuth} from "lib/hooks/useAuth"
 
 const MainNavigation = () => {
+  const {Logout} = useAuth()
   return (
     <HStack width="full" align="center">
       <NextLink href="/products" passHref>
@@ -21,7 +21,7 @@ const MainNavigation = () => {
           Users
         </Link>
       </NextLink>
-      <NextLink href="/logoff" passHref>
+      <NextLink href="/" passHref>
         <Link pl="2" pr="2" onClick={() => Logout()}>
           Log out
         </Link>

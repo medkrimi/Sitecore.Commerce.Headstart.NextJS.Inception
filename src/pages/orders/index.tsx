@@ -23,21 +23,13 @@ import {
   Tbody,
   Td,
   Text,
-  Textarea,
   Th,
   Thead,
   Tr,
-  VStack,
-  useColorMode,
-  useColorModeValue
+  VStack
 } from "@chakra-ui/react"
-import {
-  GetAuthenticationStatus,
-  OcAuthState
-} from "../../lib/services/ordercloud.service"
-import {Me, Orders} from "ordercloud-javascript-sdk"
+import {Orders} from "ordercloud-javascript-sdk"
 import {useEffect, useRef, useState} from "react"
-
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
 import {HiOutlineMinusSm} from "react-icons/hi"
@@ -50,7 +42,6 @@ import {textHelper} from "lib/utils/text.utils"
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([])
-  const [authState, setAuthState] = useState<OcAuthState>()
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const cancelRef = useRef()
@@ -67,11 +58,7 @@ const OrdersPage = () => {
 
   useEffect(() => {
     const getOrders = async () => {
-      const state = GetAuthenticationStatus()
-      setAuthState(state)
-      const ordersList = state?.isAdmin
-        ? await Orders.List("All")
-        : await Me.ListOrders()
+      const ordersList = await Orders.List("All")
       setOrders(ordersList.Items)
     }
     getOrders()

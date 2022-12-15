@@ -23,32 +23,22 @@ import {
   Tbody,
   Td,
   Text,
-  Textarea,
   Th,
   Thead,
   Tr,
-  VStack,
-  useColorMode,
-  useColorModeValue
+  VStack
 } from "@chakra-ui/react"
-import {
-  GetAuthenticationStatus,
-  OcAuthState
-} from "../../lib/services/ordercloud.service"
-import {Promotion, Promotions} from "ordercloud-javascript-sdk"
-import {dateHelper, priceHelper, textHelper} from "lib/utils/"
+import {Promotions} from "ordercloud-javascript-sdk"
+import {dateHelper, textHelper} from "lib/utils/"
 import {useEffect, useRef, useState} from "react"
-
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
 import {HiOutlineMinusSm} from "react-icons/hi"
-import LettersCard from "lib/components/card/LettersCard"
 import Link from "../../lib/components/navigation/Link"
 import {NextSeo} from "next-seo"
 
 const PromotionsPage = () => {
   const [promotions, setPromotions] = useState([])
-  const [authState, setAuthState] = useState<OcAuthState>()
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const cancelRef = useRef()
@@ -67,8 +57,6 @@ const PromotionsPage = () => {
 
   useEffect(() => {
     const getPromotions = async () => {
-      const state = GetAuthenticationStatus()
-      setAuthState(state)
       const promotionsList = Promotions.List()
       setPromotions((await promotionsList).Items)
     }
