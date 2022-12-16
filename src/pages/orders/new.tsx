@@ -24,9 +24,6 @@ const NewOrdersPage = () => {
   return (
     <Container maxW="full">
       <NextSeo title="New Order" />
-      <Heading as="h2" marginTop={5}>
-        New Order
-      </Heading>
       <Card variant="primaryCard">
         <IconButton
           variant="closePanelButton"
@@ -59,3 +56,11 @@ const ProtectedNewOrdersPage = () => (
 )
 
 export default ProtectedNewOrdersPage
+
+export async function getStaticProps() {
+  return {
+    props: {
+      title: "New Order"
+    }
+  }
+}

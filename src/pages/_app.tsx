@@ -26,7 +26,7 @@ const MyApp = ({Component, pageProps}: AppProps) => {
       <DefaultSeo {...defaultSEOConfig} />
       <AuthProvider>
         <ProtectedApp>
-          <Layout>
+          <Layout title={pageProps.title}>
             <Component {...pageProps} />
           </Layout>
         </ProtectedApp>

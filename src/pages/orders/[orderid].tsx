@@ -173,13 +173,9 @@ const OrderConfirmationPage: FunctionComponent = () => {
 
   return (
     <>
-      <NextSeo title={`Order ${orderWorksheet.Order.ID}`} />
-      <Container maxW="full" marginTop={30} marginBottom={30}>
+      <Container maxW="full">
         <NextSeo title="Order Details" />
-        <Heading as="h2" marginTop={5}>
-          Order Details
-        </Heading>
-        <HStack justifyContent="space-between" w="100%">
+        <HStack justifyContent="space-between" w="100%" mb={5}>
           <NextLink href="new" passHref>
             <Link pl="2" pr="2">
               <Link href={`/orders/new`}>

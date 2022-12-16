@@ -195,11 +195,7 @@ const Dashboard = () => {
                   mb={0}
                 >
                   <GridItem>
-                    <Box
-                      w="full"
-                      width="100%"
-                      pr={{xl: 2, lg: 2, md: 0, sm: 0, base: 0}}
-                    >
+                    <Box w="full" width="100%">
                       <NextLink href="#" passHref>
                         <Link>
                           <TodaysMoney
@@ -217,11 +213,7 @@ const Dashboard = () => {
                     </Box>
                   </GridItem>
                   <GridItem>
-                    <Box
-                      w="full"
-                      width="100%"
-                      pl={{xl: 2, lg: 2, md: 0, sm: 0, base: 0}}
-                    >
+                    <Box w="full" width="100%">
                       <NextLink href="#" passHref>
                         <Link>
                           <TotalSales
@@ -246,11 +238,7 @@ const Dashboard = () => {
                   mb={0}
                 >
                   <GridItem>
-                    <Box
-                      w="full"
-                      width="100%"
-                      pr={{xl: 2, lg: 2, md: 0, sm: 0, base: 0}}
-                    >
+                    <Box w="full" width="100%">
                       <NextLink href="#" passHref>
                         <Link>
                           <NewClients
@@ -266,11 +254,7 @@ const Dashboard = () => {
                     </Box>
                   </GridItem>
                   <GridItem>
-                    <Box
-                      w="full"
-                      width="100%"
-                      pl={{xl: 2, lg: 2, md: 0, sm: 0, base: 0}}
-                    >
+                    <Box w="full" width="100%">
                       <NextLink href="#" passHref>
                         <Link>
                           <TodaysUsers

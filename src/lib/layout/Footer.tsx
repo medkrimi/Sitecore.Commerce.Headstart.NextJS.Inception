@@ -27,7 +27,7 @@ const Footer = () => {
   const color = useColorModeValue("textColor.900", "textColor.100")
 
   return (
-    <Box bg={bg} color={color}>
+    <Box bg={bg} color={color} as="footer">
       <Box py={10}>
         <Flex
           align={"center"}

@@ -24,9 +24,6 @@ const NewPromotionsPage = () => {
   return (
     <Container maxW="full">
       <NextSeo title="New Promotion" />
-      <Heading as="h2" marginTop={5}>
-        New Promotion
-      </Heading>
       <Card variant="primaryCard">
         <IconButton
           variant="closePanelButton"
@@ -61,3 +58,11 @@ const ProtectedNewPromotionsPage = () => {
 }
 
 export default ProtectedNewPromotionsPage
+
+export async function getStaticProps() {
+  return {
+    props: {
+      title: "New Promotion"
+    }
+  }
+}

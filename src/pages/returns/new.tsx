@@ -23,10 +23,7 @@ import {HiOutlineMinusSm} from "react-icons/hi"
 const NewReturnPage = () => {
   return (
     <Container maxW="full">
-      <NextSeo title="New Order" />
-      <Heading as="h2" marginTop={5}>
-        New Return
-      </Heading>
+      <NextSeo title="New Return" />
       <Card variant="primaryCard">
         <IconButton
           variant="closePanelButton"
@@ -61,3 +58,11 @@ const ProtectedNewReturnPage = () => {
 }
 
 export default ProtectedNewReturnPage
+
+export async function getStaticProps() {
+  return {
+    props: {
+      title: "New Return"
+    }
+  }
+}

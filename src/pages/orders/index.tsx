@@ -9,6 +9,7 @@ import {
   Checkbox,
   CheckboxGroup,
   Container,
+  Flex,
   Divider,
   HStack,
   Heading,
@@ -100,10 +101,7 @@ const OrdersPage = () => {
   return (
     <Container maxW="full">
       <NextSeo title="Orders List" />
-      <Heading as="h2" marginTop={5}>
-        Orders List
-      </Heading>
-      <HStack justifyContent="space-between" w="100%">
+      <HStack justifyContent="space-between" w="100%" mb={5}>
         <Link href={`/orders/new`}>
           <Button variant="primaryButton">New Order</Button>
         </Link>
@@ -234,3 +232,11 @@ const ProtectedOrdersPage = () => (
 )
 
 export default ProtectedOrdersPage
+
+export async function getStaticProps() {
+  return {
+    props: {
+      title: "Order Listing"
+    }
+  }
+}
