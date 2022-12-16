@@ -33,6 +33,8 @@ import Cookies from "universal-cookie"
 import {ItemContent} from "../generic/ItemContent"
 import NextLink from "next/link"
 import {useAuth} from "lib/hooks/useAuth"
+import ProtectedContent from "../auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const MobileNavigation = () => {
   const {Logout} = useAuth()
@@ -120,20 +122,24 @@ const MobileNavigation = () => {
           </HStack>
         </MenuButton>
         <MenuList>
-          <MenuItem>
-            <NextLink href="#" passHref>
-              <Link pl="2" pr="2">
-                Manage Profile
-              </Link>
-            </NextLink>
-          </MenuItem>
-          <MenuItem>
-            <NextLink href="#" passHref>
-              <Link pl="2" pr="2">
-                Notifications
-              </Link>
-            </NextLink>
-          </MenuItem>
+          <ProtectedContent hasAccess={appPermissions.MeManager}>
+            <MenuItem>
+              <NextLink href="#" passHref>
+                <Link pl="2" pr="2">
+                  Manage Profile
+                </Link>
+              </NextLink>
+            </MenuItem>
+          </ProtectedContent>
+          <ProtectedContent hasAccess={appPermissions.MeManager}>
+            <MenuItem>
+              <NextLink href="#" passHref>
+                <Link pl="2" pr="2">
+                  Notifications
+                </Link>
+              </NextLink>
+            </MenuItem>
+          </ProtectedContent>
           <MenuItem onClick={() => Logout()}>
             <Text pl="2" pr="2">
               Log Out

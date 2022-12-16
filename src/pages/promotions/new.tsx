@@ -12,7 +12,9 @@ import {
   Text
 } from "@chakra-ui/react"
 import {Form} from "formik"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
 import Card from "lib/components/card/Card"
+import {appPermissions} from "lib/constants/app-permissions.config"
 import {NextSeo} from "next-seo"
 
 import React from "react"
@@ -50,4 +52,12 @@ const NewPromotionsPage = () => {
   )
 }
 
-export default NewPromotionsPage
+const ProtectedNewPromotionsPage = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.ProductManager}>
+      <NewPromotionsPage />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedNewPromotionsPage

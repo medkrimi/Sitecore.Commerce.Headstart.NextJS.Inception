@@ -1,24 +1,30 @@
 import {AuthContext} from "lib/context/auth-context"
 import {useContext, useMemo} from "react"
 
-export type HasAccessFunction = (permissions: string[]) => boolean
+export type HasAccessFunction = (assignedRoles: string[]) => boolean
 export type AccessQualifier = string | string[] | HasAccessFunction
 
 export const isAllowedAccess = (
-  permissions: string[],
+  assignedRoles: string[],
   hasAccess: AccessQualifier
 ) => {
   switch (typeof hasAccess) {
+    case "undefined":
+      return false
     case "string":
-      return permissions.includes(hasAccess)
+      return (
+        assignedRoles.includes(hasAccess) ||
+        assignedRoles.includes("FullAccess")
+      )
     case "function":
-      return hasAccess(permissions)
+      return hasAccess(assignedRoles)
     default:
-      var result = false
-      hasAccess.forEach((p) => {
-        if (permissions.includes(p)) result = true
-      })
-      return result
+      if (assignedRoles.includes("FullAccess")) {
+        return true
+      }
+      return hasAccess.every((requiredRole) =>
+        assignedRoles.includes(requiredRole)
+      )
   }
 }
 

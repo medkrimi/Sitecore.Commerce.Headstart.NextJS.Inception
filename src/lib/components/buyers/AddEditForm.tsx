@@ -24,10 +24,14 @@ import {useRouter} from "next/router"
 import {useToast} from "@chakra-ui/react"
 import {xpHelper} from "../../utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
+import {Buyer} from "ordercloud-javascript-sdk"
 
 export {AddEditForm}
 
-function AddEditForm({buyer}) {
+interface AddEditFormProps {
+  buyer?: Buyer
+}
+function AddEditForm({buyer}: AddEditFormProps) {
   const isAddMode = !buyer
   const router = useRouter()
   const toast = useToast()

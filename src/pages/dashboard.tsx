@@ -41,6 +41,8 @@ import {
   productsService,
   promotionsService
 } from "lib/api"
+import useHasAccess from "lib/hooks/useHasAccess"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const Dashboard = () => {
   const {push} = useRouter()
@@ -63,14 +65,23 @@ const Dashboard = () => {
   const [totalNewUsers, settotalNewUsers] = useState(Number)
   const [percentNewUsers, setpercentNewUsers] = useState(Number)
   const [percentNewUsersChange, setpercentNewUsersChange] = useState(String)
+  const [canViewReports, setCanViewReports] = useState(false)
+  const hasAccessToViewReports = useHasAccess(appPermissions.ReportViewer)
 
   const [dashboardListMeta, setDashboardMeta] = useState({})
 
   const boxBgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
 
   useEffect(() => {
+    setCanViewReports(hasAccessToViewReports)
+  }, [hasAccessToViewReports])
+
+  useEffect(() => {
+    if (!canViewReports) {
+      return
+    }
     initDashboardData()
-  }, [])
+  }, [canViewReports])
 
   async function initDashboardData() {
     let _dashboardListMeta = {}
@@ -150,6 +161,10 @@ const Dashboard = () => {
       ? "linear(to-t, brand.300, brand.400)"
       : "linear(to-t, brand.600, brand.500)"
   const color = useColorModeValue("boxTextColor.900", "boxTextColor.100")
+
+  if (!canViewReports) {
+    return <div></div>
+  }
 
   return (
     <Flex

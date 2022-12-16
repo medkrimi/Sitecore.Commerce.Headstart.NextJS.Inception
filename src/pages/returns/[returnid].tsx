@@ -32,6 +32,8 @@ import NextLink from "next/link"
 import {NextSeo} from "next-seo"
 import OcOrderReturnItemList from "lib/components/returns/OcOrderReturnItem"
 import {useRouter} from "next/router"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const OrderReturnDetailPage: FunctionComponent = () => {
   const router = useRouter()
@@ -211,4 +213,12 @@ const OrderReturnDetailPage: FunctionComponent = () => {
   )
 }
 
-export default OrderReturnDetailPage
+const ProtectedOrderReturnDetailPage = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.OrderManager}>
+      <OrderReturnDetailPage />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedOrderReturnDetailPage

@@ -34,6 +34,8 @@ import UserCdpData from "lib/components/users/UserCdpData"
 import UserCdpSessionData from "lib/components/users/UserCdpSessionData"
 import UserOrderData from "lib/components/users/UserOrderData"
 import {useRouter} from "next/router"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const UserDetails = () => {
   const router = useRouter()
@@ -294,4 +296,12 @@ const UserDetails = () => {
   )
 }
 
-export default UserDetails
+const ProtectedUserDetails = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.BuyerManager}>
+      <UserDetails />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedUserDetails

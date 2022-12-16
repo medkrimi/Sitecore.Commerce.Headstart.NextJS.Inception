@@ -44,6 +44,8 @@ import NextLink from "next/link"
 import {NextSeo} from "next-seo"
 import OcLineItemList from "lib/components/shoppingcart/OcLineItemList"
 import {useRouter} from "next/router"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const OrderConfirmationPage: FunctionComponent = () => {
   const router = useRouter()
@@ -414,4 +416,12 @@ const OrderConfirmationPage: FunctionComponent = () => {
   )
 }
 
-export default OrderConfirmationPage
+const ProtectedOrderConfirmationPage = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.OrderManager}>
+      <OrderConfirmationPage />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedOrderConfirmationPage

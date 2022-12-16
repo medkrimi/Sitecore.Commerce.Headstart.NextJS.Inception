@@ -1,15 +1,9 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  LinkBox,
-  LinkOverlay,
-  Text,
-  Container
-} from "@chakra-ui/react"
+import {Flex, Heading} from "@chakra-ui/react"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 import {NextSeo} from "next-seo"
 
-const Orders = () => {
+const Users = () => {
   return (
     <Flex
       direction="column"
@@ -26,4 +20,12 @@ const Orders = () => {
   )
 }
 
-export default Orders
+const ProtectedUsers = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.BuyerManager}>
+      <Users />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedUsers

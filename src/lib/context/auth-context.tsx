@@ -12,6 +12,8 @@ export interface AuthState {
   assignedRoles: ApiRole[]
   setUserTokens?: (accessToken: string, refreshToken: string) => void
   removeUserTokens?: () => void
+  // isAdmin: boolean
+  // isSupplier: boolean
 }
 
 const AuthContext = React.createContext<AuthState>(undefined)

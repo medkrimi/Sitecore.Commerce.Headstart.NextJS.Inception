@@ -17,11 +17,13 @@ import {
   useColorModeValue,
   ColorModeScript
 } from "@chakra-ui/react"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import BreadcrumbNavigation from "lib/components/navigation/BreadcrumbNavigation"
 import PromotionBasicData from "lib/components/promotions/PromotionBasicData"
 import PromotionBuyers from "lib/components/promotions/PromotionBuyers"
 import PromotionXpInformation from "lib/components/promotions/PromotionXpInformation"
+import {appPermissions} from "lib/constants/app-permissions.config"
 import {PromotionXPs} from "lib/types/PromotionXPs"
 import {NextSeo} from "next-seo"
 import {useRouter} from "next/router"
@@ -266,4 +268,12 @@ const PromotionDetails = () => {
   )
 }
 
-export default PromotionDetails
+const ProtectedPromotionDetails = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.ProductManager}>
+      <PromotionDetails />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedPromotionDetails

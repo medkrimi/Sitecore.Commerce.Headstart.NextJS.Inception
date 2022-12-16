@@ -20,6 +20,8 @@ import React from "react"
 import {buyersService} from "../../lib/api"
 import {dateHelper} from "../../lib/utils/date.utils"
 import router from "next/router"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const BuyersList = () => {
   const [buyers, setBuyers] = useState([])
@@ -178,4 +180,12 @@ const BuyersList = () => {
     </Container>
   )
 }
-export default BuyersList
+
+const ProtectedBuyersList = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.BuyerManager}>
+      <BuyersList />
+    </ProtectedContent>
+  )
+}
+export default ProtectedBuyersList

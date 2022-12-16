@@ -1,10 +1,13 @@
-import {AuthContext} from "lib/context/auth-context"
+import {useAuth} from "lib/hooks/useAuth"
 import {useRouter} from "next/router"
-import React from "react"
 
-export const ProtectRoute = ({children}: any) => {
+/**
+ * This higher order component is used to ensure
+ * someone can't navigate to a page (other than login) without a valid ordercloud token
+ */
+export const ProtectedApp = ({children}: any) => {
   const router = useRouter()
-  const {isAuthenticated} = React.useContext(AuthContext)
+  const {isAuthenticated} = useAuth()
   const isLoginPage = () => router.pathname === "/"
 
   // can only use router on the browser

@@ -39,6 +39,8 @@ import {NextSeo} from "next-seo"
 import {dateHelper} from "lib/utils/date.utils"
 import {priceHelper} from "lib/utils/price.utils"
 import {textHelper} from "lib/utils/text.utils"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([])
@@ -225,4 +227,10 @@ const OrdersPage = () => {
   )
 }
 
-export default OrdersPage
+const ProtectedOrdersPage = () => (
+  <ProtectedContent hasAccess={appPermissions.OrderManager}>
+    <OrdersPage />
+  </ProtectedContent>
+)
+
+export default ProtectedOrdersPage

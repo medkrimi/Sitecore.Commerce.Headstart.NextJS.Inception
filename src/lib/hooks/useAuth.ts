@@ -5,7 +5,7 @@ import {Auth, Me} from "ordercloud-javascript-sdk"
 import {useContext} from "react"
 
 export function useAuth() {
-  const {setUserTokens, removeUserTokens, isAuthenticated} =
+  const {setUserTokens, removeUserTokens, isAuthenticated, assignedRoles} =
     useContext(AuthContext)
   const router = useRouter()
 
@@ -26,13 +26,11 @@ export function useAuth() {
   }
 
   function Logout() {
-    console.log("set token")
     removeUserTokens()
     if (typeof window !== "undefined" && router.pathname !== "/") {
-      console.log("route logout")
       router.push("/")
     }
   }
 
-  return {Login, Logout, isAuthenticated}
+  return {Login, Logout, isAuthenticated, assignedRoles}
 }

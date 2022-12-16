@@ -36,6 +36,8 @@ import {ChevronDownIcon} from "@chakra-ui/icons"
 import {HiOutlineMinusSm} from "react-icons/hi"
 import Link from "../../lib/components/navigation/Link"
 import {NextSeo} from "next-seo"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const PromotionsPage = () => {
   const [promotions, setPromotions] = useState([])
@@ -215,4 +217,12 @@ const PromotionsPage = () => {
   )
 }
 
-export default PromotionsPage
+const ProtectedPromotionsPage = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.ProductManager}>
+      <PromotionsPage />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedPromotionsPage
