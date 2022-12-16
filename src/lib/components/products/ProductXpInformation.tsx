@@ -1,22 +1,16 @@
-import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 import {
-  useColorModeValue,
   Heading,
   Box,
   Text,
-  Image,
   Button,
   HStack,
   Tooltip,
-  Checkbox,
   Collapse,
   Center,
   Textarea,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   useDisclosure,
@@ -39,7 +33,6 @@ import {
   FiX,
   FiEdit,
   FiPlus,
-  FiPlusCircle,
   FiMinus,
   FiMinusSquare
 } from "react-icons/fi"
@@ -51,7 +44,7 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductXpInformation({
+export default function ProductXPInformation({
   composedProduct,
   setComposedProduct
 }: ProductDataProps) {
@@ -65,8 +58,6 @@ export default function ProductXpInformation({
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [newType, setNewType] = useState("text")
-  //console.log(composedProduct?.Product?.xp)
   const [formValues, setFormValues] = useState<ProductXPs>(
     Object.assign({}, composedProduct?.Product?.xp)
   )
@@ -101,7 +92,6 @@ export default function ProductXpInformation({
     (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
       var newVal =
         e.target.type == "number" ? Number(e.target.value) : e.target.value
-      var emptyVal = null
       var tmpXPs = formValues
       tmpXPs[fieldKey] = newVal
       setFormValues(tmpXPs)
@@ -134,12 +124,6 @@ export default function ProductXpInformation({
     //console.log(e.target.value)
   }
 
-  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    var newVal = e.target.value
-    //console.log("newVal:", newVal)
-    setNewType(newVal)
-  }
-
   const onDeleteProductXPClicked = (key: string) => async (e) => {
     setIsLoading(true)
     setIsDeleting(true)
@@ -159,7 +143,7 @@ export default function ProductXpInformation({
   }
 
   const onNewProductXP = async () => {
-    console.log(formValues[newXpFormName])
+    //console.log(formValues[newXpFormName])
     if (formValues[newXpFormName] !== undefined) {
       toast({
         title: "Validation Error",
@@ -171,16 +155,16 @@ export default function ProductXpInformation({
       return
     }
     setIsLoading(true)
-    console.log("newXpFormName:", newXpFormName)
-    console.log("newXpFormType:", newXpFormType)
-    console.log("newXpFormValue:", newXpFormValue)
+    //console.log("newXpFormName:", newXpFormName)
+    //console.log("newXpFormType:", newXpFormType)
+    //console.log("newXpFormValue:", newXpFormValue)
 
     formValues[newXpFormName] = newXpFormValue
     onNewProductXPClosed()
     setIsLoading(false)
   }
   const onNewProductXPClosed = async () => {
-    console.log("close function")
+    //console.log("close function")
     setNewXpFormName("")
     setNewXpFormType("text")
     setNewXpFormValue("")
@@ -235,8 +219,8 @@ export default function ProductXpInformation({
       var tempXPs = Object.assign({}, formValues)
       toBeDeleted.forEach((e) => delete tempXPs[e])
       newProduct["xp"] = tempXPs
-      console.log("Deleting XPs newProduct")
-      console.log(newProduct)
+      //console.log("Deleting XPs newProduct")
+      //console.log(newProduct)
       await Products.Save(composedProduct?.Product?.ID, newProduct)
       setIsDeleting(false)
       setToBeDeleted([])

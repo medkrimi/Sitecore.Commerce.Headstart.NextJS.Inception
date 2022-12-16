@@ -1,5 +1,4 @@
 import {
-  Box,
   Flex,
   Heading,
   HStack,
@@ -15,17 +14,12 @@ import {
   AlertDialog,
   AlertDialogOverlay,
   AlertDialogHeader,
-  useDisclosure,
-  Progress,
-  Text,
-  useColorModeValue
+  useDisclosure
 } from "@chakra-ui/react"
-import BrandedBox from "lib/components/branding/BrandedBox"
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import BreadcrumbNavigation from "lib/components/navigation/BreadcrumbNavigation"
 import EditorialProgressBar from "lib/components/products/EditorialProgressBar"
 import ProductCatalogAssignments from "lib/components/products/ProductCatalogAssignments"
-import ProductCategoryAssignments from "lib/components/products/ProductCategoryAssignments"
 import ProductData from "lib/components/products/ProductData"
 import ProductInventoryData from "lib/components/products/ProductInventoryData"
 import ProductInventoryRecords from "lib/components/products/ProductInventoryRecords"
@@ -38,12 +32,11 @@ import ProductXPInformation from "lib/components/products/ProductXPInformation"
 import ProductMediaInformation from "lib/components/products/ProductMediaInformation"
 import {
   ComposedProduct,
-  GetComposedProduct,
-  ProductListOptions
+  GetComposedProduct
 } from "lib/scripts/OrdercloudService"
 import {NextSeo} from "next-seo"
 import {useRouter} from "next/router"
-import {Product, Products, RequiredDeep} from "ordercloud-javascript-sdk"
+import {Products} from "ordercloud-javascript-sdk"
 import React from "react"
 import {useEffect, useState} from "react"
 import {FiRefreshCw, FiTrash2} from "react-icons/fi"
@@ -55,7 +48,6 @@ const ProductDetails = () => {
   const [prodcutName, setProductName] = useState("")
   const [breadcrumb, setBreadcrumb] = useState<Breadcrumb>()
   const [isDeleting, setIsDeleting] = useState(false)
-  const options: ProductListOptions = {}
   const {isOpen, onOpen, onClose} = useDisclosure()
   const cancelRef = React.useRef()
 

@@ -1,18 +1,14 @@
-import {CheckIcon, CloseIcon, Search2Icon, SearchIcon} from "@chakra-ui/icons"
+import {SearchIcon} from "@chakra-ui/icons"
 import {
   Text,
   Button,
-  Center,
   Checkbox,
   FormControl,
   FormLabel,
   Heading,
-  Image,
   HStack,
-  Icon,
   IconButton,
   Input,
-  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -20,8 +16,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Tbody,
-  Td,
   Th,
   Thead,
   Tooltip,
@@ -30,7 +24,6 @@ import {
   useDisclosure,
   useToast,
   VStack,
-  Flex,
   Slider,
   SliderFilledTrack,
   SliderThumb,
@@ -47,10 +40,6 @@ import {
   FiRotateCcw,
   FiPlus,
   FiList,
-  FiCheckSquare,
-  FiArrowDown,
-  FiArrowUp,
-  FiArrowRight,
   FiGrid,
   FiEdit,
   FiChevronDown,
@@ -141,7 +130,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
   })
 
   const onSearchClicked = async () => {
-    console.log("onSearchClicked")
+    //console.log("onSearchClicked")
     setOptionsSortBy("name")
     setSortBy("name")
     setEditorialProgressFilter(100)
@@ -204,7 +193,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
     }
 
   const onResetSearch = (e) => {
-    console.log("onResetSearch")
+    //console.log("onResetSearch")
     setSearchQuery("")
     setOptionsSortBy("name")
     setSortBy("name")
@@ -261,7 +250,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
   }
 
   const onMassEditCheckboxChanged = (productId: string) => (e) => {
-    console.log(productId)
+    //console.log(productId)
     var product = componentProducts.find((element) => element.ID == productId)
     var isChecked = e.target.checked
     var productsToEdit = massEditProducts
