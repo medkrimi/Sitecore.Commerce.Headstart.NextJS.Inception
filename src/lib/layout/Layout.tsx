@@ -20,9 +20,16 @@ const Layout = ({children, title}: LayoutProps) => {
     setIsAuthenticated(auth.isAuthenticated)
   }, [auth.isAuthenticated])
 
+  if (!isAuthenticated) {
+    return (
+      <Flex width="100vw" height="100vh" alignItems="center" justify="center">
+        {children}
+      </Flex>
+    )
+  }
   return (
     <Box as="section" w="100%" margin="0 auto" transition="0.5s ease-out">
-      {isAuthenticated && <Header />}
+      <Header />
       <Flex
         alignItems="flex-start"
         height="100%"
@@ -32,14 +39,14 @@ const Layout = ({children, title}: LayoutProps) => {
         mt="89px"
         justify="space-between"
       >
-        {isAuthenticated && <LeftNavigation />}
+        <LeftNavigation />
         <Container maxW="full">
           <ContentHeader title={title} />
           {children}
           <ContentFooter />
         </Container>
       </Flex>
-      {isAuthenticated && <Footer />}
+      <Footer />
     </Box>
   )
 }
