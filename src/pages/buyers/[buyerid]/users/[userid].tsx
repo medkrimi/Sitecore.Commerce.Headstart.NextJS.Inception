@@ -1,18 +1,21 @@
-// import {useEffect, useState} from "react"
-// import {AddEditForm} from "../../lib/components/buyers/AddEditForm"
-// import {Buyer} from "ordercloud-javascript-sdk"
-// import {buyersService} from "../../lib/api"
-// import {useRouter} from "next/router"
+import {useEffect, useState} from "react"
 
-// const BuyerListItem = () => {
-//   const router = useRouter()
-//   const [buyer, setBuyer] = useState({} as Buyer)
-//   useEffect(() => {
-//     if (router.query.id) {
-//       buyersService.getById(router.query.id).then((buyer) => setBuyer(buyer))
-//     }
-//   }, [router.query.id])
-//   return <>{buyer?.ID ? <AddEditForm buyer={buyer} /> : <div> Loading</div>}</>
-// }
+import {AddEditForm} from "../../../../lib/components/users/AddEditForm"
+import {User} from "ordercloud-javascript-sdk"
+import {useRouter} from "next/router"
+import {usersService} from "../../../../lib/api"
 
-// export default BuyerListItem
+const UserItem = () => {
+  const router = useRouter()
+  const [user, setUser] = useState({} as User)
+  useEffect(() => {
+    if (router.query.buyerid) {
+      usersService
+        .getById(router.query.buyerid, router.query.userid)
+        .then((user) => setUser(user))
+    }
+  }, [router.query.buyerid, router.query.userid])
+  return <>{user?.ID ? <AddEditForm user={user} /> : <div> Loading</div>}</>
+}
+
+export default UserItem

@@ -13,7 +13,8 @@ import {
   NumberInputControl,
   PercentComplete,
   SelectControl,
-  SwitchControl
+  SwitchControl,
+  TextareaControl
 } from "formik-chakra-ui"
 
 import Card from "../card/Card"
@@ -73,7 +74,7 @@ function AddEditForm({userGroup}) {
         isClosable: true,
         position: "top"
       })
-      router.push(".")
+      router.push(`/buyers/${router.query.buyerid}/usergroups/`)
     } catch (e) {
       setSubmitting(false)
     }
@@ -95,7 +96,7 @@ function AddEditForm({userGroup}) {
         isClosable: true,
         position: "top"
       })
-      router.push(".")
+      router.push(`/buyers/${router.query.buyerid}/usergroups/`)
     } catch (e) {
       setSubmitting(false)
     }
@@ -129,8 +130,7 @@ function AddEditForm({userGroup}) {
               <Box as="form" onSubmit={handleSubmit as any}>
                 <Stack spacing={5}>
                   <InputControl name="Name" label="User Group Name" />
-                  <InputControl name="Description" label="Description" />
-                  {isAddMode && <PercentComplete />}
+                  <TextareaControl name="Description" label="Description" />
                   <ButtonGroup>
                     <Button
                       variant="primaryButton"
@@ -150,7 +150,11 @@ function AddEditForm({userGroup}) {
                       Reset
                     </Button>
                     <Button
-                      onClick={() => router.push("/buyers")}
+                      onClick={() =>
+                        router.push(
+                          `/buyers/${router.query.buyerid}/usersgroups`
+                        )
+                      }
                       variant="secondaryButton"
                       isLoading={isSubmitting}
                     >

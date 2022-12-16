@@ -35,12 +35,12 @@ const UserGroupsList = () => {
     setBuyers(userGroupsList.Items)
   }
 
-  async function deleteBuyer(userGroupId) {
+  async function deleteBuyer(userGroupid) {
     try {
-      await userGroupsService.delete(router.query.buyerid, userGroupId)
+      await userGroupsService.delete(router.query.buyerid, userGroupid)
       initBuyersData()
       toast({
-        id: id + "-deleted",
+        id: userGroupid + "-deleted",
         title: "Success",
         description: "Buyer deleted successfully.",
         status: "success",
@@ -50,7 +50,7 @@ const UserGroupsList = () => {
       })
     } catch (e) {
       toast({
-        id: id + "fail-deleted",
+        id: userGroupid + "fail-deleted",
         title: "Error",
         description: "Buyer delete failed",
         status: "error",
@@ -66,7 +66,11 @@ const UserGroupsList = () => {
       Header: "Name",
       accessor: "Name",
       Cell: ({value, row}) => (
-        <Link href={`/buyers/${row.original.ID}`}>{value}</Link>
+        <Link
+          href={`/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`}
+        >
+          {value}
+        </Link>
       )
     },
     {
@@ -79,7 +83,11 @@ const UserGroupsList = () => {
         <ButtonGroup>
           <Button
             variant="secondaryButton"
-            onClick={() => router.push(`/buyers/${row.original.ID}/`)}
+            onClick={() =>
+              router.push(
+                `/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`
+              )
+            }
             leftIcon={<EditIcon />}
           >
             Edit
@@ -112,7 +120,6 @@ const UserGroupsList = () => {
         >
           Create user group
         </Button>
-
         <HStack>
           <Button variant="secondaryButton">Export CSV</Button>
         </HStack>

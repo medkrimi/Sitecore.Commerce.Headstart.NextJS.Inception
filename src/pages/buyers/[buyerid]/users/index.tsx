@@ -22,7 +22,7 @@ import {dateHelper} from "../../../../lib/utils/date.utils"
 import {useRouter} from "next/router"
 import {usersService} from "../../../../lib/api"
 
-const UserGroupsList = () => {
+const UsersList = () => {
   const [users, setBuyers] = useState([])
   const router = useRouter()
   const toast = useToast()
@@ -35,12 +35,12 @@ const UserGroupsList = () => {
     setBuyers(usersList.Items)
   }
 
-  async function deleteBuyer(userGroupId) {
+  async function deleteBuyer(userid) {
     try {
-      await usersService.delete(router.query.buyerid, userGroupId)
+      await usersService.delete(router.query.buyerid, userid)
       initUsersData()
       toast({
-        id: id + "-deleted",
+        id: userid + "-deleted",
         title: "Success",
         description: "Buyer deleted successfully.",
         status: "success",
@@ -50,7 +50,7 @@ const UserGroupsList = () => {
       })
     } catch (e) {
       toast({
-        id: id + "fail-deleted",
+        id: userid + "fail-deleted",
         title: "Error",
         description: "Buyer delete failed",
         status: "error",
@@ -64,7 +64,12 @@ const UserGroupsList = () => {
   const columnsData = [
     {
       Header: "FirstName",
-      accessor: "FirstName"
+      accessor: "FirstName",
+      Cell: ({value, row}) => (
+        <Link href={`/buyers/${router.query.buyerid}/users/${row.original.ID}`}>
+          {value}
+        </Link>
+      )
     },
     {
       Header: "LastName",
@@ -92,7 +97,18 @@ const UserGroupsList = () => {
     },
     {
       Header: "Active",
-      accessor: "Active"
+      accessor: "Active",
+      Cell: ({row}) => (
+        <>
+          <Icon
+            as={row.original.Active === true ? MdCheck : IoMdClose}
+            color={row.original.Active === true ? "green.400" : "red.400"}
+            w="20px"
+            h="20px"
+          />
+          <Text>{row.original.Active ? "Active" : "Non active"}</Text>
+        </>
+      )
     },
     {
       Header: "ACTIONS",
@@ -100,7 +116,11 @@ const UserGroupsList = () => {
         <ButtonGroup>
           <Button
             variant="secondaryButton"
-            onClick={() => router.push(`/buyers/${row.original.ID}/`)}
+            onClick={() =>
+              router.push(
+                `/buyers/${router.query.buyerid}/users/${row.original.ID}`
+              )
+            }
             leftIcon={<EditIcon />}
           >
             Edit
@@ -125,7 +145,9 @@ const UserGroupsList = () => {
       </Heading>
       <HStack justifyContent="space-between" w="100%">
         <Button
-          onClick={() => router.push("#")}
+          onClick={() =>
+            router.push(`/buyers/${router.query.buyerid}/users/add`)
+          }
           variant="primaryButton"
           leftIcon={<AddIcon />}
         >
@@ -142,4 +164,4 @@ const UserGroupsList = () => {
     </Container>
   )
 }
-export default UserGroupsList
+export default UsersList

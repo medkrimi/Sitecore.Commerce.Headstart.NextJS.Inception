@@ -1,3 +1,3 @@
-// import {AddEditForm} from "../../lib/components/buyers"
+import {AddEditForm} from "../../../../lib/components/users"
 
-// export default AddEditForm
+export default AddEditForm

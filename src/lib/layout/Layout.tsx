@@ -43,9 +43,7 @@ const Layout = ({children}: LayoutProps) => {
         justify="flex-start"
       >
         {state?.isAnonymous ?? true ? <></> : <LeftNavigation />}
-        <VStack spacing={5}>
-          <Box>{children}</Box>
-        </VStack>
+        {children}
       </HStack>
       {state?.isAnonymous ?? true ? <></> : <Footer />}
     </Box>
