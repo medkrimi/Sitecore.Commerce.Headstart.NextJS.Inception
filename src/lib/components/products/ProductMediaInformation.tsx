@@ -82,11 +82,6 @@ export default function ProductMediaInformation({
       }))
     }
 
-  const handleCheckboxChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
-    }
-
   const onDeleteProductImageClicked = (url: string) => async (e) => {
     setIsLoading(true)
     var tmpImages = [...formValues.images]

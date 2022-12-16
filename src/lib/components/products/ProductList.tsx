@@ -29,9 +29,9 @@ import {ProductXPs} from "lib/types/ProductXPs"
 import {CalculateEditorialProcess} from "./EditorialProgressBar"
 
 const ProductList = (props) => {
-  const [componentProducts, setComponentProducts] = useState<
-    Product<ProductXPs>[]
-  >(props.products)
+  const [componentProducts, setComponentProducts] = useState<Product[]>(
+    props.products
+  )
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
   const [sortBy, setSortBy] = useState("")
@@ -179,8 +179,10 @@ const ProductList = (props) => {
                           <Image
                             src={
                               typeof product?.xp?.Images != "undefined"
-                                ? product?.xp?.Images[0]?.ThumbnailUrl
-                                : "https://mss-p-006-delivery.stylelabs.cloud/api/public/content/4fc742feffd14e7686e4820e55dbfbaa"
+                                ? product?.xp?.Images[0]?.ThumbnailUrl ??
+                                  product?.xp?.Images[0]?.Url
+                                : product?.xp?.image_url ??
+                                  "https://mss-p-006-delivery.stylelabs.cloud/api/public/content/4fc742feffd14e7686e4820e55dbfbaa"
                             }
                             alt="product image"
                             width="50px"

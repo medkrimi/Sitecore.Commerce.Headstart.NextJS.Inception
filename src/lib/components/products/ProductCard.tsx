@@ -30,8 +30,10 @@ const ProductCard = (props) => {
           <Image
             src={
               typeof product?.xp?.Images != "undefined"
-                ? product?.xp?.Images[0]?.ThumbnailUrl
-                : "https://mss-p-006-delivery.stylelabs.cloud/api/public/content/4fc742feffd14e7686e4820e55dbfbaa"
+                ? product?.xp?.Images[0]?.ThumbnailUrl ??
+                  product?.xp?.Images[0]?.Url
+                : product?.xp?.image_url ??
+                  "https://mss-p-006-delivery.stylelabs.cloud/api/public/content/4fc742feffd14e7686e4820e55dbfbaa"
             }
             alt="product image"
             width="100px"
