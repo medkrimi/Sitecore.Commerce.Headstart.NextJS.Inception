@@ -4,6 +4,8 @@ import {AddEditForm} from "../../../lib/components/buyers/AddEditForm"
 import {Buyer} from "ordercloud-javascript-sdk"
 import {buyersService} from "../../../lib/api"
 import {useRouter} from "next/router"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const BuyerListItem = () => {
   const router = useRouter()
@@ -18,4 +20,12 @@ const BuyerListItem = () => {
   return <>{buyer?.ID ? <AddEditForm buyer={buyer} /> : <div> Loading</div>}</>
 }
 
-export default BuyerListItem
+const ProtectedBuyerListItem = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.BuyerManager}>
+      <BuyerListItem />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedBuyerListItem

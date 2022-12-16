@@ -48,6 +48,8 @@ import {NextSeo} from "next-seo"
 import {dateHelper} from "lib/utils/date.utils"
 import {priceHelper} from "lib/utils/price.utils"
 import {textHelper} from "lib/utils/text.utils"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const TableRow = (orderReturn: OrderReturn) => {
   let currentItems: OrderReturnItem[] = orderReturn.ItemsToReturn
@@ -115,8 +117,7 @@ const ReturnsPage = () => {
   return (
     <Container maxW="full">
       <NextSeo title="Returns" />
-      <Heading as="h2">Returns List</Heading>
-      <HStack justifyContent="space-between" w="100%">
+      <HStack justifyContent="space-between" w="100%" mb={5}>
         <Link href={`/returns/new`}>
           <Button variant="primaryButton">New Return</Button>
         </Link>
@@ -198,7 +199,7 @@ const ReturnsPage = () => {
           </Thead>
           <Tbody>{returnsContent}</Tbody>
         </Table>
-        {loadMoreButton}
+        {/* {loadMoreButton} */}
       </Card>
       <AlertDialog
         isOpen={isExportCSVDialogOpen}
@@ -240,4 +241,20 @@ const ReturnsPage = () => {
   )
 }
 
-export default ReturnsPage
+const ProtectedReturnsPage = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.OrderManager}>
+      <ReturnsPage />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedReturnsPage
+
+export async function getStaticProps() {
+  return {
+    props: {
+      title: "Returns Listing"
+    }
+  }
+}

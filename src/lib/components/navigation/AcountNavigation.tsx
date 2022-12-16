@@ -22,21 +22,26 @@ import {
   Tooltip,
   useColorMode,
   useColorModeValue,
-  useDisclosure,
-  useMediaQuery
+  useDisclosure
 } from "@chakra-ui/react"
 import {BsMoonStarsFill, BsSun} from "react-icons/bs"
 import {HiOutlineBell, HiOutlineCog} from "react-icons/hi"
-import {Me, RequiredDeep} from "ordercloud-javascript-sdk"
 import React, {useState} from "react"
 
 import {ChevronDownIcon} from "@chakra-ui/icons"
 import Cookies from "universal-cookie"
 import {ItemContent} from "../generic/ItemContent"
-import {Logout} from "../../services/ordercloud.service"
 import NextLink from "next/link"
+import {useAuth} from "lib/hooks/useAuth"
+import ProtectedContent from "../auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const MobileNavigation = () => {
+  const {Logout} = useAuth()
+  let usersName =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("usersname"))
+      : ""
   let menuBg = useColorModeValue("white", "navy.800")
   const {isOpen, onOpen, onClose} = useDisclosure()
   const btnRef = React.useRef()
@@ -102,40 +107,43 @@ const MobileNavigation = () => {
         <MenuButton>
           <HStack>
             <Avatar
-              name="Chris Janning"
-              src="/images/avatars/avatar1.png"
+              name={usersName}
+              src={`https://robohash.org/{usersName}.png`}
               borderRadius="50%"
-              mr="10px"
-              ml="30px"
-              size="sm"
+              mr="0"
+              ml="15px"
+              size="md"
+              border=".5px solid #ccc"
             />
             <Show breakpoint="(min-width: 900px)">
-              <Text fontSize="12px">Chris Janning</Text>
+              <Text fontSize="12px">{usersName}</Text>
               <ChevronDownIcon ml="10px" />
             </Show>
           </HStack>
         </MenuButton>
         <MenuList>
-          <MenuItem>
-            <NextLink href="#" passHref>
-              <Link pl="2" pr="2">
-                Manage Profile
-              </Link>
-            </NextLink>
-          </MenuItem>
-          <MenuItem>
-            <NextLink href="#" passHref>
-              <Link pl="2" pr="2">
-                Notifications
-              </Link>
-            </NextLink>
-          </MenuItem>
-          <MenuItem>
-            <NextLink href="/logoff" passHref>
-              <Link pl="2" pr="2" onClick={() => Logout()}>
-                Log out
-              </Link>
-            </NextLink>
+          <ProtectedContent hasAccess={appPermissions.MeManager}>
+            <MenuItem>
+              <NextLink href="#" passHref>
+                <Link pl="2" pr="2">
+                  Manage Profile
+                </Link>
+              </NextLink>
+            </MenuItem>
+          </ProtectedContent>
+          <ProtectedContent hasAccess={appPermissions.MeManager}>
+            <MenuItem>
+              <NextLink href="#" passHref>
+                <Link pl="2" pr="2">
+                  Notifications
+                </Link>
+              </NextLink>
+            </MenuItem>
+          </ProtectedContent>
+          <MenuItem onClick={() => Logout()}>
+            <Text pl="2" pr="2">
+              Log Out
+            </Text>
           </MenuItem>
         </MenuList>
       </Menu>

@@ -39,6 +39,7 @@
     "formik": "^2.2.9",
     "formik-chakra-ui": "^1.6.1",
     "framer-motion": "^7.6.4",
+    "lodash": "^4.17.21",
     "next": "12.2.0",
     "next-seo": "^5.4.0",
     "ordercloud-javascript-sdk": "^5.0.0-beta.2",

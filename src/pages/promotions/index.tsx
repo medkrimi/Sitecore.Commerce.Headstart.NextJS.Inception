@@ -23,32 +23,24 @@ import {
   Tbody,
   Td,
   Text,
-  Textarea,
   Th,
   Thead,
   Tr,
-  VStack,
-  useColorMode,
-  useColorModeValue
+  VStack
 } from "@chakra-ui/react"
-import {
-  GetAuthenticationStatus,
-  OcAuthState
-} from "../../lib/services/ordercloud.service"
-import {Promotion, Promotions} from "ordercloud-javascript-sdk"
-import {dateHelper, priceHelper, textHelper} from "lib/utils/"
+import {Promotions} from "ordercloud-javascript-sdk"
+import {dateHelper, textHelper} from "lib/utils/"
 import {useEffect, useRef, useState} from "react"
-
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
 import {HiOutlineMinusSm} from "react-icons/hi"
-import LettersCard from "lib/components/card/LettersCard"
 import Link from "../../lib/components/navigation/Link"
 import {NextSeo} from "next-seo"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const PromotionsPage = () => {
   const [promotions, setPromotions] = useState([])
-  const [authState, setAuthState] = useState<OcAuthState>()
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const cancelRef = useRef()
@@ -67,8 +59,6 @@ const PromotionsPage = () => {
 
   useEffect(() => {
     const getPromotions = async () => {
-      const state = GetAuthenticationStatus()
-      setAuthState(state)
       const promotionsList = Promotions.List()
       setPromotions((await promotionsList).Items)
     }
@@ -99,10 +89,7 @@ const PromotionsPage = () => {
   return (
     <Container maxW="full">
       <NextSeo title="Promotions List" />
-      <Heading as="h2" marginTop={5}>
-        Promotions List
-      </Heading>
-      <HStack justifyContent="space-between" w="100%">
+      <HStack justifyContent="space-between" w="100%" mb={5}>
         <Link href={`/promotions/new`}>
           <Button variant="primaryButton">New Promotion</Button>
         </Link>
@@ -181,7 +168,7 @@ const PromotionsPage = () => {
           </Thead>
           <Tbody>{promotionsContent}</Tbody>
         </Table>
-        {loadMoreButton}
+        {/* {loadMoreButton} */}
       </Card>
       <AlertDialog
         isOpen={isExportCSVDialogOpen}
@@ -227,4 +214,20 @@ const PromotionsPage = () => {
   )
 }
 
-export default PromotionsPage
+const ProtectedPromotionsPage = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.ProductManager}>
+      <PromotionsPage />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedPromotionsPage
+
+export async function getStaticProps() {
+  return {
+    props: {
+      title: "Promotions List"
+    }
+  }
+}

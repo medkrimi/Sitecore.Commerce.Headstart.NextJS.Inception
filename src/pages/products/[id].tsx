@@ -47,6 +47,8 @@ import ProductVariants from "lib/components/products/ProductVariants"
 import ProductXpInformation from "lib/components/products/ProductXpInformation"
 import React from "react"
 import {useRouter} from "next/router"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const ProductDetails = () => {
   const router = useRouter()
@@ -358,4 +360,12 @@ const ProductDetails = () => {
   )
 }
 
-export default ProductDetails
+const ProtectedProductDetails = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.ProductManager}>
+      <ProductDetails />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedProductDetails
