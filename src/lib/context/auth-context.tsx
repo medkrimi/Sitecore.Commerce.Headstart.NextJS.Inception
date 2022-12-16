@@ -12,8 +12,8 @@ export interface AuthState {
   assignedRoles: ApiRole[]
   setUserTokens?: (accessToken: string, refreshToken: string) => void
   removeUserTokens?: () => void
-  // isAdmin: boolean
-  // isSupplier: boolean
+  isAdmin: boolean
+  isSupplier: boolean
 }
 
 const AuthContext = React.createContext<AuthState>(undefined)
@@ -31,7 +31,9 @@ const AuthProvider = ({children}) => {
         decodedAccessToken: {} as DecodedToken,
         loading: false,
         initialized: false,
-        assignedRoles: []
+        assignedRoles: [],
+        isAdmin: false,
+        isSupplier: false
       }
     } else {
       const decodedAccessToken = parseJwt(accessToken)
@@ -46,7 +48,9 @@ const AuthProvider = ({children}) => {
         // will be a string else it will be a proper array
         assignedRoles: (typeof decodedAccessToken.role === "string"
           ? [decodedAccessToken.role]
-          : decodedAccessToken.role) as ApiRole[]
+          : decodedAccessToken.role) as ApiRole[],
+        isAdmin: decodedAccessToken.usrtype === "admin",
+        isSupplier: decodedAccessToken.usrtype === "supplier"
       }
     }
   }

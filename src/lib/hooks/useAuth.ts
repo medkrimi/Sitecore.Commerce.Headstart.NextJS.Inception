@@ -5,8 +5,14 @@ import {Auth, Me} from "ordercloud-javascript-sdk"
 import {useContext} from "react"
 
 export function useAuth() {
-  const {setUserTokens, removeUserTokens, isAuthenticated, assignedRoles} =
-    useContext(AuthContext)
+  const {
+    setUserTokens,
+    removeUserTokens,
+    isAuthenticated,
+    assignedRoles,
+    isAdmin,
+    isSupplier
+  } = useContext(AuthContext)
   const router = useRouter()
 
   async function Login(
@@ -32,5 +38,5 @@ export function useAuth() {
     }
   }
 
-  return {Login, Logout, isAuthenticated, assignedRoles}
+  return {Login, Logout, isAuthenticated, assignedRoles, isAdmin, isSupplier}
 }
