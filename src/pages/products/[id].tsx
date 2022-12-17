@@ -28,7 +28,7 @@ import ProductPriceScheduleAssignments from "lib/components/products/ProductPric
 import ProductSpecs from "lib/components/products/ProductSpecs"
 import ProductSuppliers from "lib/components/products/ProductSupllier"
 import ProductVariants from "lib/components/products/ProductVariants"
-import ProductXPInformation from "lib/components/products/ProductXPInformation"
+import ProductXpInformation from "lib/components/products/ProductXpInformation"
 import ProductMediaInformation from "lib/components/products/ProductMediaInformation"
 import {
   ComposedProduct,
@@ -242,7 +242,7 @@ const ProductDetails = () => {
                   />
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={4}>
-                  <ProductXPInformation
+                  <ProductXpInformation
                     composedProduct={composedProduct}
                     setComposedProduct={setComposedProduct}
                   />

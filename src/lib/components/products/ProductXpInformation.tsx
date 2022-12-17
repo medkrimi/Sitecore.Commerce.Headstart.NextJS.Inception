@@ -44,7 +44,7 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductXPInformation({
+export default function ProductXpInformation({
   composedProduct,
   setComposedProduct
 }: ProductDataProps) {
