@@ -1,20 +1,14 @@
+import {SearchIcon} from "@chakra-ui/icons"
 import {
-  Box,
+  Text,
   Button,
-  Center,
   Checkbox,
-  Flex,
   FormControl,
   FormLabel,
-  HStack,
   Heading,
-  Icon,
+  HStack,
   IconButton,
-  Image,
   Input,
-  InputGroup,
-  InputLeftElement,
-  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -22,38 +16,33 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select,
-  Slider,
-  SliderFilledTrack,
-  SliderMark,
-  SliderThumb,
-  SliderTrack,
-  Tbody,
-  Td,
-  Text,
   Th,
   Thead,
   Tooltip,
   Tr,
-  VStack,
   useColorModeValue,
   useDisclosure,
-  useToast
+  useToast,
+  VStack,
+  Slider,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderTrack,
+  Box,
+  SliderMark,
+  InputGroup,
+  InputLeftElement,
+  Select
 } from "@chakra-ui/react"
 import {ChangeEvent, useEffect, useState} from "react"
-import {CheckIcon, CloseIcon, Search2Icon, SearchIcon} from "@chakra-ui/icons"
 import {
-  FiArrowDown,
-  FiArrowRight,
-  FiArrowUp,
-  FiCheckSquare,
-  FiChevronDown,
-  FiChevronUp,
-  FiEdit,
-  FiGrid,
-  FiList,
+  FiRotateCcw,
   FiPlus,
-  FiRotateCcw
+  FiList,
+  FiGrid,
+  FiEdit,
+  FiChevronDown,
+  FiChevronUp
 } from "react-icons/fi"
 import {Product, Products} from "ordercloud-javascript-sdk"
 
@@ -105,6 +94,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
       options.searchOn = ["Name", "Description", "ID"]
       options.searchType = optionsSearchType
       options.sortBy = [optionsSortBy]
+      options.pageSize = 100
       var productList = await Products.List<ProductXPs>(options)
       let productItems = productList.Items
       setComponentProducts(productItems)
@@ -142,7 +132,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
   })
 
   const onSearchClicked = async () => {
-    console.log("onSearchClicked")
+    //console.log("onSearchClicked")
     setOptionsSortBy("name")
     setSortBy("name")
     setEditorialProgressFilter(100)
@@ -205,7 +195,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
     }
 
   const onResetSearch = (e) => {
-    console.log("onResetSearch")
+    //console.log("onResetSearch")
     setSearchQuery("")
     setOptionsSortBy("name")
     setSortBy("name")
@@ -262,7 +252,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
   }
 
   const onMassEditCheckboxChanged = (productId: string) => (e) => {
-    console.log(productId)
+    //console.log(productId)
     var product = componentProducts.find((element) => element.ID == productId)
     var isChecked = e.target.checked
     var productsToEdit = massEditProducts
@@ -413,7 +403,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           icon={<SearchIcon />}
                           onClick={onSearchClicked}
                           float="right"
-                          variant="primary"
                         />
                       </Tooltip>
                       <Tooltip label="Reset Search Parameters">
@@ -422,7 +411,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           icon={<FiRotateCcw />}
                           onClick={onResetSearch}
                           float="right"
-                          variant="primary"
                         />
                       </Tooltip>
                       <Tooltip label="Add new Product">
@@ -431,7 +419,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           icon={<FiPlus />}
                           onClick={onOpenAddProduct}
                           float="right"
-                          variant="primary"
                         />
                       </Tooltip>
                       <Tooltip label="Mass Edit Products">
@@ -440,7 +427,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           icon={<FiEdit />}
                           onClick={onMassEditOpenClicked}
                           float="right"
-                          variant="primary"
                         />
                       </Tooltip>
                       <Tooltip label="Switch List/Grid View">
@@ -449,7 +435,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           icon={toggleViewMode ? <FiGrid /> : <FiList />}
                           onClick={() => setToggleViewMode(!toggleViewMode)}
                           float="right"
-                          variant="primary"
                         />
                       </Tooltip>
                       <InputGroup width={"450px"} float="right">
@@ -461,7 +446,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           placeholder="Enter here ..."
                           aria-label="Enter Search Term"
                           //_placeholder={{color: color}}
-                          variant="primary"
+
                           id={"headerSearchInput"}
                           width={"100%"}
                           value={searchQuery}
@@ -533,7 +518,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
                                 : setOptionsSortBy("!" + optionsSortBy)
                             }}
                             float="right"
-                            variant="primary"
                           />
                         </Tooltip>
                       </InputGroup>
