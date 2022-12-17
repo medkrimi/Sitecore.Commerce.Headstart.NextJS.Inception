@@ -1,56 +1,50 @@
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Button,
   Checkbox,
+  CheckboxGroup,
   Container,
-  Heading,
+  Flex,
+  Divider,
   HStack,
+  Heading,
+  IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  Spinner,
+  Stack,
   Table,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
-  useColorMode,
-  useColorModeValue,
-  Text,
-  CheckboxGroup,
-  Stack,
-  VStack,
-  Divider,
-  IconButton,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  Textarea,
-  AlertDialogFooter,
-  Spinner
+  VStack
 } from "@chakra-ui/react"
-import {NextSeo} from "next-seo"
-import {Me, Orders} from "ordercloud-javascript-sdk"
+import {Orders} from "ordercloud-javascript-sdk"
 import {useEffect, useRef, useState} from "react"
-import Link from "../../lib/components/navigation/Link"
-import {formatDate} from "lib/utils/formatDate"
-import formatPrice from "lib/utils/formatPrice"
-import {
-  GetAuthenticationStatus,
-  OcAuthState
-} from "lib/scripts/OrdercloudService"
-import formatStatus from "lib/utils/formatStatus"
-import LettersCard from "lib/components/card/LettersCard"
-import formatTextTruncate from "lib/utils/formatTextTruncate"
-import {ChevronDownIcon} from "@chakra-ui/icons"
 import Card from "lib/components/card/Card"
+import {ChevronDownIcon} from "@chakra-ui/icons"
 import {HiOutlineMinusSm} from "react-icons/hi"
+import LettersCard from "lib/components/card/LettersCard"
+import Link from "../../lib/components/navigation/Link"
+import {NextSeo} from "next-seo"
+import {dateHelper} from "lib/utils/date.utils"
+import {priceHelper} from "lib/utils/price.utils"
+import {textHelper} from "lib/utils/text.utils"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([])
-  const [authState, setAuthState] = useState<OcAuthState>()
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const cancelRef = useRef()
@@ -67,11 +61,7 @@ const OrdersPage = () => {
 
   useEffect(() => {
     const getOrders = async () => {
-      const state = GetAuthenticationStatus()
-      setAuthState(state)
-      const ordersList = state?.isAdmin
-        ? await Orders.List("All")
-        : await Me.ListOrders()
+      const ordersList = await Orders.List("All")
       setOrders(ordersList.Items)
     }
     getOrders()
@@ -84,8 +74,8 @@ const OrdersPage = () => {
           <Checkbox pr="10px"></Checkbox>
           <Link href={`/orders/${order.ID}`}>{order.ID}</Link>
         </Td>
-        <Td>{formatDate(order.DateSubmitted)}</Td>
-        <Td>{formatStatus(order.Status)}</Td>
+        <Td>{dateHelper.formatDate(order.DateSubmitted)}</Td>
+        <Td>{textHelper.formatStatus(order.Status)}</Td>
         <Td>
           <HStack>
             <LettersCard
@@ -97,9 +87,9 @@ const OrdersPage = () => {
             </Text>
           </HStack>
         </Td>
-        <Td>{formatTextTruncate(50, order.OrderItem, "...")}</Td>
+        <Td>{textHelper.formatTextTruncate(50, order.OrderItem, "...")}</Td>
         <Td>{order.LineItemCount}</Td>
-        <Td>{formatPrice(order.Total)}</Td>
+        <Td>{priceHelper.formatPrice(order.Total)}</Td>
       </Tr>
     ))
   ) : (
@@ -111,10 +101,7 @@ const OrdersPage = () => {
   return (
     <Container maxW="full">
       <NextSeo title="Orders List" />
-      <Heading as="h2" marginTop={5}>
-        Orders List
-      </Heading>
-      <HStack justifyContent="space-between" w="100%">
+      <HStack justifyContent="space-between" w="100%" mb={5}>
         <Link href={`/orders/new`}>
           <Button variant="primaryButton">New Order</Button>
         </Link>
@@ -196,7 +183,7 @@ const OrdersPage = () => {
           </Thead>
           <Tbody>{ordersContent}</Tbody>
         </Table>
-        {loadMoreButton}
+        {/* {loadMoreButton} */}
       </Card>
       <AlertDialog
         isOpen={isExportCSVDialogOpen}
@@ -238,4 +225,18 @@ const OrdersPage = () => {
   )
 }
 
-export default OrdersPage
+const ProtectedOrdersPage = () => (
+  <ProtectedContent hasAccess={appPermissions.OrderManager}>
+    <OrdersPage />
+  </ProtectedContent>
+)
+
+export default ProtectedOrdersPage
+
+export async function getStaticProps() {
+  return {
+    props: {
+      title: "Order Listing"
+    }
+  }
+}

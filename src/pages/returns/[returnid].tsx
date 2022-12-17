@@ -8,53 +8,37 @@ import {
   Flex,
   Grid,
   GridItem,
-  Heading,
   HStack,
+  Heading,
   IconButton,
   Link,
   Spacer,
+  Text,
   useColorMode,
-  useColorModeValue,
-  Text
+  useColorModeValue
 } from "@chakra-ui/react"
-import {NextSeo} from "next-seo"
-import NextLink from "next/link"
-import {useRouter} from "next/router"
-import formatPrice from "lib/utils/formatPrice"
+import {FunctionComponent, useEffect, useState} from "react"
 import {
   OrderReturn,
   OrderReturns,
   Payment,
   Payments
 } from "ordercloud-javascript-sdk"
-import {FunctionComponent, useEffect, useState} from "react"
-import {formatDate} from "lib/utils/formatDate"
-import OcOrderReturnItemList from "lib/components/returns/OcOrderReturnItem"
-import {HiOutlineMinusSm} from "react-icons/hi"
+import {dateHelper, priceHelper} from "lib/utils"
+
 import Card from "lib/components/card/Card"
+import {HiOutlineMinusSm} from "react-icons/hi"
+import NextLink from "next/link"
+import {NextSeo} from "next-seo"
+import OcOrderReturnItemList from "lib/components/returns/OcOrderReturnItem"
+import {useRouter} from "next/router"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const OrderReturnDetailPage: FunctionComponent = () => {
   const router = useRouter()
   const [orderReturn, setOrderReturn] = useState({} as OrderReturn)
   const [itemsToReturn, setItemsToReturn] = useState([])
-  const boxBgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
-  const buttonPrimary = useColorModeValue("black", "brand.500")
-  const buttonSecondary = useColorModeValue("white", "black")
-  const {colorMode, toggleColorMode} = useColorMode()
-  const shadow = "5px 5px 5px #999999"
-  const gradient =
-    colorMode === "light"
-      ? "linear(to-t, brand.300, brand.400)"
-      : "linear(to-t, brand.600, brand.500)"
-  const hoverColor = useColorModeValue("brand.300", "brand.400")
-  const focusColor = useColorModeValue("brand.300", "brand.400")
-  const colorSheme = "gray"
-  const colorPrimary = useColorModeValue("white", "black")
-  const colorSecondary = useColorModeValue(
-    "boxTextColor.900",
-    "boxTextColor.100"
-  )
-  const tileBg = useColorModeValue("tileBg.500", "tileBg.900")
 
   useEffect(() => {
     const getOrderReturn = async () => {
@@ -113,15 +97,7 @@ const OrderReturnDetailPage: FunctionComponent = () => {
     <>
       <Container maxW="full" marginTop={30} marginBottom={30}>
         <NextSeo title="Order Return Detail" />
-        <Heading as="h2" mt="40px">
-          Order Return
-        </Heading>
-        <Heading as="h4" size="md">
-          <HStack mb="20px">
-            <Text>Return ID:</Text> <Text>{orderReturn.ID}</Text>
-          </HStack>
-        </Heading>
-        <HStack justifyContent="space-between" w="100%">
+        <HStack justifyContent="space-between" w="100%" mb={5}>
           <NextLink href="new" passHref>
             <Link pl="2" pr="2">
               <Button variant="primaryButton">New Return</Button>
@@ -149,7 +125,8 @@ const OrderReturnDetailPage: FunctionComponent = () => {
               <Flex minWidth="max-content" alignItems="center" gap="2" mb="4">
                 <Box>
                   <Heading size="md">
-                    Refund Amount: {formatPrice(orderReturn.RefundAmount)}
+                    Refund Amount:{" "}
+                    {priceHelper.formatPrice(orderReturn.RefundAmount)}
                   </Heading>
                 </Box>
                 <Spacer />
@@ -186,14 +163,14 @@ const OrderReturnDetailPage: FunctionComponent = () => {
                   <Heading as="h5" size="sm">
                     Request Submitted
                   </Heading>
-                  {formatDate(orderReturn.DateSubmitted)}
+                  {dateHelper.formatDate(orderReturn.DateSubmitted)}
                 </GridItem>
                 {orderReturn.DateCanceled && (
                   <GridItem w="100%" h="10">
                     <Heading as="h5" size="sm">
                       Date Canceled
                     </Heading>
-                    {formatDate(orderReturn.DateCanceled)}
+                    {dateHelper.formatDate(orderReturn.DateCanceled)}
                   </GridItem>
                 )}
                 {orderReturn.DateCompleted && (
@@ -201,7 +178,7 @@ const OrderReturnDetailPage: FunctionComponent = () => {
                     <Heading as="h5" size="sm">
                       Date Completed
                     </Heading>
-                    {formatDate(orderReturn.DateCompleted)}
+                    {dateHelper.formatDate(orderReturn.DateCompleted)}
                   </GridItem>
                 )}
                 {orderReturn.Comments && (
@@ -228,4 +205,12 @@ const OrderReturnDetailPage: FunctionComponent = () => {
   )
 }
 
-export default OrderReturnDetailPage
+const ProtectedOrderReturnDetailPage = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.OrderManager}>
+      <OrderReturnDetailPage />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedOrderReturnDetailPage

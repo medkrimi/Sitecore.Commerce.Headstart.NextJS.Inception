@@ -1,41 +1,52 @@
-import {Box, HStack} from "@chakra-ui/react"
+import {Box, Container, Flex} from "@chakra-ui/react"
 import {ReactNode, useEffect, useState} from "react"
 import Footer from "./Footer"
 import Header from "./Header"
+import ContentHeader from "./ContentHeader"
+import ContentFooter from "./ContentFooter"
 import LeftNavigation from "lib/components/navigation/SideNavigation"
-import {
-  GetAuthenticationStatus,
-  OcAuthState
-} from "lib/scripts/OrdercloudService"
+import {useAuth} from "lib/hooks/useAuth"
 
 type LayoutProps = {
   children: ReactNode
+  title: string
 }
 
-const Layout = ({children}: LayoutProps) => {
-  const [state, setState] = useState<OcAuthState>()
+const Layout = ({children, title}: LayoutProps) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const auth = useAuth()
 
   useEffect(() => {
-    setState(GetAuthenticationStatus())
-  }, [children])
+    setIsAuthenticated(auth.isAuthenticated)
+  }, [auth.isAuthenticated])
 
+  if (!isAuthenticated) {
+    return (
+      <Flex width="100vw" height="100vh" alignItems="center" justify="center">
+        {children}
+      </Flex>
+    )
+  }
   return (
     <Box as="section" w="100%" margin="0 auto" transition="0.5s ease-out">
-      {state?.isAnonymous ?? true ? <></> : <Header />}
-      <HStack
+      <Header />
+      <Flex
         alignItems="flex-start"
         height="100%"
-        pr="20px"
         w="100%"
         width="full"
         as="section"
         mt="89px"
-        justify="flex-start"
+        justify="space-between"
       >
-        {state?.isAnonymous ?? true ? <></> : <LeftNavigation />}
-        {children}
-      </HStack>
-      {state?.isAnonymous ?? true ? <></> : <Footer />}
+        <LeftNavigation />
+        <Container maxW="full">
+          <ContentHeader title={title} />
+          {children}
+          <ContentFooter />
+        </Container>
+      </Flex>
+      <Footer />
     </Box>
   )
 }

@@ -1,122 +1,191 @@
+import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
 import {
   Button,
+  ButtonGroup,
   Container,
+  HStack,
   Heading,
   Icon,
-  Table,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  Tr
+  useToast
 } from "@chakra-ui/react"
-import {Buyers, Catalogs, Users} from "ordercloud-javascript-sdk"
-import {MdCheck, MdReplay} from "react-icons/md"
 import {useEffect, useState} from "react"
-
+import BuyersDataTable from "../../lib/components/datatable/datatable"
+import Card from "lib/components/card/Card"
 import {IoMdClose} from "react-icons/io"
 import Link from "../../lib/components/navigation/Link"
+import {MdCheck} from "react-icons/md"
 import {NextSeo} from "next-seo"
 import React from "react"
-import {formatDate} from "../../lib/utils/formatDate"
+import {buyersService} from "../../lib/api"
+import {dateHelper} from "../../lib/utils/date.utils"
+import router from "next/router"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
-const BuyersPage = () => {
+const BuyersList = () => {
   const [buyers, setBuyers] = useState([])
-  const [usersTotalCount, setusersTotalCount] = useState<number>(0)
-  const [catalogTotalCount, setcatalogTotalCount] = useState<number>(0)
-
+  const [buyersMeta, setBuyersMeta] = useState({})
+  const toast = useToast()
   useEffect(() => {
-    const getBuyers = async () => {
-      const buyersList = await Buyers.List()
-      setBuyers(buyersList.Items)
+    initBuyersData()
+  }, [])
+
+  async function initBuyersData() {
+    let _buyerListMeta = {}
+    const buyersList = await buyersService.list()
+
+    const requests = buyersList.Items.map(async (buyer) => {
+      _buyerListMeta[buyer.ID] = {}
+      _buyerListMeta[buyer.ID]["usersCount"] =
+        await buyersService.getUsersCountById(buyer.ID)
+      _buyerListMeta[buyer.ID]["catalogsCount"] =
+        await buyersService.getCatalogsCountById(buyer.ID)
+    })
+    await Promise.all(requests)
+    setBuyersMeta(_buyerListMeta)
+    setBuyers(buyersList.Items)
+  }
+
+  async function deleteBuyer(id) {
+    try {
+      await buyersService.delete(id)
+      initBuyersData()
+      toast({
+        id: id + "-deleted",
+        title: "Success",
+        description: "Buyer deleted successfully.",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top"
+      })
+    } catch (e) {
+      toast({
+        id: id + "fail-deleted",
+        title: "Error",
+        description: "Buyer delete failed",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top"
+      })
     }
-    getBuyers()
-  })
-
-  function getUsersTotalCount({buyerID}): number {
-    Users.List(buyerID).then((userList) =>
-      setusersTotalCount(userList.Meta.TotalCount)
-    )
-    return usersTotalCount
   }
 
-  function getCatalogTotalCount({buyerID}): number {
-    Catalogs.List().then((catalogList) =>
-      setcatalogTotalCount(catalogList.Meta.TotalCount)
-    )
-    return catalogTotalCount
-  }
-
-  const buyersContent = buyers.length ? (
-    buyers.map((buyer) => (
-      <Tr key={buyer.ID}>
-        <Td>
-          <Link href={`/buyers/${buyer.ID}`}>{buyer.ID}</Link>
-        </Td>
-        <Td>{buyer.Name}</Td>
-        <Td>{buyer.DefaultCatalogID}</Td>
-        <Td>
+  const columnsData = [
+    {
+      Header: "BUYER ID",
+      accessor: "ID",
+      Cell: ({value, row}) => (
+        <Link href={`/buyers/${row.original.ID}`}>{value}</Link>
+      )
+    },
+    {
+      Header: "Name",
+      accessor: "Name",
+      Cell: ({value, row}) => (
+        <Link href={`/buyers/${row.original.ID}`}>{value}</Link>
+      )
+    },
+    {
+      Header: "DEFAULT CATALOG ID",
+      accessor: "DefaultCatalogID"
+    },
+    {
+      Header: "STATUS",
+      accessor: "Active",
+      Cell: ({row}) => (
+        <>
           <Icon
-            as={buyer.Active === true ? MdCheck : IoMdClose}
-            color={buyer.Active === true ? "green.400" : "red.400"}
+            as={row.original.Active === true ? MdCheck : IoMdClose}
+            color={row.original.Active === true ? "green.400" : "red.400"}
             w="20px"
             h="20px"
           />
-          <Text>{buyer.Active ? "Active" : "Non active"}</Text>
-        </Td>
-        <Td>{formatDate(buyer.DateCreated)}</Td>
-        <Td>
-          <Link href={`/buyers/${buyer.ID}/users`}>
-            <Button variant="outline" colorScheme="dark">
-              Manage Users ({getUsersTotalCount({buyerID: buyer.ID})})
-            </Button>
-          </Link>
-        </Td>
-        <Td>
-          <Link href={`/buyers/${buyer.ID}/users`}>
-            <Button variant="outline" colorScheme="dark">
-              Manage Catalogs ({getCatalogTotalCount({buyerID: buyer.ID})})
-            </Button>
-          </Link>
-        </Td>
-        <Td>
-          <Link href="/categories">
-            <Button variant="outline" colorScheme="dark">
-              Manage Categories
-            </Button>
-          </Link>
-        </Td>
-      </Tr>
-    ))
-  ) : (
-    <Tr>
-      <Td colSpan={4}>No buyers!</Td>
-    </Tr>
-  )
+          <Text>{row.original.Active ? "Active" : "Non active"}</Text>
+        </>
+      )
+    },
+    {
+      Header: "CREATED DATE",
+      accessor: "DateCreated",
+      Cell: ({value}) => dateHelper.formatDate(value)
+    },
+    {
+      Header: "USERS",
+      Cell: ({row}) => (
+        <Link href={`/buyers/${row.original.ID}/users`}>
+          <Button variant="secondaryButton">
+            Manage Users ({buyersMeta[row.original.ID]["usersCount"]})
+          </Button>
+        </Link>
+      )
+    },
+    {
+      Header: "CATALOGS",
+      Cell: ({row}) => (
+        <Link href={`/catalogs/${row.original.ID}/`}>
+          <Button variant="secondaryButton">
+            Manage Catalogs ({buyersMeta[row.original.ID]["usersCount"]})
+          </Button>
+        </Link>
+      )
+    },
+    {
+      Header: "ACTIONS",
+      Cell: ({row}) => (
+        <ButtonGroup>
+          <Button
+            variant="secondaryButton"
+            onClick={() => router.push(`/buyers/${row.original.ID}/`)}
+            leftIcon={<EditIcon />}
+          >
+            Edit
+          </Button>
+          <Button
+            variant="secondaryButton"
+            onClick={() => deleteBuyer(row.original.ID)}
+            leftIcon={<DeleteIcon />}
+          >
+            Delete
+          </Button>
+        </ButtonGroup>
+      )
+    }
+  ]
 
   return (
-    <Container maxWidth={"120ch"}>
+    <Container maxW="full">
       <NextSeo title="Buyers" />
       <Heading as="h2" marginTop={5}>
-        Buyers{" "}
+        Buyers List
       </Heading>
-      <Table variant="striped" margin={30}>
-        <Thead>
-          <Tr>
-            <Th>Buyer ID</Th>
-            <Th>Name</Th>
-            <Th>Default Catalog ID</Th>
-            <Th>Status</Th>
-            <Th>Created</Th>
-            <Th>Users</Th>
-            <Th>Catalogs</Th>
-            <Th>Categories</Th>
-          </Tr>
-        </Thead>
-        <Tbody>{buyersContent}</Tbody>
-      </Table>
+      <HStack justifyContent="space-between" w="100%">
+        <Button
+          onClick={() => router.push("/buyers/add")}
+          variant="primaryButton"
+          leftIcon={<AddIcon />}
+        >
+          Create new buyer
+        </Button>
+
+        <HStack>
+          <Button variant="secondaryButton">Export CSV</Button>
+        </HStack>
+      </HStack>
+      <Card variant="primaryCard">
+        <BuyersDataTable tableData={buyers} columnsData={columnsData} />
+      </Card>
     </Container>
   )
 }
-export default BuyersPage
+
+const ProtectedBuyersList = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.BuyerManager}>
+      <BuyersList />
+    </ProtectedContent>
+  )
+}
+export default ProtectedBuyersList

@@ -1,32 +1,33 @@
-import {CheckIcon, CloseIcon, Search2Icon, SearchIcon} from "@chakra-ui/icons"
 import {
-  Text,
   Center,
   Checkbox,
+  Flex,
   Image,
   Link,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tooltip,
   Tr,
-  useColorModeValue,
-  Flex
+  useColorModeValue
 } from "@chakra-ui/react"
+import {CheckIcon, CloseIcon, Search2Icon, SearchIcon} from "@chakra-ui/icons"
 import {
-  FiCheckSquare,
   FiArrowDown,
+  FiArrowRight,
   FiArrowUp,
-  FiArrowRight
+  FiCheckSquare
 } from "react-icons/fi"
-import BrandedSpinner from "../branding/BrandedSpinner"
-import NextLink from "next/link"
-import {stripHTML} from "lib/utils/stripHTML"
 import {useEffect, useState} from "react"
+
+import BrandedSpinner from "../branding/BrandedSpinner"
+import {CalculateEditorialProcess} from "./EditorialProgressBar"
+import NextLink from "next/link"
 import {Product} from "ordercloud-javascript-sdk"
 import {ProductXPs} from "lib/types/ProductXPs"
-import {CalculateEditorialProcess} from "./EditorialProgressBar"
+import {textHelper} from "lib/utils/text.utils"
 
 const ProductList = (props) => {
   const [componentProducts, setComponentProducts] = useState<Product[]>(
@@ -197,9 +198,11 @@ const ProductList = (props) => {
                     </NextLink>
                   </Td>
                   <Td>
-                    {stripHTML(product.Description).length > 40
-                      ? stripHTML(product.Description).substring(0, 40) + "..."
-                      : stripHTML(product.Description)}
+                    {textHelper.stripHTML(product.Description).length > 40
+                      ? textHelper
+                          .stripHTML(product.Description)
+                          .substring(0, 40) + "..."
+                      : textHelper.stripHTML(product.Description)}
                   </Td>
                   <Td>
                     {product.Active ? (

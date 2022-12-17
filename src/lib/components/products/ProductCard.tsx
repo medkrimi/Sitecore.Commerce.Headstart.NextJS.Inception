@@ -1,19 +1,18 @@
 import {
-  VStack,
-  Heading,
-  Text,
-  Button,
-  Image,
   Checkbox,
-  Link,
-  useColorModeValue,
-  HStack,
   Flex,
+  Heading,
+  Image,
+  Link,
   Spacer,
-  Tooltip
+  Text,
+  Tooltip,
+  VStack,
+  useColorModeValue
 } from "@chakra-ui/react"
-import {stripHTML} from "lib/utils/stripHTML"
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
+
+import {textHelper} from "lib/utils/text.utils"
 
 const ProductCard = (props) => {
   const product = props.product
@@ -68,9 +67,10 @@ const ProductCard = (props) => {
         </Tooltip>
         <Link href={"/products/" + product.ID}>
           <Text fontSize="small" color="brand.500">
-            {stripHTML(product.Description).length > 40
-              ? stripHTML(product.Description).substring(0, 40) + "..."
-              : stripHTML(product.Description)}
+            {textHelper.stripHTML(product.Description).length > 40
+              ? textHelper.stripHTML(product.Description).substring(0, 40) +
+                "..."
+              : textHelper.stripHTML(product.Description)}
           </Text>
         </Link>
         {/*         <Link href={"/products/" + product.ID}>

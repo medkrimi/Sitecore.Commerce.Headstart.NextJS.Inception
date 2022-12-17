@@ -1,4 +1,6 @@
 import {Container, Heading, HStack, Text} from "@chakra-ui/react"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 import {NextSeo} from "next-seo"
 
 import React from "react"
@@ -17,4 +19,12 @@ const SettingsPage = () => {
   )
 }
 
-export default SettingsPage
+const ProtectedSettingsPage = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.MeManager}>
+      <SettingsPage />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedSettingsPage

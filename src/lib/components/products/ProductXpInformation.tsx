@@ -24,7 +24,7 @@ import {
 import {
   ComposedProduct,
   GetComposedProduct
-} from "lib/scripts/OrdercloudService"
+} from "../../services/ordercloud.service"
 import {ProductXPs} from "lib/types/ProductXPs"
 import {Product, Products} from "ordercloud-javascript-sdk"
 import {ChangeEvent, useEffect, useState} from "react"

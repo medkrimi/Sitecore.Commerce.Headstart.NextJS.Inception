@@ -1,16 +1,20 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import {DefaultSeo} from "next-seo"
+
 import type {AppProps} from "next/app"
-import Head from "next/head"
-import defaultSEOConfig from "../../next-seo.config"
 import {Chakra} from "lib/components/Chakra"
+import {DefaultSeo} from "next-seo"
+import Head from "next/head"
 import Layout from "lib/layout/Layout"
-import {SetConfiguration} from "lib/scripts/OrdercloudService"
-// import * as dotenv from "dotenv"
-// dotenv.config()
+import {SetConfiguration} from "../lib/services/ordercloud.service"
+import {axiosService} from "lib/services/axios.service"
+import defaultSEOConfig from "../../next-seo.config"
+import {ProtectedApp} from "lib/components/auth/ProtectedApp"
+import {AuthProvider} from "lib/context/auth-context"
+
+axiosService.initializeInterceptors()
+SetConfiguration()
 
 const MyApp = ({Component, pageProps}: AppProps) => {
-  SetConfiguration()
   return (
     <Chakra>
       <Head>
@@ -20,9 +24,13 @@ const MyApp = ({Component, pageProps}: AppProps) => {
         />
       </Head>
       <DefaultSeo {...defaultSEOConfig} />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <AuthProvider>
+        <ProtectedApp>
+          <Layout title={pageProps.title}>
+            <Component {...pageProps} />
+          </Layout>
+        </ProtectedApp>
+      </AuthProvider>
     </Chakra>
   )
 }

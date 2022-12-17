@@ -1,24 +1,31 @@
 import {
-  Flex,
-  Heading,
-  HStack,
-  VStack,
-  Tooltip,
-  Grid,
-  GridItem,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Button,
   Container,
-  AlertDialogFooter,
-  AlertDialogContent,
-  AlertDialogBody,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogHeader,
-  useDisclosure
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  HStack,
+  Tooltip,
+  useDisclosure,
+  VStack
 } from "@chakra-ui/react"
+import {
+  ComposedProduct,
+  GetComposedProduct
+} from "../../lib/services/ordercloud.service"
+import {FiRefreshCw, FiTrash2} from "react-icons/fi"
+import {useEffect, useState} from "react"
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import BreadcrumbNavigation from "lib/components/navigation/BreadcrumbNavigation"
 import EditorialProgressBar from "lib/components/products/EditorialProgressBar"
+import {NextSeo} from "next-seo"
 import ProductCatalogAssignments from "lib/components/products/ProductCatalogAssignments"
 import ProductData from "lib/components/products/ProductData"
 import ProductInventoryData from "lib/components/products/ProductInventoryData"
@@ -30,16 +37,11 @@ import ProductSuppliers from "lib/components/products/ProductSupllier"
 import ProductVariants from "lib/components/products/ProductVariants"
 import ProductXpInformation from "lib/components/products/ProductXpInformation"
 import ProductMediaInformation from "lib/components/products/ProductMediaInformation"
-import {
-  ComposedProduct,
-  GetComposedProduct
-} from "lib/scripts/OrdercloudService"
-import {NextSeo} from "next-seo"
-import {useRouter} from "next/router"
 import {Products} from "ordercloud-javascript-sdk"
 import React from "react"
-import {useEffect, useState} from "react"
-import {FiRefreshCw, FiTrash2} from "react-icons/fi"
+import {useRouter} from "next/router"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const ProductDetails = () => {
   const router = useRouter()
@@ -357,4 +359,12 @@ const ProductDetails = () => {
   )
 }
 
-export default ProductDetails
+const ProtectedProductDetails = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.ProductManager}>
+      <ProductDetails />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedProductDetails

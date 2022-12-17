@@ -34,8 +34,7 @@ import {
   InputLeftElement,
   Select
 } from "@chakra-ui/react"
-import {NextSeo} from "next-seo"
-import {AiOutlineSearch} from "react-icons/ai"
+import {ChangeEvent, useEffect, useState} from "react"
 import {
   FiRotateCcw,
   FiPlus,
@@ -45,15 +44,18 @@ import {
   FiChevronDown,
   FiChevronUp
 } from "react-icons/fi"
+import {Product, Products} from "ordercloud-javascript-sdk"
+
+import {AiOutlineSearch} from "react-icons/ai"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
-import {useState, ChangeEvent, useEffect} from "react"
-import {Product, Products} from "ordercloud-javascript-sdk"
-import {ProductXPs} from "lib/types/ProductXPs"
 import {CalculateEditorialProcess} from "./EditorialProgressBar"
+import {NextSeo} from "next-seo"
 import ProductGrid from "./ProductGrid"
 import ProductList from "./ProductList"
-import {ProductListOptions} from "lib/scripts/OrdercloudService"
+import {ProductListOptions} from "../../services/ordercloud.service"
+import {ProductXPs} from "lib/types/ProductXPs"
+
 //import Image from "next/image"
 
 interface ProductSearchProps {

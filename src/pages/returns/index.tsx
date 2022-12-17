@@ -1,53 +1,55 @@
-import {ChevronDownIcon} from "@chakra-ui/icons"
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Button,
+  Checkbox,
   CheckboxGroup,
   Container,
-  Heading,
+  Divider,
   HStack,
+  Heading,
+  IconButton,
   Link,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  Spinner,
   Stack,
   Table,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
   VStack,
-  Text,
-  Checkbox,
-  Divider,
   useColorMode,
-  useColorModeValue,
-  IconButton,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  AlertDialogFooter,
-  Spinner
+  useColorModeValue
 } from "@chakra-ui/react"
-import Card from "lib/components/card/Card"
-import LettersCard from "lib/components/card/LettersCard"
-import formatTextTruncate from "lib/utils/formatTextTruncate"
-import {formatDate} from "lib/utils/formatDate"
-import formatPrice from "lib/utils/formatPrice"
-import formatStatus from "lib/utils/formatStatus"
-import {NextSeo} from "next-seo"
-import NextLink from "next/link"
 import {
-  OrderReturns,
   OrderReturn,
-  OrderReturnItem
+  OrderReturnItem,
+  OrderReturns
 } from "ordercloud-javascript-sdk"
 import React, {useRef} from "react"
 import {useEffect, useState} from "react"
+
+import Card from "lib/components/card/Card"
+import {ChevronDownIcon} from "@chakra-ui/icons"
 import {HiOutlineMinusSm} from "react-icons/hi"
+import LettersCard from "lib/components/card/LettersCard"
+import NextLink from "next/link"
+import {NextSeo} from "next-seo"
+import {dateHelper} from "lib/utils/date.utils"
+import {priceHelper} from "lib/utils/price.utils"
+import {textHelper} from "lib/utils/text.utils"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const TableRow = (orderReturn: OrderReturn) => {
   let currentItems: OrderReturnItem[] = orderReturn.ItemsToReturn
@@ -59,8 +61,8 @@ const TableRow = (orderReturn: OrderReturn) => {
           <Link>{orderReturn.ID}</Link>
         </NextLink>
       </Td>
-      <Td>{formatDate(orderReturn.DateCreated)}</Td>
-      <Td>{formatStatus(orderReturn.Status)}</Td>
+      <Td>{dateHelper.formatDate(orderReturn.DateCreated)}</Td>
+      <Td>{textHelper.formatStatus(orderReturn.Status)}</Td>
       <Td>
         {/* <LettersCard>
           firstname={orderReturn.FromUser.FirstName}, lastname=
@@ -69,10 +71,14 @@ const TableRow = (orderReturn: OrderReturn) => {
         {orderReturn.FromUser.FirstName} {orderReturn.FromUser.LastName} */}
       </Td>
       <Td>
-        {formatTextTruncate(50, orderReturn.ItemsToReturn.toString(), "...")}
+        {textHelper.formatTextTruncate(
+          50,
+          orderReturn.ItemsToReturn.toString(),
+          "..."
+        )}
       </Td>
       <Td></Td>
-      <Td>{formatPrice(orderReturn.RefundAmount)}</Td>
+      <Td>{priceHelper.formatPrice(orderReturn.RefundAmount)}</Td>
     </Tr>
   )
 }
@@ -111,8 +117,7 @@ const ReturnsPage = () => {
   return (
     <Container maxW="full">
       <NextSeo title="Returns" />
-      <Heading as="h2">Returns List</Heading>
-      <HStack justifyContent="space-between" w="100%">
+      <HStack justifyContent="space-between" w="100%" mb={5}>
         <Link href={`/returns/new`}>
           <Button variant="primaryButton">New Return</Button>
         </Link>
@@ -194,7 +199,7 @@ const ReturnsPage = () => {
           </Thead>
           <Tbody>{returnsContent}</Tbody>
         </Table>
-        {loadMoreButton}
+        {/* {loadMoreButton} */}
       </Card>
       <AlertDialog
         isOpen={isExportCSVDialogOpen}
@@ -236,4 +241,20 @@ const ReturnsPage = () => {
   )
 }
 
-export default ReturnsPage
+const ProtectedReturnsPage = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.OrderManager}>
+      <ReturnsPage />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedReturnsPage
+
+export async function getStaticProps() {
+  return {
+    props: {
+      title: "Returns Listing"
+    }
+  }
+}

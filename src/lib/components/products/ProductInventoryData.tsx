@@ -1,32 +1,33 @@
-import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 import {
   Box,
   Button,
-  Heading,
-  HStack,
-  Tooltip,
-  useColorModeValue,
-  Text,
-  useColorMode,
-  Spinner,
+  Checkbox,
+  Collapse,
   Container,
   Flex,
-  Collapse,
+  HStack,
+  Heading,
   Input,
-  Checkbox
+  Spinner,
+  Text,
+  Tooltip,
+  useColorMode,
+  useColorModeValue
 } from "@chakra-ui/react"
+import {ChangeEvent, useState} from "react"
+import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 import {
   ComposedProduct,
   GetComposedProduct
-} from "lib/scripts/OrdercloudService"
+} from "../../services/ordercloud.service"
+import {FiCheck, FiEdit, FiMinus, FiPlus, FiX} from "react-icons/fi"
 import {
   Inventory,
   Product,
   Products,
   RequiredDeep
 } from "ordercloud-javascript-sdk"
-import {ChangeEvent, useState} from "react"
-import {FiCheck, FiEdit, FiMinus, FiPlus, FiX} from "react-icons/fi"
+
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 

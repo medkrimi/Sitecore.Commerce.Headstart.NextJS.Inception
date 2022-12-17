@@ -1,8 +1,9 @@
-import {ProductListOptions} from "lib/scripts/OrdercloudService"
-import {useRouter} from "next/router"
+import {useCallback, useMemo} from "react"
+
 import {Filters} from "ordercloud-javascript-sdk"
 import {ParsedUrlQuery} from "querystring"
-import {useCallback, useMemo} from "react"
+import {ProductListOptions} from "../services/ordercloud.service"
+import {useRouter} from "next/router"
 
 export interface NextQueryMap {
   [key: string]: string

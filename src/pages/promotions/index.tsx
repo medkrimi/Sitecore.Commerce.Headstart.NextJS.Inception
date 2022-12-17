@@ -1,56 +1,46 @@
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Button,
   Checkbox,
+  CheckboxGroup,
   Container,
-  Heading,
+  Divider,
   HStack,
+  Heading,
+  IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  Spinner,
+  Stack,
   Table,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
-  useColorMode,
-  useColorModeValue,
-  Text,
-  CheckboxGroup,
-  Stack,
-  VStack,
-  Divider,
-  IconButton,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  Textarea,
-  AlertDialogFooter,
-  Spinner
+  VStack
 } from "@chakra-ui/react"
-import {NextSeo} from "next-seo"
-import {Promotion, Promotions} from "ordercloud-javascript-sdk"
+import {Promotions} from "ordercloud-javascript-sdk"
+import {dateHelper, textHelper} from "lib/utils/"
 import {useEffect, useRef, useState} from "react"
-import Link from "../../lib/components/navigation/Link"
-import {formatDate} from "lib/utils/formatDate"
-import formatPrice from "lib/utils/formatPrice"
-import {
-  GetAuthenticationStatus,
-  OcAuthState
-} from "lib/scripts/OrdercloudService"
-import formatStatus from "lib/utils/formatStatus"
-import LettersCard from "lib/components/card/LettersCard"
-import formatTextTruncate from "lib/utils/formatTextTruncate"
-import {ChevronDownIcon} from "@chakra-ui/icons"
 import Card from "lib/components/card/Card"
+import {ChevronDownIcon} from "@chakra-ui/icons"
 import {HiOutlineMinusSm} from "react-icons/hi"
+import Link from "../../lib/components/navigation/Link"
+import {NextSeo} from "next-seo"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const PromotionsPage = () => {
   const [promotions, setPromotions] = useState([])
-  const [authState, setAuthState] = useState<OcAuthState>()
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const cancelRef = useRef()
@@ -69,8 +59,6 @@ const PromotionsPage = () => {
 
   useEffect(() => {
     const getPromotions = async () => {
-      const state = GetAuthenticationStatus()
-      setAuthState(state)
       const promotionsList = Promotions.List()
       setPromotions((await promotionsList).Items)
     }
@@ -87,9 +75,9 @@ const PromotionsPage = () => {
         <Td>{promotion.Description}</Td>
         <Td>{promotion.Type}</Td>
         <Td>{promotion.Elgibility}</Td>
-        <Td>{formatStatus(promotion.Status)}</Td>
-        <Td>{formatDate(promotion.StartDate)}</Td>
-        <Td>{formatDate(promotion.ExpirationDate)}</Td>
+        <Td>{textHelper.formatStatus(promotion.Status)}</Td>
+        <Td>{dateHelper.formatDate(promotion.StartDate)}</Td>
+        <Td>{dateHelper.formatDate(promotion.ExpirationDate)}</Td>
       </Tr>
     ))
   ) : (
@@ -101,10 +89,7 @@ const PromotionsPage = () => {
   return (
     <Container maxW="full">
       <NextSeo title="Promotions List" />
-      <Heading as="h2" marginTop={5}>
-        Promotions List
-      </Heading>
-      <HStack justifyContent="space-between" w="100%">
+      <HStack justifyContent="space-between" w="100%" mb={5}>
         <Link href={`/promotions/new`}>
           <Button variant="primaryButton">New Promotion</Button>
         </Link>
@@ -183,7 +168,7 @@ const PromotionsPage = () => {
           </Thead>
           <Tbody>{promotionsContent}</Tbody>
         </Table>
-        {loadMoreButton}
+        {/* {loadMoreButton} */}
       </Card>
       <AlertDialog
         isOpen={isExportCSVDialogOpen}
@@ -229,4 +214,20 @@ const PromotionsPage = () => {
   )
 }
 
-export default PromotionsPage
+const ProtectedPromotionsPage = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.ProductManager}>
+      <PromotionsPage />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedPromotionsPage
+
+export async function getStaticProps() {
+  return {
+    props: {
+      title: "Promotions List"
+    }
+  }
+}
