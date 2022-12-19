@@ -292,6 +292,7 @@ const Dashboard = () => {
                 <NextLink href="/products" passHref>
                   <Link>
                     <Card
+                      hideclosebutton="true"
                       p="28px 10px 0px 0px"
                       mb={{sm: "26px", lg: "0px"}}
                       bg={boxBgColor}
@@ -337,6 +338,7 @@ const Dashboard = () => {
                 <NextLink href="/orders" passHref>
                   <Link>
                     <Card
+                      hideclosebutton="true"
                       p="28px 10px 0px 0px"
                       mb={{sm: "26px", lg: "0px"}}
                       bg={boxBgColor}
@@ -379,6 +381,7 @@ const Dashboard = () => {
                 <NextLink href="/users" passHref>
                   <Link>
                     <Card
+                      hideclosebutton="true"
                       p="28px 10px 0px 0px"
                       mb={{sm: "26px", lg: "0px"}}
                       bg={boxBgColor}
@@ -422,6 +425,7 @@ const Dashboard = () => {
                 <NextLink href="/promotions" passHref>
                   <Link>
                     <Card
+                      hideclosebutton="true"
                       p="28px 10px 0px 0px"
                       mb={{sm: "26px", lg: "0px"}}
                       bg={boxBgColor}

@@ -46,6 +46,7 @@
     "pre-commit": "^1.2.2",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.0",
+    "react-breadcrumbs": "^2.1.7",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.40.0",
     "react-icons": "^4.4.0",

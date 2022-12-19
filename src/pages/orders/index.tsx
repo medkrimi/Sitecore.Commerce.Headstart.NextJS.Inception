@@ -33,7 +33,6 @@ import {Orders} from "ordercloud-javascript-sdk"
 import {useEffect, useRef, useState} from "react"
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
-import {HiOutlineMinusSm} from "react-icons/hi"
 import LettersCard from "lib/components/card/LettersCard"
 import Link from "../../lib/components/navigation/Link"
 import {NextSeo} from "next-seo"
@@ -164,11 +163,6 @@ const OrdersPage = () => {
         </HStack>
       </HStack>
       <Card variant="primaryCard">
-        <IconButton
-          variant="closePanelButton"
-          aria-label="close panel"
-          icon={<HiOutlineMinusSm />}
-        ></IconButton>
         <Table margin={30}>
           <Thead>
             <Tr>
@@ -198,7 +192,7 @@ const OrdersPage = () => {
             <AlertDialogBody>
               <Text display="inline">
                 Export the selected orders to a CSV, once the export button is
-                clicked behind the scense a job will be kicked off to create the
+                clicked behind the scenes a job will be kicked off to create the
                 csv and then will automatically download to your downloads
                 folder in the browser.
               </Text>

@@ -54,7 +54,16 @@ const ContentHeader = (props) => {
       ) : (
         <></>
       )}
-      <Heading as="h2">{props.title}</Heading>
+      <Heading
+        as="h2"
+        textAlign="left"
+        width="full"
+        display="inline-block"
+        pl="3"
+        pb="5"
+      >
+        {props.title}
+      </Heading>
     </VStack>
   )
 }
