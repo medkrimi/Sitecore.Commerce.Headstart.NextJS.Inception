@@ -1,6 +1,7 @@
 export const textHelper = {
   stripHTML,
   formatTextTruncate,
+  capitalizeFirstLetter,
   formatStatus
 }
 
@@ -31,6 +32,10 @@ function formatTextTruncate(len: number, str: string, ending: string): string {
   } else {
     return str
   }
+}
+
+function capitalizeFirstLetter(string) {
+  return string[0].toUpperCase() + string.slice(1)
 }
 
 function formatStatus(status: string): string {
