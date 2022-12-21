@@ -14,9 +14,16 @@ const Layout = (props) => {
   useEffect(() => {
     setIsAuthenticated(auth.isAuthenticated)
   }, [auth.isAuthenticated])
+  if (!isAuthenticated) {
+    return (
+      <Flex width="100vw" height="100vh" alignItems="center" justify="center">
+        {props.children}
+      </Flex>
+    )
+  }
   return (
     <Box as="section" w="100%" margin="0 auto" transition="0.5s ease-out">
-      {isAuthenticated && <Header />}
+      <Header />
       <Flex
         alignItems="flex-start"
         height="100%"
@@ -26,14 +33,14 @@ const Layout = (props) => {
         mt="89px"
         justify="space-between"
       >
-        {isAuthenticated && <LeftNavigation />}
+        <LeftNavigation />
         <Container maxW="full">
           <ContentHeader {...props} />
           {props.children}
           <ContentFooter />
         </Container>
       </Flex>
-      {isAuthenticated && <Footer />}
+      <Footer />
     </Box>
   )
 }

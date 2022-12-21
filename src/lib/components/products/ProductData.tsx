@@ -8,10 +8,8 @@ import {
   HStack,
   Heading,
   Input,
-  Spinner,
   Text,
   Tooltip,
-  useColorMode,
   useColorModeValue
 } from "@chakra-ui/react"
 import {ChangeEvent, useState} from "react"
@@ -20,13 +18,8 @@ import {
   ComposedProduct,
   GetComposedProduct
 } from "../../services/ordercloud.service"
-import {FiCheck, FiEdit, FiMinus, FiPlus, FiX} from "react-icons/fi"
-import {
-  Inventory,
-  Product,
-  Products,
-  RequiredDeep
-} from "ordercloud-javascript-sdk"
+import {FiCheck, FiEdit, FiX} from "react-icons/fi"
+import {Product, Products} from "ordercloud-javascript-sdk"
 
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
@@ -44,7 +37,7 @@ export default function ProductData({
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
   const color = useColorModeValue("textColor.100", "textColor.300")
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [formValues, setFormValues] = useState({
     name: composedProduct?.Product?.Name,
