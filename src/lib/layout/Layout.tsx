@@ -8,19 +8,12 @@ import Header from "./Header"
 import LeftNavigation from "lib/components/navigation/SideNavigation"
 import {useAuth} from "lib/hooks/useAuth"
 
-type LayoutProps = {
-  children: ReactNode
-  title: string
-}
-
-const Layout = ({children, title}: LayoutProps) => {
+const Layout = (props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const auth = useAuth()
-
   useEffect(() => {
     setIsAuthenticated(auth.isAuthenticated)
   }, [auth.isAuthenticated])
-
   return (
     <Box as="section" w="100%" margin="0 auto" transition="0.5s ease-out">
       {isAuthenticated && <Header />}
@@ -35,8 +28,8 @@ const Layout = ({children, title}: LayoutProps) => {
       >
         {isAuthenticated && <LeftNavigation />}
         <Container maxW="full">
-          <ContentHeader title={title} />
-          {children}
+          <ContentHeader {...props} />
+          {props.children}
           <ContentFooter />
         </Container>
       </Flex>

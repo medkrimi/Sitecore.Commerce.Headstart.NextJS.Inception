@@ -17,6 +17,8 @@ axiosService.initializeInterceptors()
 SetConfiguration()
 
 const MyApp = ({Component, pageProps}: AppProps) => {
+  console.log("_app >>")
+  console.log(pageProps)
   return (
     <Chakra>
       <Head>
@@ -28,7 +30,7 @@ const MyApp = ({Component, pageProps}: AppProps) => {
       <DefaultSeo {...defaultSEOConfig} />
       <AuthProvider>
         <ProtectedApp>
-          <Layout title={pageProps.title}>
+          <Layout {...pageProps}>
             <Component {...pageProps} />
           </Layout>
         </ProtectedApp>
