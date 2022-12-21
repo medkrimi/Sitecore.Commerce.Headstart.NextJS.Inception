@@ -2,13 +2,17 @@ import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
 import {
   Button,
   ButtonGroup,
-  Container,
   HStack,
-  Heading,
   Icon,
   Text,
   useToast
 } from "@chakra-ui/react"
+import {
+  buyersService,
+  catalogsService,
+  userGroupsService,
+  usersService
+} from "../../lib/api"
 import {useEffect, useState} from "react"
 
 import BuyersDataTable from "../../lib/components/datatable/datatable"
@@ -16,18 +20,37 @@ import Card from "lib/components/card/Card"
 import {IoMdClose} from "react-icons/io"
 import Link from "../../lib/components/navigation/Link"
 import {MdCheck} from "react-icons/md"
-import {NextSeo} from "next-seo"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
 import React from "react"
-import {buyersService} from "../../lib/api"
+import {appPermissions} from "lib/constants/app-permissions.config"
 import {dateHelper} from "../../lib/utils/date.utils"
 import router from "next/router"
-import ProtectedContent from "lib/components/auth/ProtectedContent"
-import {appPermissions} from "lib/constants/app-permissions.config"
+
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getStaticProps() {
+  return {
+    props: {
+      header: {
+        title: "Buyers List",
+        metas: {
+          hasBreadcrumbs: true
+        }
+      },
+      revalidate: 5 * 60
+    }
+  }
+}
 
 const BuyersList = () => {
   const [buyers, setBuyers] = useState([])
   const [buyersMeta, setBuyersMeta] = useState({})
-  const toast = useToast()
+
+  const toast = useToast({
+    duration: 6000,
+    isClosable: true,
+    position: "top"
+  })
+
   useEffect(() => {
     initBuyersData()
   }, [])
@@ -39,11 +62,11 @@ const BuyersList = () => {
     const requests = buyersList.Items.map(async (buyer) => {
       _buyerListMeta[buyer.ID] = {}
       _buyerListMeta[buyer.ID]["userGroupsCount"] =
-        await buyersService.getUserGroupsCountById(buyer.ID)
+        await userGroupsService.getUserGroupsCountById(buyer.ID)
       _buyerListMeta[buyer.ID]["usersCount"] =
-        await buyersService.getUsersCountById(buyer.ID)
+        await usersService.getUsersCountById(buyer.ID)
       _buyerListMeta[buyer.ID]["catalogsCount"] =
-        await buyersService.getCatalogsCountById(buyer.ID)
+        await catalogsService.getCatalogsCountById(buyer.ID)
     })
     await Promise.all(requests)
     setBuyersMeta(_buyerListMeta)
@@ -58,20 +81,14 @@ const BuyersList = () => {
         id: id + "-deleted",
         title: "Success",
         description: "Buyer deleted successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+        status: "success"
       })
     } catch (e) {
       toast({
         id: id + "fail-deleted",
         title: "Error",
         description: "Buyer delete failed",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+        status: "error"
       })
     }
   }
@@ -168,28 +185,22 @@ const BuyersList = () => {
   ]
 
   return (
-    <Container maxW="full">
-      <NextSeo title="Buyers" />
-      <Heading as="h2" marginTop={5}>
-        Buyers List
-      </Heading>
-      <HStack justifyContent="space-between" w="100%">
+    <>
+      <HStack justifyContent="space-between" w="100%" mb={5}>
         <Button
           onClick={() => router.push("/buyers/add")}
           variant="primaryButton"
           leftIcon={<AddIcon />}
+          size="lg"
         >
-          Create new buyer
+          Create a new buyer
         </Button>
-
-        <HStack>
-          <Button variant="secondaryButton">Export CSV</Button>
-        </HStack>
+        <Button variant="secondaryButton">Export CSV</Button>
       </HStack>
       <Card variant="primaryCard">
         <BuyersDataTable tableData={buyers} columnsData={columnsData} />
       </Card>
-    </Container>
+    </>
   )
 }
 
@@ -200,4 +211,5 @@ const ProtectedBuyersList = () => {
     </ProtectedContent>
   )
 }
+
 export default ProtectedBuyersList

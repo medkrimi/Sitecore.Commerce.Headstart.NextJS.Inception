@@ -35,6 +35,7 @@ import {useReducer, useState} from "react"
 import Card from "../card/Card"
 import {MdCheckCircle} from "react-icons/md"
 import {NextSeo} from "next-seo"
+import {User} from "ordercloud-javascript-sdk"
 import {useRouter} from "next/router"
 import {useToast} from "@chakra-ui/react"
 import {usersService} from "../../api"
@@ -42,8 +43,10 @@ import {xpHelper} from "../../utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
 
 export {AddEditForm}
-
-function AddEditForm({user}) {
+interface AddEditFormProps {
+  user?: User
+}
+function AddEditForm({user}: AddEditFormProps) {
   const isAddMode = !user
   const router = useRouter()
   const toast = useToast()
@@ -133,13 +136,8 @@ function AddEditForm({user}) {
 
   return (
     <>
-      <Container maxW="full">
-        <NextSeo title="Users" />
-        <Heading as="h2" marginTop={5}>
-          <span>{isAddMode ? "Add User" : "Edit User"}</span>
-        </Heading>
-
-        <Card variant="primaryCard">
+      <Card variant="primaryCard">
+        <Flex flexDirection="column" p="10">
           <Formik
             initialValues={formOptions.defaultValues}
             validationSchema={validationSchema}
@@ -165,36 +163,40 @@ function AddEditForm({user}) {
                   <InputControl name="Email" label="Email" />
                   <InputControl name="Phone" label="Phone" />
                   <SwitchControl name="Active" label="Active" />
-                  <label htmlFor="Password">Password</label>
-                  <Box position="relative">
-                    <Field
-                      style={{width: "100%"}}
-                      label="Password"
-                      name="Password"
-                      pr="4.5rem"
-                      type={show ? "text" : "password"}
-                      placeholder="Enter password"
-                    />
-                    <Button
-                      position="absolute"
-                      right="2px"
-                      top="2px"
-                      size="sm"
-                      onClick={handleClick}
-                    >
-                      {show ? "Hide" : "Show"}
-                    </Button>
-                  </Box>
-                  <ErrorMessage name="Password" />
-                  <label htmlFor="ConfirmPassword">Confirm Password</label>
-                  <Field
-                    label="Confirm Password"
-                    name="ConfirmPassword"
-                    pr="4.5rem"
-                    type={show ? "text" : "password"}
-                    placeholder="Enter password"
-                  />
-                  <ErrorMessage name="ConfirmPassword" />
+                  {isAddMode && (
+                    <>
+                      <label htmlFor="Password">Password</label>
+                      <Box position="relative">
+                        <Field
+                          style={{width: "100%"}}
+                          label="Password"
+                          name="Password"
+                          pr="4.5rem"
+                          type={show ? "text" : "password"}
+                          placeholder="Enter password"
+                        />
+                        <Button
+                          position="absolute"
+                          right="2px"
+                          top="2px"
+                          size="sm"
+                          onClick={handleClick}
+                        >
+                          {show ? "Hide" : "Show"}
+                        </Button>
+                      </Box>
+                      <ErrorMessage name="Password" />
+                      <label htmlFor="ConfirmPassword">Confirm Password</label>
+                      <Field
+                        label="Confirm Password"
+                        name="ConfirmPassword"
+                        pr="4.5rem"
+                        type={show ? "text" : "password"}
+                        placeholder="Enter password"
+                      />
+                      <ErrorMessage name="ConfirmPassword" />
+                    </>
+                  )}
                   <ButtonGroup>
                     <Button
                       variant="primaryButton"
@@ -227,10 +229,13 @@ function AddEditForm({user}) {
               </Box>
             )}
           </Formik>
-        </Card>
-        <Card variant="primaryCard">
-          {!isAddMode && user?.AvailableRoles && (
-            <>
+        </Flex>
+      </Card>
+
+      {!isAddMode && user?.AvailableRoles && (
+        <>
+          <Card variant="primaryCard">
+            <Flex flexDirection="column" p="10">
               <Heading as="h5" size="md">
                 Available Roles
               </Heading>
@@ -242,10 +247,10 @@ function AddEditForm({user}) {
                   </ListItem>
                 ))}
               </List>
-            </>
-          )}
-        </Card>
-      </Container>
+            </Flex>
+          </Card>
+        </>
+      )}
     </>
   )
 }

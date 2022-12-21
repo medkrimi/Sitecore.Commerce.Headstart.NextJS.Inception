@@ -1,13 +1,6 @@
 import * as Yup from "yup"
 
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Container,
-  Heading,
-  Stack
-} from "@chakra-ui/react"
+import {Box, Button, ButtonGroup, Flex, Stack} from "@chakra-ui/react"
 import {
   InputControl,
   NumberInputControl,
@@ -16,23 +9,24 @@ import {
   SwitchControl
 } from "formik-chakra-ui"
 
+import {Buyer} from "ordercloud-javascript-sdk"
 import Card from "../card/Card"
 import {Formik} from "formik"
-import {NextSeo} from "next-seo"
 import {buyersService} from "../../api"
 import {useRouter} from "next/router"
 import {useToast} from "@chakra-ui/react"
 import {xpHelper} from "../../utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
-import {Buyer} from "ordercloud-javascript-sdk"
 
 export {AddEditForm}
 
 interface AddEditFormProps {
   buyer?: Buyer
 }
+
 function AddEditForm({buyer}: AddEditFormProps) {
   const isAddMode = !buyer
+  console.log(isAddMode)
   const router = useRouter()
   const toast = useToast()
   // form validation rules
@@ -58,11 +52,9 @@ function AddEditForm({buyer}: AddEditFormProps) {
     setStatus()
     if (isAddMode) {
       const buyer = xpHelper.unflattenXpObject(fields, "_")
-      console.log(buyer)
       createBuyer(buyer, setSubmitting)
     } else {
       const buyer = xpHelper.unflattenXpObject(fields, "_")
-      console.log(buyer)
       updateBuyer(buyer, setSubmitting)
     }
   }
@@ -105,12 +97,8 @@ function AddEditForm({buyer}: AddEditFormProps) {
 
   return (
     <>
-      <Container maxW="full">
-        <NextSeo title="Buyers" />
-        <Heading as="h2" marginTop={5}>
-          <span>{isAddMode ? "Add Buyer" : "Edit Buyer"}</span>
-        </Heading>
-        <Card variant="primaryCard">
+      <Card variant="primaryCard">
+        <Flex flexDirection="column" p="10">
           <Formik
             initialValues={formOptions.defaultValues}
             validationSchema={validationSchema}
@@ -187,8 +175,8 @@ function AddEditForm({buyer}: AddEditFormProps) {
               </Box>
             )}
           </Formik>
-        </Card>
-      </Container>
+        </Flex>
+      </Card>
     </>
   )
 }

@@ -1,8 +1,23 @@
+import {AddEditForm} from "../../lib/components/buyers/AddEditForm"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
-import {AddEditForm} from "../../lib/components/buyers"
 
-const ProtectedAddEditForm = () => {
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getStaticProps() {
+  return {
+    props: {
+      header: {
+        title: "Create a new buyer",
+        metas: {
+          hasBreadcrumbs: true
+        }
+      },
+      revalidate: 5 * 60
+    }
+  }
+}
+
+function ProtectedAddEditForm() {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
       <AddEditForm />

@@ -11,16 +11,31 @@ import {
 } from "@chakra-ui/react"
 import {useEffect, useState} from "react"
 
+import BuyerContextSwitch from "lib/components/buyers/BuyerContextSwitch"
 import Card from "lib/components/card/Card"
 import {IoMdClose} from "react-icons/io"
 import Link from "../../../../lib/components/navigation/Link"
 import {MdCheck} from "react-icons/md"
-import {NextSeo} from "next-seo"
 import React from "react"
 import UsersDataTable from "../../../../lib/components/datatable/datatable"
 import {dateHelper} from "../../../../lib/utils/date.utils"
 import {useRouter} from "next/router"
 import {usersService} from "../../../../lib/api"
+
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Users List",
+        metas: {
+          hasBreadcrumbs: true
+        }
+      },
+      revalidate: 5 * 60
+    }
+  }
+}
 
 const UsersList = () => {
   const [users, setBuyers] = useState([])
@@ -138,18 +153,15 @@ const UsersList = () => {
   ]
 
   return (
-    <Container maxW="full">
-      <NextSeo title="Buyers" />
-      <Heading as="h2" marginTop={5}>
-        Users List
-      </Heading>
-      <HStack justifyContent="space-between" w="100%">
+    <>
+      <HStack justifyContent="space-between" w="100%" mb={5}>
         <Button
           onClick={() =>
             router.push(`/buyers/${router.query.buyerid}/users/add`)
           }
           variant="primaryButton"
           leftIcon={<AddIcon />}
+          size="lg"
         >
           Create user
         </Button>
@@ -161,7 +173,8 @@ const UsersList = () => {
       <Card variant="primaryCard">
         <UsersDataTable tableData={users} columnsData={columnsData} />
       </Card>
-    </Container>
+    </>
   )
 }
+
 export default UsersList

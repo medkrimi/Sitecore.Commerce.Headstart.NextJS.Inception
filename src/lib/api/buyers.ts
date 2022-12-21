@@ -5,10 +5,7 @@ export const buyersService = {
   getById,
   create,
   update,
-  delete: _delete,
-  getUsersCountById,
-  getCatalogsCountById,
-  getUserGroupsCountById
+  delete: _delete
 }
 
 async function list() {
@@ -45,28 +42,4 @@ async function _delete(buyerID) {
   if (buyerID) {
     return await Buyers.Delete(buyerID)
   }
-}
-
-async function getUsersCountById(buyerID) {
-  console.log("buyersService::getUsersCountById")
-  if (buyerID) {
-    const usersList = await Users.List(buyerID)
-    return usersList?.Meta?.TotalCount
-  } else return "-"
-}
-
-async function getUserGroupsCountById(buyerID) {
-  console.log("buyersService::getUserGroupsCountById")
-  if (buyerID) {
-    const userGroupsList = await UserGroups.List(buyerID)
-    return userGroupsList?.Meta?.TotalCount
-  } else return "-"
-}
-
-async function getCatalogsCountById(buyerID) {
-  console.log("buyersService::getCatalogsCountById")
-  if (buyerID) {
-    const catalogsList = await Catalogs.ListAssignments({buyerID: buyerID})
-    return catalogsList?.Meta?.TotalCount
-  } else return "-"
 }

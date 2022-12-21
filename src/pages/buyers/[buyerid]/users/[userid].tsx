@@ -1,11 +1,28 @@
 import {useEffect, useState} from "react"
 
 import {AddEditForm} from "../../../../lib/components/users/AddEditForm"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {User} from "ordercloud-javascript-sdk"
+import {appPermissions} from "lib/constants/app-permissions.config"
 import {useRouter} from "next/router"
 import {usersService} from "../../../../lib/api"
 
-const UserItem = () => {
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Update user",
+        metas: {
+          hasBreadcrumbs: true
+        }
+      },
+      revalidate: 5 * 60
+    }
+  }
+}
+
+const UserListItem = () => {
   const router = useRouter()
   const [user, setUser] = useState({} as User)
   useEffect(() => {
@@ -18,4 +35,12 @@ const UserItem = () => {
   return <>{user?.ID ? <AddEditForm user={user} /> : <div> Loading</div>}</>
 }
 
-export default UserItem
+const ProtectedBuyerListItem = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.BuyerManager}>
+      <UserListItem />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedBuyerListItem

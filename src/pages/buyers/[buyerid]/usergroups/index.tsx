@@ -22,6 +22,21 @@ import {dateHelper} from "../../../../lib/utils/date.utils"
 import {useRouter} from "next/router"
 import {userGroupsService} from "../../../../lib/api"
 
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "User groups List",
+        metas: {
+          hasBreadcrumbs: true
+        }
+      },
+      revalidate: 5 * 60
+    }
+  }
+}
+
 const UserGroupsList = () => {
   const [userGroups, setBuyers] = useState([])
   const router = useRouter()
@@ -105,18 +120,15 @@ const UserGroupsList = () => {
   ]
 
   return (
-    <Container maxW="full">
-      <NextSeo title="Buyers" />
-      <Heading as="h2" marginTop={5}>
-        User Groups List
-      </Heading>
-      <HStack justifyContent="space-between" w="100%">
+    <>
+      <HStack justifyContent="space-between" w="100%" mb={5}>
         <Button
           onClick={() =>
             router.push(`/buyers/${router.query.buyerid}/usergroups/add`)
           }
           variant="primaryButton"
           leftIcon={<AddIcon />}
+          size="lg"
         >
           Create user group
         </Button>
@@ -127,7 +139,8 @@ const UserGroupsList = () => {
       <Card variant="primaryCard">
         <UserGroupsDataTable tableData={userGroups} columnsData={columnsData} />
       </Card>
-    </Container>
+    </>
   )
 }
+
 export default UserGroupsList

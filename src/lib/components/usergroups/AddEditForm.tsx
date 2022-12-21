@@ -5,6 +5,7 @@ import {
   Button,
   ButtonGroup,
   Container,
+  Flex,
   Heading,
   Stack
 } from "@chakra-ui/react"
@@ -20,6 +21,7 @@ import {
 import Card from "../card/Card"
 import {Formik} from "formik"
 import {NextSeo} from "next-seo"
+import {UserGroup} from "ordercloud-javascript-sdk"
 import {useRouter} from "next/router"
 import {useToast} from "@chakra-ui/react"
 import {userGroupsService} from "../../api"
@@ -28,7 +30,10 @@ import {yupResolver} from "@hookform/resolvers/yup"
 
 export {AddEditForm}
 
-function AddEditForm({userGroup}) {
+interface AddEditFormProps {
+  userGroup?: UserGroup
+}
+function AddEditForm({userGroup}: AddEditFormProps) {
   const isAddMode = !userGroup
   const router = useRouter()
   const toast = useToast()
@@ -104,12 +109,8 @@ function AddEditForm({userGroup}) {
 
   return (
     <>
-      <Container maxW="full">
-        <NextSeo title="User Groups" />
-        <Heading as="h2" marginTop={5}>
-          <span>{isAddMode ? "Add User Group" : "Edit User Group"}</span>
-        </Heading>
-        <Card variant="primaryCard">
+      <Card variant="primaryCard">
+        <Flex flexDirection="column" p="10">
           <Formik
             initialValues={formOptions.defaultValues}
             validationSchema={validationSchema}
@@ -165,8 +166,8 @@ function AddEditForm({userGroup}) {
               </Box>
             )}
           </Formik>
-        </Card>
-      </Container>
+        </Flex>
+      </Card>
     </>
   )
 }

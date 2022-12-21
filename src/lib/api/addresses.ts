@@ -13,33 +13,25 @@ async function list(buyerID) {
   return await Addresses.List(buyerID)
 }
 
-async function getById(buyerID, userGroupID) {
+async function getById(buyerID, addressID) {
   console.log("userGroupsService::getById")
-  return await Addresses.Get(buyerID, userGroupID)
+  return await Addresses.Get(buyerID, addressID)
 }
 
-async function create(buyerID, user) {
+async function create(buyerID, address) {
   console.log("userGroups::create")
-  //Demo sample : By default OrderCloud will assign a unique ID to the new created buyer.
-  //Customizing the ID generation business logic here for Demo purpose.
-  user.ID = user.Name.toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/[\s_-]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-
-  return await Addresses.Create(buyerID, user)
+  return await Addresses.Create(buyerID, address)
 }
 
-async function update(buyerID, userGroupID, user) {
+async function update(buyerID, addressID, address) {
   console.log("buyersService::update")
-  return await Addresses.Patch(buyerID, userGroupID, user)
+  return await Addresses.Patch(buyerID, addressID, address)
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
-async function _delete(buyerID, userGroupID) {
+async function _delete(buyerID, addressID) {
   console.log("buyersService::_delete")
   if (buyerID) {
-    return await Addresses.Delete(buyerID, userGroupID)
+    return await Addresses.Delete(buyerID, addressID)
   }
 }

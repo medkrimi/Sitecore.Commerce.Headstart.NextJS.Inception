@@ -17,8 +17,6 @@ axiosService.initializeInterceptors()
 SetConfiguration()
 
 const MyApp = ({Component, pageProps}: AppProps) => {
-  console.log("_app >>")
-  console.log(pageProps)
   return (
     <Chakra>
       <Head>
