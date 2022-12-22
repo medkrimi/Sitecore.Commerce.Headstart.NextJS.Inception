@@ -43,18 +43,18 @@ const UsersList = () => {
   const router = useRouter()
   const toast = useToast()
   useEffect(() => {
-    initUsersData()
-  }, [])
+    initUsersData(router.query.buyerid)
+  }, [router.query.buyerid])
 
-  async function initUsersData() {
-    const usersList = await usersService.list(router.query.buyerid)
+  async function initUsersData(buyerid) {
+    const usersList = await usersService.list(buyerid)
     setBuyers(usersList.Items)
   }
 
   async function deleteBuyer(userid) {
     try {
       await usersService.delete(router.query.buyerid, userid)
-      initUsersData()
+      initUsersData(router.query.buyerid)
       toast({
         id: userid + "-deleted",
         title: "Success",
