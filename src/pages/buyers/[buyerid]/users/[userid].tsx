@@ -14,7 +14,8 @@ export async function getServerSideProps() {
       header: {
         title: "Update user",
         metas: {
-          hasBreadcrumbs: true
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: true
         }
       },
       revalidate: 5 * 60

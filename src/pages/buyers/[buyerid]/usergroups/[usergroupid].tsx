@@ -14,7 +14,8 @@ export async function getServerSideProps() {
       header: {
         title: "Edit user group",
         metas: {
-          hasBreadcrumbs: true
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: true
         }
       },
       revalidate: 5 * 60

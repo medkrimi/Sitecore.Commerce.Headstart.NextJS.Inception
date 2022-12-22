@@ -29,7 +29,8 @@ export async function getServerSideProps() {
       header: {
         title: "Users List",
         metas: {
-          hasBreadcrumbs: true
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: true
         }
       },
       revalidate: 5 * 60

@@ -1,6 +1,7 @@
 import {Box, Heading, VStack} from "@chakra-ui/react"
 
 import Breadcrumbs from "nextjs-breadcrumbs"
+import BuyerContextSwitch from "lib/components/buyers/BuyerContextSwitch"
 import {textHelper} from "lib/utils"
 
 const ContentHeader = (props) => {
@@ -25,6 +26,22 @@ const ContentHeader = (props) => {
 
       {props?.header?.title && (
         <Heading as="h2">{props?.header?.title}</Heading>
+      )}
+      {props?.header?.metas?.hasBuyerContextSwitch && (
+        <Box
+          //direction="row"
+          alignItems="center"
+          justifyContent="flex-start"
+          gap={4}
+          p={18}
+          w="100%"
+          width="full"
+          maxW="full"
+          display="inline-block"
+          mt="20px"
+        >
+          <BuyerContextSwitch />
+        </Box>
       )}
     </VStack>
   )

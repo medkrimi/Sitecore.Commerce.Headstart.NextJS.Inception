@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Button,
   ButtonGroup,
   Flex,
@@ -8,7 +9,9 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Text
+  Spacer,
+  Text,
+  VStack
 } from "@chakra-ui/react"
 import {useEffect, useState} from "react"
 import {Buyer} from "ordercloud-javascript-sdk"
@@ -41,8 +44,13 @@ export default function BuyerContextSwitch({...props}) {
       catalogsService
         .getCatalogsCountById(router.query.buyerid)
         .then((totalCount) => setCatalogsCount(totalCount))
+
+      let currentBuyer = buyers.find(
+        (buyer) => buyer.ID === router.query.buyerid
+      )
+      setCurrentBuyer(currentBuyer)
     }
-  }, [router.query.buyerid])
+  }, [buyers, router.query.buyerid])
 
   return (
     <Flex
@@ -82,10 +90,11 @@ export default function BuyerContextSwitch({...props}) {
           <Text fontSize={{sm: "sm", md: "md"}} color="gray.400">
             {currentBuyer?.ID}
           </Text>
+          <Spacer />
           <Menu>
             {buyers.length > 1 && (
               <MenuButton as={Button} rightIcon={<ChevronDownIcon />} size="lg">
-                Update the buyer context
+                {currentBuyer?.Name}
               </MenuButton>
             )}
             <MenuList>

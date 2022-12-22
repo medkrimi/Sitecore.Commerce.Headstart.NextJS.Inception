@@ -9,7 +9,8 @@ export async function getServerSideProps() {
       header: {
         title: "Create a new user group",
         metas: {
-          hasBreadcrumbs: true
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: true
         }
       },
       revalidate: 5 * 60

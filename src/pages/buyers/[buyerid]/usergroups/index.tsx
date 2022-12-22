@@ -29,7 +29,8 @@ export async function getServerSideProps() {
       header: {
         title: "User groups List",
         metas: {
-          hasBreadcrumbs: true
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: true
         }
       },
       revalidate: 5 * 60
@@ -42,18 +43,18 @@ const UserGroupsList = () => {
   const router = useRouter()
   const toast = useToast()
   useEffect(() => {
-    initBuyersData()
-  }, [])
+    initUserGroupsData(router.query.buyerid)
+  }, [router.query.buyerid])
 
-  async function initBuyersData() {
-    const userGroupsList = await userGroupsService.list(router.query.buyerid)
+  async function initUserGroupsData(buyerid) {
+    const userGroupsList = await userGroupsService.list(buyerid)
     setBuyers(userGroupsList.Items)
   }
 
   async function deleteBuyer(userGroupid) {
     try {
       await userGroupsService.delete(router.query.buyerid, userGroupid)
-      initBuyersData()
+      initUserGroupsData(router.query.buyerid)
       toast({
         id: userGroupid + "-deleted",
         title: "Success",
