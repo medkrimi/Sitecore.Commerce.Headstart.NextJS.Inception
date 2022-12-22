@@ -1,29 +1,23 @@
 import {Box, Container, Flex} from "@chakra-ui/react"
 import {ReactNode, useEffect, useState} from "react"
+
+import ContentFooter from "./ContentFooter"
+import ContentHeader from "./ContentHeader"
 import Footer from "./Footer"
 import Header from "./Header"
-import ContentHeader from "./ContentHeader"
-import ContentFooter from "./ContentFooter"
 import LeftNavigation from "lib/components/navigation/SideNavigation"
 import {useAuth} from "lib/hooks/useAuth"
 
-type LayoutProps = {
-  children: ReactNode
-  title: string
-}
-
-const Layout = ({children, title}: LayoutProps) => {
+const Layout = (props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const auth = useAuth()
-
   useEffect(() => {
     setIsAuthenticated(auth.isAuthenticated)
   }, [auth.isAuthenticated])
-
   if (!isAuthenticated) {
     return (
       <Flex width="100vw" height="100vh" alignItems="center" justify="center">
-        {children}
+        {props.children}
       </Flex>
     )
   }
@@ -41,8 +35,8 @@ const Layout = ({children, title}: LayoutProps) => {
       >
         <LeftNavigation />
         <Container maxW="full">
-          <ContentHeader title={title} />
-          {children}
+          <ContentHeader {...props} />
+          {props.children}
           <ContentFooter />
         </Container>
       </Flex>

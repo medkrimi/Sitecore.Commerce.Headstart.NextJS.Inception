@@ -5,20 +5,20 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
-  Heading,
   HStack,
+  Heading,
   IconButton,
   Input,
   Text
 } from "@chakra-ui/react"
-import {Form} from "formik"
-import ProtectedContent from "lib/components/auth/ProtectedContent"
-import Card from "lib/components/card/Card"
-import {appPermissions} from "lib/constants/app-permissions.config"
-import {NextSeo} from "next-seo"
 
-import React from "react"
+import Card from "lib/components/card/Card"
+import {Form} from "formik"
 import {HiOutlineMinusSm} from "react-icons/hi"
+import {NextSeo} from "next-seo"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import React from "react"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 const NewOrdersPage = () => {
   return (
@@ -57,10 +57,16 @@ const ProtectedNewOrdersPage = () => (
 
 export default ProtectedNewOrdersPage
 
+/* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getStaticProps() {
   return {
     props: {
-      title: "New Order"
+      header: {
+        title: "New Order",
+        metas: {
+          hasBreadcrumbs: true
+        }
+      }
     }
   }
 }

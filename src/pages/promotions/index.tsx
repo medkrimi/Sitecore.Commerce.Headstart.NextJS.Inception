@@ -28,14 +28,15 @@ import {
   Tr,
   VStack
 } from "@chakra-ui/react"
-import {Promotions} from "ordercloud-javascript-sdk"
 import {dateHelper, textHelper} from "lib/utils/"
 import {useEffect, useRef, useState} from "react"
+
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
 import {HiOutlineMinusSm} from "react-icons/hi"
 import Link from "../../lib/components/navigation/Link"
 import {NextSeo} from "next-seo"
+import {Promotions} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 
@@ -224,10 +225,16 @@ const ProtectedPromotionsPage = () => {
 
 export default ProtectedPromotionsPage
 
+/* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getStaticProps() {
   return {
     props: {
-      title: "Promotions List"
+      header: {
+        title: "Promotions List",
+        metas: {
+          hasBreadcrumbs: true
+        }
+      }
     }
   }
 }

@@ -1,41 +1,13 @@
-import {Heading, Flex, Box, VStack} from "@chakra-ui/react"
-import BreadcrumbNavigation from "lib/components/navigation/BreadcrumbNavigation"
-import {useEffect, useState} from "react"
+import {Box, Heading, VStack} from "@chakra-ui/react"
 
-interface BreadcrumbItem {
-  name: string
-  url: string
-}
-interface Breadcrumb {
-  items: BreadcrumbItem[]
-}
+import Breadcrumbs from "nextjs-breadcrumbs"
+import BuyerContextSwitch from "lib/components/buyers/BuyerContextSwitch"
+import {textHelper} from "lib/utils"
+
 const ContentHeader = (props) => {
-  const [breadcrumb, setBreadcrumb] = useState<Breadcrumb>()
-
-  useEffect(() => {
-    const doSetBreadcrumb = () => {
-      const breadcrumbItems: BreadcrumbItem[] = [
-        {
-          name: "Home",
-          url: "/dashboard"
-        },
-        {
-          name: "Promotions",
-          url: "/promotions"
-        }
-      ]
-      const tmpbreadcrumb: Breadcrumb = {
-        items: breadcrumbItems
-      }
-      setBreadcrumb(tmpbreadcrumb)
-    }
-
-    doSetBreadcrumb()
-  }, [])
-
   return (
-    <VStack w="100%" width="full">
-      {breadcrumb?.items?.length ?? 0 > 0 ? (
+    <VStack w="100%" width="full" marginBottom={3} marginTop={5}>
+      {props?.header?.metas?.hasBreadcrumbs && (
         <Box
           //direction="row"
           alignItems="center"
@@ -47,14 +19,30 @@ const ContentHeader = (props) => {
           maxW="full"
           display="inline-block"
           mt="20px"
-          mb="0"
         >
-          <BreadcrumbNavigation breadcrumbs={breadcrumb?.items ?? null} />
+          <Breadcrumbs useDefaultStyle labelsToUppercase />
         </Box>
-      ) : (
-        <></>
       )}
-      <Heading as="h2">{props.title}</Heading>
+
+      {props?.header?.title && (
+        <Heading as="h2">{props?.header?.title}</Heading>
+      )}
+      {props?.header?.metas?.hasBuyerContextSwitch && (
+        <Box
+          //direction="row"
+          alignItems="center"
+          justifyContent="flex-start"
+          gap={4}
+          p={18}
+          w="100%"
+          width="full"
+          maxW="full"
+          display="inline-block"
+          mt="20px"
+        >
+          <BuyerContextSwitch />
+        </Box>
+      )}
     </VStack>
   )
 }

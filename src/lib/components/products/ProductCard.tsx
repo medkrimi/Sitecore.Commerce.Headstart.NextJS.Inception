@@ -1,3 +1,4 @@
+import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 import {
   Checkbox,
   Flex,
@@ -10,7 +11,6 @@ import {
   VStack,
   useColorModeValue
 } from "@chakra-ui/react"
-import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 
 import {textHelper} from "lib/utils/text.utils"
 
@@ -28,11 +28,12 @@ const ProductCard = (props) => {
         <Link href={"/products/" + product.ID}>
           <Image
             src={
-              typeof product?.xp?.Images != "undefined"
-                ? product?.xp?.Images[0]?.ThumbnailUrl ??
-                  product?.xp?.Images[0]?.Url
-                : product?.xp?.image_url ??
-                  "https://mss-p-006-delivery.stylelabs.cloud/api/public/content/4fc742feffd14e7686e4820e55dbfbaa"
+              typeof product?.xp?.Images != "undefined" &&
+              product?.xp?.Images?.length > 0
+                ? product?.xp?.Images[0]?.ThumbnailUrl ||
+                  product?.xp?.Images[0]?.Url ||
+                  product?.xp?.Images[0]?.url
+                : "/images/dummy-image-square.jpg"
             }
             alt="product image"
             width="100px"
