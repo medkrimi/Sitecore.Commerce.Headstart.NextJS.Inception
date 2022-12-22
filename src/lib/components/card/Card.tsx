@@ -45,7 +45,6 @@ function Card(props) {
         aria-label="close panel"
         icon={isShownPanel ? <HiOutlineMinusSm /> : <HiOutlinePlusSm />}
         onClick={handlePanelClick}
-        //display={isShownButton}
         hidden={isShownButton}
       ></IconButton>
       {isShownPanel && (
