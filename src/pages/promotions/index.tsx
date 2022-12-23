@@ -40,6 +40,21 @@ import {Promotions} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Promotions List",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
+
 const PromotionsPage = () => {
   const [promotions, setPromotions] = useState([])
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
@@ -155,7 +170,7 @@ const PromotionsPage = () => {
           aria-label="close panel"
           icon={<HiOutlineMinusSm />}
         ></IconButton>
-        <Table margin={30}>
+        <Table>
           <Thead>
             <Tr>
               <Th>Code</Th>
@@ -224,17 +239,3 @@ const ProtectedPromotionsPage = () => {
 }
 
 export default ProtectedPromotionsPage
-
-/* This declare the page title and enable the breadcrumbs in the content header section. */
-export async function getStaticProps() {
-  return {
-    props: {
-      header: {
-        title: "Promotions List",
-        metas: {
-          hasBreadcrumbs: true
-        }
-      }
-    }
-  }
-}

@@ -32,6 +32,21 @@ import React from "react"
 import {useEffect, useState} from "react"
 import {FiRefreshCw, FiTrash2} from "react-icons/fi"
 
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Promotion Details",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
+
 const PromotionDetails = () => {
   const router = useRouter()
 
@@ -72,27 +87,6 @@ const PromotionDetails = () => {
   }
 
   useEffect(() => {
-    // TODO: Add 404 Handling if promotion really does not exist
-    const doSetBreadcrumb = () => {
-      const breadcrumbItems: BreadcrumbItem[] = [
-        {
-          name: "Home",
-          url: "/dashboard"
-        },
-        {
-          name: "Promotions",
-          url: "/promotions"
-        },
-        {
-          name: promotion?.Name ?? "...",
-          url: "/promotions/" + promotion?.ID ?? ""
-        }
-      ]
-      const tmpbreadcrumb: Breadcrumb = {
-        items: breadcrumbItems
-      }
-      setBreadcrumb(tmpbreadcrumb)
-    }
     async function doGetPromotion() {
       if (id != promotion?.ID) {
         const promotion = await Promotions.Get(id as string)
@@ -102,28 +96,11 @@ const PromotionDetails = () => {
 
     doGetPromotion()
     setPromotionName(promotion?.Name ?? "")
-    doSetBreadcrumb()
   }, [id, promotion])
 
   return (
     <>
       <>
-        {breadcrumb?.items?.length ?? 0 > 0 ? (
-          <Flex
-            direction="column"
-            alignItems="center"
-            justifyContent="center"
-            gap={4}
-            mb={1}
-            p={18}
-            w="full"
-            color={color}
-          >
-            <BreadcrumbNavigation breadcrumbs={breadcrumb?.items ?? null} />
-          </Flex>
-        ) : (
-          <></>
-        )}
         <NextSeo title="Promotion Details" />
         <HStack justifyContent={"space-between"} px={6} width={"full"}>
           <HStack

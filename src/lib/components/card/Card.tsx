@@ -1,7 +1,29 @@
-import {Box, useStyleConfig} from "@chakra-ui/react"
+import {Box, Flex, IconButton, useStyleConfig} from "@chakra-ui/react"
+
+import {useEffect, useState} from "react"
+import {HiOutlineMinusSm, HiOutlinePlusSm} from "react-icons/hi"
 function Card(props) {
   const {variant, children, ...rest} = props
   const styles = useStyleConfig("Card", {variant})
+  const [isShownPanel, setIsShownPanel] = useState(true)
+  const [isShownButton, setIsShownButton] = useState(false)
+
+  useEffect(() => {
+    if (props.showclosebutton !== undefined) {
+      //var showbutton = props.showclosebutton.toLowerCase()
+      console.log("Not Undefined")
+      if (props.showclosebutton === "false") {
+        console.log("hit function")
+        setIsShownButton(true)
+      }
+    }
+  }, [props.showclosebutton])
+
+  const handlePanelClick = (event) => {
+    // toggle shown state
+    setIsShownPanel((current) => !current)
+  }
+
   return (
     <Box
       bg="white"
@@ -20,7 +42,19 @@ function Card(props) {
         borderRadius: "10px"
       }}
     >
-      {children}
+      <IconButton
+        variant="closePanelButton"
+        aria-label="close panel"
+        icon={isShownPanel ? <HiOutlineMinusSm /> : <HiOutlinePlusSm />}
+        onClick={handlePanelClick}
+        hidden={isShownButton}
+      ></IconButton>
+      {isShownPanel && (
+        <Flex flexDirection="column" p="10">
+          {children}
+        </Flex>
+      )}
+      {isShownPanel == false && <Flex p="5">Panel is closed</Flex>}
     </Box>
   )
 }

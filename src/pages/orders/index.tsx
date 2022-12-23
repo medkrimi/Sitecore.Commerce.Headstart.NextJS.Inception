@@ -33,7 +33,6 @@ import {useEffect, useRef, useState} from "react"
 
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
-import {HiOutlineMinusSm} from "react-icons/hi"
 import LettersCard from "lib/components/card/LettersCard"
 import Link from "../../lib/components/navigation/Link"
 import {NextSeo} from "next-seo"
@@ -44,6 +43,20 @@ import {dateHelper} from "lib/utils/date.utils"
 import {priceHelper} from "lib/utils/price.utils"
 import {textHelper} from "lib/utils/text.utils"
 
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Orders List",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
 const OrdersPage = () => {
   const [orders, setOrders] = useState([])
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
@@ -165,12 +178,7 @@ const OrdersPage = () => {
         </HStack>
       </HStack>
       <Card variant="primaryCard">
-        <IconButton
-          variant="closePanelButton"
-          aria-label="close panel"
-          icon={<HiOutlineMinusSm />}
-        ></IconButton>
-        <Table margin={30}>
+        <Table>
           <Thead>
             <Tr>
               <Th>ID</Th>
@@ -199,7 +207,7 @@ const OrdersPage = () => {
             <AlertDialogBody>
               <Text display="inline">
                 Export the selected orders to a CSV, once the export button is
-                clicked behind the scense a job will be kicked off to create the
+                clicked behind the scenes a job will be kicked off to create the
                 csv and then will automatically download to your downloads
                 folder in the browser.
               </Text>
@@ -233,17 +241,3 @@ const ProtectedOrdersPage = () => (
 )
 
 export default ProtectedOrdersPage
-
-/* This declare the page title and enable the breadcrumbs in the content header section. */
-export async function getStaticProps() {
-  return {
-    props: {
-      header: {
-        title: "Orders List",
-        metas: {
-          hasBreadcrumbs: true
-        }
-      }
-    }
-  }
-}

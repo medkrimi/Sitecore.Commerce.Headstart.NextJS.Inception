@@ -18,32 +18,39 @@ import {appPermissions} from "lib/constants/app-permissions.config"
 import {NextSeo} from "next-seo"
 
 import React from "react"
-import {HiOutlineMinusSm} from "react-icons/hi"
+
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "New Return",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
 
 const NewReturnPage = () => {
   return (
     <Container maxW="full">
       <NextSeo title="New Return" />
       <Card variant="primaryCard">
-        <IconButton
-          variant="closePanelButton"
-          aria-label="close panel"
-          icon={<HiOutlineMinusSm />}
-        ></IconButton>
-        <Flex flexDirection="column" p="10">
-          <HStack justifyContent="space-between" w="100%">
-            <FormControl>
-              <FormLabel>Buyer</FormLabel>
-              <Input type="text" />
-              <FormLabel>Product(s)</FormLabel>
-              <Input type="text" />
-            </FormControl>
-          </HStack>
-          <HStack justifyContent="space-between" w="100%">
-            <Button variant="secondaryButton">Cancel</Button>
-            <Button> Submit</Button>
-          </HStack>
-        </Flex>
+        <HStack justifyContent="space-between" w="100%">
+          <FormControl>
+            <FormLabel>Buyer</FormLabel>
+            <Input type="text" />
+            <FormLabel>Product(s)</FormLabel>
+            <Input type="text" />
+          </FormControl>
+        </HStack>
+        <HStack justifyContent="space-between" w="100%">
+          <Button variant="secondaryButton">Cancel</Button>
+          <Button> Submit</Button>
+        </HStack>
       </Card>
     </Container>
   )
@@ -58,11 +65,3 @@ const ProtectedNewReturnPage = () => {
 }
 
 export default ProtectedNewReturnPage
-
-export async function getStaticProps() {
-  return {
-    props: {
-      title: "New Return"
-    }
-  }
-}

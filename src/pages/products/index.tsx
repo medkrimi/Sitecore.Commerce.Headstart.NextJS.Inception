@@ -5,6 +5,20 @@ import {appPermissions} from "lib/constants/app-permissions.config"
 import {useRouter} from "next/router"
 import React, {useEffect, useState} from "react"
 
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Products List",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
 const Products = () => {
   const [query, setQuery] = useState("")
   const router = useRouter()

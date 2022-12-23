@@ -27,7 +27,7 @@ const OcLineItemList: FunctionComponent<OcLineItemListProps> = ({
 }) => {
   return lineItems && lineItems.length ? (
     <Flex as="section" gap={3} w="full" width="full">
-      <Table margin={30}>
+      <Table>
         <Thead>
           <Tr>
             <Th>Product</Th>

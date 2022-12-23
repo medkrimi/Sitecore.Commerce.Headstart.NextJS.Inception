@@ -6,6 +6,7 @@ import {User} from "ordercloud-javascript-sdk"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {useRouter} from "next/router"
 import {usersService} from "../../../../lib/api"
+import {Box} from "@chakra-ui/react"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -39,7 +40,9 @@ const UserListItem = () => {
 const ProtectedBuyerListItem = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
-      <UserListItem />
+      <Box padding="20px">
+        <UserListItem />
+      </Box>
     </ProtectedContent>
   )
 }

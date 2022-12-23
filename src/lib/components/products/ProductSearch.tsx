@@ -1,4 +1,4 @@
-import {SearchIcon} from "@chakra-ui/icons"
+import {ChevronDownIcon, SearchIcon} from "@chakra-ui/icons"
 import {
   Text,
   Button,
@@ -32,9 +32,26 @@ import {
   SliderMark,
   InputGroup,
   InputLeftElement,
-  Select
+  Select,
+  Link,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  CheckboxGroup,
+  Stack,
+  Divider,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
+  Spinner,
+  Icon,
+  Spacer
 } from "@chakra-ui/react"
-import {ChangeEvent, useEffect, useState} from "react"
+import {ChangeEvent, useEffect, useRef, useState} from "react"
 import {
   FiRotateCcw,
   FiPlus,
@@ -55,6 +72,8 @@ import ProductGrid from "./ProductGrid"
 import ProductList from "./ProductList"
 import {ProductListOptions} from "../../services/ordercloud.service"
 import {ProductXPs} from "lib/types/ProductXPs"
+import Card from "../card/Card"
+import {HiOutlineViewGrid, HiOutlineViewList} from "react-icons/hi"
 
 //import Image from "next/image"
 
@@ -86,6 +105,14 @@ export default function ProductSearch({query}: ProductSearchProps) {
     fontSize: "sm"
   }
   const [toggleViewMode, setToggleViewMode] = useState(false)
+
+  const [isBulkImportDialogOpen, setBulkImportDialogOpen] = useState(false)
+  const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const cancelRef = useRef()
+
+  const requestExportCSV = () => {}
+  const requestImportCSV = () => {}
 
   useEffect(() => {
     async function GetProducts() {
@@ -336,107 +363,248 @@ export default function ProductSearch({query}: ProductSearchProps) {
     <>
       {componentProducts ? (
         <VStack p={0} spacing={6} width="full" align="center">
-          <NextSeo title="Products Overview" />
-          <Heading as="h1">Products Overview</Heading>
-          <HStack width={"full"} justifyContent={"space-between"}>
-            <Box width={"100%"} pt={8} pb={4} pl={6} pr={6}>
-              <Slider
-                borderRight={"solid black"}
-                borderLeft={"solid black"}
-                aria-label="Editorial Progress Filter"
-                defaultValue={100}
-                value={editorialProgressFilter}
-                onChange={(val) => setEditorialProgressFilter(val)}
-                onChangeEnd={onEditorialProgressFilterChanged}
-                min={0}
-                max={100}
-                step={1}
-              >
-                <SliderMark value={0} {...labelStyles}>
-                  0%
-                </SliderMark>
-                <SliderMark value={25} {...labelStyles}>
-                  25%
-                </SliderMark>
-                <SliderMark value={50} {...labelStyles}>
-                  50%
-                </SliderMark>
-                <SliderMark value={75} {...labelStyles}>
-                  75%
-                </SliderMark>
-                <SliderMark value={100} {...labelStyles}>
-                  100%
-                </SliderMark>
-                <SliderMark
-                  value={editorialProgressFilter}
-                  textAlign="center"
-                  bg={sliderColor}
-                  color="white"
-                  mt="-10"
-                  ml="-5"
-                  w="12"
-                >
-                  {editorialProgressFilter}%
-                </SliderMark>
-                <SliderTrack bg={"lightgray"}>
-                  <SliderFilledTrack bg={sliderColor} />
-                </SliderTrack>
-                <SliderThumb />
-              </Slider>
-              <Text fontWeight={"bold"} pt={5} ml={-2}>
-                Filter by Editorial Progress...
-              </Text>
-            </Box>
-          </HStack>
+          <NextSeo title="Products List" />
 
           {isLoading && !sortingChanging ? (
             <BrandedSpinner />
           ) : (
             <>
-              <BrandedTable>
-                <Thead>
-                  <Tr>
-                    <Th colSpan={7}>
-                      <Tooltip label="Search for Products">
-                        <IconButton
-                          aria-label="Search"
-                          icon={<SearchIcon />}
-                          onClick={onSearchClicked}
-                          float="right"
+              <HStack justifyContent="space-between" w="100%" mb={5}>
+                <Link onClick={onOpenAddProduct}>
+                  <Button variant="primaryButton">New Product</Button>
+                </Link>
+                <HStack>
+                  <Button
+                    variant="link"
+                    color="gray.500"
+                    fontWeight="400"
+                    fontSize="10px"
+                    marginRight="30px"
+                    onClick={onResetSearch}
+                  >
+                    Reset Search
+                  </Button>
+                  <Menu>
+                    <MenuButton
+                      px={4}
+                      py={2}
+                      transition="all 0.2s"
+                      borderRadius="md"
+                      borderWidth="1px"
+                      _hover={{bg: "gray.400"}}
+                      _expanded={{bg: "blue.400"}}
+                      _focus={{boxShadow: "outline"}}
+                    >
+                      Filters <ChevronDownIcon />
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem>
+                        <VStack>
+                          <HStack
+                            width={"full"}
+                            justifyContent={"space-between"}
+                          >
+                            <Box width={"100%"} pt={8} pb={4} pl={6} pr={6}>
+                              <Slider
+                                borderRight={"solid black"}
+                                borderLeft={"solid black"}
+                                aria-label="Editorial Progress Filter"
+                                defaultValue={100}
+                                value={editorialProgressFilter}
+                                onChange={(val) =>
+                                  setEditorialProgressFilter(val)
+                                }
+                                onChangeEnd={onEditorialProgressFilterChanged}
+                                min={0}
+                                max={100}
+                                step={1}
+                              >
+                                <SliderMark value={0} {...labelStyles}>
+                                  0%
+                                </SliderMark>
+                                <SliderMark value={25} {...labelStyles}>
+                                  25%
+                                </SliderMark>
+                                <SliderMark value={50} {...labelStyles}>
+                                  50%
+                                </SliderMark>
+                                <SliderMark value={75} {...labelStyles}>
+                                  75%
+                                </SliderMark>
+                                <SliderMark value={100} {...labelStyles}>
+                                  100%
+                                </SliderMark>
+                                <SliderMark
+                                  value={editorialProgressFilter}
+                                  textAlign="center"
+                                  bg={sliderColor}
+                                  color="white"
+                                  mt="-10"
+                                  ml="-5"
+                                  w="12"
+                                >
+                                  {editorialProgressFilter}%
+                                </SliderMark>
+                                <SliderTrack bg={"lightgray"}>
+                                  <SliderFilledTrack bg={sliderColor} />
+                                </SliderTrack>
+                                <SliderThumb />
+                              </Slider>
+                              <Text fontWeight={"bold"} pt={5} ml={-2}>
+                                Filter by Editorial Progress...
+                              </Text>
+                            </Box>
+                          </HStack>
+                          <Text>Product Status</Text>
+                          <CheckboxGroup>
+                            <Stack
+                              spacing={[1, 3]}
+                              direction={["column", "row"]}
+                            >
+                              <Checkbox value="Completed" defaultChecked>
+                                Completed
+                              </Checkbox>
+                              <Checkbox value="AwaitingApproval" defaultChecked>
+                                Awaiting Approval
+                              </Checkbox>
+                              <Checkbox value="Canceled" defaultChecked>
+                                Canceled
+                              </Checkbox>
+                              <Checkbox value="Declined" defaultChecked>
+                                Declined
+                              </Checkbox>
+                              <Checkbox value="Open" defaultChecked>
+                                Open
+                              </Checkbox>
+                            </Stack>
+                          </CheckboxGroup>
+                          <Divider />
+                          <HStack>
+                            {/*<Button size="md" bg={boxBgColor} color={color}>
+                      Clear
+                    </Button>
+                  <Button size="md" bg={boxBgColor} color={color}>
+                      Submit
+                    </Button> */}
+
+                            <Select
+                              onChange={handleSelectChange}
+                              w={"60%"}
+                              value={
+                                sortBy.substring(0, 1) == "!"
+                                  ? sortBy.substring(1)
+                                  : sortBy
+                              }
+                            >
+                              <option
+                                value="name"
+                                /* selected={
+                              optionsSortBy == "name" ||
+                              optionsSortBy == "!name"
+                            } */
+                              >
+                                Name
+                              </option>
+                              <option
+                                value="ID"
+                                /* selected={
+                              optionsSortBy == "ID" || optionsSortBy == "!ID"
+                            } */
+                              >
+                                Product ID
+                              </option>
+                              <option
+                                value="editorialProcess"
+                                /* selected={
+                              optionsSortBy == "editorialProcess" ||
+                              optionsSortBy == "!editorialProcess"
+                            } */
+                              >
+                                Progress
+                              </option>
+                              <option
+                                value="Active"
+                                /* selected={
+                              optionsSortBy == "Active" ||
+                              optionsSortBy == "!Active"
+                            } */
+                              >
+                                Active
+                              </option>
+                            </Select>
+                            <Tooltip label="Sort Asc/Desc">
+                              <IconButton
+                                aria-label="Sort Asc/Desc"
+                                icon={
+                                  sortDesc ? <FiChevronDown /> : <FiChevronUp />
+                                }
+                                onClick={() => {
+                                  setSortDesc(!sortDesc)
+                                  sortBy.substring(0, 1) == "!"
+                                    ? setSortBy(sortBy.substring(1))
+                                    : setSortBy("!" + sortBy)
+                                  optionsSortBy.substring(0, 1) == "!"
+                                    ? setOptionsSortBy(
+                                        optionsSortBy.substring(1)
+                                      )
+                                    : setOptionsSortBy("!" + optionsSortBy)
+                                }}
+                                float="right"
+                              />
+                            </Tooltip>
+                          </HStack>
+                        </VStack>
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                  <Button
+                    variant="secondaryButton"
+                    onClick={onMassEditOpenClicked}
+                  >
+                    Bulk Edit
+                  </Button>
+                  <Button
+                    variant="secondaryButton"
+                    onClick={() => setBulkImportDialogOpen(true)}
+                  >
+                    Bulk Import
+                  </Button>
+                  <Button
+                    variant="secondaryButton"
+                    onClick={() => setExportCSVDialogOpen(true)}
+                  >
+                    Export CSV
+                  </Button>
+                </HStack>
+              </HStack>
+              <Card showclosebutton="false">
+                <HStack justifyContent="space-between">
+                  <Text fontWeight={"bold"} p={3} float={"left"}>
+                    Total Products: {componentProducts.length}
+                  </Text>
+                  <Box>
+                    <HStack>
+                      <Box pb="15px">
+                        <Icon
+                          aria-label="Grid View"
+                          as={HiOutlineViewGrid}
+                          onClick={() => setToggleViewMode(false)}
+                          fontSize="36px"
+                          color="gray.200"
+                          cursor="pointer"
                         />
-                      </Tooltip>
-                      <Tooltip label="Reset Search Parameters">
-                        <IconButton
-                          aria-label="Reset all Search Parameters"
-                          icon={<FiRotateCcw />}
-                          onClick={onResetSearch}
-                          float="right"
+                      </Box>
+                      <Box pb="15px">
+                        <Icon
+                          aria-label="List View"
+                          as={HiOutlineViewList}
+                          onClick={() => setToggleViewMode(true)}
+                          fontSize="36px"
+                          color="gray.200"
+                          cursor="pointer"
                         />
-                      </Tooltip>
-                      <Tooltip label="Add new Product">
-                        <IconButton
-                          aria-label="Add new Product"
-                          icon={<FiPlus />}
-                          onClick={onOpenAddProduct}
-                          float="right"
-                        />
-                      </Tooltip>
-                      <Tooltip label="Mass Edit Products">
-                        <IconButton
-                          aria-label="Mass Edit Products"
-                          icon={<FiEdit />}
-                          onClick={onMassEditOpenClicked}
-                          float="right"
-                        />
-                      </Tooltip>
-                      <Tooltip label="Switch List/Grid View">
-                        <IconButton
-                          aria-label="Switch List/Grid View"
-                          icon={toggleViewMode ? <FiGrid /> : <FiList />}
-                          onClick={() => setToggleViewMode(!toggleViewMode)}
-                          float="right"
-                        />
-                      </Tooltip>
+                      </Box>
+                      <Spacer width="20px"></Spacer>
                       <InputGroup width={"450px"} float="right">
                         <InputLeftElement>
                           <AiOutlineSearch />
@@ -457,97 +625,45 @@ export default function ProductSearch({query}: ProductSearchProps) {
                             }
                           }}
                         />
-                        <Select
-                          onChange={handleSelectChange}
-                          w={"60%"}
-                          value={
-                            sortBy.substring(0, 1) == "!"
-                              ? sortBy.substring(1)
-                              : sortBy
-                          }
-                        >
-                          <option
-                            value="name"
-                            /* selected={
-                              optionsSortBy == "name" ||
-                              optionsSortBy == "!name"
-                            } */
-                          >
-                            Name
-                          </option>
-                          <option
-                            value="ID"
-                            /* selected={
-                              optionsSortBy == "ID" || optionsSortBy == "!ID"
-                            } */
-                          >
-                            Product ID
-                          </option>
-                          <option
-                            value="editorialProcess"
-                            /* selected={
-                              optionsSortBy == "editorialProcess" ||
-                              optionsSortBy == "!editorialProcess"
-                            } */
-                          >
-                            Progress
-                          </option>
-                          <option
-                            value="Active"
-                            /* selected={
-                              optionsSortBy == "Active" ||
-                              optionsSortBy == "!Active"
-                            } */
-                          >
-                            Active
-                          </option>
-                        </Select>
-                        <Tooltip label="Sort Asc/Desc">
-                          <IconButton
-                            aria-label="Sort Asc/Desc"
-                            icon={
-                              sortDesc ? <FiChevronDown /> : <FiChevronUp />
-                            }
-                            onClick={() => {
-                              setSortDesc(!sortDesc)
-                              sortBy.substring(0, 1) == "!"
-                                ? setSortBy(sortBy.substring(1))
-                                : setSortBy("!" + sortBy)
-                              optionsSortBy.substring(0, 1) == "!"
-                                ? setOptionsSortBy(optionsSortBy.substring(1))
-                                : setOptionsSortBy("!" + optionsSortBy)
-                            }}
-                            float="right"
-                          />
-                        </Tooltip>
                       </InputGroup>
-                    </Th>
-                  </Tr>
-                </Thead>
-                {toggleViewMode ? (
-                  <ProductList
-                    products={componentProducts}
-                    onCheckChange={(productid) =>
-                      onMassEditCheckboxChanged(productid)
-                    }
-                    onSort={(columnName) => onSortByNameClicked(columnName)}
-                    sortBy={sortBy}
-                  />
-                ) : (
-                  <ProductGrid
-                    products={componentProducts}
-                    onCheck={(productid) =>
-                      onMassEditCheckboxChanged(productid)
-                    }
-                  />
-                )}
-              </BrandedTable>
-              <Box>
-                <Text fontWeight={"bold"} p={3} float={"left"}>
-                  {componentProducts.length} out of {componentProducts.length}{" "}
-                  Products{" "}
-                </Text>
-              </Box>
+                      {/* <Tooltip label="Search for Products">
+                        <IconButton
+                          aria-label="Search"
+                          icon={<SearchIcon />}
+                          onClick={onSearchClicked}
+                          float="right"
+                        />
+                        MOVE THIS TO ENTER BUTTON TO MATCH OTHER AREAS
+                      </Tooltip> */}
+                    </HStack>
+                  </Box>
+                </HStack>
+                <BrandedTable>
+                  {toggleViewMode ? (
+                    <ProductList
+                      products={componentProducts}
+                      onCheckChange={(productid) =>
+                        onMassEditCheckboxChanged(productid)
+                      }
+                      onSort={(columnName) => onSortByNameClicked(columnName)}
+                      sortBy={sortBy}
+                    />
+                  ) : (
+                    <ProductGrid
+                      products={componentProducts}
+                      onCheck={(productid) =>
+                        onMassEditCheckboxChanged(productid)
+                      }
+                    />
+                  )}
+                </BrandedTable>
+                <Box>
+                  <Text fontWeight={"bold"} p={3} float={"left"}>
+                    {componentProducts.length} out of {componentProducts.length}
+                    Products
+                  </Text>
+                </Box>
+              </Card>
             </>
           )}
         </VStack>
@@ -658,6 +774,79 @@ export default function ProductSearch({query}: ProductSearchProps) {
           )}
         </ModalContent>
       </Modal>
+      <AlertDialog
+        isOpen={isExportCSVDialogOpen}
+        onClose={() => setExportCSVDialogOpen(false)}
+        leastDestructiveRef={cancelRef}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Export Selected Products to CSV
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              <Text display="inline">
+                Export the selected products to a CSV, once the export button is
+                clicked behind the scenes a job will be kicked off to create the
+                csv and then will automatically download to your downloads
+                folder in the browser.
+              </Text>
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <HStack justifyContent="space-between" w="100%">
+                <Button
+                  ref={cancelRef}
+                  onClick={() => setExportCSVDialogOpen(false)}
+                  disabled={loading}
+                  variant="secondaryButton"
+                >
+                  Cancel
+                </Button>
+                <Button onClick={requestExportCSV} disabled={loading}>
+                  {loading ? <Spinner color="brand.500" /> : "Export Orders"}
+                </Button>
+              </HStack>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+
+      <AlertDialog
+        isOpen={isBulkImportDialogOpen}
+        onClose={() => setBulkImportDialogOpen(false)}
+        leastDestructiveRef={cancelRef}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Bulk Import Products
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              <Text display="inline">
+                Bulk import products from an excel or csv file, once the upload
+                button is clicked behind the scenes a job will be kicked off
+                load each of the products included in your files, once it has
+                completed you will see them appear in your search.
+              </Text>
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <HStack justifyContent="space-between" w="100%">
+                <Button
+                  ref={cancelRef}
+                  onClick={() => setBulkImportDialogOpen(false)}
+                  disabled={loading}
+                  variant="secondaryButton"
+                >
+                  Cancel
+                </Button>
+                <Button onClick={requestImportCSV} disabled={loading}>
+                  {loading ? <Spinner color="brand.500" /> : "Import Products"}
+                </Button>
+              </HStack>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </>
   )
 }

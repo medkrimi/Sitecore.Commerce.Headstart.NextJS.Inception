@@ -43,11 +43,26 @@ import {useRouter} from "next/router"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Product Detail Page:",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
+
 const ProductDetails = () => {
   const router = useRouter()
   const {id} = router.query
   const [composedProduct, setComposedProduct] = useState<ComposedProduct>(null)
-  const [prodcutName, setProductName] = useState("")
+  const [productName, setProductName] = useState("")
   const [breadcrumb, setBreadcrumb] = useState<Breadcrumb>()
   const [isDeleting, setIsDeleting] = useState(false)
   const {isOpen, onOpen, onClose} = useDisclosure()
@@ -84,53 +99,15 @@ const ProductDetails = () => {
     }
 
     LoadProduct()
-    // TODO: Add 404 Handling if product really does not exist
-    const doSetBreadcrumb = () => {
-      const breadcrumbItems: BreadcrumbItem[] = [
-        {
-          name: "Home",
-          url: "/"
-        },
-        {
-          name: "Products",
-          url: "/products"
-        },
-        {
-          name: composedProduct?.Product?.Name ?? "...",
-          url: "/products/" + composedProduct?.Product?.ID ?? ""
-        }
-      ]
-      const tmpbreadcrumb: Breadcrumb = {
-        items: breadcrumbItems
-      }
-      setBreadcrumb(tmpbreadcrumb)
-    }
 
     setProductName(composedProduct?.Product?.Name ?? "")
-    doSetBreadcrumb()
   }, [composedProduct, id])
 
   return (
     <VStack w="full">
       <>
-        {/* {prodcutName !== "" ? ( */}
+        {/* {productName !== "" ? ( */}
         <>
-          {breadcrumb?.items?.length ?? 0 > 0 ? (
-            <Flex
-              direction="column"
-              alignItems="left"
-              justifyContent="center"
-              gap={4}
-              mb={1}
-              p={18}
-              w="full"
-              //color={color}
-            >
-              <BreadcrumbNavigation breadcrumbs={breadcrumb?.items ?? null} />
-            </Flex>
-          ) : (
-            <></>
-          )}
           <NextSeo title="Product Details" />
           <Heading
             //color={color}
@@ -140,8 +117,8 @@ const ProductDetails = () => {
             ml={5}
             display={{base: "block", sm: "inline-block", md: "none"}}
           >
-            Product Detail Page: {prodcutName == "" ? "..." : null}{" "}
-            <i>{prodcutName}</i>
+            Product Detail Page: {productName == "" ? "..." : null}{" "}
+            <i>{productName}</i>
           </Heading>
           <VStack justifyContent={"space-between"} px={6} width={"full"}>
             <Heading
@@ -151,8 +128,8 @@ const ProductDetails = () => {
               size={{base: "md", sm: "md", md: "lg", lg: "lg", xl: "xl"}}
               display={{base: "none", sm: "none", md: "block"}}
             >
-              Product Detail Page: {prodcutName == "" ? "..." : null}{" "}
-              <i>{prodcutName}</i>
+              Product Detail Page: {productName == "" ? "..." : null}{" "}
+              <i>{productName}</i>
             </Heading>
             <HStack
               justifyContent={{

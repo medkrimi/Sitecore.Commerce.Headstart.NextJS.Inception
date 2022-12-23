@@ -6,6 +6,7 @@ import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {buyersService} from "../../../lib/api"
 import {useRouter} from "next/router"
+import {Box} from "@chakra-ui/react"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 /* TODO Ask if this is the way to go or better to have getStaticProps + GetStaticPath in this case */
@@ -46,7 +47,9 @@ const BuyerListItem = () => {
 const ProtectedBuyerListItem = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
-      <BuyerListItem />
+      <Box padding="20px">
+        <BuyerListItem />
+      </Box>
     </ProtectedContent>
   )
 }

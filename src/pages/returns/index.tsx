@@ -41,8 +41,6 @@ import {useEffect, useState} from "react"
 
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
-import {HiOutlineMinusSm} from "react-icons/hi"
-import LettersCard from "lib/components/card/LettersCard"
 import NextLink from "next/link"
 import {NextSeo} from "next-seo"
 import {dateHelper} from "lib/utils/date.utils"
@@ -50,6 +48,21 @@ import {priceHelper} from "lib/utils/price.utils"
 import {textHelper} from "lib/utils/text.utils"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
+
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Returns List",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
 
 const TableRow = (orderReturn: OrderReturn) => {
   let currentItems: OrderReturnItem[] = orderReturn.ItemsToReturn
@@ -180,12 +193,7 @@ const ReturnsPage = () => {
         </HStack>
       </HStack>
       <Card variant="primaryCard">
-        <IconButton
-          variant="closePanelButton"
-          aria-label="close panel"
-          icon={<HiOutlineMinusSm />}
-        ></IconButton>
-        <Table margin={30}>
+        <Table>
           <Thead>
             <Tr>
               <Th>ID</Th>
@@ -214,7 +222,7 @@ const ReturnsPage = () => {
             <AlertDialogBody>
               <Text display="inline">
                 Export the select returns to a CSV, once the export button is
-                clicked behind the scense a job will be kicked off to create the
+                clicked behind the scenes a job will be kicked off to create the
                 csv and then will automatically download to your downloads
                 folder in the browser.
               </Text>
@@ -250,11 +258,3 @@ const ProtectedReturnsPage = () => {
 }
 
 export default ProtectedReturnsPage
-
-export async function getStaticProps() {
-  return {
-    props: {
-      title: "Returns Listing"
-    }
-  }
-}

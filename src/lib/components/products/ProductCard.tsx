@@ -20,7 +20,16 @@ const ProductCard = (props) => {
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
 
   return (
-    <VStack h="full" justifyContent="space-between" p={2}>
+    <VStack
+      h="full"
+      justifyContent="space-between"
+      p={2}
+      backgroundColor="white"
+      border="1px solid"
+      borderColor="gray.200"
+      borderRadius="xl"
+      shadow="xl"
+    >
       <Flex w="full" alignItems={"flex-start"}>
         <Checkbox onChange={props.onCheck(product.ID)} />
         <Spacer />
@@ -36,7 +45,7 @@ const ProductCard = (props) => {
                 : "/images/dummy-image-square.jpg"
             }
             alt="product image"
-            width="100px"
+            width="175px"
           />
         </Link>
         <Spacer />
@@ -59,7 +68,7 @@ const ProductCard = (props) => {
         {/* <Heading fontSize="xx-small" fontWeight='normal' color='gray.300' >NEW ARRIVALS</Heading>  */}
         <Tooltip label={product.Name}>
           <Link href={"/products/" + product.ID}>
-            <Heading as="h3" fontSize="small">
+            <Heading as="h3" fontSize="lg">
               {product.Name.length > 39
                 ? product.Name.substring(0, 39) + "..."
                 : product.Name}
