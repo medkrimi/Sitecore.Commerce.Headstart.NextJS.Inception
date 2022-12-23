@@ -43,6 +43,20 @@ import {dateHelper} from "lib/utils/date.utils"
 import {priceHelper} from "lib/utils/price.utils"
 import {textHelper} from "lib/utils/text.utils"
 
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Orders List",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
 const OrdersPage = () => {
   const [orders, setOrders] = useState([])
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
@@ -164,7 +178,7 @@ const OrdersPage = () => {
         </HStack>
       </HStack>
       <Card variant="primaryCard">
-        <Table margin={30}>
+        <Table>
           <Thead>
             <Tr>
               <Th>ID</Th>
@@ -227,17 +241,3 @@ const ProtectedOrdersPage = () => (
 )
 
 export default ProtectedOrdersPage
-
-/* This declare the page title and enable the breadcrumbs in the content header section. */
-export async function getStaticProps() {
-  return {
-    props: {
-      header: {
-        title: "Orders List",
-        metas: {
-          hasBreadcrumbs: true
-        }
-      }
-    }
-  }
-}

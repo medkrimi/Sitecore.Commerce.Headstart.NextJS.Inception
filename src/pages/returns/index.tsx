@@ -49,6 +49,21 @@ import {textHelper} from "lib/utils/text.utils"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Returns List",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
+
 const TableRow = (orderReturn: OrderReturn) => {
   let currentItems: OrderReturnItem[] = orderReturn.ItemsToReturn
   return (
@@ -178,7 +193,7 @@ const ReturnsPage = () => {
         </HStack>
       </HStack>
       <Card variant="primaryCard">
-        <Table margin={30}>
+        <Table>
           <Thead>
             <Tr>
               <Th>ID</Th>
@@ -243,11 +258,3 @@ const ProtectedReturnsPage = () => {
 }
 
 export default ProtectedReturnsPage
-
-export async function getStaticProps() {
-  return {
-    props: {
-      title: "Returns Listing"
-    }
-  }
-}

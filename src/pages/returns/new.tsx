@@ -19,6 +19,21 @@ import {NextSeo} from "next-seo"
 
 import React from "react"
 
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "New Return",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
+
 const NewReturnPage = () => {
   return (
     <Container maxW="full">
@@ -50,11 +65,3 @@ const ProtectedNewReturnPage = () => {
 }
 
 export default ProtectedNewReturnPage
-
-export async function getStaticProps() {
-  return {
-    props: {
-      title: "New Return"
-    }
-  }
-}

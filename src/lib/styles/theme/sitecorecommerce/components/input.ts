@@ -24,6 +24,8 @@ export const Input = {
       // Need both root and field for Text Area and Input to style
       bg: "inputBg",
       border: "1px",
+      borderColor: "gray.200",
+      mb: "20px",
       field: {
         bg: "inputBg",
         border: "1px"
@@ -39,7 +41,8 @@ export const Input = {
     },
     search: {
       field: {
-        border: "none",
+        border: "1px",
+        borderColor: "gray.200",
         py: "11px",
         borderRadius: "inherit",
         _placeholder: "gray.300"

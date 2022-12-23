@@ -18,14 +18,13 @@ const ContentHeader = (props) => {
           width="full"
           maxW="full"
           display="inline-block"
-          mt="20px"
         >
-          <Breadcrumbs useDefaultStyle labelsToUppercase />
+          <Breadcrumbs labelsToUppercase containerClassName="breadcrumb" />
         </Box>
       )}
 
       {props?.header?.title && (
-        <Heading as="h2">{props?.header?.title}</Heading>
+        <Heading as="h1">{props?.header?.title}</Heading>
       )}
       {props?.header?.metas?.hasBuyerContextSwitch && (
         <Box

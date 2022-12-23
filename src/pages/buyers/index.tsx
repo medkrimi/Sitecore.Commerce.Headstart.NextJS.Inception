@@ -1,7 +1,9 @@
 import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
 import {
+  Box,
   Button,
   ButtonGroup,
+  Container,
   HStack,
   Icon,
   Text,
@@ -186,20 +188,7 @@ const BuyersList = () => {
 
   return (
     <>
-      <HStack justifyContent="space-between" w="100%" mb={5}>
-        <Button
-          onClick={() => router.push("/buyers/add")}
-          variant="primaryButton"
-          leftIcon={<AddIcon />}
-          size="lg"
-        >
-          Create a new buyer
-        </Button>
-        <Button variant="secondaryButton">Export CSV</Button>
-      </HStack>
-      <Card variant="primaryCard">
-        <BuyersDataTable tableData={buyers} columnsData={columnsData} />
-      </Card>
+      <BuyersDataTable tableData={buyers} columnsData={columnsData} />
     </>
   )
 }
@@ -207,7 +196,11 @@ const BuyersList = () => {
 const ProtectedBuyersList = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
-      <BuyersList />
+      <Box padding="20px">
+        <Card variant="primaryCard">
+          <BuyersList />
+        </Card>
+      </Box>
     </ProtectedContent>
   )
 }

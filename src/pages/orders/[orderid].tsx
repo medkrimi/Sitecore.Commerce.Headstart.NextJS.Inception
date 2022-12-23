@@ -47,7 +47,21 @@ import OcLineItemList from "lib/components/shoppingcart/OcLineItemList"
 import {useRouter} from "next/router"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
-import {GrTroubleshoot} from "react-icons/gr"
+
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Order Details",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
 
 const OrderConfirmationPage: FunctionComponent = () => {
   const router = useRouter()

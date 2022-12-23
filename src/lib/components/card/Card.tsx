@@ -9,13 +9,15 @@ function Card(props) {
   const [isShownButton, setIsShownButton] = useState(false)
 
   useEffect(() => {
-    if (props.hideclosebutton !== null) {
-      //var showbutton = props.hideclosebutton.toLowerCase()
-      if (props.hideclosebutton === true) {
+    if (props.showclosebutton !== undefined) {
+      //var showbutton = props.showclosebutton.toLowerCase()
+      console.log("Not Undefined")
+      if (props.showclosebutton === "false") {
+        console.log("hit function")
         setIsShownButton(true)
       }
     }
-  }, [])
+  }, [props.showclosebutton])
 
   const handlePanelClick = (event) => {
     // toggle shown state
