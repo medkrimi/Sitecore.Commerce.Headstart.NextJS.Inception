@@ -1,38 +1,46 @@
 import * as Yup from "yup"
 
-import {Box, Button, ButtonGroup, Flex, Stack} from "@chakra-ui/react"
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Container,
+  Flex,
+  Heading,
+  Stack
+} from "@chakra-ui/react"
 import {
   InputControl,
   NumberInputControl,
   PercentComplete,
   SelectControl,
-  SwitchControl
+  SwitchControl,
+  TextareaControl
 } from "formik-chakra-ui"
 
-import {Buyer} from "ordercloud-javascript-sdk"
 import Card from "../card/Card"
 import {Formik} from "formik"
-import {buyersService} from "../../api"
+import {NextSeo} from "next-seo"
+import {UserGroup} from "ordercloud-javascript-sdk"
 import {useRouter} from "next/router"
 import {useToast} from "@chakra-ui/react"
+import {userGroupsService} from "../../api"
 import {xpHelper} from "../../utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
 
 export {AddEditForm}
 
 interface AddEditFormProps {
-  buyer?: Buyer
+  userGroup?: UserGroup
 }
-
-function AddEditForm({buyer}: AddEditFormProps) {
-  const isAddMode = !buyer
-  console.log(isAddMode)
+function AddEditForm({userGroup}: AddEditFormProps) {
+  const isAddMode = !userGroup
   const router = useRouter()
   const toast = useToast()
   // form validation rules
   const validationSchema = Yup.object().shape({
-    Name: Yup.string().required("Name is required"),
-    xp_MarkupPercent: Yup.number()
+    Name: Yup.string().max(100).required("Name is required"),
+    Description: Yup.string().max(100)
   })
 
   const formOptions = {
@@ -45,41 +53,45 @@ function AddEditForm({buyer}: AddEditFormProps) {
 
   // set default form values if user passed in props
   if (!isAddMode) {
-    formOptions.defaultValues = xpHelper.flattenXpObject(buyer, "_")
+    formOptions.defaultValues = xpHelper.flattenXpObject(userGroup, "_")
   }
 
   function onSubmit(fields, {setStatus, setSubmitting}) {
     setStatus()
     if (isAddMode) {
-      const buyer = xpHelper.unflattenXpObject(fields, "_")
-      createBuyer(buyer, setSubmitting)
+      const userGroup = xpHelper.unflattenXpObject(fields, "_")
+      createUserGroup(userGroup, setSubmitting)
     } else {
-      const buyer = xpHelper.unflattenXpObject(fields, "_")
-      updateBuyer(buyer, setSubmitting)
+      const userGroup = xpHelper.unflattenXpObject(fields, "_")
+      updateUserGroup(userGroup, setSubmitting)
     }
   }
 
-  async function createBuyer(fields, setSubmitting) {
+  async function createUserGroup(fields, setSubmitting) {
     try {
-      await buyersService.create(fields)
+      await userGroupsService.create(router.query.buyerid, fields)
       toast({
         id: fields.ID + "-created",
         title: "Success",
-        description: "Buyer created successfully.",
+        description: "User Group created successfully.",
         status: "success",
         duration: 9000,
         isClosable: true,
         position: "top"
       })
-      router.push(".")
+      router.push(`/buyers/${router.query.buyerid}/usergroups/`)
     } catch (e) {
       setSubmitting(false)
     }
   }
 
-  async function updateBuyer(fields, setSubmitting) {
+  async function updateUserGroup(fields, setSubmitting) {
     try {
-      await buyersService.update(fields)
+      await userGroupsService.update(
+        router.query.buyerid,
+        router.query.usergroupid,
+        fields
+      )
       toast({
         id: fields.ID + "-updated",
         title: "Success",
@@ -89,7 +101,7 @@ function AddEditForm({buyer}: AddEditFormProps) {
         isClosable: true,
         position: "top"
       })
-      router.push(".")
+      router.push(`/buyers/${router.query.buyerid}/usergroups/`)
     } catch (e) {
       setSubmitting(false)
     }
@@ -118,33 +130,8 @@ function AddEditForm({buyer}: AddEditFormProps) {
             }) => (
               <Box as="form" onSubmit={handleSubmit as any}>
                 <Stack spacing={5}>
-                  <InputControl name="Name" label="Buyer Name" />
-                  <SwitchControl name="Active" label="Active" />
-                  {/* Complete this with getCatalogList one we create the catalog.service*/}
-                  <SelectControl
-                    name="DefaultCatalogID"
-                    label="Default Catalog"
-                    selectProps={{placeholder: "Select option"}}
-                  >
-                    <option value="PlayShop">PlayShop</option>
-                    <option value="PlayShop1">catalog 2</option>
-                    <option value="PlayShop2">catalog 3</option>
-                  </SelectControl>
-                  <NumberInputControl
-                    name="xp_MarkupPercent"
-                    label="Markup percent"
-                  />
-                  <InputControl name="xp_URL" label="Url" />
-
-                  {isAddMode ? (
-                    <PercentComplete />
-                  ) : (
-                    <InputControl
-                      name="DateCreated"
-                      label="Date created"
-                      isReadOnly
-                    />
-                  )}
+                  <InputControl name="Name" label="User Group Name" />
+                  <TextareaControl name="Description" label="Description" />
                   <ButtonGroup>
                     <Button
                       variant="primaryButton"
@@ -164,7 +151,11 @@ function AddEditForm({buyer}: AddEditFormProps) {
                       Reset
                     </Button>
                     <Button
-                      onClick={() => router.push("/buyers")}
+                      onClick={() =>
+                        router.push(
+                          `/buyers/${router.query.buyerid}/usersgroups`
+                        )
+                      }
                       variant="secondaryButton"
                       isLoading={isSubmitting}
                     >

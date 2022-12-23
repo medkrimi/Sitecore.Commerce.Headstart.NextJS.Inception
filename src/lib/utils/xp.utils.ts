@@ -40,7 +40,5 @@ function unflattenXpObject(ob: object, separator: string): object {
       )
     }, result)
   }
-  console.log("unflattedxpObject::result")
-  console.log(result)
   return result
 }

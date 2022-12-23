@@ -42,6 +42,7 @@
     "lodash": "^4.17.21",
     "next": "12.2.0",
     "next-seo": "^5.4.0",
+    "nextjs-breadcrumbs": "^1.1.9",
     "ordercloud-javascript-sdk": "^5.0.0-beta.2",
     "pre-commit": "^1.2.2",
     "react": "^18.2.0",
