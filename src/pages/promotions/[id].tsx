@@ -32,6 +32,21 @@ import React from "react"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {useRouter} from "next/router"
 
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Promotion Details",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
+
 const PromotionDetails = () => {
   const router = useRouter()
 

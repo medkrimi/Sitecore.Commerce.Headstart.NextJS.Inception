@@ -20,6 +20,20 @@ import ProtectedContent from "lib/components/auth/ProtectedContent"
 import React from "react"
 import {appPermissions} from "lib/constants/app-permissions.config"
 
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "New Promotion",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
 const NewPromotionsPage = () => {
   return (
     <Container maxW="full">
@@ -58,17 +72,3 @@ const ProtectedNewPromotionsPage = () => {
 }
 
 export default ProtectedNewPromotionsPage
-
-/* This declare the page title and enable the breadcrumbs in the content header section. */
-export async function getStaticProps() {
-  return {
-    props: {
-      header: {
-        title: "New Promotion",
-        metas: {
-          hasBreadcrumbs: true
-        }
-      }
-    }
-  }
-}

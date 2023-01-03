@@ -1,5 +1,6 @@
 import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
 import {
+  Box,
   Button,
   ButtonGroup,
   Container,
@@ -154,25 +155,27 @@ const UsersList = () => {
 
   return (
     <>
-      <HStack justifyContent="space-between" w="100%" mb={5}>
-        <Button
-          onClick={() =>
-            router.push(`/buyers/${router.query.buyerid}/users/add`)
-          }
-          variant="primaryButton"
-          leftIcon={<AddIcon />}
-          size="lg"
-        >
-          Create user
-        </Button>
+      <Box padding="20px">
+        <HStack justifyContent="space-between" w="100%" mb={5}>
+          <Button
+            onClick={() =>
+              router.push(`/buyers/${router.query.buyerid}/users/add`)
+            }
+            variant="primaryButton"
+            leftIcon={<AddIcon />}
+            size="lg"
+          >
+            Create user
+          </Button>
 
-        <HStack>
-          <Button variant="secondaryButton">Export CSV</Button>
+          <HStack>
+            <Button variant="secondaryButton">Export CSV</Button>
+          </HStack>
         </HStack>
-      </HStack>
-      <Card variant="primaryCard">
-        <UsersDataTable tableData={users} columnsData={columnsData} />
-      </Card>
+        <Card variant="primaryCard">
+          <UsersDataTable tableData={users} columnsData={columnsData} />
+        </Card>
+      </Box>
     </>
   )
 }

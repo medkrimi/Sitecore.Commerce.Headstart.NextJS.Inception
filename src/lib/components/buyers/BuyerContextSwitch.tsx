@@ -4,6 +4,7 @@ import {
   Button,
   ButtonGroup,
   Flex,
+  HStack,
   Image,
   Menu,
   MenuButton,
@@ -16,6 +17,7 @@ import {
 import {useEffect, useState} from "react"
 import {Buyer} from "ordercloud-javascript-sdk"
 import {ChevronDownIcon} from "@chakra-ui/icons"
+import Card from "lib/components/card/Card"
 import {
   buyersService,
   catalogsService,
@@ -53,50 +55,63 @@ export default function BuyerContextSwitch({...props}) {
   }, [buyers, router.query.buyerid])
 
   return (
-    <Flex
-      direction={{sm: "column", md: "row"}}
-      mb="24px"
-      maxH="330px"
-      justifyContent={{sm: "center", md: "space-between"}}
-      align="center"
-      backdropFilter="blur(21px)"
-      boxShadow="0px 2px 5.5px rgba(0, 0, 0, 0.02)"
-      border="1.5px solid"
-      p="24px"
-      borderRadius="20px"
+    <Box
+      bg="white"
+      borderRadius="xl"
+      pl="20px"
+      pr="20px"
+      pt="2"
+      pb="2"
+      mb="6"
+      shadow="xl"
+      w="100%"
+      width="full"
+      position="relative"
+      _hover={{
+        textDecoration: "none",
+        borderRadius: "10px"
+      }}
     >
-      <Flex
-        align="center"
-        mb={{sm: "10px", md: "0px"}}
-        direction={{sm: "column", md: "row"}}
-        w={{sm: "100%"}}
-        textAlign={{sm: "center", md: "start"}}
+      <HStack
+        maxWidth="100%"
+        my={{sm: "14px"}}
+        justifyContent="space-between"
+        w="100%"
       >
-        <Avatar
-          me={{md: "22px"}}
-          src={`https://robohash.org/${router.query.buyerid}.png`}
-          w="80px"
-          h="80px"
-          borderRadius="15px"
-        />
-        <Flex direction="column" maxWidth="100%" my={{sm: "14px"}}>
-          <Text
-            fontSize={{sm: "lg", lg: "xl"}}
-            fontWeight="bold"
-            ms={{sm: "8px", md: "0px"}}
-          >
-            {currentBuyer?.Name}
-          </Text>
-          <Text fontSize={{sm: "sm", md: "md"}} color="gray.400">
-            {currentBuyer?.ID}
-          </Text>
-          <Spacer />
+        <HStack>
+          <Avatar
+            me={{md: "22px"}}
+            src={`https://robohash.org/${router.query.buyerid}.png`}
+            w="80px"
+            h="80px"
+            borderRadius="15px"
+          />
+          <VStack textAlign="left">
+            <Text
+              fontSize={{sm: "lg", lg: "xl"}}
+              fontWeight="bold"
+              ms={{sm: "8px", md: "0px"}}
+              width="100%"
+            >
+              {currentBuyer?.Name}
+            </Text>
+            <Text fontSize={{sm: "sm", md: "md"}} color="gray.400" width="100%">
+              {currentBuyer?.ID}
+            </Text>
+          </VStack>
+          <Spacer width="40px"></Spacer>
           <Menu>
             {buyers.length > 1 && (
-              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} size="lg">
+              <MenuButton
+                as={Button}
+                rightIcon={<ChevronDownIcon />}
+                size="lg"
+                ml="30px"
+              >
                 {currentBuyer?.Name}
               </MenuButton>
             )}
+
             <MenuList>
               {buyers.map((buyer) => (
                 <>
@@ -117,45 +132,48 @@ export default function BuyerContextSwitch({...props}) {
               ))}
             </MenuList>
           </Menu>
+        </HStack>
+
+        <Flex
+          direction={{sm: "column", lg: "row"}}
+          w={{sm: "100%", md: "50%", lg: "auto"}}
+        >
+          <ButtonGroup>
+            <Button
+              onClick={() =>
+                router.push(`/buyers/${router.query.buyerid}/usergroups`)
+              }
+              variant="secondaryButton"
+            >
+              User Groups ({userGroupsCount})
+            </Button>
+            <Button
+              onClick={() =>
+                router.push(`/buyers/${router.query.buyerid}/users`)
+              }
+              variant="secondaryButton"
+            >
+              Users ({usersCount})
+            </Button>
+            <Button
+              onClick={() =>
+                router.push(`/buyers/${router.query.buyerid}/catalogs`)
+              }
+              variant="secondaryButton"
+            >
+              Catalogs ({catalogsCount})
+            </Button>
+            <Button
+              onClick={() =>
+                router.push(`/buyers/${router.query.buyerid}/categories`)
+              }
+              variant="secondaryButton"
+            >
+              Categories (17)
+            </Button>
+          </ButtonGroup>
         </Flex>
-      </Flex>
-      <Flex
-        direction={{sm: "column", lg: "row"}}
-        w={{sm: "100%", md: "50%", lg: "auto"}}
-      >
-        <ButtonGroup>
-          <Button
-            onClick={() =>
-              router.push(`/buyers/${router.query.buyerid}/usergroups`)
-            }
-            variant="secondaryButton"
-          >
-            User Groups ({userGroupsCount})
-          </Button>
-          <Button
-            onClick={() => router.push(`/buyers/${router.query.buyerid}/users`)}
-            variant="secondaryButton"
-          >
-            Users ({usersCount})
-          </Button>
-          <Button
-            onClick={() =>
-              router.push(`/buyers/${router.query.buyerid}/catalogs`)
-            }
-            variant="secondaryButton"
-          >
-            Catalogs ({catalogsCount})
-          </Button>
-          <Button
-            onClick={() =>
-              router.push(`/buyers/${router.query.buyerid}/categories`)
-            }
-            variant="secondaryButton"
-          >
-            Categories (17)
-          </Button>
-        </ButtonGroup>
-      </Flex>
-    </Flex>
+      </HStack>
+    </Box>
   )
 }

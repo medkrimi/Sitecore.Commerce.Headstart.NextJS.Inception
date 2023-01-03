@@ -27,13 +27,27 @@ import {
 import {dateHelper, priceHelper} from "lib/utils"
 
 import Card from "lib/components/card/Card"
-import {HiOutlineMinusSm} from "react-icons/hi"
 import NextLink from "next/link"
 import {NextSeo} from "next-seo"
 import OcOrderReturnItemList from "lib/components/returns/OcOrderReturnItem"
 import {useRouter} from "next/router"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
+
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Return Details",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
 
 const OrderReturnDetailPage: FunctionComponent = () => {
   const router = useRouter()
@@ -110,95 +124,86 @@ const OrderReturnDetailPage: FunctionComponent = () => {
           </HStack>
         </HStack>
         <Card variant="primaryCard">
-          <IconButton
-            variant="closePanelButton"
-            aria-label="close panel"
-            icon={<HiOutlineMinusSm />}
-          ></IconButton>
-          <Flex flexDirection="column" p="10">
-            <Box>
-              <Badge variant="outline" color={getStatusColor()}>
-                {/* Space before capital letters */}
-                {orderReturn.Status.replace(/[A-Z]/g, " $&").trim()}
-              </Badge>
-              <Divider m="3" />
-              <Flex minWidth="max-content" alignItems="center" gap="2" mb="4">
-                <Box>
-                  <Heading size="md">
-                    Refund Amount:{" "}
-                    {priceHelper.formatPrice(orderReturn.RefundAmount)}
-                  </Heading>
-                </Box>
-                <Spacer />
-                <ButtonGroup gap="2">
-                  {orderReturn.Status === "Open" && (
-                    <>
-                      <Button
-                        colorScheme="teal"
-                        variant="solid"
-                        onClick={handleCompleteAnOrderReturn}
-                      >
-                        Complete
-                      </Button>
-                      <Button
-                        colorScheme="red"
-                        variant="solid"
-                        onClick={handleCancelAnOrderReturn}
-                      >
-                        Cancel
-                      </Button>
-                    </>
-                  )}
-                </ButtonGroup>
-              </Flex>
+          <Box>
+            <Badge variant="outline" color={getStatusColor()}>
+              {/* Space before capital letters */}
+              {orderReturn.Status.replace(/[A-Z]/g, " $&").trim()}
+            </Badge>
+            <Divider m="3" />
+            <Flex minWidth="max-content" alignItems="center" gap="2" mb="4">
+              <Box>
+                <Heading size="md">
+                  Refund Amount:{" "}
+                  {priceHelper.formatPrice(orderReturn.RefundAmount)}
+                </Heading>
+              </Box>
+              <Spacer />
+              <ButtonGroup gap="2">
+                {orderReturn.Status === "Open" && (
+                  <>
+                    <Button
+                      variant="primaryButton"
+                      onClick={handleCompleteAnOrderReturn}
+                    >
+                      Complete
+                    </Button>
+                    <Button
+                      variant="secondaryButton"
+                      onClick={handleCancelAnOrderReturn}
+                    >
+                      Cancel
+                    </Button>
+                  </>
+                )}
+              </ButtonGroup>
+            </Flex>
 
-              <Grid templateColumns="repeat(3, 1fr)" gap={6} mt={6}>
+            <Grid templateColumns="repeat(3, 1fr)" gap={6} mt={6}>
+              <GridItem w="100%" h="10">
+                <Heading as="h5" size="sm">
+                  Order ID
+                </Heading>
+                {orderReturn.OrderID}
+              </GridItem>
+              <GridItem w="100%" h="10">
+                <Heading as="h5" size="sm">
+                  Request Submitted
+                </Heading>
+                {dateHelper.formatDate(orderReturn.DateSubmitted)}
+              </GridItem>
+              {orderReturn.DateCanceled && (
                 <GridItem w="100%" h="10">
                   <Heading as="h5" size="sm">
-                    Order ID
+                    Date Canceled
                   </Heading>
-                  {orderReturn.OrderID}
+                  {dateHelper.formatDate(orderReturn.DateCanceled)}
                 </GridItem>
+              )}
+              {orderReturn.DateCompleted && (
                 <GridItem w="100%" h="10">
                   <Heading as="h5" size="sm">
-                    Request Submitted
+                    Date Completed
                   </Heading>
-                  {dateHelper.formatDate(orderReturn.DateSubmitted)}
+                  {dateHelper.formatDate(orderReturn.DateCompleted)}
                 </GridItem>
-                {orderReturn.DateCanceled && (
-                  <GridItem w="100%" h="10">
-                    <Heading as="h5" size="sm">
-                      Date Canceled
-                    </Heading>
-                    {dateHelper.formatDate(orderReturn.DateCanceled)}
-                  </GridItem>
-                )}
-                {orderReturn.DateCompleted && (
-                  <GridItem w="100%" h="10">
-                    <Heading as="h5" size="sm">
-                      Date Completed
-                    </Heading>
-                    {dateHelper.formatDate(orderReturn.DateCompleted)}
-                  </GridItem>
-                )}
-                {orderReturn.Comments && (
-                  <GridItem w="100%" h="10">
-                    <Heading as="h5" size="sm">
-                      Comments
-                    </Heading>
-                    {orderReturn.Comments}
-                  </GridItem>
-                )}
-              </Grid>
-            </Box>
-            <Box mt="6">
-              <Heading as="h3" size="lg">
-                Return Items
-              </Heading>
-              <Divider m="3" />
-              <OcOrderReturnItemList itemsToReturn={itemsToReturn} />
-            </Box>
-          </Flex>
+              )}
+              {orderReturn.Comments && (
+                <GridItem w="100%" h="10">
+                  <Heading as="h5" size="sm">
+                    Comments
+                  </Heading>
+                  {orderReturn.Comments}
+                </GridItem>
+              )}
+            </Grid>
+          </Box>
+          <Box mt="6">
+            <Heading as="h3" size="lg">
+              Return Items
+            </Heading>
+            <Divider m="3" />
+            <OcOrderReturnItemList itemsToReturn={itemsToReturn} />
+          </Box>
         </Card>
       </Container>
     </>

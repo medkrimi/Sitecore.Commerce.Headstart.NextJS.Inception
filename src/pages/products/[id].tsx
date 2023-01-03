@@ -19,7 +19,7 @@ import {
 import {
   ComposedProduct,
   GetComposedProduct
-} from "../../lib/services/ordercloud.service"
+} from "lib/services/ordercloud.service"
 import {FiRefreshCw, FiTrash2} from "react-icons/fi"
 import {useEffect, useState} from "react"
 
@@ -42,6 +42,21 @@ import ProtectedContent from "lib/components/auth/ProtectedContent"
 import React from "react"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {useRouter} from "next/router"
+
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Product Detail Page:",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
 
 const ProductDetails = () => {
   const router = useRouter()
@@ -82,7 +97,7 @@ const ProductDetails = () => {
   return (
     <VStack w="full">
       <>
-        {/* {prodcutName !== "" ? ( */}
+        {/* {productName !== "" ? ( */}
         <>
           <NextSeo title="Product Details" />
           <Heading
@@ -93,8 +108,8 @@ const ProductDetails = () => {
             ml={5}
             display={{base: "block", sm: "inline-block", md: "none"}}
           >
-            Product Detail Page: {prodcutName == "" ? "..." : null}{" "}
-            <i>{prodcutName}</i>
+            Product Detail Page: {productName == "" ? "..." : null}{" "}
+            <i>{productName}</i>
           </Heading>
           <VStack justifyContent={"space-between"} px={6} width={"full"}>
             <Heading
@@ -104,8 +119,8 @@ const ProductDetails = () => {
               size={{base: "md", sm: "md", md: "lg", lg: "lg", xl: "xl"}}
               display={{base: "none", sm: "none", md: "block"}}
             >
-              Product Detail Page: {prodcutName == "" ? "..." : null}{" "}
-              <i>{prodcutName}</i>
+              Product Detail Page: {productName == "" ? "..." : null}{" "}
+              <i>{productName}</i>
             </Heading>
             <HStack
               justifyContent={{
