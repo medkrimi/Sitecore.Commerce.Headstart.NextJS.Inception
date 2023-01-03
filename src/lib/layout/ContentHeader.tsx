@@ -9,7 +9,6 @@ const ContentHeader = (props) => {
     <VStack w="100%" width="full" marginBottom={3} marginTop={5}>
       {props?.header?.metas?.hasBreadcrumbs && (
         <Box
-          //direction="row"
           alignItems="center"
           justifyContent="flex-start"
           gap={4}
@@ -29,7 +28,6 @@ const ContentHeader = (props) => {
       )}
       {props?.header?.metas?.hasBuyerContextSwitch && (
         <Box
-          //direction="row"
           alignItems="center"
           justifyContent="flex-start"
           gap={4}

@@ -10,11 +10,11 @@ import {
   Flex,
   Grid,
   GridItem,
-  Heading,
   HStack,
+  Heading,
   Tooltip,
-  useDisclosure,
-  VStack
+  VStack,
+  useDisclosure
 } from "@chakra-ui/react"
 import {
   ComposedProduct,
@@ -22,8 +22,8 @@ import {
 } from "../../lib/services/ordercloud.service"
 import {FiRefreshCw, FiTrash2} from "react-icons/fi"
 import {useEffect, useState} from "react"
+
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
-import BreadcrumbNavigation from "lib/components/navigation/BreadcrumbNavigation"
 import EditorialProgressBar from "lib/components/products/EditorialProgressBar"
 import {NextSeo} from "next-seo"
 import ProductCatalogAssignments from "lib/components/products/ProductCatalogAssignments"
@@ -31,35 +31,26 @@ import ProductData from "lib/components/products/ProductData"
 import ProductInventoryData from "lib/components/products/ProductInventoryData"
 import ProductInventoryRecords from "lib/components/products/ProductInventoryRecords"
 import ProductMeasurementData from "lib/components/products/ProductMeasurementData"
+import ProductMediaInformation from "lib/components/products/ProductMediaInformation"
 import ProductPriceScheduleAssignments from "lib/components/products/ProductPriceScheduleAssignments"
 import ProductSpecs from "lib/components/products/ProductSpecs"
 import ProductSuppliers from "lib/components/products/ProductSupllier"
 import ProductVariants from "lib/components/products/ProductVariants"
 import ProductXpInformation from "lib/components/products/ProductXpInformation"
-import ProductMediaInformation from "lib/components/products/ProductMediaInformation"
 import {Products} from "ordercloud-javascript-sdk"
-import React from "react"
-import {useRouter} from "next/router"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
+import React from "react"
 import {appPermissions} from "lib/constants/app-permissions.config"
+import {useRouter} from "next/router"
 
 const ProductDetails = () => {
   const router = useRouter()
   const {id} = router.query
   const [composedProduct, setComposedProduct] = useState<ComposedProduct>(null)
   const [prodcutName, setProductName] = useState("")
-  const [breadcrumb, setBreadcrumb] = useState<Breadcrumb>()
   const [isDeleting, setIsDeleting] = useState(false)
   const {isOpen, onOpen, onClose} = useDisclosure()
   const cancelRef = React.useRef()
-
-  interface BreadcrumbItem {
-    name: string
-    url: string
-  }
-  interface Breadcrumb {
-    items: BreadcrumbItem[]
-  }
 
   const onDelete = (e) => {
     setIsDeleting(true)
@@ -84,30 +75,8 @@ const ProductDetails = () => {
     }
 
     LoadProduct()
-    // TODO: Add 404 Handling if product really does not exist
-    const doSetBreadcrumb = () => {
-      const breadcrumbItems: BreadcrumbItem[] = [
-        {
-          name: "Home",
-          url: "/"
-        },
-        {
-          name: "Products",
-          url: "/products"
-        },
-        {
-          name: composedProduct?.Product?.Name ?? "...",
-          url: "/products/" + composedProduct?.Product?.ID ?? ""
-        }
-      ]
-      const tmpbreadcrumb: Breadcrumb = {
-        items: breadcrumbItems
-      }
-      setBreadcrumb(tmpbreadcrumb)
-    }
 
     setProductName(composedProduct?.Product?.Name ?? "")
-    doSetBreadcrumb()
   }, [composedProduct, id])
 
   return (
@@ -115,22 +84,6 @@ const ProductDetails = () => {
       <>
         {/* {prodcutName !== "" ? ( */}
         <>
-          {breadcrumb?.items?.length ?? 0 > 0 ? (
-            <Flex
-              direction="column"
-              alignItems="left"
-              justifyContent="center"
-              gap={4}
-              mb={1}
-              p={18}
-              w="full"
-              //color={color}
-            >
-              <BreadcrumbNavigation breadcrumbs={breadcrumb?.items ?? null} />
-            </Flex>
-          ) : (
-            <></>
-          )}
           <NextSeo title="Product Details" />
           <Heading
             //color={color}

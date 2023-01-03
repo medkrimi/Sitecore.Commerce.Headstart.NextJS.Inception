@@ -1,56 +1,47 @@
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Button,
+  ColorModeScript,
+  Container,
   Flex,
-  Heading,
-  HStack,
-  Tooltip,
   Grid,
   GridItem,
-  Button,
-  Container,
-  AlertDialogFooter,
-  AlertDialogContent,
-  AlertDialogBody,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogHeader,
-  useDisclosure,
+  HStack,
+  Heading,
+  Tooltip,
   useColorModeValue,
-  ColorModeScript
+  useDisclosure
 } from "@chakra-ui/react"
-import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {FiRefreshCw, FiTrash2} from "react-icons/fi"
+import {Promotion, Promotions} from "ordercloud-javascript-sdk"
+import {useEffect, useState} from "react"
+
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
-import BreadcrumbNavigation from "lib/components/navigation/BreadcrumbNavigation"
+import {NextSeo} from "next-seo"
 import PromotionBasicData from "lib/components/promotions/PromotionBasicData"
 import PromotionBuyers from "lib/components/promotions/PromotionBuyers"
-import PromotionXpInformation from "lib/components/promotions/PromotionXpInformation"
-import {appPermissions} from "lib/constants/app-permissions.config"
 import {PromotionXPs} from "lib/types/PromotionXPs"
-import {NextSeo} from "next-seo"
-import {useRouter} from "next/router"
-import {Promotion, Promotions} from "ordercloud-javascript-sdk"
+import PromotionXpInformation from "lib/components/promotions/PromotionXpInformation"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
 import React from "react"
-import {useEffect, useState} from "react"
-import {FiRefreshCw, FiTrash2} from "react-icons/fi"
+import {appPermissions} from "lib/constants/app-permissions.config"
+import {useRouter} from "next/router"
 
 const PromotionDetails = () => {
   const router = useRouter()
 
   const {id} = router.query
   const [promotionName, setPromotionName] = useState("")
-  const [breadcrumb, setBreadcrumb] = useState<Breadcrumb>()
   const [isDeleting, setIsDeleting] = useState(false)
   const [promotion, setPromotion] = useState<Promotion<PromotionXPs>>(null)
   const color = useColorModeValue("textColor.900", "textColor.100")
   const {isOpen, onOpen, onClose} = useDisclosure()
   const cancelRef = React.useRef()
-
-  interface BreadcrumbItem {
-    name: string
-    url: string
-  }
-  interface Breadcrumb {
-    items: BreadcrumbItem[]
-  }
 
   const onRefreshPromotionDataClicked = async () => {
     setPromotion(null)
@@ -72,27 +63,6 @@ const PromotionDetails = () => {
   }
 
   useEffect(() => {
-    // TODO: Add 404 Handling if promotion really does not exist
-    const doSetBreadcrumb = () => {
-      const breadcrumbItems: BreadcrumbItem[] = [
-        {
-          name: "Home",
-          url: "/dashboard"
-        },
-        {
-          name: "Promotions",
-          url: "/promotions"
-        },
-        {
-          name: promotion?.Name ?? "...",
-          url: "/promotions/" + promotion?.ID ?? ""
-        }
-      ]
-      const tmpbreadcrumb: Breadcrumb = {
-        items: breadcrumbItems
-      }
-      setBreadcrumb(tmpbreadcrumb)
-    }
     async function doGetPromotion() {
       if (id != promotion?.ID) {
         const promotion = await Promotions.Get(id as string)
@@ -102,28 +72,11 @@ const PromotionDetails = () => {
 
     doGetPromotion()
     setPromotionName(promotion?.Name ?? "")
-    doSetBreadcrumb()
   }, [id, promotion])
 
   return (
     <>
       <>
-        {breadcrumb?.items?.length ?? 0 > 0 ? (
-          <Flex
-            direction="column"
-            alignItems="center"
-            justifyContent="center"
-            gap={4}
-            mb={1}
-            p={18}
-            w="full"
-            color={color}
-          >
-            <BreadcrumbNavigation breadcrumbs={breadcrumb?.items ?? null} />
-          </Flex>
-        ) : (
-          <></>
-        )}
         <NextSeo title="Promotion Details" />
         <HStack justifyContent={"space-between"} px={6} width={"full"}>
           <HStack

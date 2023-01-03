@@ -11,16 +11,15 @@ import {
 } from "@chakra-ui/react"
 import {useEffect, useState} from "react"
 
-import BuyerContextSwitch from "lib/components/buyers/BuyerContextSwitch"
 import Card from "lib/components/card/Card"
 import {IoMdClose} from "react-icons/io"
-import Link from "../../../../lib/components/navigation/Link"
+import Link from "lib/components/navigation/Link"
 import {MdCheck} from "react-icons/md"
 import React from "react"
-import UsersDataTable from "../../../../lib/components/datatable/datatable"
-import {dateHelper} from "../../../../lib/utils/date.utils"
+import UsersDataTable from "lib/components/datatable/datatable"
+import {dateHelper} from "lib/utils/date.utils"
 import {useRouter} from "next/router"
-import {usersService} from "../../../../lib/api"
+import {usersService} from "lib/api"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -30,7 +29,7 @@ export async function getServerSideProps() {
         title: "Users List",
         metas: {
           hasBreadcrumbs: true,
-          hasBuyerContextSwitch: true
+          hasBuyerContextSwitch: false
         }
       },
       revalidate: 5 * 60

@@ -14,26 +14,26 @@ async function list() {
   return await Catalogs.List()
 }
 
-async function getById(buyerID) {
+async function getById(catalogID) {
   console.log("catalogsService::getById")
-  return await Catalogs.Get(buyerID)
+  return await Catalogs.Get(catalogID)
 }
 
-async function create(buyer) {
+async function create(catalog) {
   console.log("catalogsService::create")
-  return await Catalogs.Create(buyer)
+  return await Catalogs.Create(catalog)
 }
 
-async function update(buyer) {
+async function update(catalog) {
   console.log("catalogsService::update")
-  return await Catalogs.Patch(buyer.ID, buyer)
+  return await Catalogs.Patch(catalog.ID, catalog)
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
-async function _delete(buyerID) {
+async function _delete(catalogID) {
   console.log("catalogsService::_delete")
-  if (buyerID) {
-    return await Catalogs.Delete(buyerID)
+  if (catalogID) {
+    return await Catalogs.Delete(catalogID)
   }
 }
 
