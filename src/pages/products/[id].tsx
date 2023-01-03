@@ -62,7 +62,7 @@ const ProductDetails = () => {
   const router = useRouter()
   const {id} = router.query
   const [composedProduct, setComposedProduct] = useState<ComposedProduct>(null)
-  const [prodcutName, setProductName] = useState("")
+  const [productName, setProductName] = useState("")
   const [isDeleting, setIsDeleting] = useState(false)
   const {isOpen, onOpen, onClose} = useDisclosure()
   const cancelRef = React.useRef()
