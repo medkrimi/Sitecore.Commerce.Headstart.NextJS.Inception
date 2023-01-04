@@ -17,6 +17,7 @@ import {
   IconButton,
   Input,
   Link,
+  Spacer,
   Spinner,
   Table,
   Tbody,
@@ -229,7 +230,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
           </HStack>
         </HStack>
         <Card variant="primaryCard">
-          <HStack justifyContent="space-between" w="100%">
+          <HStack justifyContent="space-between" w="100%" pr="60px">
             <Text fontSize="20px" fontWeight="600" pb="20px" color="gray.300">
               Order Information
             </Text>
@@ -264,6 +265,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
                   placeholder="Invoice Number"
                   defaultValue={orderWorksheet.Order.ID}
                 ></Input>
+                <Spacer pt="25px"></Spacer>
                 <Text width="full">Billing Address</Text>
                 <AddressCard
                   Street1={orderWorksheet.Order.BillingAddress?.Street1}
@@ -272,9 +274,8 @@ const OrderConfirmationPage: FunctionComponent = () => {
                   State={orderWorksheet.Order.BillingAddress?.State}
                   Zip={orderWorksheet.Order.BillingAddress?.Zip}
                 />
-                <Text width="full" pt="20px">
-                  Buyer Comments
-                </Text>
+                <Spacer pt="25px"></Spacer>
+                <Text width="full">Buyer Comments</Text>
                 <Textarea defaultValue={orderWorksheet.Order.Comments} />
               </VStack>
             </GridItem>
@@ -287,6 +288,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
                     orderWorksheet.Order.DateSubmitted
                   )}
                 ></Input>
+                <Spacer pt="25px"></Spacer>
                 <Text width="full">Shipping Address</Text>
                 <AddressCard
                   Street1={orderWorksheet.LineItems[0].ShippingAddress?.Street1}
@@ -297,7 +299,11 @@ const OrderConfirmationPage: FunctionComponent = () => {
                 />
               </VStack>
             </GridItem>
-            <GridItem w="100%" justifyContent="center">
+            <GridItem
+              w="100%"
+              justifyContent="center"
+              key={orderWorksheet.Order.ID}
+            >
               <Box
                 border="1px"
                 borderColor="gray.200"

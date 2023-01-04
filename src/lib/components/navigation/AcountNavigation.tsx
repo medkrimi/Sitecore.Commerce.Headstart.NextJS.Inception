@@ -38,10 +38,8 @@ import {appPermissions} from "lib/constants/app-permissions.config"
 
 const MobileNavigation = () => {
   const {Logout} = useAuth()
-  let usersName =
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("usersname"))
-      : ""
+  let usersToken =
+    typeof window !== "undefined" ? localStorage.getItem("usersToken") : ""
   let menuBg = useColorModeValue("white", "navy.800")
   const {isOpen, onOpen, onClose} = useDisclosure()
   const btnRef = React.useRef()
@@ -107,8 +105,8 @@ const MobileNavigation = () => {
         <MenuButton>
           <HStack>
             <Avatar
-              name={usersName}
-              src={`https://robohash.org/{usersName}.png`}
+              name={usersToken}
+              src={`https://robohash.org/{usersToken}.png`}
               borderRadius="50%"
               mr="0"
               ml="15px"
@@ -116,7 +114,7 @@ const MobileNavigation = () => {
               border=".5px solid #ccc"
             />
             <Show breakpoint="(min-width: 900px)">
-              <Text fontSize="12px">{usersName}</Text>
+              <Text fontSize="12px">{usersToken}</Text>
               <ChevronDownIcon ml="10px" />
             </Show>
           </HStack>

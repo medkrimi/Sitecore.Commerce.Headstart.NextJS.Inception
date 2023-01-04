@@ -10,10 +10,7 @@ function Card(props) {
 
   useEffect(() => {
     if (props.showclosebutton !== undefined) {
-      //var showbutton = props.showclosebutton.toLowerCase()
-      console.log("Not Undefined")
       if (props.showclosebutton === "false") {
-        console.log("hit function")
         setIsShownButton(true)
       }
     }
