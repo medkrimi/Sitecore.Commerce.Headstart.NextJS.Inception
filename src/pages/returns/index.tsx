@@ -5,6 +5,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
+  Box,
   Button,
   Checkbox,
   CheckboxGroup,
@@ -131,9 +132,13 @@ const ReturnsPage = () => {
     <Container maxW="full">
       <NextSeo title="Returns" />
       <HStack justifyContent="space-between" w="100%" mb={5}>
-        <Link href={`/returns/new`}>
-          <Button variant="primaryButton">New Return</Button>
-        </Link>
+        <Box>
+          {/* <NextLink href="new" passHref>
+            <Link pl="2" pr="2">
+              <Button variant="primaryButton">New Return</Button>
+            </Link>
+          </NextLink> */}
+        </Box>
         <HStack>
           <Menu>
             <MenuButton

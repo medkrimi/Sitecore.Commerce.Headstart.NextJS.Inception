@@ -3,6 +3,14 @@ const d = new Date()
 let day = d.getDate()
 let month = d.getMonth() + 1 //Need the plus 1 since it is an array of 0-11
 let year = d.getFullYear()
+let previousMonth = d.getMonth()
+if (d.getMonth() === 0) {
+  previousMonth = 11
+}
+let previousMonthYear = d.getFullYear()
+if (d.getMonth() === 0) {
+  previousMonthYear = d.getFullYear() - 1
+}
 
 export const dashboardService = {
   getTodaysSales,
@@ -41,8 +49,8 @@ async function getPreviousTodaysSales() {
   const ordersList = await Orders.List("All", {
     filters: {
       DateCreated: [
-        ">" + year + "-" + d.getMonth() + "-01",
-        "<" + year + "-" + d.getMonth() + "-" + day
+        ">" + previousMonthYear + "-" + previousMonth + "-01",
+        "<" + previousMonthYear + "-" + previousMonth + "-" + day
       ]
     }
   })
@@ -157,8 +165,8 @@ async function getPreviousTotalNewUsers() {
   const usersList = await Orders.List("All", {
     filters: {
       DateCreated: [
-        ">" + year + "-" + d.getMonth() + "-01",
-        "<" + year + "-" + d.getMonth() + "-" + day
+        ">" + previousMonthYear + "-" + previousMonth + "-01",
+        "<" + previousMonthYear + "-" + previousMonth + "-" + day
       ]
     }
   })
