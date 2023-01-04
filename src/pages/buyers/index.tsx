@@ -149,7 +149,7 @@ const BuyersList = () => {
       Cell: ({row}) => (
         <Link href={`/buyers/${row.original.ID}/catalogs`}>
           <Button variant="secondaryButton">
-            Manage Catalogs ({buyersMeta[row.original.ID]["usersCount"]})
+            Catalogs ({buyersMeta[row.original.ID]["catalogsCount"]})
           </Button>
         </Link>
       )

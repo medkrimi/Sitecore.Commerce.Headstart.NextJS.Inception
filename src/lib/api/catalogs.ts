@@ -1,4 +1,4 @@
-import {Catalogs} from "ordercloud-javascript-sdk"
+import {CatalogAssignment, Catalogs} from "ordercloud-javascript-sdk"
 
 export const catalogsService = {
   list,
@@ -8,7 +8,8 @@ export const catalogsService = {
   update,
   delete: _delete,
   getCatalogsCountByBuyerID,
-  getCatalogsbyBuyerID
+  getCatalogsbyBuyerID,
+  saveAssignment
 }
 
 async function list() {
@@ -55,12 +56,25 @@ async function getCatalogsCountByBuyerID(buyerID) {
 async function getCatalogsbyBuyerID(buyerID) {
   console.log("catalogsService::getCatalogsbyBuyerId")
   const catalogsAssignments = await Catalogs.ListAssignments({buyerID: buyerID})
-  let catalogAssinmentsIds = catalogsAssignments.Items.map(
+  let catalogAssignmentsIds = catalogsAssignments.Items.map(
     (item) => item.CatalogID
   )
+  console.log(catalogAssignmentsIds)
   const catalogsList = await Catalogs.List({
-    filters: {ID: catalogAssinmentsIds}
+    filters: {ID: catalogAssignmentsIds.join("|")}
   })
   console.log(catalogsList)
   return catalogsList
+}
+
+async function saveAssignment(buyerID, catalogID) {
+  console.log("catalogsService::createCatalogAssignment")
+  let catalogAssignement: CatalogAssignment
+  catalogAssignement = {
+    CatalogID: catalogID,
+    BuyerID: buyerID,
+    ViewAllCategories: true, // Default Value for Demo purpose
+    ViewAllProducts: true // Default Value for Demo purpose
+  }
+  return await Catalogs.SaveAssignment(catalogAssignement)
 }

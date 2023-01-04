@@ -21,11 +21,10 @@ import {
 import Card from "../card/Card"
 import {Catalog} from "ordercloud-javascript-sdk"
 import {Formik} from "formik"
-import {NextSeo} from "next-seo"
-import {catalogsService} from "../../api"
+import {catalogsService} from "lib/api"
 import {useRouter} from "next/router"
 import {useToast} from "@chakra-ui/react"
-import {xpHelper} from "../../utils/xp.utils"
+import {xpHelper} from "lib/utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
 
 export {AddEditForm}
@@ -59,27 +58,31 @@ function AddEditForm({catalog}: AddEditFormProps) {
   function onSubmit(fields, {setStatus, setSubmitting}) {
     setStatus()
     if (isAddMode) {
-      const userGroup = xpHelper.unflattenXpObject(fields, "_")
-      createCatalog(userGroup, setSubmitting)
+      const catalog = xpHelper.unflattenXpObject(fields, "_")
+      createCatalog(catalog, setSubmitting)
     } else {
-      const userGroup = xpHelper.unflattenXpObject(fields, "_")
-      updateCatalog(userGroup, setSubmitting)
+      const catalog = xpHelper.unflattenXpObject(fields, "_")
+      updateCatalog(catalog, setSubmitting)
     }
   }
 
   async function createCatalog(fields, setSubmitting) {
     try {
-      await catalogsService.create(fields)
+      const createdCatalog = await catalogsService.create(fields)
+      await catalogsService.saveAssignment(
+        router.query.buyerid,
+        createdCatalog.ID
+      )
       toast({
         id: fields.ID + "-created",
         title: "Success",
-        description: "User Group created successfully.",
+        description: "Catalog created successfully.",
         status: "success",
         duration: 9000,
         isClosable: true,
         position: "top"
       })
-      router.push(`/catalogs/`)
+      router.push(`/buyers/${router.query.buyerid}/catalogs`)
     } catch (e) {
       setSubmitting(false)
     }
@@ -87,17 +90,21 @@ function AddEditForm({catalog}: AddEditFormProps) {
 
   async function updateCatalog(fields, setSubmitting) {
     try {
-      await catalogsService.update(fields)
+      const updatedCatalog = await catalogsService.update(fields)
+      await catalogsService.saveAssignment(
+        router.query.buyerid,
+        updatedCatalog.ID
+      )
       toast({
         id: fields.ID + "-updated",
         title: "Success",
-        description: "Buyer updated successfully.",
+        description: "Catalog updated successfully.",
         status: "success",
         duration: 9000,
         isClosable: true,
         position: "top"
       })
-      router.push(`/catalogs/`)
+      router.push(`/buyers/${router.query.buyerid}/catalogs`)
     } catch (e) {
       setSubmitting(false)
     }
@@ -126,8 +133,9 @@ function AddEditForm({catalog}: AddEditFormProps) {
             }) => (
               <Box as="form" onSubmit={handleSubmit as any}>
                 <Stack spacing={5}>
-                  <InputControl name="Name" label="User Group Name" />
+                  <InputControl name="Name" label="Catalog Name" />
                   <TextareaControl name="Description" label="Description" />
+                  <SwitchControl name="Active" label="Active" />
                   <ButtonGroup>
                     <Button
                       variant="primaryButton"
@@ -148,9 +156,7 @@ function AddEditForm({catalog}: AddEditFormProps) {
                     </Button>
                     <Button
                       onClick={() =>
-                        router.push(
-                          `/buyers/${router.query.buyerid}/usersgroups`
-                        )
+                        router.push(`/buyers/${router.query.buyerid}/catalogs`)
                       }
                       variant="secondaryButton"
                       isLoading={isSubmitting}

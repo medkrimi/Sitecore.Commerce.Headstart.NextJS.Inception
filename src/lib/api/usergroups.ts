@@ -48,7 +48,7 @@ async function _delete(buyerID, userGroupID) {
 }
 
 async function getUserGroupsCountByBuyerID(buyerID) {
-  console.log("buyersService::getUserGroupsCountById")
+  console.log("buyersService::getUserGroupsCountByBuyerID")
   if (buyerID) {
     const userGroupsList = await UserGroups.List(buyerID)
     return userGroupsList?.Meta?.TotalCount
