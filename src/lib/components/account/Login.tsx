@@ -76,7 +76,7 @@ const OcLoginForm: FunctionComponent<OcLoginFormProps> = ({
   return (
     !isAuthenticated && (
       <form name="ocLoginForm" onSubmit={handleSubmit}>
-        <Card variant="primaryCard">
+        <Card variant="primaryCard" showclosebutton="false">
           <VStack width="full" p={10}>
             <HeaderLogo />
             <Heading as="h1" py={6}>
