@@ -2,11 +2,10 @@ import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
 import {
   Button,
   ButtonGroup,
-  Container,
   HStack,
-  Heading,
-  Icon,
+  Switch,
   Text,
+  Tooltip,
   useToast
 } from "@chakra-ui/react"
 import {useEffect, useState} from "react"
@@ -43,7 +42,8 @@ const CatalogsList = () => {
   }, [router.query.buyerid])
 
   async function initCatalogsData(buyerid) {
-    const catalogsList = await catalogsService.list()
+    const catalogsList = await catalogsService.getCatalogsbyBuyerID(buyerid)
+    console.log(catalogsList)
     setCatalogs(catalogsList.Items)
   }
 
@@ -75,19 +75,42 @@ const CatalogsList = () => {
 
   const columnsData = [
     {
-      Header: "Name",
-      accessor: "Name",
+      Header: "Catalog ID",
+      accessor: "ID",
       Cell: ({value, row}) => (
         <Link
-          href={`/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`}
+          href={`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}`}
         >
           {value}
         </Link>
       )
     },
     {
-      Header: "DESCRIPTION",
+      Header: "Name",
+      accessor: "Name"
+    },
+    {
+      Header: "Description",
       accessor: "Description"
+    },
+    {
+      Header: "Active",
+      accessor: "Active",
+      Cell: ({value, row}) => (
+        <>
+          <Tooltip label={value ? "Active" : "Non active"} placement="bottom">
+            <Switch colorScheme="teal" size="lg" isReadOnly isChecked={value} />
+          </Tooltip>
+        </>
+      )
+    },
+    {
+      Header: "Category Count",
+      accessor: "CategoryCount"
+    },
+    {
+      Header: "Marketplace",
+      accessor: "OwnerID"
     },
     {
       Header: "ACTIONS",
@@ -97,7 +120,7 @@ const CatalogsList = () => {
             variant="secondaryButton"
             onClick={() =>
               router.push(
-                `/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`
+                `/buyers/${router.query.buyerid}/catalogs/${row.original.ID}`
               )
             }
             leftIcon={<EditIcon />}

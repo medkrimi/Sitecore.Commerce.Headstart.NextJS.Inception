@@ -2,7 +2,6 @@ import {Box, Heading, VStack} from "@chakra-ui/react"
 
 import Breadcrumbs from "nextjs-breadcrumbs"
 import BuyerContextSwitch from "lib/components/buyers/BuyerContextSwitch"
-import {textHelper} from "lib/utils"
 
 const ContentHeader = (props) => {
   return (

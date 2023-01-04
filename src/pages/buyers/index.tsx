@@ -1,31 +1,22 @@
-import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Container,
-  HStack,
-  Icon,
-  Text,
-  useToast
-} from "@chakra-ui/react"
+import {Box, Button, ButtonGroup, Icon, Text, useToast} from "@chakra-ui/react"
+import {DeleteIcon, EditIcon} from "@chakra-ui/icons"
 import {
   buyersService,
   catalogsService,
   userGroupsService,
   usersService
-} from "../../lib/api"
+} from "lib/api"
 import {useEffect, useState} from "react"
 
-import BuyersDataTable from "../../lib/components/datatable/datatable"
+import BuyersDataTable from "lib/components/datatable/datatable"
 import Card from "lib/components/card/Card"
 import {IoMdClose} from "react-icons/io"
-import Link from "../../lib/components/navigation/Link"
+import Link from "lib/components/navigation/Link"
 import {MdCheck} from "react-icons/md"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import React from "react"
 import {appPermissions} from "lib/constants/app-permissions.config"
-import {dateHelper} from "../../lib/utils/date.utils"
+import {dateHelper} from "lib/utils/date.utils"
 import router from "next/router"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
@@ -64,11 +55,11 @@ const BuyersList = () => {
     const requests = buyersList.Items.map(async (buyer) => {
       _buyerListMeta[buyer.ID] = {}
       _buyerListMeta[buyer.ID]["userGroupsCount"] =
-        await userGroupsService.getUserGroupsCountById(buyer.ID)
+        await userGroupsService.getUserGroupsCountByBuyerID(buyer.ID)
       _buyerListMeta[buyer.ID]["usersCount"] =
-        await usersService.getUsersCountById(buyer.ID)
+        await usersService.getUsersCountByBuyerID(buyer.ID)
       _buyerListMeta[buyer.ID]["catalogsCount"] =
-        await catalogsService.getCatalogsCountById(buyer.ID)
+        await catalogsService.getCatalogsCountByBuyerID(buyer.ID)
     })
     await Promise.all(requests)
     setBuyersMeta(_buyerListMeta)
@@ -156,7 +147,7 @@ const BuyersList = () => {
     {
       Header: "CATALOGS",
       Cell: ({row}) => (
-        <Link href={`/catalogs/${row.original.ID}/`}>
+        <Link href={`/buyers/${row.original.ID}/catalogs`}>
           <Button variant="secondaryButton">
             Manage Catalogs ({buyersMeta[row.original.ID]["usersCount"]})
           </Button>

@@ -30,7 +30,7 @@ export async function getServerSideProps() {
         title: "Users List",
         metas: {
           hasBreadcrumbs: true,
-          hasBuyerContextSwitch: false
+          hasBuyerContextSwitch: true
         }
       },
       revalidate: 5 * 60

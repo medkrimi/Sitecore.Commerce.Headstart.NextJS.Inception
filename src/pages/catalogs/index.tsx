@@ -23,10 +23,10 @@ export async function getServerSideProps() {
   return {
     props: {
       header: {
-        title: "Catalogs List",
+        title: "All Catalogs",
         metas: {
           hasBreadcrumbs: true,
-          hasBuyerContextSwitch: true
+          hasBuyerContextSwitch: false
         }
       },
       revalidate: 5 * 60

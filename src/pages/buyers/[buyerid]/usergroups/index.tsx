@@ -14,14 +14,13 @@ import {useEffect, useState} from "react"
 
 import Card from "lib/components/card/Card"
 import {IoMdClose} from "react-icons/io"
-import Link from "../../../../lib/components/navigation/Link"
+import Link from "lib/components/navigation/Link"
 import {MdCheck} from "react-icons/md"
 import {NextSeo} from "next-seo"
 import React from "react"
-import UserGroupsDataTable from "../../../../lib/components/datatable/datatable"
-import {dateHelper} from "../../../../lib/utils/date.utils"
+import UserGroupsDataTable from "lib/components/datatable/datatable"
 import {useRouter} from "next/router"
-import {userGroupsService} from "../../../../lib/api"
+import {userGroupsService} from "lib/api"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {

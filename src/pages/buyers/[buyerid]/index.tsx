@@ -1,12 +1,12 @@
 import {useEffect, useState} from "react"
 
-import {AddEditForm} from "../../../lib/components/buyers"
+import {AddEditForm} from "lib/components/buyers"
+import {Box} from "@chakra-ui/react"
 import {Buyer} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
-import {buyersService} from "../../../lib/api"
+import {buyersService} from "lib/api"
 import {useRouter} from "next/router"
-import {Box} from "@chakra-ui/react"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 /* TODO Ask if this is the way to go or better to have getStaticProps + GetStaticPath in this case */
@@ -17,19 +17,13 @@ export async function getServerSideProps() {
         title: "Edit buyer",
         metas: {
           hasBreadcrumbs: true,
-          hasBuyerContextSwitch: true
+          hasBuyerContextSwitch: false
         }
       },
       revalidate: 5 * 60
     }
   }
 }
-// export async function getStaticPaths() {
-//   return {
-//     paths: [],
-//     fallback: false // can also be true or 'blocking'
-//   }
-// }
 
 const BuyerListItem = () => {
   const router = useRouter()

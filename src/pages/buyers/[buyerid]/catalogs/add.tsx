@@ -7,7 +7,7 @@ export async function getServerSideProps() {
   return {
     props: {
       header: {
-        title: "Create a new user group",
+        title: "Create a new catalog",
         metas: {
           hasBreadcrumbs: true,
           hasBuyerContextSwitch: true

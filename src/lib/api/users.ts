@@ -6,7 +6,7 @@ export const usersService = {
   create,
   update,
   delete: _delete,
-  getUsersCountById
+  getUsersCountByBuyerID
 }
 
 async function list(buyerID) {
@@ -39,8 +39,8 @@ async function _delete(buyerID, userID) {
     return await Users.Delete(buyerID, userID)
   }
 }
-async function getUsersCountById(buyerID) {
-  console.log("buyersService::getUsersCountById")
+async function getUsersCountByBuyerID(buyerID) {
+  console.log("buyersService::getUsersCountByBuyerID")
   if (buyerID) {
     const usersList = await Users.List(buyerID)
     return usersList?.Meta?.TotalCount
