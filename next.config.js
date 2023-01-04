@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+  devIndicators: {
+    autoPrerender: true
+  },
   pwa: {
     disable:
       process.env.NODE_ENV === "development" ||

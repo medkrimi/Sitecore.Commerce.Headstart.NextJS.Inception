@@ -6,7 +6,7 @@ export const userGroupsService = {
   create,
   update,
   delete: _delete,
-  getUserGroupsCountById
+  getUserGroupsCountByBuyerID
 }
 
 async function list(buyerID) {
@@ -47,8 +47,8 @@ async function _delete(buyerID, userGroupID) {
   }
 }
 
-async function getUserGroupsCountById(buyerID) {
-  console.log("buyersService::getUserGroupsCountById")
+async function getUserGroupsCountByBuyerID(buyerID) {
+  console.log("buyersService::getUserGroupsCountByBuyerID")
   if (buyerID) {
     const userGroupsList = await UserGroups.List(buyerID)
     return userGroupsList?.Meta?.TotalCount

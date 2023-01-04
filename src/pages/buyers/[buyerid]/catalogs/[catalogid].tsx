@@ -1,19 +1,18 @@
 import {useEffect, useState} from "react"
 
-import {AddEditForm} from "../../../../lib/components/users/AddEditForm"
-import {Box} from "@chakra-ui/react"
+import {AddEditForm} from "lib/components/catalogs/AddEditForm"
+import {Catalog} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
-import {User} from "ordercloud-javascript-sdk"
 import {appPermissions} from "lib/constants/app-permissions.config"
+import {catalogsService} from "lib/api"
 import {useRouter} from "next/router"
-import {usersService} from "../../../../lib/api"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
   return {
     props: {
       header: {
-        title: "Update user",
+        title: "Edit catalog",
         metas: {
           hasBreadcrumbs: true,
           hasBuyerContextSwitch: false
@@ -24,25 +23,25 @@ export async function getServerSideProps() {
   }
 }
 
-const UserListItem = () => {
+const CatalogListItem = () => {
   const router = useRouter()
-  const [user, setUser] = useState({} as User)
+  const [catalog, setCatalog] = useState({} as Catalog)
   useEffect(() => {
-    if (router.query.buyerid) {
-      usersService
-        .getById(router.query.buyerid, router.query.userid)
-        .then((user) => setUser(user))
+    if (router.query.catalogid) {
+      catalogsService
+        .getById(router.query.catalogid)
+        .then((catalog) => setCatalog(catalog))
     }
-  }, [router.query.buyerid, router.query.userid])
-  return <>{user?.ID ? <AddEditForm user={user} /> : <div> Loading</div>}</>
+  }, [router.query.catalogid])
+  return (
+    <>{catalog?.ID ? <AddEditForm catalog={catalog} /> : <div> Loading</div>}</>
+  )
 }
 
 const ProtectedBuyerListItem = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
-      <Box padding="20px">
-        <UserListItem />
-      </Box>
+      <CatalogListItem />
     </ProtectedContent>
   )
 }

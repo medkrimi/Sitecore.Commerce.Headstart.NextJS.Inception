@@ -1,6 +1,5 @@
 import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
 import {
-  Box,
   Button,
   ButtonGroup,
   Container,
@@ -13,24 +12,21 @@ import {
 import {useEffect, useState} from "react"
 
 import Card from "lib/components/card/Card"
-import {IoMdClose} from "react-icons/io"
+import CatalogsDataTable from "lib/components/datatable/datatable"
 import Link from "lib/components/navigation/Link"
-import {MdCheck} from "react-icons/md"
-import {NextSeo} from "next-seo"
 import React from "react"
-import UserGroupsDataTable from "lib/components/datatable/datatable"
+import {catalogsService} from "lib/api"
 import {useRouter} from "next/router"
-import {userGroupsService} from "lib/api"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
   return {
     props: {
       header: {
-        title: "User groups List",
+        title: "All Catalogs",
         metas: {
           hasBreadcrumbs: true,
-          hasBuyerContextSwitch: true
+          hasBuyerContextSwitch: false
         }
       },
       revalidate: 5 * 60
@@ -38,25 +34,25 @@ export async function getServerSideProps() {
   }
 }
 
-const UserGroupsList = () => {
-  const [userGroups, setUserGroup] = useState([])
+const CatalogsList = () => {
+  const [catalogs, setCatalogs] = useState([])
   const router = useRouter()
   const toast = useToast()
   useEffect(() => {
-    initUserGroupsData(router.query.buyerid)
+    initCatalogsData(router.query.buyerid)
   }, [router.query.buyerid])
 
-  async function initUserGroupsData(buyerid) {
-    const userGroupsList = await userGroupsService.list(buyerid)
-    setUserGroup(userGroupsList.Items)
+  async function initCatalogsData(buyerid) {
+    const catalogsList = await catalogsService.list()
+    setCatalogs(catalogsList.Items)
   }
 
-  async function deleteUserGroup(userGroupid) {
+  async function deleteCatalog(catalogid) {
     try {
-      await userGroupsService.delete(router.query.buyerid, userGroupid)
-      initUserGroupsData(router.query.buyerid)
+      await catalogsService.delete(catalogid)
+      initCatalogsData(router.query.buyerid)
       toast({
-        id: userGroupid + "-deleted",
+        id: catalogid + "-deleted",
         title: "Success",
         description: "Buyer deleted successfully.",
         status: "success",
@@ -66,7 +62,7 @@ const UserGroupsList = () => {
       })
     } catch (e) {
       toast({
-        id: userGroupid + "fail-deleted",
+        id: catalogid + "fail-deleted",
         title: "Error",
         description: "Buyer delete failed",
         status: "error",
@@ -110,7 +106,7 @@ const UserGroupsList = () => {
           </Button>
           <Button
             variant="secondaryButton"
-            onClick={() => deleteUserGroup(row.original.ID)}
+            onClick={() => deleteCatalog(row.original.ID)}
             leftIcon={<DeleteIcon />}
           >
             Delete
@@ -122,31 +118,26 @@ const UserGroupsList = () => {
 
   return (
     <>
-      <Box padding="20px">
-        <HStack justifyContent="space-between" w="100%" mb={5}>
-          <Button
-            onClick={() =>
-              router.push(`/buyers/${router.query.buyerid}/usergroups/add`)
-            }
-            variant="primaryButton"
-            leftIcon={<AddIcon />}
-            size="lg"
-          >
-            Create user group
-          </Button>
-          <HStack>
-            <Button variant="secondaryButton">Export CSV</Button>
-          </HStack>
+      <HStack justifyContent="space-between" w="100%" mb={5}>
+        <Button
+          onClick={() =>
+            router.push(`/buyers/${router.query.buyerid}/usergroups/add`)
+          }
+          variant="primaryButton"
+          leftIcon={<AddIcon />}
+          size="lg"
+        >
+          Create catalog
+        </Button>
+        <HStack>
+          <Button variant="secondaryButton">Export CSV</Button>
         </HStack>
-        <Card variant="primaryCard">
-          <UserGroupsDataTable
-            tableData={userGroups}
-            columnsData={columnsData}
-          />
-        </Card>
-      </Box>
+      </HStack>
+      <Card variant="primaryCard">
+        <CatalogsDataTable tableData={catalogs} columnsData={columnsData} />
+      </Card>
     </>
   )
 }
 
-export default UserGroupsList
+export default CatalogsList
