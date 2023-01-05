@@ -177,14 +177,6 @@ export default function BuyerContextSwitch({...props}) {
               >
                 Catalogs ({buyersMeta[buyerid]?.catalogsCount || "-"})
               </Button>
-              <Button
-                onClick={() =>
-                  router.push(`/buyers/${router.query.buyerid}/categories`)
-                }
-                variant="secondaryButton"
-              >
-                Categories ({buyersMeta[buyerid]?.categoriesCount || "-"})
-              </Button>
             </ButtonGroup>
           </Flex>
         </HStack>
