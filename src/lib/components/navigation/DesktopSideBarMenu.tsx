@@ -34,11 +34,11 @@ const DesktopSideBarMenu = () => {
         //pos="sticky"
         left="0"
         h="95vh"
-        marginTop="5px"
         boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
         borderRadius={navSize == "small" ? "15px" : "30px"}
         w={navSize == "small" ? "75px" : "220px"}
-        ml={navSize == "small" ? "0" : "25px"}
+        ml={navSize == "small" ? "0" : "20px"}
+        mt={navSize == "small" ? "10px" : "20px"}
         flexDir="column"
         justifyContent="flex-start"
         background={sidebarBg}
@@ -58,7 +58,7 @@ const DesktopSideBarMenu = () => {
             _hover={{background: "none"}}
             icon={
               <HiChevronDoubleLeft
-                fontSize={navSize == "small" ? "30px" : "25px"}
+                fontSize={navSize == "small" ? "30px" : "35px"}
               />
             }
             onClick={() => {
@@ -70,7 +70,7 @@ const DesktopSideBarMenu = () => {
             <Link pl="2" pr="2" pb="15px" pt="30px">
               <Icon
                 as={HiOutlineChartBar}
-                fontSize={navSize == "small" ? "30px" : "25px"}
+                fontSize={navSize == "small" ? "30px" : "35px"}
                 title="Dashboard"
                 color="white"
               ></Icon>
@@ -79,6 +79,7 @@ const DesktopSideBarMenu = () => {
                 pl="20px"
                 hidden={navSize == "small" ? true : false}
                 color="white"
+                fontSize={navSize == "small" ? "16px" : "21px"}
               >
                 Dashboard
               </Text>
@@ -89,7 +90,7 @@ const DesktopSideBarMenu = () => {
               <Link pl="2" pr="2" pb="15px">
                 <Icon
                   as={HiOutlineQrcode}
-                  fontSize={navSize == "small" ? "30px" : "25px"}
+                  fontSize={navSize == "small" ? "30px" : "35px"}
                   title="Products"
                   color="white"
                 ></Icon>
@@ -98,6 +99,7 @@ const DesktopSideBarMenu = () => {
                   pl="20px"
                   hidden={navSize == "small" ? true : false}
                   color="white"
+                  fontSize={navSize == "small" ? "16px" : "21px"}
                 >
                   Products
                 </Text>
@@ -109,7 +111,7 @@ const DesktopSideBarMenu = () => {
               <Link pl="2" pr="2" pb="15px">
                 <Icon
                   as={FiStar}
-                  fontSize={navSize == "small" ? "30px" : "25px"}
+                  fontSize={navSize == "small" ? "30px" : "35px"}
                   title="Promotions"
                   color="white"
                 ></Icon>
@@ -118,6 +120,7 @@ const DesktopSideBarMenu = () => {
                   pl="20px"
                   hidden={navSize == "small" ? true : false}
                   color="white"
+                  fontSize={navSize == "small" ? "16px" : "21px"}
                 >
                   Promotions
                 </Text>
@@ -129,7 +132,7 @@ const DesktopSideBarMenu = () => {
               <Link pl="2" pr="2" pb="15px">
                 <Icon
                   as={BsCurrencyDollar}
-                  fontSize={navSize == "small" ? "30px" : "25px"}
+                  fontSize={navSize == "small" ? "30px" : "35px"}
                   title="Orders"
                   color="white"
                 ></Icon>
@@ -138,6 +141,7 @@ const DesktopSideBarMenu = () => {
                   pl="20px"
                   hidden={navSize == "small" ? true : false}
                   color="white"
+                  fontSize={navSize == "small" ? "16px" : "21px"}
                 >
                   Orders
                 </Text>
@@ -149,7 +153,7 @@ const DesktopSideBarMenu = () => {
               <Link pl="2" pr="2" pb="15px">
                 <Icon
                   as={HiOutlineEmojiSad}
-                  fontSize={navSize == "small" ? "30px" : "25px"}
+                  fontSize={navSize == "small" ? "30px" : "35px"}
                   title="Returns"
                   color="white"
                 ></Icon>
@@ -158,6 +162,7 @@ const DesktopSideBarMenu = () => {
                   pl="20px"
                   hidden={navSize == "small" ? true : false}
                   color="white"
+                  fontSize={navSize == "small" ? "16px" : "21px"}
                 >
                   Returns
                 </Text>
@@ -169,7 +174,7 @@ const DesktopSideBarMenu = () => {
               <Link pl="2" pr="2" pb="15px">
                 <Icon
                   as={HiOutlineUser}
-                  fontSize={navSize == "small" ? "30px" : "25px"}
+                  fontSize={navSize == "small" ? "30px" : "35px"}
                   color="white"
                 ></Icon>
                 <Text
@@ -178,6 +183,7 @@ const DesktopSideBarMenu = () => {
                   hidden={navSize == "small" ? true : false}
                   title="Buyers"
                   color="white"
+                  fontSize={navSize == "small" ? "16px" : "21px"}
                 >
                   Buyers
                 </Text>
@@ -189,7 +195,7 @@ const DesktopSideBarMenu = () => {
               <Link pl="2" pr="2" pb="15px">
                 <Icon
                   as={FiSettings}
-                  fontSize={navSize == "small" ? "30px" : "25px"}
+                  fontSize={navSize == "small" ? "30px" : "35px"}
                   title="Settings"
                   color="white"
                 ></Icon>
@@ -198,6 +204,7 @@ const DesktopSideBarMenu = () => {
                   pl="20px"
                   hidden={navSize == "small" ? true : false}
                   color="white"
+                  fontSize={navSize == "small" ? "16px" : "21px"}
                 >
                   Settings
                 </Text>

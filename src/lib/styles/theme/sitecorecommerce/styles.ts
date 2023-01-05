@@ -21,6 +21,17 @@ export const styles = {
         pl: "25px"
       },
       //MOVE THESE TO PROPER PLACE AFTER V1 RELEASE
+      ".facet-input": {
+        input: {
+          bg: "inputBg",
+          border: "1px",
+          borderColor: "gray.200",
+          mb: "20px",
+          width: "100%",
+          height: "40px",
+          pl: "20px"
+        }
+      },
       "input[type=text]": {
         bg: "inputBg",
         border: "1px",
@@ -31,7 +42,8 @@ export const styles = {
         bg: "inputBg",
         border: "1px",
         borderColor: "gray.200",
-        mb: "20px"
+        mb: "20px",
+        borderRadius: "md"
       },
       "input:read-only": {
         bg: "none",

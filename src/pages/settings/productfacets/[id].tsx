@@ -38,7 +38,7 @@ import {
 } from "ordercloud-javascript-sdk"
 import React, {FunctionComponent, useEffect, useRef, useState} from "react"
 import {dateHelper, priceHelper} from "lib/utils/"
-import AddressCard from "../../lib/components/card/AddressCard"
+import AddressCard from "../../../lib/components/card/AddressCard"
 import Card from "lib/components/card/Card"
 import {HiOutlineMinusSm} from "react-icons/hi"
 import LettersCard from "lib/components/card/LettersCard"
@@ -54,7 +54,7 @@ export async function getServerSideProps() {
   return {
     props: {
       header: {
-        title: "Order Details",
+        title: "Product Facets Details",
         metas: {
           hasBreadcrumbs: true,
           hasBuyerContextSwitch: false
@@ -204,7 +204,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
           <NextLink href="new" passHref>
             <Link pl="2" pr="2">
               <Link href={`/orders/new`}>
-                <Button variant="primaryButton">Place re-order</Button>
+                <Button variant="primaryButton">New Order</Button>
               </Link>
             </Link>
           </NextLink>
