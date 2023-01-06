@@ -38,7 +38,7 @@ const Header = () => {
                 pl="10"
                 fontWeight="normal"
               >
-                Commerce Administration
+                Seller Administration
               </Heading>
             </Show>
           </HStack>

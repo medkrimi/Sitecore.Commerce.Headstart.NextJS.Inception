@@ -231,7 +231,12 @@ const OrderConfirmationPage: FunctionComponent = () => {
         </HStack>
         <Card variant="primaryCard">
           <HStack justifyContent="space-between" w="100%" pr="60px">
-            <Text fontSize="20px" fontWeight="600" pb="20px" color="gray.300">
+            <Text
+              fontSize="20px"
+              fontWeight="600"
+              pb="GlobalPadding"
+              color="gray.300"
+            >
               Order Information
             </Text>
             <Text>Status: {orderStatus}</Text>
@@ -245,7 +250,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
             <VStack textAlign="left" w="100%">
               <HStack textAlign="left" w="100%">
                 <Text textAlign="left">
-                  {orderWorksheet.Order.FromUser.FirstName}
+                  {orderWorksheet.Order.FromUser.FirstName} &nbsp;
                   {orderWorksheet.Order.FromUser.LastName}
                 </Text>
               </HStack>
@@ -307,7 +312,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
               <Box
                 border="1px"
                 borderColor="gray.200"
-                padding="20px"
+                padding="GlobalPadding"
                 w="100%"
                 maxW="450px"
               >
@@ -401,7 +406,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
             </VStack>
             <VStack alignContent="right" align="flex-end">
               <Text
-                fontSize="20px"
+                fontSize="GlobalPadding"
                 fontWeight="600"
                 color="gray.300"
                 textAlign="right"

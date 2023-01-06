@@ -13,7 +13,7 @@ const HeaderLogo = () => {
   return (
     <HStack>
       <NextLink href="/" passHref>
-        <Link>
+        <Link pt="2px">
           {colorMode === "dark" ? (
             <Image
               width="100%"

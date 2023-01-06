@@ -15,6 +15,20 @@ import {NextSeo} from "next-seo"
 import React from "react"
 import {HiOutlineFilter} from "react-icons/hi"
 
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Settings ",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
 const SettingsPage = () => {
   const color = useColorModeValue("boxTextColor.900", "boxTextColor.100")
   const boxBgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
@@ -22,10 +36,7 @@ const SettingsPage = () => {
   return (
     <Container maxW="full">
       <NextSeo title="Settings" />
-      <Heading as="h2" marginTop={5}>
-        Settings
-      </Heading>
-      <HStack justifyContent="space-between" w="100%" mt="50px">
+      <HStack justifyContent="space-between" w="100%">
         <Card
           showclosebutton="false"
           p="28px 10px 0px 0px"

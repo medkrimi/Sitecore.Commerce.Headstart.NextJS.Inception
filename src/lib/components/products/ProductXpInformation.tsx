@@ -176,14 +176,14 @@ export default function ProductXpInformation({
       case "text":
         return (
           <>
-            <Text pt={"20px"}>Value:</Text>
+            <Text pt={"GlobalPadding"}>Value:</Text>
             <Input type={"text"} name={"value"} onChange={handleNewXPChange} />
           </>
         )
       case "number":
         return (
           <>
-            <Text pt={"20px"}>Value:</Text>
+            <Text pt={"GlobalPadding"}>Value:</Text>
             <Input
               type={"number"}
               name={"value"}
@@ -194,7 +194,7 @@ export default function ProductXpInformation({
       case "tag":
         return (
           <>
-            <Text pt={"20px"}>Value:</Text>
+            <Text pt={"GlobalPadding"}>Value:</Text>
             <Select name={"value"}>
               {["1", "2", "3", "4", "5", "6"].map((x, key) => {
                 return (
@@ -391,7 +391,7 @@ export default function ProductXpInformation({
                   name={"name"}
                   onChange={handleNewXPChange}
                 />
-                <Text pt={"20px"}>Field Type:</Text>
+                <Text pt={"GlobalPadding"}>Field Type:</Text>
                 <Select onChange={handleNewXPChange} name={"type"}>
                   <option value="text">text</option>
                   <option value="number">number</option>

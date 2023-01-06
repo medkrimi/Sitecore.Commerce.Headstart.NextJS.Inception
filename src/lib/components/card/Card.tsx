@@ -47,7 +47,7 @@ function Card(props) {
         hidden={isShownButton}
       ></IconButton>
       {isShownPanel && (
-        <Flex flexDirection="column" p="10">
+        <Flex flexDirection="column" p="GlobalPadding" mt="6">
           {children}
         </Flex>
       )}

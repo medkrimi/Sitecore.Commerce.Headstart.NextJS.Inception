@@ -67,7 +67,7 @@ const MobileNavigation = () => {
     <HStack>
       <Menu>
         <MenuButton>
-          <Icon as={HiOutlineBell} />
+          <Icon as={HiOutlineBell} fontSize="24px" />
         </MenuButton>
         <MenuList p="16px 8px" bg={menuBg}>
           <Flex flexDirection="column">
@@ -114,7 +114,9 @@ const MobileNavigation = () => {
               border=".5px solid #ccc"
             />
             <Show breakpoint="(min-width: 900px)">
-              <Text fontSize="12px">{usersToken}</Text>
+              <Text fontSize="18px" color="gray.500">
+                {usersToken}
+              </Text>
               <ChevronDownIcon ml="10px" />
             </Show>
           </HStack>
@@ -146,7 +148,7 @@ const MobileNavigation = () => {
         </MenuList>
       </Menu>
       <Button ref={btnRef} onClick={onOpen} variant="unstyled">
-        <Icon as={HiOutlineCog} />
+        <Icon as={HiOutlineCog} fontSize="24px" />
       </Button>
       <Drawer
         isOpen={isOpen}

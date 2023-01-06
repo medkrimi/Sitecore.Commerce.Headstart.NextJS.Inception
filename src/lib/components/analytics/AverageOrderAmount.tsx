@@ -90,7 +90,12 @@ export default function AverageOrderAmount() {
 
   return (
     <Card p="28px 10px 15px 0px" mb={{sm: "26px", lg: "0px"}} bg={boxBgColor}>
-      <Flex direction="column" mb="20px" ps="22px" alignSelf="flex-start">
+      <Flex
+        direction="column"
+        mb="GlobalPadding"
+        ps="22px"
+        alignSelf="flex-start"
+      >
         <Text
           fontSize="lg"
           textTransform="uppercase"

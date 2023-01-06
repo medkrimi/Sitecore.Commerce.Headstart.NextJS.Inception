@@ -65,14 +65,6 @@ const OrdersPage = () => {
 
   const requestExportCSV = () => {}
 
-  const showInfiniteScrollBtn = orders.length
-
-  const loadMoreButton = showInfiniteScrollBtn != 0 && (
-    <HStack justifyContent="center">
-      <Button variant="tertiaryButton">Scroll down to load more orders</Button>
-    </HStack>
-  )
-
   useEffect(() => {
     const getOrders = async () => {
       const ordersList = await Orders.List("All")
@@ -192,7 +184,6 @@ const OrdersPage = () => {
           </Thead>
           <Tbody>{ordersContent}</Tbody>
         </Table>
-        {/* {loadMoreButton} */}
       </Card>
       <AlertDialog
         isOpen={isExportCSVDialogOpen}

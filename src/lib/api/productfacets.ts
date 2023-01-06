@@ -29,6 +29,8 @@ async function create(fields) {
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "")
 
+  //Assign the XP PAth to the facet and field name
+  fields.XpPath = "Facets." + fields.ID
   ProductFacets.Create(fields)
 }
 

@@ -66,8 +66,8 @@ export default function BuyerContextSwitch({...props}) {
       <Box
         bg="white"
         borderRadius="xl"
-        pl="20px"
-        pr="20px"
+        pl="GlobalPadding"
+        pr="GlobalPadding"
         pt="2"
         pb="2"
         mb="6"

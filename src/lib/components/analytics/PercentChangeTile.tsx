@@ -13,7 +13,7 @@ export default function PercentChangeTitle(prop) {
       bg={bgColor}
       showclosebutton="false"
     >
-      <Flex direction="column" mb="20px" p="22px" alignSelf="flex-start">
+      <Flex direction="column" alignSelf="flex-start">
         <Text
           fontSize="lg"
           mb="6px"

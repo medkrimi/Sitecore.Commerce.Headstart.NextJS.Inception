@@ -9,7 +9,7 @@ export async function getStaticProps() {
   return {
     props: {
       header: {
-        title: "Create a new Product Facet",
+        title: "Create a Product Facet",
         metas: {
           hasBreadcrumbs: true
         }

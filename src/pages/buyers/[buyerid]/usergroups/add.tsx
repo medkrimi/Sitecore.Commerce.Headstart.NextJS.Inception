@@ -22,7 +22,7 @@ export async function getServerSideProps() {
 const ProtectedAddEditForm = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
-      <Box padding="20px">
+      <Box padding="GlobalPadding">
         <AddEditForm />
       </Box>
     </ProtectedContent>

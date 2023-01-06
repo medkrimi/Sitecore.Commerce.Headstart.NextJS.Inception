@@ -36,7 +36,7 @@ const DesktopSideBarMenu = () => {
         h="95vh"
         boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
         borderRadius={navSize == "small" ? "15px" : "30px"}
-        w={navSize == "small" ? "75px" : "220px"}
+        w={navSize == "small" ? "75px" : "250px"}
         ml={navSize == "small" ? "0" : "20px"}
         mt={navSize == "small" ? "10px" : "20px"}
         flexDir="column"
@@ -67,19 +67,27 @@ const DesktopSideBarMenu = () => {
             }}
           />
           <NextLink href="/" passHref>
-            <Link pl="2" pr="2" pb="15px" pt="30px">
+            <Link
+              pl="2"
+              pr="2"
+              pb="15px"
+              pt="30px"
+              verticalAlign="middle"
+              display="flex"
+              color="white"
+              _hover={{color: "gray.300"}}
+            >
               <Icon
                 as={HiOutlineChartBar}
                 fontSize={navSize == "small" ? "30px" : "35px"}
                 title="Dashboard"
-                color="white"
               ></Icon>
               <Text
                 as="span"
-                pl="20px"
+                pl="GlobalPadding"
                 hidden={navSize == "small" ? true : false}
-                color="white"
                 fontSize={navSize == "small" ? "16px" : "21px"}
+                pt="2px"
               >
                 Dashboard
               </Text>
@@ -87,19 +95,26 @@ const DesktopSideBarMenu = () => {
           </NextLink>
           <ProtectedContent hasAccess={appPermissions.ProductManager}>
             <NextLink href="/products" passHref>
-              <Link pl="2" pr="2" pb="15px">
+              <Link
+                pl="2"
+                pr="2"
+                pb="15px"
+                verticalAlign="middle"
+                display="flex"
+                color="white"
+                _hover={{color: "gray.300"}}
+              >
                 <Icon
                   as={HiOutlineQrcode}
                   fontSize={navSize == "small" ? "30px" : "35px"}
                   title="Products"
-                  color="white"
                 ></Icon>
                 <Text
                   as="span"
-                  pl="20px"
+                  pl="GlobalPadding"
                   hidden={navSize == "small" ? true : false}
-                  color="white"
                   fontSize={navSize == "small" ? "16px" : "21px"}
+                  pt="2px"
                 >
                   Products
                 </Text>
@@ -108,19 +123,26 @@ const DesktopSideBarMenu = () => {
           </ProtectedContent>
           <ProtectedContent hasAccess={appPermissions.ProductManager}>
             <NextLink href="/promotions" passHref>
-              <Link pl="2" pr="2" pb="15px">
+              <Link
+                pl="2"
+                pr="2"
+                pb="15px"
+                verticalAlign="middle"
+                display="flex"
+                color="white"
+                _hover={{color: "gray.300"}}
+              >
                 <Icon
                   as={FiStar}
                   fontSize={navSize == "small" ? "30px" : "35px"}
                   title="Promotions"
-                  color="white"
                 ></Icon>
                 <Text
                   as="span"
-                  pl="20px"
+                  pl="GlobalPadding"
                   hidden={navSize == "small" ? true : false}
-                  color="white"
                   fontSize={navSize == "small" ? "16px" : "21px"}
+                  pt="2px"
                 >
                   Promotions
                 </Text>
@@ -129,19 +151,26 @@ const DesktopSideBarMenu = () => {
           </ProtectedContent>
           <ProtectedContent hasAccess={appPermissions.OrderManager}>
             <NextLink href="/orders" passHref>
-              <Link pl="2" pr="2" pb="15px">
+              <Link
+                pl="2"
+                pr="2"
+                pb="15px"
+                verticalAlign="middle"
+                display="flex"
+                color="white"
+                _hover={{color: "gray.300"}}
+              >
                 <Icon
                   as={BsCurrencyDollar}
                   fontSize={navSize == "small" ? "30px" : "35px"}
                   title="Orders"
-                  color="white"
                 ></Icon>
                 <Text
                   as="span"
-                  pl="20px"
+                  pl="GlobalPadding"
                   hidden={navSize == "small" ? true : false}
-                  color="white"
                   fontSize={navSize == "small" ? "16px" : "21px"}
+                  pt="2px"
                 >
                   Orders
                 </Text>
@@ -150,19 +179,26 @@ const DesktopSideBarMenu = () => {
           </ProtectedContent>
           <ProtectedContent hasAccess={appPermissions.OrderManager}>
             <NextLink href="/returns" passHref>
-              <Link pl="2" pr="2" pb="15px">
+              <Link
+                pl="2"
+                pr="2"
+                pb="15px"
+                verticalAlign="middle"
+                display="flex"
+                color="white"
+                _hover={{color: "gray.300"}}
+              >
                 <Icon
                   as={HiOutlineEmojiSad}
                   fontSize={navSize == "small" ? "30px" : "35px"}
                   title="Returns"
-                  color="white"
                 ></Icon>
                 <Text
                   as="span"
-                  pl="20px"
+                  pl="GlobalPadding"
                   hidden={navSize == "small" ? true : false}
-                  color="white"
                   fontSize={navSize == "small" ? "16px" : "21px"}
+                  pt="2px"
                 >
                   Returns
                 </Text>
@@ -171,19 +207,26 @@ const DesktopSideBarMenu = () => {
           </ProtectedContent>
           <ProtectedContent hasAccess={appPermissions.BuyerManager}>
             <NextLink href="/buyers" passHref>
-              <Link pl="2" pr="2" pb="15px">
+              <Link
+                pl="2"
+                pr="2"
+                pb="15px"
+                verticalAlign="middle"
+                display="flex"
+                color="white"
+                _hover={{color: "gray.300"}}
+              >
                 <Icon
                   as={HiOutlineUser}
                   fontSize={navSize == "small" ? "30px" : "35px"}
-                  color="white"
                 ></Icon>
                 <Text
                   as="span"
-                  pl="20px"
+                  pl="GlobalPadding"
                   hidden={navSize == "small" ? true : false}
                   title="Buyers"
-                  color="white"
                   fontSize={navSize == "small" ? "16px" : "21px"}
+                  pt="2px"
                 >
                   Buyers
                 </Text>
@@ -192,19 +235,26 @@ const DesktopSideBarMenu = () => {
           </ProtectedContent>
           <ProtectedContent hasAccess={appPermissions.MeManager}>
             <NextLink href="/settings" passHref>
-              <Link pl="2" pr="2" pb="15px">
+              <Link
+                pl="2"
+                pr="2"
+                pb="15px"
+                verticalAlign="middle"
+                display="flex"
+                color="white"
+                _hover={{color: "gray.300"}}
+              >
                 <Icon
                   as={FiSettings}
                   fontSize={navSize == "small" ? "30px" : "35px"}
                   title="Settings"
-                  color="white"
                 ></Icon>
                 <Text
                   as="span"
-                  pl="20px"
+                  pl="GlobalPadding"
                   hidden={navSize == "small" ? true : false}
-                  color="white"
                   fontSize={navSize == "small" ? "16px" : "21px"}
+                  pt="2px"
                 >
                   Settings
                 </Text>

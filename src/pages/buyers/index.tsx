@@ -187,7 +187,7 @@ const BuyersList = () => {
 const ProtectedBuyersList = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
-      <Box padding="20px">
+      <Box padding="GlobalPadding">
         <Card variant="primaryCard">
           <BuyersList />
         </Card>

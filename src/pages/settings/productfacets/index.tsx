@@ -37,6 +37,9 @@ import {NextSeo} from "next-seo"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {productfacetsService} from "lib/api/productfacets"
+import {textHelper} from "lib/utils"
+import router, {useRouter} from "next/router"
+import {useToast} from "@chakra-ui/react"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -54,6 +57,8 @@ export async function getServerSideProps() {
 }
 
 const ProductFacetsPage = () => {
+  const router = useRouter()
+  const toast = useToast()
   const [productfacets, setProductFacets] = useState([])
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -69,6 +74,37 @@ const ProductFacetsPage = () => {
     getProductFacets()
   }, [])
 
+  async function initProductFacetsData(productfacetid) {
+    const productfacetList = await productfacetsService.getAll()
+    setProductFacets(productfacetList.Items)
+  }
+
+  async function deleteProductFacets(productfacetid) {
+    try {
+      await productfacetsService.delete(productfacetid)
+      initProductFacetsData(router.query.buyerid)
+      toast({
+        id: productfacetid + "-deleted",
+        title: "Success",
+        description: "Product Facet deleted successfully.",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top"
+      })
+    } catch (e) {
+      toast({
+        id: productfacetid + "fail-deleted",
+        title: "Error",
+        description: "Product Facet delete failed",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top"
+      })
+    }
+  }
+
   const productfacetsContent = productfacets.length ? (
     productfacets.map((productfacets) => (
       <Tr key={productfacets.ID}>
@@ -79,6 +115,16 @@ const ProductFacetsPage = () => {
           </Link>
         </Td>
         <Td>{productfacets.ID}</Td>
+        <Td>{productfacets.xp_Options}</Td>
+        <Td>
+          <Button
+            onClick={() => deleteProductFacets(productfacets.ID)}
+            disabled={loading}
+            variant="tertiaryButton"
+          >
+            Delete
+          </Button>
+        </Td>
       </Tr>
     ))
   ) : (
@@ -160,6 +206,8 @@ const ProductFacetsPage = () => {
             <Tr>
               <Th>Name</Th>
               <Th>ID</Th>
+              <Th>Facet Options</Th>
+              <Th></Th>
             </Tr>
           </Thead>
           <Tbody>{productfacetsContent}</Tbody>
