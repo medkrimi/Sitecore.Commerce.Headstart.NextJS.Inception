@@ -1,4 +1,4 @@
-import {Box, HStack, Text} from "@chakra-ui/react"
+import {Badge, Box, HStack, Text} from "@chakra-ui/react"
 
 export default function LettersCard(props) {
   var str = new String(props.FirstName)
@@ -6,28 +6,27 @@ export default function LettersCard(props) {
   const firstnameletter = str.charAt(0)
   const lastnameletter = strlast.charAt(0)
   return (
-    <Box
+    <Badge
       bg="brand.500"
       borderRadius="50%"
-      p="15px"
-      pt="20px"
-      pb="20px"
+      alignItems="center"
+      textAlign="center"
+      display="flex"
       shadow="xl"
       width="40px"
       height="40px"
-      position="relative"
       _hover={{
         bg: "brand.600",
         textDecoration: "none",
         borderRadius: "10px"
       }}
     >
-      <HStack w="full" color="white" position="absolute" top="10px" left="6px">
-        <Text fontSize="18px">
+      <HStack w="full" color="white" width="100%">
+        <Text fontSize="18px" width="100%" fontWeight="normal">
           {firstnameletter}
           {lastnameletter}
         </Text>
       </HStack>
-    </Box>
+    </Badge>
   )
 }

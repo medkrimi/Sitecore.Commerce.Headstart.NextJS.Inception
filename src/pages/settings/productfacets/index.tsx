@@ -10,7 +10,6 @@ import {
   CheckboxGroup,
   Container,
   Divider,
-  Flex,
   HStack,
   Heading,
   IconButton,
@@ -30,25 +29,24 @@ import {
   VStack
 } from "@chakra-ui/react"
 import {useEffect, useRef, useState} from "react"
-
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
-import LettersCard from "lib/components/card/LettersCard"
-import Link from "../../lib/components/navigation/Link"
+import {HiOutlineMinusSm} from "react-icons/hi"
+import Link from "../../../lib/components/navigation/Link"
 import {NextSeo} from "next-seo"
-import {Orders} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
-import {dateHelper} from "lib/utils/date.utils"
-import {priceHelper} from "lib/utils/price.utils"
-import {textHelper} from "lib/utils/text.utils"
+import {productfacetsService} from "lib/api/productfacets"
+import {textHelper} from "lib/utils"
+import router, {useRouter} from "next/router"
+import {useToast} from "@chakra-ui/react"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
   return {
     props: {
       header: {
-        title: "Orders List",
+        title: "Product Facets List",
         metas: {
           hasBreadcrumbs: true,
           hasBuyerContextSwitch: false
@@ -57,8 +55,11 @@ export async function getServerSideProps() {
     }
   }
 }
-const OrdersPage = () => {
-  const [orders, setOrders] = useState([])
+
+const ProductFacetsPage = () => {
+  const router = useRouter()
+  const toast = useToast()
+  const [productfacets, setProductFacets] = useState([])
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const cancelRef = useRef()
@@ -66,50 +67,78 @@ const OrdersPage = () => {
   const requestExportCSV = () => {}
 
   useEffect(() => {
-    const getOrders = async () => {
-      const ordersList = await Orders.List("All")
-      setOrders(ordersList.Items)
+    const getProductFacets = async () => {
+      const productfacetsList = productfacetsService.getAll()
+      setProductFacets((await productfacetsList).Items)
     }
-    getOrders()
+    getProductFacets()
   }, [])
 
-  const ordersContent = orders.length ? (
-    orders.map((order) => (
-      <Tr key={order.ID}>
+  async function initProductFacetsData(productfacetid) {
+    const productfacetList = await productfacetsService.getAll()
+    setProductFacets(productfacetList.Items)
+  }
+
+  async function deleteProductFacets(productfacetid) {
+    try {
+      await productfacetsService.delete(productfacetid)
+      initProductFacetsData(router.query.buyerid)
+      toast({
+        id: productfacetid + "-deleted",
+        title: "Success",
+        description: "Product Facet deleted successfully.",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top"
+      })
+    } catch (e) {
+      toast({
+        id: productfacetid + "fail-deleted",
+        title: "Error",
+        description: "Product Facet delete failed",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top"
+      })
+    }
+  }
+
+  const productfacetsContent = productfacets.length ? (
+    productfacets.map((productfacets) => (
+      <Tr key={productfacets.ID}>
         <Td>
           <Checkbox pr="10px"></Checkbox>
-          <Link href={`/orders/${order.ID}`}>{order.ID}</Link>
+          <Link href={`/settings/productfacets/${productfacets.ID}`}>
+            {productfacets.Name}
+          </Link>
         </Td>
-        <Td>{dateHelper.formatDate(order.DateSubmitted)}</Td>
-        <Td>{textHelper.formatStatus(order.Status)}</Td>
+        <Td>{productfacets.ID}</Td>
+        <Td>{productfacets.xp_Options}</Td>
         <Td>
-          <HStack>
-            <LettersCard
-              FirstName={order.FromUser.FirstName}
-              LastName={order.FromUser.LastName}
-            />
-            <Text>
-              {order.FromUser.FirstName} {order.FromUser.LastName}
-            </Text>
-          </HStack>
+          <Button
+            onClick={() => deleteProductFacets(productfacets.ID)}
+            disabled={loading}
+            variant="tertiaryButton"
+          >
+            Delete
+          </Button>
         </Td>
-        <Td>{textHelper.formatTextTruncate(50, order.OrderItem, "...")}</Td>
-        <Td>{order.LineItemCount}</Td>
-        <Td>{priceHelper.formatPrice(order.Total)}</Td>
       </Tr>
     ))
   ) : (
     <Tr>
-      <Td colSpan={7}>No orders have been submitted</Td>
+      <Td colSpan={7}>No Product Facets have been created</Td>
     </Tr>
   )
 
   return (
     <Container maxW="full">
-      <NextSeo title="Orders List" />
+      <NextSeo title="Product Facets List" />
       <HStack justifyContent="space-between" w="100%" mb={5}>
-        <Link href={`/orders/new`}>
-          <Button variant="primaryButton">New Order</Button>
+        <Link href={`/settings/productfacets/add`}>
+          <Button variant="primaryButton">New Product Facet</Button>
         </Link>
         <HStack>
           <Menu>
@@ -128,7 +157,7 @@ const OrdersPage = () => {
             <MenuList>
               <MenuItem>
                 <VStack>
-                  <Text>Product Status</Text>
+                  <Text>Product Facet Status</Text>
                   <CheckboxGroup>
                     <Stack spacing={[1, 3]} direction={["column", "row"]}>
                       <Checkbox value="Completed" defaultChecked>
@@ -140,11 +169,8 @@ const OrdersPage = () => {
                       <Checkbox value="Canceled" defaultChecked>
                         Canceled
                       </Checkbox>
-                      <Checkbox value="Declined" defaultChecked>
-                        Declined
-                      </Checkbox>
-                      <Checkbox value="Open" defaultChecked>
-                        Open
+                      <Checkbox value="Active" defaultChecked>
+                        Active
                       </Checkbox>
                     </Stack>
                   </CheckboxGroup>
@@ -170,19 +196,21 @@ const OrdersPage = () => {
         </HStack>
       </HStack>
       <Card variant="primaryCard">
+        <IconButton
+          variant="closePanelButton"
+          aria-label="close panel"
+          icon={<HiOutlineMinusSm />}
+        ></IconButton>
         <Table>
           <Thead>
             <Tr>
+              <Th>Name</Th>
               <Th>ID</Th>
-              <Th>Date</Th>
-              <Th>Status</Th>
-              <Th>Customer</Th>
-              <Th>Products</Th>
-              <Th># of Line Items</Th>
-              <Th>Revenue</Th>
+              <Th>Facet Options</Th>
+              <Th></Th>
             </Tr>
           </Thead>
-          <Tbody>{ordersContent}</Tbody>
+          <Tbody>{productfacetsContent}</Tbody>
         </Table>
       </Card>
       <AlertDialog
@@ -193,14 +221,14 @@ const OrdersPage = () => {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Export Selected Orders to CSV
+              Export Selected Product Facets to CSV
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text display="inline">
-                Export the selected orders to a CSV, once the export button is
-                clicked behind the scenes a job will be kicked off to create the
-                csv and then will automatically download to your downloads
-                folder in the browser.
+                Export the selected product facets to a CSV, once the export
+                button is clicked behind the scense a job will be kicked off to
+                create the csv and then will automatically download to your
+                downloads folder in the browser.
               </Text>
             </AlertDialogBody>
             <AlertDialogFooter>
@@ -214,7 +242,11 @@ const OrdersPage = () => {
                   Cancel
                 </Button>
                 <Button onClick={requestExportCSV} disabled={loading}>
-                  {loading ? <Spinner color="brand.500" /> : "Export Orders"}
+                  {loading ? (
+                    <Spinner color="brand.500" />
+                  ) : (
+                    "Export Product Facets"
+                  )}
                 </Button>
               </HStack>
             </AlertDialogFooter>
@@ -225,10 +257,12 @@ const OrdersPage = () => {
   )
 }
 
-const ProtectedOrdersPage = () => (
-  <ProtectedContent hasAccess={appPermissions.OrderManager}>
-    <OrdersPage />
-  </ProtectedContent>
-)
+const ProtectedProductFacetsPage = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.ProductManager}>
+      <ProductFacetsPage />
+    </ProtectedContent>
+  )
+}
 
-export default ProtectedOrdersPage
+export default ProtectedProductFacetsPage
