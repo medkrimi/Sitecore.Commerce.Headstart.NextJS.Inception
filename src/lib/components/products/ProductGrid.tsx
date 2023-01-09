@@ -23,7 +23,7 @@ const ProductGrid = (props) => {
             <Td colSpan={7}>
               <Grid
                 as="section"
-                templateColumns="repeat(4, 1fr)"
+                templateColumns="repeat(3, 1fr)"
                 templateRows="(3, 1fr)"
                 gap={4}
                 w="full"
