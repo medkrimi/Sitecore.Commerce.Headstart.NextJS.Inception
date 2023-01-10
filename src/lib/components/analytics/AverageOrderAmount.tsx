@@ -2,6 +2,7 @@ import {Flex, Text, Box, useColorModeValue} from "@chakra-ui/react"
 import React, {useEffect, useState} from "react"
 import LineChart from "../charts/LineChart"
 import Card from "../card/Card"
+import {dashboardService} from "lib/api"
 
 export default function AverageOrderAmount() {
   const boxBgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
@@ -9,19 +10,28 @@ export default function AverageOrderAmount() {
   const headingColor = useColorModeValue("boxTextColor.400", "boxTextColor.300")
   const [totalSales, settotalSales] = useState([Number])
   const [totalPreviousYearSales, settotalPreviousYearSales] = useState([Number])
-
+  //const [chartData, setchartData] = useState()
+  let chartData = require("../../mockdata/dashboard_data.json")
+  console.log(chartData)
   useEffect(() => {
     initData()
   }, [])
 
   async function initData() {
-    // const totalSales = await dashboardService.getTotalSalesByMonth()
-    // settotalSales(totalSales)
-    // const totalSalesPreviousYear =
-    //   await dashboardService.getTotalSalesPreviousYearByMonth()
-    // settotalPreviousYearSales(totalSalesPreviousYear)
+    if (process.env.NEXT_PUBLIC_OC_USELIVEDATA) {
+      //TODO COMPLETE THIS SECTION
+      //These functions will bring in real data
+      //const totalSales = await dashboardService.getTotalSalesByMonth()
+      //settotalSales(totalSales)
+      //const totalSalesPreviousYear =
+      // await dashboardService.getTotalSalesPreviousYearByMonth()
+      //settotalPreviousYearSales(totalSalesPreviousYear)
+    } else {
+      //This function will bring in mock data
+      //let data = require("../../mockdata/dashboard_data.json")
+      //setchartData(data)
+    }
   }
-
   const d = new Date()
   let year = d.getFullYear()
   const options = {
@@ -73,18 +83,18 @@ export default function AverageOrderAmount() {
       ]
     },
     title: {
-      text: "Year to Date Sales",
+      text: chartData.salesoverview.title,
       align: "left"
     }
   }
   const series = [
     {
-      name: "Current years sales",
-      data: [130, 140, 415, 510, 149, 160, 170, 391, 130, 410, 451, 501]
+      name: chartData.salesoverview.series.currentyear.title,
+      data: chartData.salesoverview.series.currentyear.data
     },
     {
-      name: "Previous years sales",
-      data: [30, 40, 115, 310, 249, 60, 70, 191, 110, 210, 151, 101]
+      name: chartData.salesoverview.series.previousyear.title,
+      data: chartData.salesoverview.series.previousyear.data
     }
   ]
 
@@ -102,16 +112,17 @@ export default function AverageOrderAmount() {
           mb="6px"
           color={headingColor}
         >
-          Sales Overview
+          {chartData.salesoverview.title}
         </Text>
         <Text fontSize="sm" fontWeight="medium" color={color}>
           <Text as="span" color="green.400" fontWeight="bold" pr="10px">
-            (+5%) more
+            ({chartData.salesoverview.percentchangeindicator}
+            {chartData.salesoverview.percentchange}%) more
           </Text>
           in {year}
         </Text>
       </Flex>
-      <Box w="100%" h={{sm: "100%", xl: "330px"}} ps="8px">
+      <Box w="100%" h={{sm: "100%", xl: "265px"}} ps="8px">
         <LineChart chartData={series} chartOptions={options} />
       </Box>
     </Card>
