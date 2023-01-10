@@ -21,8 +21,6 @@ async function getById(buyerID, userGroupID) {
 
 async function create(buyerID, userGroup) {
   console.log("userGroups::create")
-  console.log(buyerID)
-  console.log(userGroup)
   //Demo sample : By default OrderCloud will assign a unique ID to the new created buyer.
   //Customizing the ID generation business logic here for Demo purpose.
   userGroup.ID = userGroup.Name.toLowerCase()

@@ -1,6 +1,7 @@
 export * from "./addresses"
 export * from "./buyers"
 export * from "./catalogs"
+export * from "./categories"
 export * from "./dashboard"
 export * from "./orders"
 export * from "./products"

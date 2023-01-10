@@ -59,11 +59,9 @@ async function getCatalogsbyBuyerID(buyerID) {
   let catalogAssignmentsIds = catalogsAssignments.Items.map(
     (item) => item.CatalogID
   )
-  console.log(catalogAssignmentsIds)
   const catalogsList = await Catalogs.List({
     filters: {ID: catalogAssignmentsIds.join("|")}
   })
-  console.log(catalogsList)
   return catalogsList
 }
 
