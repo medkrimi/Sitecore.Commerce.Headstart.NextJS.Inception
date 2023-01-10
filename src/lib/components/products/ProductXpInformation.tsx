@@ -273,7 +273,7 @@ export default function ProductXpInformation({
               </Tooltip>
             </HStack>
           )}
-          <Heading size={{base: "md", md: "lg", lg: "xl"}}>
+          <Heading size={{base: "sm", md: "md", lg: "md"}}>
             Extended Properties
           </Heading>
 

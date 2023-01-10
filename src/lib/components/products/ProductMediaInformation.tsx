@@ -9,7 +9,8 @@ import {
   Tooltip,
   Input,
   Collapse,
-  Center
+  Center,
+  VStack
 } from "@chakra-ui/react"
 import {
   ComposedProduct,
@@ -38,6 +39,7 @@ export default function ProductMediaInformation({
   const [formValues, setFormValues] = useState({
     images: composedProduct?.Product?.xp?.Images
   })
+  const [selectedImage, setSelectedImage] = useState(0)
   const [expanded, setExpanded] = useState(true)
 
   const onEditClicked = (e) => {
@@ -175,7 +177,7 @@ export default function ProductMediaInformation({
             </Tooltip>
           </HStack>
         )}
-        <Heading size={{base: "md", md: "lg", lg: "xl"}}>Media</Heading>
+        <Heading size={{base: "sm", md: "md", lg: "md"}}>Media</Heading>
 
         {(isLoading || !composedProduct?.Product) && expanded ? (
           <Box pt={6} textAlign={"center"}>
@@ -184,11 +186,9 @@ export default function ProductMediaInformation({
         ) : (
           <>
             <Collapse in={expanded}>
-              <Box width="full" pb={2} pt={4}>
+              <Box width="full" pb={2} pt={4} pl={14}>
                 <>
-                  <Text opacity={0.5} fontWeight={"bold"}>
-                    Images:
-                  </Text>
+                  <Text>Images:</Text>
                   {formValues?.images?.map((image, key) => {
                     return isEditingBasicData ? (
                       <HStack key={key} mt={3}>
@@ -213,35 +213,55 @@ export default function ProductMediaInformation({
                     ) : (
                       <></>
                     )
-                  })}
-                  {composedProduct?.Product?.xp?.Images?.map((image, key) => {
-                    return !isEditingBasicData ? (
-                      <HStack key={key} mt={4}>
-                        <Text>{key + 1}</Text>
-                        <Heading
-                          fontSize={"2xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
+                  })}{" "}
+                  {!isEditingBasicData ? (
+                    <Image
+                      boxSize="200px"
+                      objectFit="scale-down"
+                      mt={4}
+                      alt={"Product Image"}
+                      src={
+                        composedProduct?.Product?.xp?.Images[selectedImage].Url
+                      }
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  <HStack mt={4}>
+                    {composedProduct?.Product?.xp?.Images?.map((image, key) => {
+                      return !isEditingBasicData ? (
+                        <VStack key={key}>
+                          <Text>{key + 1}</Text>
+
                           {(image?.Url ?? "") == "" ? (
-                            <>No Image</>
+                            <Heading
+                              fontSize={"2xl"}
+                              fontFamily={"body"}
+                              fontWeight={500}
+                            >
+                              <>No Image</>
+                            </Heading>
                           ) : (
                             <>
                               <Image
-                                boxSize="250px"
+                                boxSize="75px"
                                 objectFit="scale-down"
                                 mt={4}
                                 alt={"Product Image"}
-                                src={image?.Url}
+                                src={image?.ThumbnailUrl}
+                                border={key == selectedImage ? "1px solid" : ""}
+                                onClick={() => {
+                                  setSelectedImage(key)
+                                }}
                               />
                             </>
                           )}
-                        </Heading>
-                      </HStack>
-                    ) : (
-                      <></>
-                    )
-                  })}
+                        </VStack>
+                      ) : (
+                        <></>
+                      )
+                    })}
+                  </HStack>
                   {isEditingBasicData &&
                   formValues?.images[formValues?.images?.length - 1]?.Url !=
                     "" ? (

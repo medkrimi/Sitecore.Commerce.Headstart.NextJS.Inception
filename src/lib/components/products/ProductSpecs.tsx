@@ -159,7 +159,7 @@ export default function ProductSpecs({
               </Button>
             </Tooltip>
           </HStack>
-          <Heading size={{base: "md", md: "lg", lg: "xl"}}>Specs</Heading>{" "}
+          <Heading size={{base: "sm", md: "md", lg: "md"}}>Specs</Heading>{" "}
           {(isLoading || !composedProduct?.Product) && expanded ? (
             <Box pt={6} textAlign={"center"}>
               Updating... <BrandedSpinner />

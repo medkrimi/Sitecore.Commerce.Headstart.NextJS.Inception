@@ -43,7 +43,7 @@ export default function ProductMeasurementData({
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [formValues, setFormValues] = useState({
     shipWeight: composedProduct?.Product?.ShipWeight,
@@ -150,16 +150,14 @@ export default function ProductMeasurementData({
           ) : (
             <>
               <Heading
-                size={{base: "md", md: "lg", lg: "xl"}}
+                size={{base: "sm", md: "md", lg: "md"}}
                 mb={expanded ? 6 : 0}
               >
                 Sizes
               </Heading>
               <Collapse in={expanded}>
                 <Box width="full" pb={2}>
-                  <Text opacity={0.5} fontWeight={"bold"}>
-                    Ship Weight:
-                  </Text>
+                  <Text>Ship Weight:</Text>
                   {isEditingBasicData ? (
                     <Input
                       type={"number"}
@@ -198,9 +196,7 @@ export default function ProductMeasurementData({
                 </Box>
 
                 <Box width="full" pb={2}>
-                  <Text opacity={0.5} fontWeight={"bold"}>
-                    Ship Length:
-                  </Text>
+                  <Text>Ship Length:</Text>
                   {isEditingBasicData ? (
                     <Input
                       type={"number"}

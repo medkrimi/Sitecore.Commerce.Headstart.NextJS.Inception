@@ -43,7 +43,7 @@ export default function ProductInventoryData({
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [formValues, setFormValues] = useState({
     inventoryEnabled: composedProduct?.Product?.Inventory?.Enabled,
@@ -179,7 +179,7 @@ export default function ProductInventoryData({
           ) : (
             <>
               <Heading
-                size={{base: "md", md: "lg", lg: "xl"}}
+                size={{base: "sm", md: "md", lg: "md"}}
                 mb={expanded ? 6 : 0}
               >
                 Inventory
@@ -188,9 +188,7 @@ export default function ProductInventoryData({
                 <Flex flexDirection={{base: "column", sm: "column", md: "row"}}>
                   <Container>
                     <Box width="full" pb={2}>
-                      <Text opacity={0.5} fontWeight={"bold"}>
-                        Inventory Enabled?:
-                      </Text>
+                      <Text>Inventory Enabled?:</Text>
                       {isEditingBasicData ? (
                         <Checkbox
                           isChecked={formValues.inventoryEnabled}
@@ -242,9 +240,7 @@ export default function ProductInventoryData({
                       </Box>
                     </Tooltip>
                     <Box width="full" pb={2}>
-                      <Text opacity={0.5} fontWeight={"bold"}>
-                        Notification Point:
-                      </Text>
+                      <Text>Notification Point:</Text>
                       {isEditingBasicData ? (
                         <Input
                           type={"number"}
@@ -291,9 +287,7 @@ export default function ProductInventoryData({
                   </Container>
                   <Container>
                     <Box width="full" pb={2}>
-                      <Text opacity={0.5} fontWeight={"bold"}>
-                        Variant Level Tracking?:
-                      </Text>
+                      <Text>Variant Level Tracking?:</Text>
                       {isEditingBasicData ? (
                         <Checkbox
                           isChecked={formValues.variantLevelTracking}

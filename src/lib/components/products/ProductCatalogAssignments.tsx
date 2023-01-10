@@ -72,7 +72,7 @@ export default function ProductCatalogAssignments({
   const [isLoading, setIsLoading] = useState(false)
 
   const color = useColorModeValue("textColor.900", "textColor.100")
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(true)
 
   useEffect(() => {
     async function GetProductCatalogAssignments() {
@@ -183,7 +183,7 @@ export default function ProductCatalogAssignments({
               </Button>
             </Tooltip>
           </HStack>
-          <Heading size={{base: "md", md: "lg", lg: "xl"}}>
+          <Heading size={{base: "sm", md: "md", lg: "md"}}>
             Catalog Assignments
           </Heading>
           {!composedProduct && expanded ? (

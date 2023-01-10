@@ -100,17 +100,6 @@ const ProductDetails = () => {
         {/* {productName !== "" ? ( */}
         <>
           <NextSeo title="Product Details" />
-          <Heading
-            //color={color}
-            as="h1"
-            size={{sm: "lg"}}
-            pb={2}
-            ml={5}
-            display={{base: "block", sm: "inline-block", md: "none"}}
-          >
-            Product Detail Page: {productName == "" ? "..." : null}{" "}
-            <i>{productName}</i>
-          </Heading>
           <VStack justifyContent={"space-between"} px={6} width={"full"}>
             <Heading
               //color={color}
@@ -119,8 +108,7 @@ const ProductDetails = () => {
               size={{base: "md", sm: "md", md: "lg", lg: "lg", xl: "xl"}}
               display={{base: "none", sm: "none", md: "block"}}
             >
-              Product Detail Page: {productName == "" ? "..." : null}{" "}
-              <i>{productName}</i>
+              {productName == "" ? "..." : null} <i>{productName}</i>
             </Heading>
             <HStack
               justifyContent={{
@@ -211,14 +199,26 @@ const ProductDetails = () => {
                     setComposedProduct={setComposedProduct}
                   />
                 </GridItem>
-                <GridItem rowSpan={1} colSpan={4}>
+                <GridItem rowSpan={3} colSpan={4}>
                   <ProductXpInformation
                     composedProduct={composedProduct}
                     setComposedProduct={setComposedProduct}
                   />
                 </GridItem>
-                <GridItem rowSpan={1} colSpan={4}>
-                  <ProductPriceScheduleAssignments
+                <GridItem
+                  rowSpan={1}
+                  colSpan={{base: 6, md: 6, sm: 6, lg: 4, xl: 2}}
+                >
+                  <ProductCatalogAssignments
+                    composedProduct={composedProduct}
+                    setComposedProduct={setComposedProduct}
+                  />
+                </GridItem>
+                <GridItem
+                  rowSpan={1}
+                  colSpan={{base: 6, md: 6, sm: 6, lg: 4, xl: 2}}
+                >
+                  <ProductInventoryData
                     composedProduct={composedProduct}
                     setComposedProduct={setComposedProduct}
                   />
@@ -232,20 +232,8 @@ const ProductDetails = () => {
                     setComposedProduct={setComposedProduct}
                   />
                 </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 3, xl: 4}}
-                >
-                  <ProductInventoryData
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
-                </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 4, xl: 2}}
-                >
-                  <ProductCatalogAssignments
+                <GridItem rowSpan={1} colSpan={6}>
+                  <ProductPriceScheduleAssignments
                     composedProduct={composedProduct}
                     setComposedProduct={setComposedProduct}
                   />

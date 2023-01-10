@@ -302,7 +302,7 @@ export default function ProductPriceScheduleAssignments({
               </Button>
             </Tooltip>
           </HStack>
-          <Heading size={{base: "md", md: "lg", lg: "xl"}}>
+          <Heading size={{base: "sm", md: "md", lg: "md"}}>
             Price Schedules
           </Heading>{" "}
           {(isLoading || !composedProduct?.Product) && expanded ? (

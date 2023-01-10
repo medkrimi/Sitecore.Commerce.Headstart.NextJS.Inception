@@ -145,7 +145,7 @@ export default function ProductSuppliers({
           </HStack>
           <Heading
             position={"relative"}
-            size={{base: "md", md: "lg", lg: "xl"}}
+            size={{base: "sm", md: "md", lg: "md"}}
           >
             Supplier
             <Tag

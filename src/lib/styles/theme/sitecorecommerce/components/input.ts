@@ -1,8 +1,11 @@
+import {border} from "@chakra-ui/react"
+
 export const Input = {
   baseStyle: {
     field: {
       fontWeight: 400,
-      borderRadius: "md"
+      borderRadius: "md",
+      border: "1px solid"
     },
     addon: {
       border: "1px solid",
@@ -28,6 +31,9 @@ export const Input = {
       mb: "20px",
       field: {
         bg: "inputBg",
+        border: "1px"
+      },
+      _readonly: {
         border: "1px"
       }
     },

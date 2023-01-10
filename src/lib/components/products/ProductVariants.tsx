@@ -118,7 +118,7 @@ export default function ProductVariants({
               </Button>
             </Tooltip>
           </HStack>{" "}
-          <Heading size={{base: "md", md: "lg", lg: "xl"}}>Variants</Heading>
+          <Heading size={{base: "sm", md: "md", lg: "md"}}>Variants</Heading>
           {(isLoading || !composedProduct?.Product) && expanded ? (
             <Box pt={6} textAlign={"center"}>
               Updating... <BrandedSpinner />

@@ -179,7 +179,7 @@ export default function ProductData({
           ) : (
             <>
               <Heading
-                size={{base: "md", md: "lg", lg: "xl"}}
+                size={{base: "sm", md: "md", lg: "md"}}
                 mb={expanded ? 6 : 0}
               >
                 Product Data
@@ -195,22 +195,18 @@ export default function ProductData({
                       }
                     >
                       <Box width="full" pb={2}>
-                        <Text opacity={0.5} fontWeight={"bold"}>
-                          Product Name:*
-                        </Text>
+                        <Text>Product Name:</Text>
                         {isEditingBasicData ? (
                           <Input
                             value={formValues.name}
                             onChange={handleInputChange("name")}
                           />
                         ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {composedProduct?.Product?.Name}
-                          </Heading>
+                          <Input
+                            border={"1px"}
+                            value={composedProduct?.Product?.Name}
+                            readOnly
+                          />
                         )}
                       </Box>
                     </Tooltip>
@@ -218,50 +214,38 @@ export default function ProductData({
                       label={isEditingBasicData ? "ID is not changeable" : ""}
                     >
                       <Box width="full" pb={2}>
-                        <Text opacity={0.5} fontWeight={"bold"}>
-                          ID:
-                        </Text>
+                        <Text>ID:</Text>
                         {isEditingBasicData ? (
                           <Input
-                            disabled={true}
+                            readOnly
                             value={formValues.id}
                             onChange={handleInputChange("productId")}
                           />
                         ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {composedProduct?.Product?.ID}
-                          </Heading>
+                          <Input
+                            value={composedProduct?.Product?.ID}
+                            readOnly
+                          />
                         )}
                       </Box>
                     </Tooltip>
                     <Box width="full" pb={2}>
-                      <Text opacity={0.5} fontWeight={"bold"}>
-                        Description:
-                      </Text>
+                      <Text>Description:</Text>
                       {isEditingBasicData ? (
                         <Input
                           value={formValues.description}
                           onChange={handleInputChange("description")}
                         />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
-                          {composedProduct?.Product?.Description}
-                        </Heading>
+                        <Input
+                          value={composedProduct?.Product?.Description}
+                          readOnly
+                        />
                       )}
                     </Box>
                     <Tooltip label="When provided, no explicit PriceSchedule assignment is required. When a PriceSchedule assignment exists, it will override any default provided.">
                       <Box width="full" pb={2}>
-                        <Text opacity={0.5} fontWeight={"bold"}>
-                          Default Price Schedule ID:
-                        </Text>
+                        <Text>Default Price Schedule ID:</Text>
                         {isEditingBasicData ? (
                           <Input
                             value={formValues.defaultPriceScheduleId}
@@ -270,14 +254,13 @@ export default function ProductData({
                             )}
                           />
                         ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {composedProduct?.Product?.DefaultPriceScheduleID ??
-                              "Not set"}
-                          </Heading>
+                          <Input
+                            value={
+                              composedProduct?.Product
+                                ?.DefaultPriceScheduleID ?? "Not set"
+                            }
+                            readOnly
+                          />
                         )}
                       </Box>
                     </Tooltip>
@@ -285,52 +268,44 @@ export default function ProductData({
                   <Container>
                     <Tooltip label="Marketplace Owner or Supplier AddressID where the product will be shipped from. Can be used to calculate shipping costs.">
                       <Box width="full" pb={2}>
-                        <Text opacity={0.5} fontWeight={"bold"}>
-                          Ship from Address:
-                        </Text>
+                        <Text>Ship from Address:</Text>
                         {isEditingBasicData ? (
                           <Input
                             value={formValues.shipFromAddress}
                             onChange={handleInputChange("shipFromAddress")}
                           />
                         ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {composedProduct?.Product?.ShipFromAddressID ??
-                              "Not set"}
-                          </Heading>
+                          <Input
+                            value={
+                              composedProduct?.Product?.ShipFromAddressID ??
+                              "Not set"
+                            }
+                            readOnly
+                          />
                         )}
                       </Box>
                     </Tooltip>
                     <Tooltip label="If this property has a value and a SupplierID isn't explicitly passed when creating a LineItem, this SupplierID will be used.">
                       <Box width="full" pb={2}>
-                        <Text opacity={0.5} fontWeight={"bold"}>
-                          Default Supplier ID
-                        </Text>
+                        <Text>Default Supplier ID</Text>
                         {isEditingBasicData ? (
                           <Input
                             value={formValues?.defaultSupplierId}
                             onChange={handleInputChange("defaultSupplierId")}
                           />
                         ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {composedProduct?.Product?.DefaultSupplierID ??
-                              "Not set"}
-                          </Heading>
+                          <Input
+                            value={
+                              composedProduct?.Product?.DefaultSupplierID ??
+                              "Not set"
+                            }
+                            readOnly
+                          />
                         )}
                       </Box>
                     </Tooltip>
                     <Box width="full" pb={2}>
-                      <Text opacity={0.5} fontWeight={"bold"}>
-                        All Suppliers can sell?{" "}
-                      </Text>
+                      <Text>All Suppliers can sell? </Text>
                       {isEditingBasicData ? (
                         <Checkbox
                           isChecked={formValues.allSuppliersCanSell}
@@ -355,9 +330,7 @@ export default function ProductData({
                   <Container>
                     <Tooltip label="For reference only, does not influence any OrderCloud behavior. Used to indicate an amount per Quantity.">
                       <Box width="full" pb={2}>
-                        <Text opacity={0.5} fontWeight={"bold"}>
-                          Quantity Multiplier:
-                        </Text>
+                        <Text>Quantity Multiplier:</Text>
                         {isEditingBasicData ? (
                           <Input
                             type={"number"}
@@ -367,21 +340,18 @@ export default function ProductData({
                             )}
                           />
                         ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {composedProduct?.Product?.QuantityMultiplier ??
-                              "Not set"}
-                          </Heading>
+                          <Input
+                            value={
+                              composedProduct?.Product?.QuantityMultiplier ??
+                              "Not set"
+                            }
+                            readOnly
+                          />
                         )}
                       </Box>
                     </Tooltip>
                     <Box width="full" pb={2}>
-                      <Text opacity={0.5} fontWeight={"bold"}>
-                        Returnable?{" "}
-                      </Text>
+                      <Text>Returnable? </Text>
                       {isEditingBasicData ? (
                         <Checkbox
                           isChecked={formValues.returnable}
@@ -402,9 +372,7 @@ export default function ProductData({
                       )}
                     </Box>
                     <Box width="full" pb={2}>
-                      <Text opacity={0.5} fontWeight={"bold"}>
-                        Is Active{" "}
-                      </Text>
+                      <Text>Is Active </Text>
                       {isEditingBasicData ? (
                         <Checkbox
                           isChecked={formValues.isActive}
