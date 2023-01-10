@@ -41,7 +41,7 @@ const BuyerListItem = () => {
 const ProtectedBuyerListItem = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
-      <Box padding="20px">
+      <Box padding="GlobalPadding">
         <BuyerListItem />
       </Box>
     </ProtectedContent>

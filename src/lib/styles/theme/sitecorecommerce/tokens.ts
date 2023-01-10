@@ -29,5 +29,8 @@ export const semanticTokens = {
       default: "white",
       _dark: "gray.800"
     }
+  },
+  space: {
+    GlobalPadding: "16px"
   }
 }

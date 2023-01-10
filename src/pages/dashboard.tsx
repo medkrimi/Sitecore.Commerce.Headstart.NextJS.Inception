@@ -293,7 +293,7 @@ const Dashboard = () => {
                   <Link>
                     <Card
                       showclosebutton="false"
-                      p="28px 10px 0px 0px"
+                      p="0px"
                       mb={{sm: "26px", lg: "0px"}}
                       bg={boxBgColor}
                       color={color}
@@ -302,7 +302,6 @@ const Dashboard = () => {
                         justifyContent="space-around"
                         w="100%"
                         width="full"
-                        p="26px"
                       >
                         <Heading size="md">
                           Products
@@ -339,7 +338,7 @@ const Dashboard = () => {
                   <Link>
                     <Card
                       showclosebutton="false"
-                      p="28px 10px 0px 0px"
+                      p="0px"
                       mb={{sm: "26px", lg: "0px"}}
                       bg={boxBgColor}
                       color={color}
@@ -348,7 +347,6 @@ const Dashboard = () => {
                         justifyContent="space-around"
                         w="100%"
                         width="full"
-                        p="26px"
                       >
                         <Heading size="md">
                           Orders
@@ -382,7 +380,7 @@ const Dashboard = () => {
                   <Link>
                     <Card
                       showclosebutton="false"
-                      p="28px 10px 0px 0px"
+                      p="0px"
                       mb={{sm: "26px", lg: "0px"}}
                       bg={boxBgColor}
                       color={color}
@@ -391,7 +389,6 @@ const Dashboard = () => {
                         justifyContent="space-around"
                         w="100%"
                         width="full"
-                        p="26px"
                         direction={{base: "column", md: "row"}}
                       >
                         <Heading size="md">
@@ -426,7 +423,7 @@ const Dashboard = () => {
                   <Link>
                     <Card
                       showclosebutton="false"
-                      p="28px 10px 0px 0px"
+                      p="0px"
                       mb={{sm: "26px", lg: "0px"}}
                       bg={boxBgColor}
                       color={color}
@@ -435,7 +432,6 @@ const Dashboard = () => {
                         justifyContent="space-around"
                         w="100%"
                         width="full"
-                        p="26px"
                       >
                         <Heading size="md">
                           Promotions

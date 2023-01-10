@@ -32,6 +32,7 @@ const Layout = (props) => {
         as="section"
         mt="89px"
         justify="space-between"
+        gap="GlobalPadding"
       >
         <LeftNavigation />
         <Container maxW="full">

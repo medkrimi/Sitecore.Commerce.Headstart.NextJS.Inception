@@ -155,7 +155,7 @@ const UsersList = () => {
 
   return (
     <>
-      <Box padding="20px">
+      <Box padding="GlobalPadding">
         <HStack justifyContent="space-between" w="100%" mb={5}>
           <Button
             onClick={() =>
