@@ -104,43 +104,6 @@ const MobileSideBarMenu = () => {
           </ProtectedContent>
         </Flex>
       </Flex>
-      <Flex
-        justify="center"
-        direction="column"
-        align="center"
-        w="100%"
-        width="full"
-        pb="30px"
-        pt="50px"
-      >
-        <Image src="/images/SidebarHelpImage.png" w="90px" alt="" />
-        <Flex
-          direction="column"
-          align="center"
-          textAlign="center"
-          mb="12px"
-          me="24px"
-          w="100%"
-          width="full"
-        >
-          <Text fontSize="12px" fontWeight="bold">
-            Need help?
-          </Text>
-          <Text fontSize="10px">Please check our docs.</Text>
-        </Flex>
-        <Link href="#">
-          <Button
-            size="sm"
-            fontWeight="bold"
-            minW="185px"
-            m="0"
-            fontSize="10px"
-            color="gray.500"
-          >
-            Documentation
-          </Button>
-        </Link>
-      </Flex>
     </>
   )
 }
