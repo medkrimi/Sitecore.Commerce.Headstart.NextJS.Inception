@@ -43,7 +43,6 @@ const CatalogsList = () => {
 
   async function initCatalogsData(buyerid) {
     const catalogsList = await catalogsService.getCatalogsbyBuyerID(buyerid)
-    console.log(catalogsList)
     setCatalogs(catalogsList.Items)
   }
 

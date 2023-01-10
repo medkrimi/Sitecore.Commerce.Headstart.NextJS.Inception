@@ -1,11 +1,11 @@
-import {Category, UserGroup} from "ordercloud-javascript-sdk"
-import {categoriesService, userGroupsService} from "lib/api"
 import {useEffect, useState} from "react"
 
 import {AddEditForm} from "lib/components/categories/AddEditForm"
 import {Box} from "@chakra-ui/react"
+import {Category} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
+import {categoriesService} from "lib/api"
 import {useRouter} from "next/router"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
@@ -24,30 +24,31 @@ export async function getServerSideProps() {
   }
 }
 
-const CategoryListItem = () => {
+const CategoryListItem = (props) => {
   const router = useRouter()
   const [category, setCategory] = useState({} as Category)
   useEffect(() => {
-    if (router.query.categoryid) {
-      categoriesService
-        .getById(router.query.catalogid, router.query.categoryid)
-        .then((category) => setCategory(category))
-    }
-  }, [router.query.catalogid, router.query.categoryid])
+    const categoryid = props.selectedNode?.id || router.query.categoryid
+    categoriesService
+      .getById(router.query.catalogid, categoryid)
+      .then((category) => {
+        setCategory(category)
+      })
+  }, [props.selectedNode, router.query.catalogid, router.query.categoryid])
   return (
     <>
       {category?.ID ? <AddEditForm category={category} /> : <div> Loading</div>}
     </>
   )
 }
-const ProtectedBuyerListItem = () => {
+const ProtectedCategoryListItem = (props) => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
       <Box padding="20px">
-        <CategoryListItem />
+        <CategoryListItem {...props} />
       </Box>
     </ProtectedContent>
   )
 }
 
-export default ProtectedBuyerListItem
+export default ProtectedCategoryListItem

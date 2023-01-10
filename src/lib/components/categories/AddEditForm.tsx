@@ -7,6 +7,7 @@ import {
   Container,
   Flex,
   Heading,
+  Link,
   Stack
 } from "@chakra-ui/react"
 import {Catalog, Category} from "ordercloud-javascript-sdk"
@@ -20,8 +21,9 @@ import {
 } from "formik-chakra-ui"
 
 import Card from "../card/Card"
+import {DeleteIcon} from "@chakra-ui/icons"
 import {Formik} from "formik"
-import {catalogsService} from "lib/api"
+import {categoriesService} from "lib/api"
 import {useRouter} from "next/router"
 import {useToast} from "@chakra-ui/react"
 import {xpHelper} from "lib/utils/xp.utils"
@@ -34,6 +36,7 @@ interface AddEditFormProps {
 }
 function AddEditForm({category}: AddEditFormProps) {
   const isAddMode = !category
+  console.log(category)
   const router = useRouter()
   const toast = useToast()
   // form validation rules
@@ -68,10 +71,15 @@ function AddEditForm({category}: AddEditFormProps) {
 
   async function createCatalog(fields, setSubmitting) {
     try {
-      const createdCatalog = await catalogsService.create(fields)
-      await catalogsService.saveAssignment(
+      const createdCatalog = await categoriesService.create(
+        router.query.catalogid,
+        fields
+      )
+      await categoriesService.saveAssignment(
+        router.query.catalogid,
+        createdCatalog.ID,
         router.query.buyerid,
-        createdCatalog.ID
+        router.query.usergroupid
       )
       toast({
         id: fields.ID + "-created",
@@ -82,7 +90,9 @@ function AddEditForm({category}: AddEditFormProps) {
         isClosable: true,
         position: "top"
       })
-      router.push(`/buyers/${router.query.buyerid}/catalogs`)
+      router.push(
+        `/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories`
+      )
     } catch (e) {
       setSubmitting(false)
     }
@@ -90,10 +100,15 @@ function AddEditForm({category}: AddEditFormProps) {
 
   async function updateCatalog(fields, setSubmitting) {
     try {
-      const updatedCatalog = await catalogsService.update(fields)
-      await catalogsService.saveAssignment(
+      const updatedCatalog = await categoriesService.update(
+        router.query.catalogid,
+        fields
+      )
+      await categoriesService.saveAssignment(
+        router.query.catalogid,
+        updatedCatalog.ID,
         router.query.buyerid,
-        updatedCatalog.ID
+        router.query.usergroupid
       )
       toast({
         id: fields.ID + "-updated",
@@ -104,9 +119,36 @@ function AddEditForm({category}: AddEditFormProps) {
         isClosable: true,
         position: "top"
       })
-      router.push(`/buyers/${router.query.buyerid}/catalogs`)
+      router.push(
+        `/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories`
+      )
     } catch (e) {
       setSubmitting(false)
+    }
+  }
+
+  async function deleteCategory(categoryid) {
+    try {
+      await categoriesService.delete(router.query.catalogid, categoryid)
+      toast({
+        id: categoryid + "-deleted",
+        title: "Success",
+        description: "Category deleted successfully.",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top"
+      })
+    } catch (e) {
+      toast({
+        id: categoryid + "fail-deleted",
+        title: "Error",
+        description: "Category delete failed",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top"
+      })
     }
   }
 
@@ -115,6 +157,7 @@ function AddEditForm({category}: AddEditFormProps) {
       <Card variant="primaryCard">
         <Flex flexDirection="column" p="10">
           <Formik
+            enableReinitialize
             initialValues={formOptions.defaultValues}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
@@ -156,12 +199,21 @@ function AddEditForm({category}: AddEditFormProps) {
                     </Button>
                     <Button
                       onClick={() =>
-                        router.push(`/buyers/${router.query.buyerid}/catalogs`)
+                        router.push(
+                          `/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories`
+                        )
                       }
                       variant="secondaryButton"
                       isLoading={isSubmitting}
                     >
                       Cancel
+                    </Button>
+                    <Button
+                      variant="secondaryButton"
+                      onClick={() => deleteCategory(values.ID)}
+                      leftIcon={<DeleteIcon />}
+                    >
+                      Delete
                     </Button>
                   </ButtonGroup>
                 </Stack>

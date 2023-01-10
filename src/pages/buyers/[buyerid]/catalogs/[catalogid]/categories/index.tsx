@@ -4,19 +4,24 @@ import {
   Button,
   ButtonGroup,
   Container,
+  Grid,
+  GridItem,
   HStack,
   Heading,
   Icon,
   Text,
   useToast
 } from "@chakra-ui/react"
-import {useEffect, useState} from "react"
+import {useEffect, useRef, useState} from "react"
 
 import Card from "lib/components/card/Card"
 import CategoriesDataTable from "lib/components/datatable/datatable"
 import Link from "lib/components/navigation/Link"
+import ProtectedCategoryListItem from "./[categoryid]"
 import React from "react"
+import TreeView from "lib/components/dndtreeview/TreeView"
 import {categoriesService} from "lib/api"
+import {ocNodeModel} from "@minoru/react-dnd-treeview"
 import {useRouter} from "next/router"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
@@ -35,8 +40,10 @@ export async function getServerSideProps() {
   }
 }
 
-const CategoriesList = () => {
+const CategoriesList = (props) => {
   const [categories, setCategories] = useState([])
+  const [categoriesTreeView, setCategoriesTreeView] = useState([])
+  const [selectedNode, setSelectedNode] = useState<ocNodeModel>(null)
   const router = useRouter()
   const toast = useToast()
   useEffect(() => {
@@ -45,10 +52,23 @@ const CategoriesList = () => {
 
   async function initCategoriesData(catalogid) {
     const categoriesList = await categoriesService.list(catalogid)
-    console.log(catalogid)
-    console.log(categoriesList.Items)
     setCategories(categoriesList.Items)
+    setCategoriesTreeView(await buildTreeView(categoriesList.Items))
   }
+
+  async function buildTreeView(treeData: any[]) {
+    return treeData.map((item) => {
+      return {
+        id: item.ID,
+        parent: item.ParentID ? item.ParentID : "-",
+        text: item.Name,
+        type: "category",
+        droppable: true,
+        data: item
+      }
+    })
+  }
+  const handleSelect = (node: ocNodeModel) => setSelectedNode(node)
 
   async function deleteCategory(categoryid) {
     try {
@@ -144,6 +164,38 @@ const CategoriesList = () => {
             tableData={categories}
             columnsData={columnsData}
           />
+        </Card>
+        <Card variant="primaryCard">
+          <Grid
+            templateAreas={`"header header"
+                  "nav main"
+                  "nav footer"`}
+            gridTemplateRows={"auto 1fr 30px"}
+            gridTemplateColumns={"auto 1fr"}
+            h="auto"
+            gap="1"
+            color="blackAlpha.700"
+            fontWeight="bold"
+          >
+            <GridItem pl="2" area={"header"}></GridItem>
+            <GridItem pl="2" area={"nav"}>
+              <TreeView
+                treeData={categoriesTreeView}
+                selectedNode={selectedNode}
+                handleSelect={handleSelect}
+                {...props}
+              />
+            </GridItem>
+            <GridItem pl="2" area={"main"}>
+              <ProtectedCategoryListItem
+                selectedNode={selectedNode}
+                {...props}
+              />
+            </GridItem>
+            <GridItem pl="2" area={"footer"}>
+              Common element
+            </GridItem>
+          </Grid>
         </Card>
       </Box>
     </>

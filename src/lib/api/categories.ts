@@ -1,8 +1,4 @@
-import {
-  Categories,
-  CategoryAssignment,
-  CategoryProductAssignment
-} from "ordercloud-javascript-sdk"
+import {Categories, CategoryAssignment} from "ordercloud-javascript-sdk"
 
 export const categoriesService = {
   list,
@@ -17,7 +13,7 @@ export const categoriesService = {
 
 async function list(catalogID) {
   console.log("categoriesService::List")
-  return await Categories.List(catalogID)
+  return await Categories.List(catalogID, {depth: "99"})
 }
 
 async function listAssignements(catalogID) {
@@ -27,6 +23,7 @@ async function listAssignements(catalogID) {
 
 async function getById(catalogID, categoryID) {
   console.log("categoriesService::getById")
+  console.log(categoryID)
   return await Categories.Get(catalogID, categoryID)
 }
 
