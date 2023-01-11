@@ -102,6 +102,54 @@ export const styles = {
             }
           }
         }
+      },
+      ".TreeView_app__mdeVn": {
+        div: {
+          p: {
+            display: "none"
+          }
+        },
+        ".tree-node": {
+          py: "20px",
+          _hover: {
+            bgColor: "gray.200"
+          }
+        },
+        ul: {
+          listStyle: "none",
+          border: "0px",
+          li: {
+            fontWeight: 500,
+            borderBottom: "1px",
+            borderColor: "gray.200",
+            cursor: "pointer",
+            _first: {
+              borderTop: "1px",
+              borderColor: "gray.200"
+            },
+            svg: {
+              //display: "none"
+            },
+            ul: {
+              marginTop: "0px",
+              li: {
+                _last: {
+                  borderBottom: "0px"
+                  // borderColor: "gray.200"
+                },
+                ul: {
+                  marginTop: "0px",
+                  li: {
+                    _last: {
+                      borderBottom: "0px"
+                      // borderColor: "gray.200"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

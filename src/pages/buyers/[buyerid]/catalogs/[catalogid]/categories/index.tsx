@@ -178,7 +178,7 @@ const CategoriesList = (props) => {
             fontWeight="bold"
           >
             <GridItem pl="2" area={"header"}></GridItem>
-            <GridItem pl="2" area={"nav"}>
+            <GridItem pl="2" area={"nav"} width="300px">
               <TreeView
                 treeData={categoriesTreeView}
                 selectedNode={selectedNode}
@@ -192,9 +192,7 @@ const CategoriesList = (props) => {
                 {...props}
               />
             </GridItem>
-            <GridItem pl="2" area={"footer"}>
-              Common element
-            </GridItem>
+            <GridItem pl="2" area={"footer"}></GridItem>
           </Grid>
         </Card>
       </Box>

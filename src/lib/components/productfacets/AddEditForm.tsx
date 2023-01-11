@@ -160,6 +160,7 @@ function AddEditForm({productfacet}: AddEditFormProps) {
       <Card variant="primaryCard">
         <Flex flexDirection="column" p="10">
           <Formik
+            enableReinitialize
             initialValues={formOptions.defaultValues}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
