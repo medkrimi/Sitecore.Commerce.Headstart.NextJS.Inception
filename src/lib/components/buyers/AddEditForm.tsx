@@ -1,13 +1,7 @@
 import * as Yup from "yup"
 
 import {Box, Button, ButtonGroup, Flex, Stack} from "@chakra-ui/react"
-import {
-  InputControl,
-  NumberInputControl,
-  PercentComplete,
-  SelectControl,
-  SwitchControl
-} from "formik-chakra-ui"
+import {InputControl, NumberInputControl, PercentComplete, SelectControl, SwitchControl} from "formik-chakra-ui"
 
 import {Buyer} from "ordercloud-javascript-sdk"
 import Card from "../card/Card"
@@ -98,11 +92,7 @@ function AddEditForm({buyer}: AddEditFormProps) {
     <>
       <Card variant="primaryCard">
         <Flex flexDirection="column" p="10">
-          <Formik
-            initialValues={formOptions.defaultValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}
-          >
+          <Formik initialValues={formOptions.defaultValues} validationSchema={validationSchema} onSubmit={onSubmit}>
             {({
               // most of the usefull available Formik props
               values,
@@ -129,27 +119,16 @@ function AddEditForm({buyer}: AddEditFormProps) {
                     <option value="PlayShop1">catalog 2</option>
                     <option value="PlayShop2">catalog 3</option>
                   </SelectControl>
-                  <NumberInputControl
-                    name="xp_MarkupPercent"
-                    label="Markup percent"
-                  />
+                  <NumberInputControl name="xp_MarkupPercent" label="Markup percent" />
                   <InputControl name="xp_URL" label="Url" />
 
                   {isAddMode ? (
                     <PercentComplete />
                   ) : (
-                    <InputControl
-                      name="DateCreated"
-                      label="Date created"
-                      isReadOnly
-                    />
+                    <InputControl name="DateCreated" label="Date created" isReadOnly />
                   )}
                   <ButtonGroup>
-                    <Button
-                      variant="primaryButton"
-                      type="submit"
-                      isLoading={isSubmitting}
-                    >
+                    <Button variant="primaryButton" type="submit" isLoading={isSubmitting}>
                       Save
                     </Button>
                     <Button
@@ -162,11 +141,7 @@ function AddEditForm({buyer}: AddEditFormProps) {
                     >
                       Reset
                     </Button>
-                    <Button
-                      onClick={() => router.push("/buyers")}
-                      variant="secondaryButton"
-                      isLoading={isSubmitting}
-                    >
+                    <Button onClick={() => router.push("/buyers")} variant="secondaryButton" isLoading={isSubmitting}>
                       Cancel
                     </Button>
                   </ButtonGroup>
