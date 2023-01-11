@@ -43,7 +43,6 @@ const CatalogsList = () => {
 
   async function initCatalogsData(buyerid) {
     const catalogsList = await catalogsService.getCatalogsbyBuyerID(buyerid)
-    console.log(catalogsList)
     setCatalogs(catalogsList.Items)
   }
 
@@ -106,7 +105,14 @@ const CatalogsList = () => {
     },
     {
       Header: "Category Count",
-      accessor: "CategoryCount"
+      accessor: "CategoryCount",
+      Cell: ({row, value}) => (
+        <Link
+          href={`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}/categories`}
+        >
+          <Button variant="secondaryButton">Categories ({value})</Button>
+        </Link>
+      )
     },
     {
       Header: "Marketplace",

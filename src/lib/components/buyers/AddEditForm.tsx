@@ -26,7 +26,6 @@ interface AddEditFormProps {
 
 function AddEditForm({buyer}: AddEditFormProps) {
   const isAddMode = !buyer
-  console.log(isAddMode)
   const router = useRouter()
   const toast = useToast()
   // form validation rules

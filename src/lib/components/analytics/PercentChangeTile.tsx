@@ -12,6 +12,7 @@ export default function PercentChangeTitle(prop) {
       mb={{sm: "0px", lg: "0px"}}
       bg={bgColor}
       showclosebutton="false"
+      h="full"
     >
       <Flex direction="column" alignSelf="flex-start">
         <Text
@@ -32,7 +33,7 @@ export default function PercentChangeTitle(prop) {
             </Text>
           ) : (
             <Text as="span" color="red.400" fontWeight="bold" pr="15px">
-              - {prop.percentchange}%
+              {prop.percentchange}%
             </Text>
           )}
           {prop.percentlabel}

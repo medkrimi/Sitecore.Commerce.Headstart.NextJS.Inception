@@ -11,10 +11,14 @@ let previousMonthYear = d.getFullYear()
 if (d.getMonth() === 0) {
   previousMonthYear = d.getFullYear() - 1
 }
+let mockData
+if (!process.env.NEXT_PUBLIC_OC_USELIVEDATA) {
+  mockData = require("../mockdata/dashboard_data.json")
+}
 
 export const dashboardService = {
-  getTodaysSales,
-  getPreviousTodaysSales,
+  getTodaysMoney,
+  getPreviousTodaysMoney,
   getTotalSales,
   getPreviousTotalSales,
   getTotalUsers,
@@ -26,68 +30,98 @@ export const dashboardService = {
   //getTotalSalesPreviousYearByMonth
 }
 
-async function getTodaysSales() {
+async function getTodaysMoney() {
   // Total Sales todate this month
   //console.log("dashboardService::getTodaysSales")
-  const ordersList = await Orders.List("All", {
-    filters: {
-      DateCreated: [
-        ">" + year + "-" + month + "-01",
-        "<" + year + "-" + month + "-" + day
-      ]
-    }
-  })
-  const result = ordersList.Items.reduce((accumulator, obj) => {
-    return accumulator + obj.Total
-  }, 0)
+  let result
+
+  if (process.env.NEXT_PUBLIC_OC_USELIVEDATA) {
+    const ordersList = await Orders.List("All", {
+      filters: {
+        DateCreated: [
+          ">" + year + "-" + month + "-01",
+          "<" + year + "-" + month + "-" + day
+        ]
+      }
+    })
+    result = ordersList.Items.reduce((accumulator, obj) => {
+      return accumulator + obj.Total
+    }, 0)
+  } else {
+    result = mockData.todaysmoney.totalamount
+  }
   return await result
 }
 
-async function getPreviousTodaysSales() {
+async function getPreviousTodaysMoney() {
   // Total Sales todate last month
   // console.log("dashboardService::getPreviousTodaysSales")
-  const ordersList = await Orders.List("All", {
-    filters: {
-      DateCreated: [
-        ">" + previousMonthYear + "-" + previousMonth + "-01",
-        "<" + previousMonthYear + "-" + previousMonth + "-" + day
-      ]
-    }
-  })
-  const result = ordersList.Items.reduce((accumulator, obj) => {
-    return accumulator + obj.Total
-  }, 0)
+  let result
+
+  if (process.env.NEXT_PUBLIC_OC_USELIVEDATA) {
+    const ordersList = await Orders.List("All", {
+      filters: {
+        DateCreated: [
+          ">" + previousMonthYear + "-" + previousMonth + "-01",
+          "<" + previousMonthYear + "-" + previousMonth + "-" + day
+        ]
+      }
+    })
+    result = ordersList.Items.reduce((accumulator, obj) => {
+      return accumulator + obj.Total
+    }, 0)
+  } else {
+    result = mockData.todaysmoney.previoustotalamount
+  }
+
   return await result
 }
 
 async function getTotalSales() {
   // Total Sales todate this month
   // console.log("dashboardService::getTotalSales")
-  const ordersList = await Orders.List("All", {
-    filters: {
-      DateCreated: [">" + year + "-01-01", "<" + year + "-" + month + "-" + day]
-    }
-  })
-  const result = ordersList.Items.reduce((accumulator, obj) => {
-    return accumulator + obj.Total
-  }, 0)
+  let result
+
+  if (process.env.NEXT_PUBLIC_OC_USELIVEDATA) {
+    const ordersList = await Orders.List("All", {
+      filters: {
+        DateCreated: [
+          ">" + year + "-01-01",
+          "<" + year + "-" + month + "-" + day
+        ]
+      }
+    })
+    result = ordersList.Items.reduce((accumulator, obj) => {
+      return accumulator + obj.Total
+    }, 0)
+  } else {
+    result = mockData.totalsales.totalamount
+  }
+
   return await result
 }
 
 async function getPreviousTotalSales() {
   // Total Sales todate last month
   // console.log("dashboardService::getPreviousTotalSales")
-  const ordersList = await Orders.List("All", {
-    filters: {
-      DateCreated: [
-        ">" + (year - 1) + "-01-01",
-        "<" + (year - 1) + "-" + month + "-" + day
-      ]
-    }
-  })
-  const result = ordersList.Items.reduce((accumulator, obj) => {
-    return accumulator + obj.Total
-  }, 0)
+  let result
+
+  if (process.env.NEXT_PUBLIC_OC_USELIVEDATA) {
+    const ordersList = await Orders.List("All", {
+      filters: {
+        DateCreated: [
+          ">" + (year - 1) + "-01-01",
+          "<" + (year - 1) + "-" + month + "-" + day
+        ]
+      }
+    })
+    result = ordersList.Items.reduce((accumulator, obj) => {
+      return accumulator + obj.Total
+    }, 0)
+  } else {
+    result = mockData.totalsales.previoustotalamount
+  }
+
   return await result
 }
 
@@ -125,51 +159,85 @@ async function getPreviousTotalSales() {
 async function getTotalUsers() {
   // Total Users todate this month
   //console.log("dashboardService::getTotalUsers")
-  const usersList = await Orders.List("All", {
-    filters: {
-      DateCreated: [">" + year + "-01-01", "<" + year + "-" + month + "-" + day]
-    }
-  })
-  const result = usersList.Items.length
+  let result
+
+  if (process.env.NEXT_PUBLIC_OC_USELIVEDATA) {
+    const usersList = await Orders.List("All", {
+      filters: {
+        DateCreated: [
+          ">" + year + "-01-01",
+          "<" + year + "-" + month + "-" + day
+        ]
+      }
+    })
+    result = usersList.Items.length
+  } else {
+    result = mockData.totalusers.totalamount
+  }
+
   return await result
 }
 async function getPreviousTotalUsers() {
   // Total Users todate this month
   //console.log("dashboardService::getTotalUsers")
-  const usersList = await Orders.List("All", {
-    filters: {
-      DateCreated: [
-        ">" + (year - 1) + "-01-01",
-        "<" + (year - 1) + "-" + month + "-" + day
-      ]
-    }
-  })
-  const result = usersList.Items.length
+  let result
+
+  if (process.env.NEXT_PUBLIC_OC_USELIVEDATA) {
+    const usersList = await Orders.List("All", {
+      filters: {
+        DateCreated: [
+          ">" + (year - 1) + "-01-01",
+          "<" + (year - 1) + "-" + month + "-" + day
+        ]
+      }
+    })
+    result = usersList.Items.length
+  } else {
+    result = mockData.totalusers.previoustotalamount
+  }
+
   return await result
 }
 
 async function getTotalNewUsers() {
   // Total Users todate this month
   //console.log("dashboardService::getTotalUsers")
-  const usersList = await Orders.List("All", {
-    filters: {
-      DateCreated: [">" + year + "-01-01", "<" + year + "-" + month + "-" + day]
-    }
-  })
-  const result = usersList.Items.length
+  let result
+
+  if (process.env.NEXT_PUBLIC_OC_USELIVEDATA) {
+    const usersList = await Orders.List("All", {
+      filters: {
+        DateCreated: [
+          ">" + year + "-01-01",
+          "<" + year + "-" + month + "-" + day
+        ]
+      }
+    })
+    result = usersList.Items.length
+  } else {
+    result = mockData.newusers.totalamount
+  }
+
   return await result
 }
 async function getPreviousTotalNewUsers() {
   // Total Users todate this month
   //console.log("dashboardService::getTotalUsers")
-  const usersList = await Orders.List("All", {
-    filters: {
-      DateCreated: [
-        ">" + previousMonthYear + "-" + previousMonth + "-01",
-        "<" + previousMonthYear + "-" + previousMonth + "-" + day
-      ]
-    }
-  })
-  const result = usersList.Items.length
+  let result
+
+  if (process.env.NEXT_PUBLIC_OC_USELIVEDATA) {
+    const usersList = await Orders.List("All", {
+      filters: {
+        DateCreated: [
+          ">" + previousMonthYear + "-" + previousMonth + "-01",
+          "<" + previousMonthYear + "-" + previousMonth + "-" + day
+        ]
+      }
+    })
+    result = usersList.Items.length
+  } else {
+    result = mockData.newusers.previoustotalamount
+  }
+
   return await result
 }
