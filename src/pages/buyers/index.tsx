@@ -1,5 +1,5 @@
+import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
 import {Box, Button, ButtonGroup, HStack, Icon, Text, useToast} from "@chakra-ui/react"
-import {DeleteIcon, EditIcon} from "@chakra-ui/icons"
 import {buyersService, catalogsService, userGroupsService, usersService} from "lib/api"
 import {useEffect, useState} from "react"
 

@@ -1,26 +1,26 @@
 import {Promotions} from "ordercloud-javascript-sdk"
 
 export const promotionsService = {
-  getAll,
+  list,
   getById,
   create,
   update,
   delete: _delete
 }
 
-async function getAll() {
-  //console.log("promotionsService::getAll")
+async function list() {
+  console.log("promotionsService::getAll")
   return await Promotions.List()
 }
 
 async function getById(id) {
-  //console.log("promotionsService::getById")
+  console.log("promotionsService::getById")
+  console.log(id)
   return await Promotions.Get(id)
 }
 
 async function create(fields) {
-  //console.log("promotionsService::create")
-  //console.log(fields)
+  console.log("promotionsService::create")
   //Demo sample : By default OrderCloud will assign a unique ID to the newly created order.
   //Customizing the ID generation business logic here for Demo purpose.
   fields.ID = fields.Name.toLowerCase()
@@ -35,7 +35,7 @@ async function create(fields) {
 async function update(fields) {
   //console.log("promotionsService::update")
   //console.log(fields)
-  //Promotions.Patch(fields.ID, fields)
+  Promotions.Patch(fields.ID, fields)
 }
 
 // prefixed with underscored because delete is a reserved word in javascript

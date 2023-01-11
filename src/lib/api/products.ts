@@ -1,14 +1,14 @@
 import {Products} from "ordercloud-javascript-sdk"
 
 export const productsService = {
-  getAll,
+  list,
   getById,
   create,
   update,
   delete: _delete
 }
 
-async function getAll() {
+async function list() {
   //console.log("productsService::getAll")
   return await Products.List()
 }
