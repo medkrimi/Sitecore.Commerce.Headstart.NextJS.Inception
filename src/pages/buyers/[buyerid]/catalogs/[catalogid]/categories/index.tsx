@@ -17,7 +17,8 @@ import {useEffect, useRef, useState} from "react"
 import Card from "lib/components/card/Card"
 import CategoriesDataTable from "lib/components/datatable/datatable"
 import Link from "lib/components/navigation/Link"
-import ProtectedCategoryListItem from "./[categoryid]"
+import ProtectedAddEditForm from "./add"
+import ProtectedCategoryItem from "./[categoryid]"
 import React from "react"
 import TreeView from "lib/components/dndtreeview/TreeView"
 import {categoriesService} from "lib/api"
@@ -32,7 +33,7 @@ export async function getServerSideProps() {
         title: "Categories List",
         metas: {
           hasBreadcrumbs: true,
-          hasBuyerContextSwitch: true
+          hasBuyerContextSwitch: false
         }
       },
       revalidate: 5 * 60
@@ -152,9 +153,6 @@ const CategoriesList = (props) => {
           </HStack>
         </HStack>
         <Card variant="primaryCard">
-          <CategoriesDataTable tableData={categories} columnsData={columnsData} />
-        </Card>
-        <Card variant="primaryCard">
           <Grid
             templateAreas={`"header header"
                   "nav main"
@@ -176,7 +174,21 @@ const CategoriesList = (props) => {
               />
             </GridItem>
             <GridItem pl="2" area={"main"}>
-              <ProtectedCategoryListItem selectedNode={selectedNode} {...props} />
+              {selectedNode ? (
+                <>
+                  <Heading as="h5" size="md" noOfLines={1}>
+                    Update the selected category
+                  </Heading>
+                  <ProtectedCategoryItem selectedNode={selectedNode} {...props} />
+                </>
+              ) : (
+                <>
+                  <Heading as="h5" size="md" noOfLines={1}>
+                    Create new category
+                  </Heading>
+                  <ProtectedAddEditForm />
+                </>
+              )}
             </GridItem>
             <GridItem pl="2" area={"footer"}></GridItem>
           </Grid>
