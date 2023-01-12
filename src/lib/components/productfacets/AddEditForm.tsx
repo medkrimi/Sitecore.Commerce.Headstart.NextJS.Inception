@@ -1,24 +1,7 @@
 import * as Yup from "yup"
 
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Flex,
-  FormLabel,
-  HStack,
-  Icon,
-  Input,
-  Stack,
-  Text
-} from "@chakra-ui/react"
-import {
-  InputControl,
-  NumberInputControl,
-  PercentComplete,
-  SelectControl,
-  SwitchControl
-} from "formik-chakra-ui"
+import {Box, Button, ButtonGroup, Flex, FormLabel, HStack, Icon, Input, Stack, Text} from "@chakra-ui/react"
+import {InputControl, NumberInputControl, PercentComplete, SelectControl, SwitchControl} from "formik-chakra-ui"
 
 import {ProductFacet} from "ordercloud-javascript-sdk"
 import Card from "../card/Card"
@@ -198,10 +181,7 @@ function AddEditForm({productfacet}: AddEditFormProps) {
                   /> */}
                   <InputControl name="Name" label="Product Facet Name" />
                   <FormLabel>
-                    Facet Options :
-                    <Text fontSize="sm">
-                      Create options for this facet group?
-                    </Text>
+                    Facet Options :<Text fontSize="sm">Create options for this facet group?</Text>
                   </FormLabel>
                   <Box id="facetlist" mt="GlobalPadding" mb="40px">
                     <HStack className="item-list">
@@ -250,15 +230,11 @@ function AddEditForm({productfacet}: AddEditFormProps) {
                           <input
                             type="text"
                             value={inputValue}
-                            onChange={(event) =>
-                              setInputValue(event.target.value)
-                            }
+                            onChange={(event) => setInputValue(event.target.value)}
                             className="add-item-input"
                             placeholder="Add a facet value..."
                           />
-                          {meta.touched && meta.error && (
-                            <div className="error">{meta.error}</div>
-                          )}
+                          {meta.touched && meta.error && <div className="error">{meta.error}</div>}
                         </div>
                       )}
                     </Field>
@@ -276,12 +252,7 @@ function AddEditForm({productfacet}: AddEditFormProps) {
                   <ButtonGroup>
                     <HStack justifyContent="space-between" w="100%" mb={5}>
                       <Box>
-                        <Button
-                          variant="primaryButton"
-                          type="submit"
-                          isLoading={isSubmitting}
-                          mr="15px"
-                        >
+                        <Button variant="primaryButton" type="submit" isLoading={isSubmitting} mr="15px">
                           Save
                         </Button>
                         <Button

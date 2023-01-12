@@ -1,22 +1,5 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControl,
-  FormLabel,
-  HStack,
-  Heading,
-  Input,
-  Text,
-  VStack
-} from "@chakra-ui/react"
-import {
-  ChangeEvent,
-  FormEvent,
-  FunctionComponent,
-  useCallback,
-  useState
-} from "react"
+import {Box, Button, Checkbox, FormControl, FormLabel, HStack, Heading, Input, Text, VStack} from "@chakra-ui/react"
+import {ChangeEvent, FormEvent, FunctionComponent, useCallback, useState} from "react"
 
 import Card from "../card/Card"
 import HeaderLogo from "../branding/HeaderLogo"
@@ -27,10 +10,7 @@ interface OcLoginFormProps {
   onLoggedIn: () => void
 }
 
-const OcLoginForm: FunctionComponent<OcLoginFormProps> = ({
-  title = "Sign into your account",
-  onLoggedIn
-}) => {
+const OcLoginForm: FunctionComponent<OcLoginFormProps> = ({title = "Sign into your account", onLoggedIn}) => {
   const {Login, isAuthenticated} = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [formValues, setFormValues] = useState({
@@ -39,38 +19,26 @@ const OcLoginForm: FunctionComponent<OcLoginFormProps> = ({
     remember: false
   })
 
-  const handleInputChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({...v, [fieldKey]: e.target.value}))
-    }
+  const handleInputChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({...v, [fieldKey]: e.target.value}))
+  }
 
-  const handleCheckboxChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
-    }
+  const handleCheckboxChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
+  }
 
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
       try {
         setIsLoading(true)
         e.preventDefault()
-        await Login(
-          formValues.identifier,
-          formValues.password,
-          formValues.remember
-        )
+        await Login(formValues.identifier, formValues.password, formValues.remember)
         onLoggedIn()
       } finally {
         setIsLoading(false)
       }
     },
-    [
-      formValues.identifier,
-      formValues.password,
-      formValues.remember,
-      onLoggedIn,
-      Login
-    ]
+    [formValues.identifier, formValues.password, formValues.remember, onLoggedIn, Login]
   )
 
   return (
@@ -132,12 +100,7 @@ const OcLoginForm: FunctionComponent<OcLoginFormProps> = ({
                 </HStack>
               </Box>
 
-              <Button
-                disabled={isLoading}
-                type="submit"
-                width="full"
-                onClick={handleSubmit}
-              >
+              <Button disabled={isLoading} type="submit" width="full" onClick={handleSubmit}>
                 Sign in
               </Button>
             </FormControl>

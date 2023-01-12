@@ -45,9 +45,7 @@ export interface ComposedProduct {
   Variants: RequiredDeep<Variant<any>>[]
 }
 
-export async function GetComposedProduct(
-  productId: string
-): Promise<ComposedProduct> {
+export async function GetComposedProduct(productId: string): Promise<ComposedProduct> {
   if (productId) {
     var product = await Products.Get(productId).catch()
     var specs = await Products.ListSpecs(productId).catch()
@@ -77,18 +75,13 @@ export async function GetCurrentOrder() {
   })
   const firstOrder = response.Items[0]
   if (firstOrder) {
-    const worksheet = await IntegrationEvents.GetWorksheet(
-      "Outgoing",
-      firstOrder.ID
-    )
+    const worksheet = await IntegrationEvents.GetWorksheet("Outgoing", firstOrder.ID)
     if (
       worksheet.Order.BillingAddress &&
       worksheet.ShipEstimateResponse &&
       worksheet.ShipEstimateResponse.ShipEstimates &&
       worksheet.ShipEstimateResponse.ShipEstimates.length &&
-      worksheet.ShipEstimateResponse.ShipEstimates.filter(
-        (se) => !se.SelectedShipMethodID
-      ).length === 0
+      worksheet.ShipEstimateResponse.ShipEstimates.filter((se) => !se.SelectedShipMethodID).length === 0
     ) {
       const response = await Payments.List("Outgoing", worksheet.Order.ID, {
         pageSize: 100

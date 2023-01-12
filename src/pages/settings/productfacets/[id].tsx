@@ -30,21 +30,11 @@ const ProductFacetsListItem = () => {
   const [productfacet, setProductFacet] = useState({} as ProductFacet)
   useEffect(() => {
     if (router.query.id) {
-      productfacetsService
-        .getById(router.query.id)
-        .then((productfacet) => setProductFacet(productfacet))
+      productfacetsService.getById(router.query.id).then((productfacet) => setProductFacet(productfacet))
     }
   }, [productfacet?.ID, router.query.id])
 
-  return (
-    <>
-      {productfacet?.ID ? (
-        <AddEditForm productfacet={productfacet} />
-      ) : (
-        <div> Loading</div>
-      )}
-    </>
-  )
+  return <>{productfacet?.ID ? <AddEditForm productfacet={productfacet} /> : <div> Loading</div>}</>
 }
 
 const ProtectedProductFacetsListItem = () => {

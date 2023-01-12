@@ -1,15 +1,5 @@
 import NextLink from "next/link"
-import {
-  Box,
-  Flex,
-  Tag,
-  Text,
-  Link,
-  VStack,
-  Heading,
-  useColorMode,
-  useColorModeValue
-} from "@chakra-ui/react"
+import {Box, Flex, Tag, Text, Link, VStack, Heading, useColorMode, useColorModeValue} from "@chakra-ui/react"
 import {ReactNode} from "react"
 
 const InformationNavigation = () => {

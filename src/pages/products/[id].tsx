@@ -16,10 +16,7 @@ import {
   VStack,
   useDisclosure
 } from "@chakra-ui/react"
-import {
-  ComposedProduct,
-  GetComposedProduct
-} from "lib/services/ordercloud.service"
+import {ComposedProduct, GetComposedProduct} from "lib/services/ordercloud.service"
 import {FiRefreshCw, FiTrash2} from "react-icons/fi"
 import {useEffect, useState} from "react"
 
@@ -81,10 +78,7 @@ const ProductDetails = () => {
   useEffect(() => {
     async function LoadProduct() {
       var product = await GetComposedProduct(id as string)
-      if (
-        product?.Product &&
-        composedProduct?.Product?.ID != product.Product.ID
-      ) {
+      if (product?.Product && composedProduct?.Product?.ID != product.Product.ID) {
         setComposedProduct(product)
       }
     }
@@ -108,8 +102,7 @@ const ProductDetails = () => {
             ml={5}
             display={{base: "block", sm: "inline-block", md: "none"}}
           >
-            Product Detail Page: {productName == "" ? "..." : null}{" "}
-            <i>{productName}</i>
+            Product Detail Page: {productName == "" ? "..." : null} <i>{productName}</i>
           </Heading>
           <VStack justifyContent={"space-between"} px={6} width={"full"}>
             <Heading
@@ -119,8 +112,7 @@ const ProductDetails = () => {
               size={{base: "md", sm: "md", md: "lg", lg: "lg", xl: "xl"}}
               display={{base: "none", sm: "none", md: "block"}}
             >
-              Product Detail Page: {productName == "" ? "..." : null}{" "}
-              <i>{productName}</i>
+              Product Detail Page: {productName == "" ? "..." : null} <i>{productName}</i>
             </Heading>
             <HStack
               justifyContent={{
@@ -143,9 +135,7 @@ const ProductDetails = () => {
                     "2xl": "15%"
                   }}
                   onClick={async (e) => {
-                    var product = await GetComposedProduct(
-                      composedProduct?.Product?.ID
-                    )
+                    var product = await GetComposedProduct(composedProduct?.Product?.ID)
                     setComposedProduct(product)
                   }}
                 >
@@ -193,29 +183,14 @@ const ProductDetails = () => {
                   <EditorialProgressBar product={composedProduct?.Product} />
                 </GridItem>
 
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 4}}
-                >
-                  <ProductData
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                <GridItem rowSpan={1} colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 4}}>
+                  <ProductData composedProduct={composedProduct} setComposedProduct={setComposedProduct} />
                 </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 2, xl: 2}}
-                >
-                  <ProductMediaInformation
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                <GridItem rowSpan={1} colSpan={{base: 6, md: 6, sm: 6, lg: 2, xl: 2}}>
+                  <ProductMediaInformation composedProduct={composedProduct} setComposedProduct={setComposedProduct} />
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={4}>
-                  <ProductXpInformation
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                  <ProductXpInformation composedProduct={composedProduct} setComposedProduct={setComposedProduct} />
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={4}>
                   <ProductPriceScheduleAssignments
@@ -223,82 +198,40 @@ const ProductDetails = () => {
                     setComposedProduct={setComposedProduct}
                   />
                 </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 3, xl: 2}}
-                >
-                  <ProductMeasurementData
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                <GridItem rowSpan={1} colSpan={{base: 6, md: 6, sm: 6, lg: 3, xl: 2}}>
+                  <ProductMeasurementData composedProduct={composedProduct} setComposedProduct={setComposedProduct} />
                 </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 3, xl: 4}}
-                >
-                  <ProductInventoryData
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                <GridItem rowSpan={1} colSpan={{base: 6, md: 6, sm: 6, lg: 3, xl: 4}}>
+                  <ProductInventoryData composedProduct={composedProduct} setComposedProduct={setComposedProduct} />
                 </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 4, xl: 2}}
-                >
+                <GridItem rowSpan={1} colSpan={{base: 6, md: 6, sm: 6, lg: 4, xl: 2}}>
                   <ProductCatalogAssignments
                     composedProduct={composedProduct}
                     setComposedProduct={setComposedProduct}
                   />
                 </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 4}}
-                >
-                  <ProductSuppliers
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                <GridItem rowSpan={1} colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 4}}>
+                  <ProductSuppliers composedProduct={composedProduct} setComposedProduct={setComposedProduct} />
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={2}>
-                  <ProductSpecs
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                  <ProductSpecs composedProduct={composedProduct} setComposedProduct={setComposedProduct} />
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={6}>
-                  <ProductVariants
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                  <ProductVariants composedProduct={composedProduct} setComposedProduct={setComposedProduct} />
                 </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 6}}
-                >
-                  <ProductInventoryRecords
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                <GridItem rowSpan={1} colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 6}}>
+                  <ProductInventoryRecords composedProduct={composedProduct} setComposedProduct={setComposedProduct} />
                 </GridItem>
               </Grid>
             </Container>
           </VStack>
         </>
 
-        <AlertDialog
-          motionPreset="slideInBottom"
-          leastDestructiveRef={cancelRef}
-          onClose={onClose}
-          isOpen={isOpen}
-        >
+        <AlertDialog motionPreset="slideInBottom" leastDestructiveRef={cancelRef} onClose={onClose} isOpen={isOpen}>
           <AlertDialogOverlay>
             <AlertDialogContent>
               {isDeleting ? (
-                <AlertDialogHeader
-                  textAlign={"center"}
-                  fontSize="lg"
-                  fontWeight="bold"
-                >
+                <AlertDialogHeader textAlign={"center"} fontSize="lg" fontWeight="bold">
                   Deleting... <BrandedSpinner />
                 </AlertDialogHeader>
               ) : (
@@ -307,9 +240,7 @@ const ProductDetails = () => {
                     Delete Product
                   </AlertDialogHeader>
 
-                  <AlertDialogBody>
-                    Are you sure? You can&apos;t undo this action afterwards.
-                  </AlertDialogBody>
+                  <AlertDialogBody>Are you sure? You can&apos;t undo this action afterwards.</AlertDialogBody>
 
                   <AlertDialogFooter>
                     <Button onClick={onClose}>Cancel</Button>

@@ -9,19 +9,9 @@ const FooterLogo = () => {
     <NextLink href="/" passHref>
       <Link>
         {colorMode === "dark" ? (
-          <Image
-            objectFit="inherit"
-            src="/Brand_Logo_White.png"
-            alt="Sitecore"
-            maxW="200px"
-          />
+          <Image objectFit="inherit" src="/Brand_Logo_White.png" alt="Sitecore" maxW="200px" />
         ) : (
-          <Image
-            objectFit="inherit"
-            src="/Brand_Logo.png"
-            alt="Sitecore"
-            maxW="200px"
-          />
+          <Image objectFit="inherit" src="/Brand_Logo.png" alt="Sitecore" maxW="200px" />
         )}
       </Link>
     </NextLink>

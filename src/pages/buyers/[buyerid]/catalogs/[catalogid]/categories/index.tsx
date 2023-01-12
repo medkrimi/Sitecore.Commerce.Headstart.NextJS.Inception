@@ -101,9 +101,7 @@ const CategoriesList = (props) => {
       Header: "Name",
       accessor: "Name",
       Cell: ({value, row}) => (
-        <Link
-          href={`/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories/${row.original.ID}`}
-        >
+        <Link href={`/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories/${row.original.ID}`}>
           {value}
         </Link>
       )
@@ -127,11 +125,7 @@ const CategoriesList = (props) => {
           >
             Edit
           </Button>
-          <Button
-            variant="secondaryButton"
-            onClick={() => deleteCategory(row.original.ID)}
-            leftIcon={<DeleteIcon />}
-          >
+          <Button variant="secondaryButton" onClick={() => deleteCategory(row.original.ID)} leftIcon={<DeleteIcon />}>
             Delete
           </Button>
         </ButtonGroup>
@@ -145,9 +139,7 @@ const CategoriesList = (props) => {
         <HStack justifyContent="space-between" w="100%" mb={5}>
           <Button
             onClick={() =>
-              router.push(
-                `/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories/add`
-              )
+              router.push(`/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories/add`)
             }
             variant="primaryButton"
             leftIcon={<AddIcon />}
@@ -160,10 +152,7 @@ const CategoriesList = (props) => {
           </HStack>
         </HStack>
         <Card variant="primaryCard">
-          <CategoriesDataTable
-            tableData={categories}
-            columnsData={columnsData}
-          />
+          <CategoriesDataTable tableData={categories} columnsData={columnsData} />
         </Card>
         <Card variant="primaryCard">
           <Grid
@@ -187,10 +176,7 @@ const CategoriesList = (props) => {
               />
             </GridItem>
             <GridItem pl="2" area={"main"}>
-              <ProtectedCategoryListItem
-                selectedNode={selectedNode}
-                {...props}
-              />
+              <ProtectedCategoryListItem selectedNode={selectedNode} {...props} />
             </GridItem>
             <GridItem pl="2" area={"footer"}></GridItem>
           </Grid>

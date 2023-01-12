@@ -8,9 +8,7 @@ interface OcOrderReturnItemListProps {
   itemsToReturn: OrderReturnItem[]
 }
 
-const OcOrderReturnItemList: FunctionComponent<OcOrderReturnItemListProps> = ({
-  itemsToReturn
-}) => {
+const OcOrderReturnItemList: FunctionComponent<OcOrderReturnItemListProps> = ({itemsToReturn}) => {
   return itemsToReturn && itemsToReturn.length ? (
     <TableContainer>
       <Table variant="simple">

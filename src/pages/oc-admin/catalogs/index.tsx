@@ -1,14 +1,5 @@
 import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
-import {
-  Button,
-  ButtonGroup,
-  Container,
-  HStack,
-  Heading,
-  Icon,
-  Text,
-  useToast
-} from "@chakra-ui/react"
+import {Button, ButtonGroup, Container, HStack, Heading, Icon, Text, useToast} from "@chakra-ui/react"
 import {useEffect, useState} from "react"
 
 import Card from "lib/components/card/Card"
@@ -78,11 +69,7 @@ const CatalogsList = () => {
       Header: "Name",
       accessor: "Name",
       Cell: ({value, row}) => (
-        <Link
-          href={`/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`}
-        >
-          {value}
-        </Link>
+        <Link href={`/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`}>{value}</Link>
       )
     },
     {
@@ -95,20 +82,12 @@ const CatalogsList = () => {
         <ButtonGroup>
           <Button
             variant="secondaryButton"
-            onClick={() =>
-              router.push(
-                `/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`
-              )
-            }
+            onClick={() => router.push(`/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`)}
             leftIcon={<EditIcon />}
           >
             Edit
           </Button>
-          <Button
-            variant="secondaryButton"
-            onClick={() => deleteCatalog(row.original.ID)}
-            leftIcon={<DeleteIcon />}
-          >
+          <Button variant="secondaryButton" onClick={() => deleteCatalog(row.original.ID)} leftIcon={<DeleteIcon />}>
             Delete
           </Button>
         </ButtonGroup>
@@ -120,9 +99,7 @@ const CatalogsList = () => {
     <>
       <HStack justifyContent="space-between" w="100%" mb={5}>
         <Button
-          onClick={() =>
-            router.push(`/buyers/${router.query.buyerid}/usergroups/add`)
-          }
+          onClick={() => router.push(`/buyers/${router.query.buyerid}/usergroups/add`)}
           variant="primaryButton"
           leftIcon={<AddIcon />}
           size="lg"

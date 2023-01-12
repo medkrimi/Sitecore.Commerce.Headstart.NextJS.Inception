@@ -1,11 +1,6 @@
 import {ApiRole} from "ordercloud-javascript-sdk"
 
-type AppPermission =
-  | "OrderManager"
-  | "ProductManager"
-  | "BuyerManager"
-  | "ReportViewer"
-  | "MeManager"
+type AppPermission = "OrderManager" | "ProductManager" | "BuyerManager" | "ReportViewer" | "MeManager"
 
 export const appPermissions: Record<AppPermission, ApiRole[]> = {
   OrderManager: ["OrderAdmin"],

@@ -67,20 +67,7 @@ export default function AverageOrderAmount() {
       }
     },
     xaxis: {
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec"
-      ]
+      categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     },
     title: {
       text: chartData.salesoverview.title,
@@ -100,18 +87,8 @@ export default function AverageOrderAmount() {
 
   return (
     <Card p="28px 10px 15px 0px" mb={{sm: "26px", lg: "0px"}} bg={boxBgColor}>
-      <Flex
-        direction="column"
-        mb="GlobalPadding"
-        ps="22px"
-        alignSelf="flex-start"
-      >
-        <Text
-          fontSize="lg"
-          textTransform="uppercase"
-          mb="6px"
-          color={headingColor}
-        >
+      <Flex direction="column" mb="GlobalPadding" ps="22px" alignSelf="flex-start">
+        <Text fontSize="lg" textTransform="uppercase" mb="6px" color={headingColor}>
           {chartData.salesoverview.title}
         </Text>
         <Text fontSize="sm" fontWeight="medium" color={color}>

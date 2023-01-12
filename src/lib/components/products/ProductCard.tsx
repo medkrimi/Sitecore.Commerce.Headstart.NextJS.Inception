@@ -1,16 +1,5 @@
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
-import {
-  Checkbox,
-  Flex,
-  Heading,
-  Image,
-  Link,
-  Spacer,
-  Text,
-  Tooltip,
-  VStack,
-  useColorModeValue
-} from "@chakra-ui/react"
+import {Checkbox, Flex, Heading, Image, Link, Spacer, Text, Tooltip, VStack, useColorModeValue} from "@chakra-ui/react"
 
 import {textHelper} from "lib/utils/text.utils"
 
@@ -37,11 +26,8 @@ const ProductCard = (props) => {
         <Link href={"/products/" + product.ID}>
           <Image
             src={
-              typeof product?.xp?.Images != "undefined" &&
-              product?.xp?.Images?.length > 0
-                ? product?.xp?.Images[0]?.ThumbnailUrl ||
-                  product?.xp?.Images[0]?.Url ||
-                  product?.xp?.Images[0]?.url
+              typeof product?.xp?.Images != "undefined" && product?.xp?.Images?.length > 0
+                ? product?.xp?.Images[0]?.ThumbnailUrl || product?.xp?.Images[0]?.Url || product?.xp?.Images[0]?.url
                 : "/images/dummy-image-square.jpg"
             }
             alt="product image"
@@ -51,35 +37,23 @@ const ProductCard = (props) => {
         <Spacer />
         <VStack>
           <p>Active</p>
-          {product.Active ? (
-            <CheckIcon boxSize={6} color={okColor} />
-          ) : (
-            <CloseIcon boxSize={6} color={errorColor} />
-          )}
+          {product.Active ? <CheckIcon boxSize={6} color={okColor} /> : <CloseIcon boxSize={6} color={errorColor} />}
         </VStack>
         <Spacer />
       </Flex>
-      <VStack
-        flex="1"
-        justifyContent="flex-end"
-        alignItems="flex-start"
-        p={[4, 2, 20, 6]}
-      >
+      <VStack flex="1" justifyContent="flex-end" alignItems="flex-start" p={[4, 2, 20, 6]}>
         {/* <Heading fontSize="xx-small" fontWeight='normal' color='gray.300' >NEW ARRIVALS</Heading>  */}
         <Tooltip label={product.Name}>
           <Link href={"/products/" + product.ID}>
             <Heading as="h3" fontSize="lg">
-              {product.Name.length > 39
-                ? product.Name.substring(0, 39) + "..."
-                : product.Name}
+              {product.Name.length > 39 ? product.Name.substring(0, 39) + "..." : product.Name}
             </Heading>
           </Link>
         </Tooltip>
         <Link href={"/products/" + product.ID}>
           <Text fontSize="small" color="brand.500">
             {textHelper.stripHTML(product.Description).length > 40
-              ? textHelper.stripHTML(product.Description).substring(0, 40) +
-                "..."
+              ? textHelper.stripHTML(product.Description).substring(0, 40) + "..."
               : textHelper.stripHTML(product.Description)}
           </Text>
         </Link>

@@ -31,13 +31,7 @@ const Header = () => {
           <HStack justifyContent="flex-start" color={color}>
             <HeaderLogo />
             <Show breakpoint="(min-width: 900px)">
-              <Heading
-                as="h4"
-                color="gray.500"
-                fontSize="large"
-                pl="10"
-                fontWeight="normal"
-              >
+              <Heading as="h4" color="gray.500" fontSize="large" pl="10" fontWeight="normal">
                 Seller Administration
               </Heading>
             </Show>

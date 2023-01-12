@@ -9,10 +9,7 @@ export interface NextQueryMap {
   [key: string]: string
 }
 
-const mapQueryParamsToFilters = (
-  map: NextQueryMap,
-  query: ParsedUrlQuery
-): Filters => {
+const mapQueryParamsToFilters = (map: NextQueryMap, query: ParsedUrlQuery): Filters => {
   const result = {}
   Object.entries(map).forEach((entry) => {
     result[entry[0]] = query[entry[1] as string]
@@ -20,10 +17,7 @@ const mapQueryParamsToFilters = (
   return result
 }
 
-const mapQueryParamsToOptions = (
-  map: NextQueryMap,
-  query: ParsedUrlQuery
-): ProductListOptions => {
+const mapQueryParamsToOptions = (map: NextQueryMap, query: ParsedUrlQuery): ProductListOptions => {
   const {search, page, pageSize, searchOn, sortBy, ...rest} = map
   const searchOnValue = query[searchOn]
   const sortByValue = query[sortBy]
@@ -31,29 +25,19 @@ const mapQueryParamsToOptions = (
     search: query[search] ? String(query[search]) : undefined,
     page: query[page] ? Number(query[page]) : undefined,
     pageSize: query[pageSize] ? Number(query[pageSize]) : undefined,
-    searchOn:
-      typeof searchOnValue === "string" ? [searchOnValue] : searchOnValue,
+    searchOn: typeof searchOnValue === "string" ? [searchOnValue] : searchOnValue,
     sortBy: typeof sortByValue === "string" ? [sortByValue] : sortByValue,
     filters: mapQueryParamsToFilters(rest, query)
   }
 }
 
-const mapOptionsToQueryParams = (
-  map: NextQueryMap,
-  options: ProductListOptions
-): ParsedUrlQuery => {
+const mapOptionsToQueryParams = (map: NextQueryMap, options: ProductListOptions): ParsedUrlQuery => {
   const result = {}
   Object.entries(options).forEach((entry) => {
-    if (entry[0] === "filters" || entry[1] === undefined || entry[1] === "")
-      return
-    result[map[entry[0]]] =
-      typeof entry[1] === "object"
-        ? encodeURIComponent(entry[1].join(","))
-        : String(entry[1])
+    if (entry[0] === "filters" || entry[1] === undefined || entry[1] === "") return
+    result[map[entry[0]]] = typeof entry[1] === "object" ? encodeURIComponent(entry[1].join(",")) : String(entry[1])
   })
-  const filterResults = options.filters
-    ? mapOptionsToQueryParams(map, options.filters)
-    : {}
+  const filterResults = options.filters ? mapOptionsToQueryParams(map, options.filters) : {}
   return {...result, ...filterResults}
 }
 

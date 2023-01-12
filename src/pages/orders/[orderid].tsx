@@ -29,13 +29,7 @@ import {
   useDisclosure,
   useToast
 } from "@chakra-ui/react"
-import {
-  IntegrationEvents,
-  OrderReturn,
-  OrderReturns,
-  OrderWorksheet,
-  Orders
-} from "ordercloud-javascript-sdk"
+import {IntegrationEvents, OrderReturn, OrderReturns, OrderWorksheet, Orders} from "ordercloud-javascript-sdk"
 import React, {FunctionComponent, useEffect, useRef, useState} from "react"
 import {dateHelper, priceHelper} from "lib/utils/"
 import AddressCard from "../../lib/components/card/AddressCard"
@@ -92,9 +86,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
     })
   }
 
-  const handleReturnCommentChange = (
-    event: React.FormEvent<HTMLTextAreaElement>
-  ) => {
+  const handleReturnCommentChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
     setReturnComments(event.currentTarget.value)
   }
 
@@ -167,18 +159,13 @@ const OrderConfirmationPage: FunctionComponent = () => {
     )
   }
 
-  const showRefundBtn =
-    orderWorksheet.Order.Status === "Completed" && !orderReturns.length
+  const showRefundBtn = orderWorksheet.Order.Status === "Completed" && !orderReturns.length
 
   const showShipBtn = orderWorksheet.Order.Status === "Open"
 
-  const refundBtn = showRefundBtn && (
-    <Button onClick={() => setRefundDialogOpen(true)}>Request Refund</Button>
-  )
+  const refundBtn = showRefundBtn && <Button onClick={() => setRefundDialogOpen(true)}>Request Refund</Button>
 
-  const shipBtn = showShipBtn && (
-    <Button onClick={() => setOrderShip(true)}>Ship Order</Button>
-  )
+  const shipBtn = showShipBtn && <Button onClick={() => setOrderShip(true)}>Ship Order</Button>
 
   const actionButtons = (showRefundBtn || showShipBtn) && (
     <Flex justifyContent="flex-start" marginBottom={10}>
@@ -209,34 +196,20 @@ const OrderConfirmationPage: FunctionComponent = () => {
             </Link>
           </NextLink>
           <HStack>
-            <Button
-              variant="secondaryButton"
-              onClick={() => setPrintLabelDialogOpen(true)}
-            >
+            <Button variant="secondaryButton" onClick={() => setPrintLabelDialogOpen(true)}>
               Print Shipping Label
             </Button>
-            <Button
-              variant="secondaryButton"
-              onClick={() => setExportPDFDialogOpen(true)}
-            >
+            <Button variant="secondaryButton" onClick={() => setExportPDFDialogOpen(true)}>
               Export PDF
             </Button>
-            <Button
-              variant="secondaryButton"
-              onClick={() => setExportCSVDialogOpen(true)}
-            >
+            <Button variant="secondaryButton" onClick={() => setExportCSVDialogOpen(true)}>
               Export CSV
             </Button>
           </HStack>
         </HStack>
         <Card variant="primaryCard">
           <HStack justifyContent="space-between" w="100%" pr="60px">
-            <Text
-              fontSize="20px"
-              fontWeight="600"
-              pb="GlobalPadding"
-              color="gray.300"
-            >
+            <Text fontSize="20px" fontWeight="600" pb="GlobalPadding" color="gray.300">
               Order Information
             </Text>
             <Text>Status: {orderStatus}</Text>
@@ -266,10 +239,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
             <GridItem w="100%">
               <VStack>
                 <Text width="full">Invoice Number</Text>
-                <Input
-                  placeholder="Invoice Number"
-                  defaultValue={orderWorksheet.Order.ID}
-                ></Input>
+                <Input placeholder="Invoice Number" defaultValue={orderWorksheet.Order.ID}></Input>
                 <Spacer pt="25px"></Spacer>
                 <Text width="full">Billing Address</Text>
                 <AddressCard
@@ -289,9 +259,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
                 <Text width="full">Order Placed</Text>
                 <Input
                   placeholder="Order Placed"
-                  defaultValue={dateHelper.formatDate(
-                    orderWorksheet.Order.DateSubmitted
-                  )}
+                  defaultValue={dateHelper.formatDate(orderWorksheet.Order.DateSubmitted)}
                 ></Input>
                 <Spacer pt="25px"></Spacer>
                 <Text width="full">Shipping Address</Text>
@@ -304,84 +272,44 @@ const OrderConfirmationPage: FunctionComponent = () => {
                 />
               </VStack>
             </GridItem>
-            <GridItem
-              w="100%"
-              justifyContent="center"
-              key={orderWorksheet.Order.ID}
-            >
-              <Box
-                border="1px"
-                borderColor="gray.200"
-                padding="GlobalPadding"
-                w="100%"
-                maxW="450px"
-              >
+            <GridItem w="100%" justifyContent="center" key={orderWorksheet.Order.ID}>
+              <Box border="1px" borderColor="gray.200" padding="GlobalPadding" w="100%" maxW="450px">
                 <VStack>
                   <Text>Order Recap</Text>
                   <Divider border="1px" borderColor="gray.200" />
-                  <Flex
-                    flexDirection="column"
-                    marginLeft={10}
-                    w="full"
-                    pr="10"
-                    pl="10"
-                  >
-                    <Table
-                      size="sm"
-                      width="full"
-                      maxWidth="100%"
-                      marginBottom={5}
-                    >
+                  <Flex flexDirection="column" marginLeft={10} w="full" pr="10" pl="10">
+                    <Table size="sm" width="full" maxWidth="100%" marginBottom={5}>
                       <Tbody>
                         <Tr>
                           <Td>Subtotal</Td>
                           <Td textAlign="right">
-                            <Text fontWeight="bold">
-                              {priceHelper.formatPrice(
-                                orderWorksheet.Order.Subtotal
-                              )}
-                            </Text>
+                            <Text fontWeight="bold">{priceHelper.formatPrice(orderWorksheet.Order.Subtotal)}</Text>
                           </Td>
                         </Tr>
                         <Tr>
                           <Td>Promotion Discount</Td>
                           <Td textAlign="right">
                             <Text fontWeight="bold">
-                              -
-                              {priceHelper.formatPrice(
-                                orderWorksheet.Order.PromotionDiscount
-                              )}
+                              -{priceHelper.formatPrice(orderWorksheet.Order.PromotionDiscount)}
                             </Text>
                           </Td>
                         </Tr>
                         <Tr>
                           <Td>Shipping</Td>
                           <Td textAlign="right">
-                            <Text fontWeight="bold">
-                              {priceHelper.formatPrice(
-                                orderWorksheet.Order.ShippingCost
-                              )}
-                            </Text>
+                            <Text fontWeight="bold">{priceHelper.formatPrice(orderWorksheet.Order.ShippingCost)}</Text>
                           </Td>
                         </Tr>
                         <Tr>
                           <Td>Tax</Td>
                           <Td textAlign="right">
-                            <Text fontWeight="bold">
-                              {priceHelper.formatPrice(
-                                orderWorksheet.Order.TaxCost
-                              )}
-                            </Text>
+                            <Text fontWeight="bold">{priceHelper.formatPrice(orderWorksheet.Order.TaxCost)}</Text>
                           </Td>
                         </Tr>
                         <Tr>
                           <Td>Order Total</Td>
                           <Td textAlign="right">
-                            <Text fontWeight="bold">
-                              {priceHelper.formatPrice(
-                                orderWorksheet.Order.Total
-                              )}
-                            </Text>
+                            <Text fontWeight="bold">{priceHelper.formatPrice(orderWorksheet.Order.Total)}</Text>
                           </Td>
                         </Tr>
                       </Tbody>
@@ -400,29 +328,17 @@ const OrderConfirmationPage: FunctionComponent = () => {
                 Ship From
               </Text>
               <Text fontSize="18px">Distributor Main Warehouse</Text>
-              <Text fontSize="14px">
-                123 First Avenue, Minneapolis, MN 55347
-              </Text>
+              <Text fontSize="14px">123 First Avenue, Minneapolis, MN 55347</Text>
             </VStack>
             <VStack alignContent="right" align="flex-end">
-              <Text
-                fontSize="GlobalPadding"
-                fontWeight="600"
-                color="gray.300"
-                textAlign="right"
-              >
+              <Text fontSize="GlobalPadding" fontWeight="600" color="gray.300" textAlign="right">
                 Ship Method
               </Text>
-              <Text textAlign="right">
-                FEDEX 2 DAY SHIPPING, EST ARRIVAL DATE 1/1/2023
-              </Text>
+              <Text textAlign="right">FEDEX 2 DAY SHIPPING, EST ARRIVAL DATE 1/1/2023</Text>
             </VStack>
           </HStack>
 
-          <OcLineItemList
-            lineItems={orderWorksheet.LineItems}
-            editable={false}
-          />
+          <OcLineItemList lineItems={orderWorksheet.LineItems} editable={false} />
         </Card>
       </Container>
       <AlertDialog
@@ -437,8 +353,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text display="inline">
-                A return for this order will be requested and if approved will
-                refund the balance of
+                A return for this order will be requested and if approved will refund the balance of
               </Text>{" "}
               <Text display="inline" color="brand.500" fontWeight="bold">
                 {priceHelper.formatPrice(orderWorksheet.Order.Total)}
@@ -478,10 +393,9 @@ const OrderConfirmationPage: FunctionComponent = () => {
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text display="inline">
-                Export the selected orders to a CSV, once the export button is
-                clicked behind the scenes a job will be kicked off to create the
-                csv and then will automatically download to your downloads
-                folder in the browser.
+                Export the selected orders to a CSV, once the export button is clicked behind the scenes a job will be
+                kicked off to create the csv and then will automatically download to your downloads folder in the
+                browser.
               </Text>
             </AlertDialogBody>
             <AlertDialogFooter>
@@ -495,11 +409,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
                   Cancel
                 </Button>
                 <Button onClick={requestExportCSV} disabled={loading}>
-                  {loading ? (
-                    <Spinner color="brand.500" />
-                  ) : (
-                    "Export Orders CSV"
-                  )}
+                  {loading ? <Spinner color="brand.500" /> : "Export Orders CSV"}
                 </Button>
               </HStack>
             </AlertDialogFooter>
@@ -519,10 +429,9 @@ const OrderConfirmationPage: FunctionComponent = () => {
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text display="inline">
-                Export the selected orders to a PDF, once the export button is
-                clicked behind the scense a job will be kicked off to create the
-                pdf and then will automatically download to your downloads
-                folder in the browser.
+                Export the selected orders to a PDF, once the export button is clicked behind the scense a job will be
+                kicked off to create the pdf and then will automatically download to your downloads folder in the
+                browser.
               </Text>
             </AlertDialogBody>
             <AlertDialogFooter>
@@ -536,11 +445,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
                   Cancel
                 </Button>
                 <Button onClick={requestExportPDF} disabled={loading}>
-                  {loading ? (
-                    <Spinner color="brand.500" />
-                  ) : (
-                    "Export Orders PDF"
-                  )}
+                  {loading ? <Spinner color="brand.500" /> : "Export Orders PDF"}
                 </Button>
               </HStack>
             </AlertDialogFooter>
@@ -560,10 +465,9 @@ const OrderConfirmationPage: FunctionComponent = () => {
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text display="inline">
-                Print Labels for the selected orders onto an Avery label, once
-                the button is clicked behind the scenes a job will be kicked off
-                to create the labels in PDF format and then will automatically
-                download to your downloads folder in the browser.
+                Print Labels for the selected orders onto an Avery label, once the button is clicked behind the scenes a
+                job will be kicked off to create the labels in PDF format and then will automatically download to your
+                downloads folder in the browser.
               </Text>
             </AlertDialogBody>
             <AlertDialogFooter>

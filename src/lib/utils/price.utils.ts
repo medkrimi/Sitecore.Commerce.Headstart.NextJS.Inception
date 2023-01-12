@@ -39,47 +39,26 @@ function formatPercentChange(amount: number): string {
 //+5.2%
 //</Text>
 
-function calcPrice(
-  priceBreaks: PriceBreak[],
-  selectedSpecOptions: SpecOption[],
-  quantity: number
-): number {
+function calcPrice(priceBreaks: PriceBreak[], selectedSpecOptions: SpecOption[], quantity: number): number {
   if (!priceBreaks?.length) return
   const startingBreak = _minBy(priceBreaks, "Quantity")
   const selectedBreak = priceBreaks.reduce((current, candidate) => {
-    return candidate.Quantity > current.Quantity &&
-      candidate.Quantity <= quantity
-      ? candidate
-      : current
+    return candidate.Quantity > current.Quantity && candidate.Quantity <= quantity ? candidate : current
   }, startingBreak)
 
   return selectedSpecOptions
-    ? getSpecMarkup(
-        selectedSpecOptions,
-        selectedBreak,
-        quantity || startingBreak.Quantity
-      )
+    ? getSpecMarkup(selectedSpecOptions, selectedBreak, quantity || startingBreak.Quantity)
     : selectedBreak.Price * (quantity || startingBreak.Quantity)
 }
 
-function getSpecMarkup(
-  selectedSpecOptions: SpecOption[],
-  selectedBreak: PriceBreak,
-  qty: number
-): number {
+function getSpecMarkup(selectedSpecOptions: SpecOption[], selectedBreak: PriceBreak, qty: number): number {
   const markups: Array<number> = new Array<number>()
 
-  selectedSpecOptions.forEach((specOption) =>
-    markups.push(singleSpecMarkup(selectedBreak.Price, qty, specOption))
-  )
+  selectedSpecOptions.forEach((specOption) => markups.push(singleSpecMarkup(selectedBreak.Price, qty, specOption)))
   return (selectedBreak.Price + markups.reduce((x, acc) => x + acc, 0)) * qty
 }
 
-function singleSpecMarkup(
-  unitPrice: number,
-  quantity: number,
-  option: SpecOption
-): number {
+function singleSpecMarkup(unitPrice: number, quantity: number, option: SpecOption): number {
   if (option) {
     switch (option.PriceMarkupType) {
       case "NoMarkup":

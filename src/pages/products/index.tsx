@@ -30,15 +30,7 @@ const Products = () => {
 
   return (
     <>
-      <Flex
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        gap={4}
-        mb={2}
-        p={8}
-        w="full"
-      >
+      <Flex direction="column" alignItems="center" justifyContent="center" gap={4} mb={2} p={8} w="full">
         <ProductSearch query={query} />
       </Flex>
     </>

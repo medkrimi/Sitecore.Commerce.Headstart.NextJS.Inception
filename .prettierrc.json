@@ -6,8 +6,6 @@
   "trailingComma": "none",
   "bracketSpacing": false,
   "jsxBracketSameLine": false,
-  "arrowParens": "always",
-  "skipBlankLines": true,
-  "quotes": ["error", "double"],
+  "arrowParens": "always",  
   "endOfLine":"auto"
 }

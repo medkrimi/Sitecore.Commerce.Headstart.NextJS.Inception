@@ -22,9 +22,7 @@ function TreeView(props) {
       <div className={styles.current}>
         <p>
           Current node:{" "}
-          <span className={styles.currentLabel}>
-            {props.selectedNode ? props.selectedNode.text : "none"}
-          </span>
+          <span className={styles.currentLabel}>{props.selectedNode ? props.selectedNode.text : "none"}</span>
         </p>
       </div>
 
@@ -42,9 +40,7 @@ function TreeView(props) {
               onSelect={props.handleSelect}
             />
           )}
-          dragPreviewRender={(monitorProps) => (
-            <CustomDragPreview monitorProps={monitorProps} />
-          )}
+          dragPreviewRender={(monitorProps) => <CustomDragPreview monitorProps={monitorProps} />}
           onDrop={handleDrop}
           classes={{
             root: styles.treeRoot,

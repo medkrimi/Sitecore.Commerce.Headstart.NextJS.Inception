@@ -110,18 +110,12 @@ const ProductFacetsPage = () => {
       <Tr key={productfacets.ID}>
         <Td>
           <Checkbox pr="10px"></Checkbox>
-          <Link href={`/settings/productfacets/${productfacets.ID}`}>
-            {productfacets.Name}
-          </Link>
+          <Link href={`/settings/productfacets/${productfacets.ID}`}>{productfacets.Name}</Link>
         </Td>
         <Td>{productfacets.ID}</Td>
         <Td>{productfacets.xp_Options}</Td>
         <Td>
-          <Button
-            onClick={() => deleteProductFacets(productfacets.ID)}
-            disabled={loading}
-            variant="tertiaryButton"
-          >
+          <Button onClick={() => deleteProductFacets(productfacets.ID)} disabled={loading} variant="tertiaryButton">
             Delete
           </Button>
         </Td>
@@ -187,20 +181,13 @@ const ProductFacetsPage = () => {
               </MenuItem>
             </MenuList>
           </Menu>
-          <Button
-            variant="secondaryButton"
-            onClick={() => setExportCSVDialogOpen(true)}
-          >
+          <Button variant="secondaryButton" onClick={() => setExportCSVDialogOpen(true)}>
             Export CSV
           </Button>
         </HStack>
       </HStack>
       <Card variant="primaryCard">
-        <IconButton
-          variant="closePanelButton"
-          aria-label="close panel"
-          icon={<HiOutlineMinusSm />}
-        ></IconButton>
+        <IconButton variant="closePanelButton" aria-label="close panel" icon={<HiOutlineMinusSm />}></IconButton>
         <Table>
           <Thead>
             <Tr>
@@ -225,10 +212,9 @@ const ProductFacetsPage = () => {
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text display="inline">
-                Export the selected product facets to a CSV, once the export
-                button is clicked behind the scense a job will be kicked off to
-                create the csv and then will automatically download to your
-                downloads folder in the browser.
+                Export the selected product facets to a CSV, once the export button is clicked behind the scense a job
+                will be kicked off to create the csv and then will automatically download to your downloads folder in
+                the browser.
               </Text>
             </AlertDialogBody>
             <AlertDialogFooter>
@@ -242,11 +228,7 @@ const ProductFacetsPage = () => {
                   Cancel
                 </Button>
                 <Button onClick={requestExportCSV} disabled={loading}>
-                  {loading ? (
-                    <Spinner color="brand.500" />
-                  ) : (
-                    "Export Product Facets"
-                  )}
+                  {loading ? <Spinner color="brand.500" /> : "Export Product Facets"}
                 </Button>
               </HStack>
             </AlertDialogFooter>

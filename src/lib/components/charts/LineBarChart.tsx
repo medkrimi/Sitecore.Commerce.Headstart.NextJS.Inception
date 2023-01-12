@@ -3,13 +3,5 @@ import dynamic from "next/dynamic"
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {ssr: false})
 
 export default function DonutChart(props) {
-  return (
-    <ReactApexChart
-      options={props.chartOptions}
-      series={props.chartData}
-      type="line"
-      width="100%"
-      height="100%"
-    />
-  )
+  return <ReactApexChart options={props.chartOptions} series={props.chartData} type="line" width="100%" height="100%" />
 }

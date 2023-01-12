@@ -14,10 +14,7 @@ import {
 } from "@chakra-ui/react"
 import {ChangeEvent, useState} from "react"
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
-import {
-  ComposedProduct,
-  GetComposedProduct
-} from "../../services/ordercloud.service"
+import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
 import {FiCheck, FiEdit, FiX} from "react-icons/fi"
 import {Product, Products} from "ordercloud-javascript-sdk"
 
@@ -29,10 +26,7 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductData({
-  composedProduct,
-  setComposedProduct
-}: ProductDataProps) {
+export default function ProductData({composedProduct, setComposedProduct}: ProductDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
@@ -52,26 +46,23 @@ export default function ProductData({
     defaultSupplierId: composedProduct?.Product?.DefaultSupplierID
   })
 
-  const handleInputChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      if (fieldKey == "name" && e.target.value == "") {
-        return
-      }
-      setFormValues((v) => ({...v, [fieldKey]: e.target.value}))
+  const handleInputChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    if (fieldKey == "name" && e.target.value == "") {
+      return
     }
+    setFormValues((v) => ({...v, [fieldKey]: e.target.value}))
+  }
 
-  const handleNumberInputChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({
-        ...v,
-        [fieldKey]: e.target.value == "" ? 0 : e.target.value
-      }))
-    }
+  const handleNumberInputChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({
+      ...v,
+      [fieldKey]: e.target.value == "" ? 0 : e.target.value
+    }))
+  }
 
-  const handleCheckboxChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
-    }
+  const handleCheckboxChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
+  }
 
   const onEditClicked = (e) => {
     setFormValues((v) => ({
@@ -79,8 +70,7 @@ export default function ProductData({
       ["name"]: composedProduct?.Product?.Name,
       ["id"]: composedProduct?.Product?.ID,
       ["description"]: composedProduct?.Product?.Description,
-      ["defaultPriceScheduleId"]:
-        composedProduct?.Product?.DefaultPriceScheduleID,
+      ["defaultPriceScheduleId"]: composedProduct?.Product?.DefaultPriceScheduleID,
       ["quantityMultiplier"]: composedProduct?.Product?.QuantityMultiplier,
       ["shipFromAddress"]: composedProduct?.Product?.ShipFromAddressID,
       ["returnable"]: composedProduct?.Product?.Returnable,
@@ -97,8 +87,7 @@ export default function ProductData({
       ["name"]: composedProduct?.Product?.Name,
       ["id"]: composedProduct?.Product?.ID,
       ["description"]: composedProduct?.Product?.Description,
-      ["defaultPriceScheduleId"]:
-        composedProduct?.Product?.DefaultPriceScheduleID,
+      ["defaultPriceScheduleId"]: composedProduct?.Product?.DefaultPriceScheduleID,
       ["quantityMultiplier"]: composedProduct?.Product?.QuantityMultiplier,
       ["shipFromAddress"]: composedProduct?.Product?.ShipFromAddressID,
       ["returnable"]: composedProduct?.Product?.Returnable,
@@ -141,20 +130,12 @@ export default function ProductData({
           {isEditingBasicData ? (
             <HStack float={"right"}>
               <Tooltip label="Save">
-                <Button
-                  colorScheme="brandButtons"
-                  aria-label="Save"
-                  onClick={onSaveClicked}
-                >
+                <Button colorScheme="brandButtons" aria-label="Save" onClick={onSaveClicked}>
                   <FiCheck />
                 </Button>
               </Tooltip>
               <Tooltip label="Abort">
-                <Button
-                  colorScheme="brandButtons"
-                  aria-label="Abort"
-                  onClick={onAbortClicked}
-                >
+                <Button colorScheme="brandButtons" aria-label="Abort" onClick={onAbortClicked}>
                   <FiX color={color} />
                 </Button>
               </Tooltip>
@@ -162,11 +143,7 @@ export default function ProductData({
           ) : (
             <HStack float={"right"}>
               <Tooltip label="Edit">
-                <Button
-                  colorScheme="brandButtons"
-                  aria-label="Edit"
-                  onClick={onEditClicked}
-                >
+                <Button colorScheme="brandButtons" aria-label="Edit" onClick={onEditClicked}>
                   <FiEdit color={color} />
                 </Button>
               </Tooltip>
@@ -178,61 +155,35 @@ export default function ProductData({
             </Box>
           ) : (
             <>
-              <Heading
-                size={{base: "md", md: "lg", lg: "xl"}}
-                mb={expanded ? 6 : 0}
-              >
+              <Heading size={{base: "md", md: "lg", lg: "xl"}} mb={expanded ? 6 : 0}>
                 Product Data
               </Heading>
               <Collapse in={expanded}>
                 <Flex flexDirection={{base: "column", sm: "column", md: "row"}}>
                   <Container>
-                    <Tooltip
-                      label={
-                        isEditingBasicData
-                          ? "Product Name is mandatory to fill"
-                          : ""
-                      }
-                    >
+                    <Tooltip label={isEditingBasicData ? "Product Name is mandatory to fill" : ""}>
                       <Box width="full" pb={2}>
                         <Text opacity={0.5} fontWeight={"bold"}>
                           Product Name:*
                         </Text>
                         {isEditingBasicData ? (
-                          <Input
-                            value={formValues.name}
-                            onChange={handleInputChange("name")}
-                          />
+                          <Input value={formValues.name} onChange={handleInputChange("name")} />
                         ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
+                          <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                             {composedProduct?.Product?.Name}
                           </Heading>
                         )}
                       </Box>
                     </Tooltip>
-                    <Tooltip
-                      label={isEditingBasicData ? "ID is not changeable" : ""}
-                    >
+                    <Tooltip label={isEditingBasicData ? "ID is not changeable" : ""}>
                       <Box width="full" pb={2}>
                         <Text opacity={0.5} fontWeight={"bold"}>
                           ID:
                         </Text>
                         {isEditingBasicData ? (
-                          <Input
-                            disabled={true}
-                            value={formValues.id}
-                            onChange={handleInputChange("productId")}
-                          />
+                          <Input disabled={true} value={formValues.id} onChange={handleInputChange("productId")} />
                         ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
+                          <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                             {composedProduct?.Product?.ID}
                           </Heading>
                         )}
@@ -243,16 +194,9 @@ export default function ProductData({
                         Description:
                       </Text>
                       {isEditingBasicData ? (
-                        <Input
-                          value={formValues.description}
-                          onChange={handleInputChange("description")}
-                        />
+                        <Input value={formValues.description} onChange={handleInputChange("description")} />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
+                        <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                           {composedProduct?.Product?.Description}
                         </Heading>
                       )}
@@ -265,18 +209,11 @@ export default function ProductData({
                         {isEditingBasicData ? (
                           <Input
                             value={formValues.defaultPriceScheduleId}
-                            onChange={handleInputChange(
-                              "defaultPriceScheduleId"
-                            )}
+                            onChange={handleInputChange("defaultPriceScheduleId")}
                           />
                         ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {composedProduct?.Product?.DefaultPriceScheduleID ??
-                              "Not set"}
+                          <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                            {composedProduct?.Product?.DefaultPriceScheduleID ?? "Not set"}
                           </Heading>
                         )}
                       </Box>
@@ -289,18 +226,10 @@ export default function ProductData({
                           Ship from Address:
                         </Text>
                         {isEditingBasicData ? (
-                          <Input
-                            value={formValues.shipFromAddress}
-                            onChange={handleInputChange("shipFromAddress")}
-                          />
+                          <Input value={formValues.shipFromAddress} onChange={handleInputChange("shipFromAddress")} />
                         ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {composedProduct?.Product?.ShipFromAddressID ??
-                              "Not set"}
+                          <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                            {composedProduct?.Product?.ShipFromAddressID ?? "Not set"}
                           </Heading>
                         )}
                       </Box>
@@ -316,13 +245,8 @@ export default function ProductData({
                             onChange={handleInputChange("defaultSupplierId")}
                           />
                         ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {composedProduct?.Product?.DefaultSupplierID ??
-                              "Not set"}
+                          <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                            {composedProduct?.Product?.DefaultSupplierID ?? "Not set"}
                           </Heading>
                         )}
                       </Box>
@@ -337,13 +261,8 @@ export default function ProductData({
                           onChange={handleCheckboxChange("allSuppliersCanSell")}
                         />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
-                          {composedProduct?.Product?.AllSuppliersCanSell ??
-                          false ? (
+                        <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                          {composedProduct?.Product?.AllSuppliersCanSell ?? false ? (
                             <CheckIcon boxSize={6} color={okColor} />
                           ) : (
                             <CloseIcon boxSize={6} color={errorColor} />
@@ -362,18 +281,11 @@ export default function ProductData({
                           <Input
                             type={"number"}
                             value={formValues.quantityMultiplier}
-                            onChange={handleNumberInputChange(
-                              "quantityMultiplier"
-                            )}
+                            onChange={handleNumberInputChange("quantityMultiplier")}
                           />
                         ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {composedProduct?.Product?.QuantityMultiplier ??
-                              "Not set"}
+                          <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                            {composedProduct?.Product?.QuantityMultiplier ?? "Not set"}
                           </Heading>
                         )}
                       </Box>
@@ -383,16 +295,9 @@ export default function ProductData({
                         Returnable?{" "}
                       </Text>
                       {isEditingBasicData ? (
-                        <Checkbox
-                          isChecked={formValues.returnable}
-                          onChange={handleCheckboxChange("returnable")}
-                        />
+                        <Checkbox isChecked={formValues.returnable} onChange={handleCheckboxChange("returnable")} />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
+                        <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                           {composedProduct?.Product?.Returnable ?? false ? (
                             <CheckIcon boxSize={6} color={okColor} />
                           ) : (
@@ -406,16 +311,9 @@ export default function ProductData({
                         Is Active{" "}
                       </Text>
                       {isEditingBasicData ? (
-                        <Checkbox
-                          isChecked={formValues.isActive}
-                          onChange={handleCheckboxChange("isActive")}
-                        />
+                        <Checkbox isChecked={formValues.isActive} onChange={handleCheckboxChange("isActive")} />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
+                        <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                           {composedProduct?.Product?.Active ?? false ? (
                             <CheckIcon boxSize={6} color={okColor} />
                           ) : (

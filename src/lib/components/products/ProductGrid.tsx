@@ -7,9 +7,7 @@ import ProductCard from "./ProductCard"
 
 const ProductGrid = (props) => {
   //const products = props.products
-  const [componentProducts, setComponentProducts] = useState<
-    Product<ProductXPs>[]
-  >(props.products)
+  const [componentProducts, setComponentProducts] = useState<Product<ProductXPs>[]>(props.products)
 
   useEffect(() => {
     setComponentProducts(props.products)
@@ -21,14 +19,7 @@ const ProductGrid = (props) => {
         <Tbody alignContent={"center"}>
           <Tr>
             <Td colSpan={7}>
-              <Grid
-                as="section"
-                templateColumns="repeat(3, 1fr)"
-                templateRows="(3, 1fr)"
-                gap={4}
-                w="full"
-                width="100%"
-              >
+              <Grid as="section" templateColumns="repeat(3, 1fr)" templateRows="(3, 1fr)" gap={4} w="full" width="100%">
                 {componentProducts && componentProducts.length > 0 ? (
                   componentProducts.map((p) => (
                     <GridItem
@@ -41,10 +32,7 @@ const ProductGrid = (props) => {
                       key={p.ID}
                       borderStyle="none"
                     >
-                      <ProductCard
-                        product={p}
-                        onCheck={(productid) => props.onCheck(productid)}
-                      />
+                      <ProductCard product={p} onCheck={(productid) => props.onCheck(productid)} />
                     </GridItem>
                   ))
                 ) : (
