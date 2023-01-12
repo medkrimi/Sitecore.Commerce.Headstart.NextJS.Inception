@@ -74,6 +74,7 @@ import {ProductListOptions} from "../../services/ordercloud.service"
 import {ProductXPs} from "lib/types/ProductXPs"
 import Card from "../card/Card"
 import {HiOutlineViewGrid, HiOutlineViewList} from "react-icons/hi"
+import {promotionsService} from "lib/api"
 
 //import Image from "next/image"
 
@@ -82,6 +83,8 @@ interface ProductSearchProps {
 }
 
 export default function ProductSearch({query}: ProductSearchProps) {
+  const [selectedPromotion, setselectedPromotion] = useState("")
+  const [promotions, setPromotions] = useState([])
   //const options: ProductListOptions = {}
   //const optionsSearchOn = ["Name", "Description", "ID"]
   const optionsSearchOnID = "ID"
@@ -108,6 +111,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
 
   const [isBulkImportDialogOpen, setBulkImportDialogOpen] = useState(false)
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
+  const [isPromotionDialogOpen, setPromotionDialogOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const cancelRef = useRef()
 
@@ -128,6 +132,10 @@ export default function ProductSearch({query}: ProductSearchProps) {
       setProducts(productItems)
       //setReload(false)
       setIsLoading(false)
+      const promotionsList = await promotionsService.getAll()
+      let promotionItems = promotionsList.Items
+      setPromotions(promotionItems)
+      console.log(promotionItems)
     }
 
     GetProducts()
@@ -565,6 +573,12 @@ export default function ProductSearch({query}: ProductSearchProps) {
                   </Button>
                   <Button
                     variant="secondaryButton"
+                    onClick={() => setPromotionDialogOpen(true)}
+                  >
+                    Assign Promotion
+                  </Button>
+                  <Button
+                    variant="secondaryButton"
                     onClick={() => setBulkImportDialogOpen(true)}
                   >
                     Bulk Import
@@ -841,6 +855,53 @@ export default function ProductSearch({query}: ProductSearchProps) {
                 </Button>
                 <Button onClick={requestImportCSV} disabled={loading}>
                   {loading ? <Spinner color="brand.500" /> : "Import Products"}
+                </Button>
+              </HStack>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+
+      <AlertDialog
+        isOpen={isPromotionDialogOpen}
+        onClose={() => setPromotionDialogOpen(false)}
+        leastDestructiveRef={cancelRef}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Attach a Promotion
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              <Text display="inline">
+                Select a promotion from the dropdown to assign to the previously
+                selected products.
+                <Select
+                  title="Select promotion"
+                  mt="20px"
+                  value={selectedPromotion}
+                >
+                  {!!promotions.length &&
+                    promotions.map((promotion) => (
+                      <option key={promotion.ID} value={promotion.ID}>
+                        {promotion.Name}
+                      </option>
+                    ))}
+                </Select>
+              </Text>
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <HStack justifyContent="space-between" w="100%">
+                <Button
+                  ref={cancelRef}
+                  onClick={() => setPromotionDialogOpen(false)}
+                  disabled={loading}
+                  variant="secondaryButton"
+                >
+                  Cancel
+                </Button>
+                <Button onClick={requestImportCSV} disabled={loading}>
+                  {loading ? <Spinner color="brand.500" /> : "Assign Promotion"}
                 </Button>
               </HStack>
             </AlertDialogFooter>

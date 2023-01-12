@@ -193,7 +193,12 @@ function AddEditForm({category}: AddEditFormProps) {
                 <Stack spacing={5}>
                   <InputControl name="Name" label="Category Name" />
                   <TextareaControl name="Description" label="Description" />
-                  <SwitchControl name="Active" label="Active" />
+                  <SwitchControl
+                    name="Active"
+                    label="Active"
+                    colorScheme="teal"
+                    size="lg"
+                  />
                   <ButtonGroup>
                     <HStack justifyContent="space-between" w="100%" mb={5}>
                       <Box>
