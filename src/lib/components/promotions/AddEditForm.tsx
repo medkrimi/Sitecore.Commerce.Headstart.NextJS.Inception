@@ -7,15 +7,19 @@ import {
   Container,
   Divider,
   Flex,
+  HStack,
   Heading,
   Input,
   InputGroup,
   InputLeftElement,
   InputRightElement,
   Link,
+  ListIcon,
+  ListItem,
   Radio,
   SimpleGrid,
-  Stack
+  Stack,
+  UnorderedList
 } from "@chakra-ui/react"
 import {CheckIcon, DeleteIcon} from "@chakra-ui/icons"
 import {
@@ -31,6 +35,7 @@ import {
 
 import Card from "../card/Card"
 import {Formik} from "formik"
+import {MdCheckCircle} from "react-icons/md"
 import {Promotion} from "ordercloud-javascript-sdk"
 import {promotionsService} from "lib/api"
 import {useRouter} from "next/router"
@@ -173,17 +178,19 @@ function AddEditForm({promotion}: AddEditFormProps) {
               resetForm
             }) => (
               <>
-                <SimpleGrid as="form" onSubmit={handleSubmit as any} columns={2} spacing={10}>
+                <SimpleGrid as="form" onSubmit={handleSubmit as any} columns={3} spacing={10}>
                   <Box>
                     <InputControl name="Name" label="Promotion Name" />
                     <TextareaControl name="Description" label="Description" />
                     <Divider mt="15" mb="15" />
-                    <SwitchControl name="NoCode" label="Automatically apply promotion" />
-                    <InputControl
-                      name="DiscountCode"
-                      label="Discount Code"
-                      helperText="Buyer users will use this code at checkout."
-                    />
+                    <SwitchControl name="withCoupon" label="Coupon Based Promo" />
+                    {values.withCoupon && (
+                      <InputControl
+                        name="DiscountCode"
+                        label="Discount Code"
+                        helperText="Buyer users will use this code at checkout."
+                      />
+                    )}
                     <Divider mt="15" mb="15" />
                     <TextareaControl name="FinePrint" label="Fine Print" />
                   </Box>
@@ -194,56 +201,74 @@ function AddEditForm({promotion}: AddEditFormProps) {
                       <Radio value="free-shipping">Free Shipping</Radio>
                       <Radio value="bogo">BOGO</Radio>
                     </RadioGroupControl>
-                    <InputGroup>
-                      <InputLeftElement pointerEvents="none" color="gray.300" fontSize="1.2em">
-                        $
-                      </InputLeftElement>
-                      <Input name="value" placeholder="Enter amout" />
-                    </InputGroup>
+
+                    {values.Type !== "free-shipping" && values.Type !== "bogo" && (
+                      <InputGroup>
+                        <InputLeftElement pointerEvents="none" color="gray.300" fontSize="1.2em">
+                          {values.Type === "percentage" ? "%" : "$"}
+                        </InputLeftElement>
+                        <Input name="value" placeholder="Enter amout" />
+                      </InputGroup>
+                    )}
+
                     <Divider mt="15" mb="15" />
-                    <RadioGroupControl name="Type" label="Minimum requirments">
+                    <RadioGroupControl name="MinRequirment" label="Minimum requirments">
                       <Radio value="none">None</Radio>
                       <Radio value="min-amount">Minimum purchase amount</Radio>
                       <Radio value="min-qty">Minimum quantity of items</Radio>
                     </RadioGroupControl>
                     <Divider mt="15" mb="15" />
-                    <RadioGroupControl name="Type" label="Buyer Eligibility">
+                    <RadioGroupControl name="BuyerEligibility" label="Buyer Eligibility">
                       <Radio value="all-buyers">All Buyers</Radio>
                       <Radio value="buyers">Specific buyers</Radio>
                       <Radio value="buyersgroup">Specific buying group</Radio>
                     </RadioGroupControl>
                     <Divider mt="15" mb="15" />
+                    <HStack spacing={6}>
+                      <SwitchControl name="LineItemLevel" label="Line Item Level" />
+                      <SwitchControl name="CanCombine" label="Can combine with other promos" />
+                    </HStack>
+                    <Divider mt="15" mb="15" />
                   </Box>
-                  <ButtonGroup>
-                    <Button variant="primaryButton" type="submit" isLoading={isSubmitting}>
-                      Save
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        resetForm()
-                      }}
-                      type="reset"
-                      variant="secondaryButton"
-                      isLoading={isSubmitting}
-                    >
-                      Reset
-                    </Button>
-                    <Button
-                      onClick={() => router.push(`/promotions`)}
-                      variant="secondaryButton"
-                      isLoading={isSubmitting}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      variant="secondaryButton"
-                      onClick={() => deletePromotion(values.ID)}
-                      leftIcon={<DeleteIcon />}
-                    >
-                      Delete
-                    </Button>
-                  </ButtonGroup>
+                  <Box>
+                    <Stack spacing={6}>
+                      <Heading as="h2" noOfLines={1}>
+                        Preview
+                      </Heading>
+                      <UnorderedList>
+                        <ListItem>Name: {values.Name}</ListItem>
+                        <ListItem>Description: {values.Description}</ListItem>
+                        <ListItem>Can Combine: {values.CanCombine ? "Yes" : "No"}</ListItem>
+                        <ListItem>Facilisis in pretium nisl aliquet</ListItem>
+                      </UnorderedList>
+                    </Stack>
+                  </Box>
                 </SimpleGrid>
+                <ButtonGroup>
+                  <Button variant="primaryButton" type="submit" isLoading={isSubmitting}>
+                    Save
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      resetForm()
+                    }}
+                    type="reset"
+                    variant="secondaryButton"
+                    isLoading={isSubmitting}
+                  >
+                    Reset
+                  </Button>
+                  <Button onClick={() => router.push(`/promotions`)} variant="secondaryButton" isLoading={isSubmitting}>
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="secondaryButton"
+                    onClick={() => deletePromotion(values.ID)}
+                    leftIcon={<DeleteIcon />}
+                  >
+                    Delete
+                  </Button>
+                </ButtonGroup>
               </>
             )}
           </Formik>
