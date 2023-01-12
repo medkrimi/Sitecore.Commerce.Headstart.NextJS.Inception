@@ -1,19 +1,11 @@
-import {
-  Container,
-  Heading,
-  HStack,
-  Icon,
-  Link,
-  Text,
-  useColorModeValue
-} from "@chakra-ui/react"
-import ProtectedContent from "lib/components/auth/ProtectedContent"
-import Card from "lib/components/card/Card"
-import {appPermissions} from "lib/constants/app-permissions.config"
-import {NextSeo} from "next-seo"
+import {Container, HStack, Heading, Icon, Link, Text, useColorModeValue} from "@chakra-ui/react"
 
-import React from "react"
+import Card from "lib/components/card/Card"
 import {HiOutlineFilter} from "react-icons/hi"
+import {NextSeo} from "next-seo"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import React from "react"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -48,12 +40,7 @@ const SettingsPage = () => {
           align="center"
         >
           <Link href="/settings/productfacets/">
-            <Icon
-              as={HiOutlineFilter}
-              fontSize="80px"
-              title="Settings"
-              color="darkGray"
-            ></Icon>
+            <Icon as={HiOutlineFilter} fontSize="80px" title="Settings" color="darkGray"></Icon>
             <Text width="100%" w="full">
               Product Facets
             </Text>

@@ -34,16 +34,8 @@ export const CustomNode: React.FC<Props> = (props) => {
   const handleSelect = () => props.onSelect(props.node)
 
   return (
-    <div
-      className={`tree-node ${styles.root}`}
-      style={{paddingInlineStart: indent}}
-      onClick={handleSelect}
-    >
-      <div
-        className={`${styles.expandIconWrapper} ${
-          props.isOpen ? styles.isOpen : ""
-        }`}
-      >
+    <div className={`tree-node ${styles.root}`} style={{paddingInlineStart: indent}} onClick={handleSelect}>
+      <div className={`${styles.expandIconWrapper} ${props.isOpen ? styles.isOpen : ""}`}>
         {props.node.droppable && (
           <div onClick={handleToggle}>
             <ChevronRightIcon w={8} h={8} />

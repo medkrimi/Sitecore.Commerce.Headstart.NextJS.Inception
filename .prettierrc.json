@@ -1,13 +1,11 @@
 {
-  "printWidth": 80,
+  "printWidth":120,
   "tabWidth": 2,
   "semi": false,
   "singleQuote": false,
   "trailingComma": "none",
   "bracketSpacing": false,
   "jsxBracketSameLine": false,
-  "arrowParens": "always",
-  "skipBlankLines": true,
-  "quotes": ["error", "double"],
+  "arrowParens": "always",  
   "endOfLine":"auto"
 }

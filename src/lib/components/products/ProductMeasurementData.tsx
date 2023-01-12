@@ -16,17 +16,9 @@ import {
 } from "@chakra-ui/react"
 import {ChangeEvent, useState} from "react"
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
-import {
-  ComposedProduct,
-  GetComposedProduct
-} from "../../services/ordercloud.service"
+import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
 import {FiCheck, FiEdit, FiMinus, FiPlus, FiX} from "react-icons/fi"
-import {
-  Inventory,
-  Product,
-  Products,
-  RequiredDeep
-} from "ordercloud-javascript-sdk"
+import {Inventory, Product, Products, RequiredDeep} from "ordercloud-javascript-sdk"
 
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
@@ -36,10 +28,7 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductMeasurementData({
-  composedProduct,
-  setComposedProduct
-}: ProductDataProps) {
+export default function ProductMeasurementData({composedProduct, setComposedProduct}: ProductDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
@@ -52,13 +41,12 @@ export default function ProductMeasurementData({
     shipWidth: composedProduct?.Product?.ShipWidth
   })
 
-  const handleNumberInputChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({
-        ...v,
-        [fieldKey]: e.target.value == "" ? 0 : e.target.value
-      }))
-    }
+  const handleNumberInputChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({
+      ...v,
+      [fieldKey]: e.target.value == "" ? 0 : e.target.value
+    }))
+  }
 
   const onEditClicked = (e) => {
     setFormValues((v) => ({
@@ -112,20 +100,12 @@ export default function ProductMeasurementData({
           {isEditingBasicData ? (
             <HStack float={"right"}>
               <Tooltip label="Save">
-                <Button
-                  colorScheme="brandButtons"
-                  aria-label="Save"
-                  onClick={onSaveClicked}
-                >
+                <Button colorScheme="brandButtons" aria-label="Save" onClick={onSaveClicked}>
                   <FiCheck />
                 </Button>
               </Tooltip>
               <Tooltip label="Abort">
-                <Button
-                  colorScheme="brandButtons"
-                  aria-label="Abort"
-                  onClick={onAbortClicked}
-                >
+                <Button colorScheme="brandButtons" aria-label="Abort" onClick={onAbortClicked}>
                   <FiX />
                 </Button>
               </Tooltip>
@@ -133,11 +113,7 @@ export default function ProductMeasurementData({
           ) : (
             <HStack float={"right"}>
               <Tooltip label="Edit">
-                <Button
-                  colorScheme="brandButtons"
-                  aria-label="Edit"
-                  onClick={onEditClicked}
-                >
+                <Button colorScheme="brandButtons" aria-label="Edit" onClick={onEditClicked}>
                   <FiEdit />
                 </Button>
               </Tooltip>
@@ -149,10 +125,7 @@ export default function ProductMeasurementData({
             </Box>
           ) : (
             <>
-              <Heading
-                size={{base: "md", md: "lg", lg: "xl"}}
-                mb={expanded ? 6 : 0}
-              >
+              <Heading size={{base: "md", md: "lg", lg: "xl"}} mb={expanded ? 6 : 0}>
                 Sizes
               </Heading>
               <Collapse in={expanded}>
@@ -167,11 +140,7 @@ export default function ProductMeasurementData({
                       onChange={handleNumberInputChange("shipWeight")}
                     />
                   ) : (
-                    <Heading
-                      fontSize={"xl"}
-                      fontFamily={"body"}
-                      fontWeight={500}
-                    >
+                    <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                       {composedProduct?.Product?.ShipWeight ?? "Not set"}
                     </Heading>
                   )}
@@ -187,11 +156,7 @@ export default function ProductMeasurementData({
                       onChange={handleNumberInputChange("shipHeight")}
                     />
                   ) : (
-                    <Heading
-                      fontSize={"xl"}
-                      fontFamily={"body"}
-                      fontWeight={500}
-                    >
+                    <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                       {composedProduct?.Product?.ShipHeight ?? "Not set"}
                     </Heading>
                   )}
@@ -208,11 +173,7 @@ export default function ProductMeasurementData({
                       onChange={handleNumberInputChange("shipLength")}
                     />
                   ) : (
-                    <Heading
-                      fontSize={"xl"}
-                      fontFamily={"body"}
-                      fontWeight={500}
-                    >
+                    <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                       {composedProduct?.Product?.ShipLength ?? "Not set"}
                     </Heading>
                   )}
@@ -229,11 +190,7 @@ export default function ProductMeasurementData({
                       onChange={handleNumberInputChange("shipWidth")}
                     />
                   ) : (
-                    <Heading
-                      fontSize={"xl"}
-                      fontFamily={"body"}
-                      fontWeight={500}
-                    >
+                    <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                       {composedProduct?.Product?.ShipWidth ?? "Not set"}
                     </Heading>
                   )}

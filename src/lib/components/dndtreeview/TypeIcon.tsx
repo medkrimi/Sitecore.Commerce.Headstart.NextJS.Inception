@@ -1,10 +1,4 @@
-import {
-  MdDomain,
-  MdGroup,
-  MdLibraryBooks,
-  MdPerson,
-  MdStorefront
-} from "react-icons/md"
+import {MdDomain, MdGroup, MdLibraryBooks, MdPerson, MdStorefront} from "react-icons/md"
 
 import {Icon} from "@chakra-ui/react"
 import React from "react"

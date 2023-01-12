@@ -84,10 +84,7 @@ const OrdersPage = () => {
         <Td>{textHelper.formatStatus(order.Status)}</Td>
         <Td>
           <HStack>
-            <LettersCard
-              FirstName={order.FromUser.FirstName}
-              LastName={order.FromUser.LastName}
-            />
+            <LettersCard FirstName={order.FromUser.FirstName} LastName={order.FromUser.LastName} />
             <Text>
               {order.FromUser.FirstName} {order.FromUser.LastName}
             </Text>
@@ -161,10 +158,7 @@ const OrdersPage = () => {
               </MenuItem>
             </MenuList>
           </Menu>
-          <Button
-            variant="secondaryButton"
-            onClick={() => setExportCSVDialogOpen(true)}
-          >
+          <Button variant="secondaryButton" onClick={() => setExportCSVDialogOpen(true)}>
             Export CSV
           </Button>
         </HStack>
@@ -197,10 +191,9 @@ const OrdersPage = () => {
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text display="inline">
-                Export the selected orders to a CSV, once the export button is
-                clicked behind the scenes a job will be kicked off to create the
-                csv and then will automatically download to your downloads
-                folder in the browser.
+                Export the selected orders to a CSV, once the export button is clicked behind the scenes a job will be
+                kicked off to create the csv and then will automatically download to your downloads folder in the
+                browser.
               </Text>
             </AlertDialogBody>
             <AlertDialogFooter>

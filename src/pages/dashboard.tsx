@@ -16,13 +16,10 @@ import {
   useColorMode,
   useColorModeValue
 } from "@chakra-ui/react"
-import {
-  HiOutlineCurrencyDollar,
-  HiOutlineFolderOpen,
-  HiOutlineUserAdd,
-  HiOutlineUserCircle
-} from "react-icons/hi"
+import {HiOutlineCurrencyDollar, HiOutlineFolderOpen, HiOutlineUserAdd, HiOutlineUserCircle} from "react-icons/hi"
+import {dashboardService, ordersService, productsService, promotionsService} from "lib/api"
 import {useEffect, useState} from "react"
+
 import AverageOrderAmount from "lib/components/analytics/AverageOrderAmount"
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import Card from "lib/components/card/Card"
@@ -32,17 +29,10 @@ import {NextSeo} from "next-seo"
 import TodaysMoney from "lib/components/analytics/PercentChangeTile"
 import TodaysUsers from "lib/components/analytics/PercentChangeTile"
 import TotalSales from "lib/components/analytics/PercentChangeTile"
-import {priceHelper} from "lib/utils/price.utils"
-import {useRouter} from "next/router"
-
-import {
-  dashboardService,
-  ordersService,
-  productsService,
-  promotionsService
-} from "lib/api"
-import useHasAccess from "lib/hooks/useHasAccess"
 import {appPermissions} from "lib/constants/app-permissions.config"
+import {priceHelper} from "lib/utils/price.utils"
+import useHasAccess from "lib/hooks/useHasAccess"
+import {useRouter} from "next/router"
 
 const Dashboard = () => {
   const {push} = useRouter()
@@ -55,8 +45,7 @@ const Dashboard = () => {
 
   const [totalTodaysSales, settotalTodaysSales] = useState(Number)
   const [previousTodaysSales, setpreviousTodaysSales] = useState(Number)
-  const [percentTodaysSalesChange, setpercentTodaysSalesChange] =
-    useState(String)
+  const [percentTodaysSalesChange, setpercentTodaysSalesChange] = useState(String)
   const [totalSales, settotalSales] = useState(Number)
   const [percentSales, setpercentSales] = useState(Number)
   const [percentSalesChange, setpercentSalesChange] = useState(String)
@@ -86,17 +75,15 @@ const Dashboard = () => {
 
   async function initDashboardData() {
     let _dashboardListMeta = {}
-    const ordersList = await ordersService.getAll()
-    const productsList = await productsService.getAll()
-    const promotionsList = await promotionsService.getAll()
-    const usersList = await promotionsService.getAll()
-
+    const ordersList = await ordersService.list()
+    const productsList = await productsService.list()
+    const promotionsList = await promotionsService.list()
+    const usersList = await promotionsService.list()
     //Todays Sales
     const todaysSales = await dashboardService.getTodaysMoney()
     settotalTodaysSales(todaysSales)
     const previousTodaysSales = await dashboardService.getPreviousTodaysMoney()
-    const percentChange =
-      ((todaysSales - previousTodaysSales) / todaysSales) * 100.0
+    const percentChange = ((todaysSales - previousTodaysSales) / todaysSales) * 100.0
     setpreviousTodaysSales(Math.round(percentChange))
 
     let percentChangeToday = "pos"
@@ -110,8 +97,7 @@ const Dashboard = () => {
     settotalSales(totalSales)
 
     const previousTotalSales = await dashboardService.getPreviousTotalSales()
-    const percentChangeTotalSales =
-      ((totalSales - previousTotalSales) / totalSales) * 100.0
+    const percentChangeTotalSales = ((totalSales - previousTotalSales) / totalSales) * 100.0
     setpercentSales(Math.round(percentChangeTotalSales))
 
     let percentChangeTotal = "pos"
@@ -125,8 +111,7 @@ const Dashboard = () => {
     settotalUsers(totalUsers.toLocaleString("en-US"))
 
     const previousTotalUsers = await dashboardService.getPreviousTotalUsers()
-    const percentChangeTotalUsers =
-      ((totalUsers - previousTotalUsers) / totalUsers) * 100.0
+    const percentChangeTotalUsers = ((totalUsers - previousTotalUsers) / totalUsers) * 100.0
     setpercentTotalUsers(Math.round(percentChangeTotalUsers))
 
     let percentChangeUsers = "pos"
@@ -139,10 +124,8 @@ const Dashboard = () => {
     const totalNewUsers = await dashboardService.getTotalNewUsers()
     settotalNewUsers(totalNewUsers.toLocaleString("en-US"))
 
-    const previousTotalNewUsers =
-      await dashboardService.getPreviousTotalNewUsers()
-    const percentChangeTotalNewUsers =
-      ((totalNewUsers - previousTotalNewUsers) / totalNewUsers) * 100.0
+    const previousTotalNewUsers = await dashboardService.getPreviousTotalNewUsers()
+    const percentChangeTotalNewUsers = ((totalNewUsers - previousTotalNewUsers) / totalNewUsers) * 100.0
     setpercentNewUsers(Math.round(percentChangeTotalNewUsers))
 
     let percentChangeNewUsers = "pos"
@@ -159,10 +142,7 @@ const Dashboard = () => {
     setUsers(usersList.Items)
   }
 
-  const gradient =
-    colorMode === "light"
-      ? "linear(to-t, brand.300, brand.400)"
-      : "linear(to-t, brand.600, brand.500)"
+  const gradient = colorMode === "light" ? "linear(to-t, brand.300, brand.400)" : "linear(to-t, brand.600, brand.500)"
   const color = useColorModeValue("boxTextColor.900", "boxTextColor.100")
 
   if (!canViewReports) {
@@ -203,9 +183,7 @@ const Dashboard = () => {
                         <Link>
                           <TodaysMoney
                             title="todays money"
-                            totalamount={` ${priceHelper.formatShortPrice(
-                              totalTodaysSales
-                            )}`}
+                            totalamount={` ${priceHelper.formatShortPrice(totalTodaysSales)}`}
                             percentchange={previousTodaysSales}
                             percentchangetype={percentTodaysSalesChange}
                             percentlabel="Compared to last month (mtd)"
@@ -221,9 +199,7 @@ const Dashboard = () => {
                         <Link>
                           <TotalSales
                             title="total sales"
-                            totalamount={` ${priceHelper.formatShortPrice(
-                              totalSales
-                            )}`}
+                            totalamount={` ${priceHelper.formatShortPrice(totalSales)}`}
                             percentchange={percentSales}
                             percentchangetype={percentSalesChange}
                             percentlabel="Compared to last year  (ytd)"
@@ -274,10 +250,7 @@ const Dashboard = () => {
                   </GridItem>
                 </SimpleGrid>
               </GridItem>
-              <GridItem
-                mt={{xl: 4, lg: 4, md: 2, sm: 0, base: 0}}
-                mb={{xl: 4, lg: 4, md: 2, sm: 4, base: 4}}
-              >
+              <GridItem mt={{xl: 4, lg: 4, md: 2, sm: 0, base: 0}} mb={{xl: 4, lg: 4, md: 2, sm: 4, base: 4}}>
                 <NextLink href="#" passHref>
                   <Link>
                     <AverageOrderAmount />
@@ -294,18 +267,8 @@ const Dashboard = () => {
               <GridItem mb={{xl: 0, lg: 0, md: 2, sm: 2, base: 2}}>
                 <NextLink href="/products" passHref>
                   <Link>
-                    <Card
-                      showclosebutton="false"
-                      p="0px"
-                      mb={{sm: "26px", lg: "0px"}}
-                      bg={boxBgColor}
-                      color={color}
-                    >
-                      <HStack
-                        justifyContent="space-around"
-                        w="100%"
-                        width="full"
-                      >
+                    <Card showclosebutton="false" p="0px" mb={{sm: "26px", lg: "0px"}} bg={boxBgColor} color={color}>
+                      <HStack justifyContent="space-around" w="100%" width="full">
                         <Heading size="md">
                           Products
                           <Text
@@ -327,10 +290,7 @@ const Dashboard = () => {
                             )}
                           </Text>
                         </Heading>
-                        <Image
-                          src="/images/icon_product.png"
-                          alt="Icon Products"
-                        />
+                        <Image src="/images/icon_product.png" alt="Icon Products" />
                       </HStack>
                     </Card>
                   </Link>
@@ -339,18 +299,8 @@ const Dashboard = () => {
               <GridItem mb={{xl: 0, lg: 0, md: 2, sm: 2, base: 2}}>
                 <NextLink href="/orders" passHref>
                   <Link>
-                    <Card
-                      showclosebutton="false"
-                      p="0px"
-                      mb={{sm: "26px", lg: "0px"}}
-                      bg={boxBgColor}
-                      color={color}
-                    >
-                      <HStack
-                        justifyContent="space-around"
-                        w="100%"
-                        width="full"
-                      >
+                    <Card showclosebutton="false" p="0px" mb={{sm: "26px", lg: "0px"}} bg={boxBgColor} color={color}>
+                      <HStack justifyContent="space-around" w="100%" width="full">
                         <Heading size="md">
                           Orders
                           <Text
@@ -381,13 +331,7 @@ const Dashboard = () => {
               <GridItem mb={{xl: 0, lg: 0, md: 2, sm: 2, base: 2}}>
                 <NextLink href="/users" passHref>
                   <Link>
-                    <Card
-                      showclosebutton="false"
-                      p="0px"
-                      mb={{sm: "26px", lg: "0px"}}
-                      bg={boxBgColor}
-                      color={color}
-                    >
+                    <Card showclosebutton="false" p="0px" mb={{sm: "26px", lg: "0px"}} bg={boxBgColor} color={color}>
                       <HStack
                         justifyContent="space-around"
                         w="100%"
@@ -424,18 +368,8 @@ const Dashboard = () => {
               <GridItem mb={{xl: 0, lg: 0, md: 2, sm: 2, base: 2}}>
                 <NextLink href="/promotions" passHref>
                   <Link>
-                    <Card
-                      showclosebutton="false"
-                      p="0px"
-                      mb={{sm: "26px", lg: "0px"}}
-                      bg={boxBgColor}
-                      color={color}
-                    >
-                      <HStack
-                        justifyContent="space-around"
-                        w="100%"
-                        width="full"
-                      >
+                    <Card showclosebutton="false" p="0px" mb={{sm: "26px", lg: "0px"}} bg={boxBgColor} color={color}>
+                      <HStack justifyContent="space-around" w="100%" width="full">
                         <Heading size="md">
                           Promotions
                           <Text
@@ -457,10 +391,7 @@ const Dashboard = () => {
                             )}
                           </Text>
                         </Heading>
-                        <Image
-                          src="/images/icon_promo.png"
-                          alt="Icon Promotions"
-                        />
+                        <Image src="/images/icon_promo.png" alt="Icon Promotions" />
                       </HStack>
                     </Card>
                   </Link>

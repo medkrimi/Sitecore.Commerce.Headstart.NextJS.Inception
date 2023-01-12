@@ -29,9 +29,7 @@ const SideNavigation = () => {
       flexDir="column"
       justifyContent="flex-start"
     >
-      <VStack justifyContent="flex-start">
-        {isMobile ? <MobileSideBarMenu /> : <DesktopSideBarMenu />}
-      </VStack>
+      <VStack justifyContent="flex-start">{isMobile ? <MobileSideBarMenu /> : <DesktopSideBarMenu />}</VStack>
     </Flex>
   )
 }

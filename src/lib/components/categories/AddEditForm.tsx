@@ -1,16 +1,6 @@
 import * as Yup from "yup"
 
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Container,
-  Flex,
-  HStack,
-  Heading,
-  Link,
-  Stack
-} from "@chakra-ui/react"
+import {Box, Button, ButtonGroup, Container, Flex, HStack, Heading, Link, Stack} from "@chakra-ui/react"
 import {Catalog, Category} from "ordercloud-javascript-sdk"
 import {
   InputControl,
@@ -72,10 +62,7 @@ function AddEditForm({category}: AddEditFormProps) {
 
   async function createCatalog(fields, setSubmitting) {
     try {
-      const createdCatalog = await categoriesService.create(
-        router.query.catalogid,
-        fields
-      )
+      const createdCatalog = await categoriesService.create(router.query.catalogid, fields)
       await categoriesService.saveAssignment(
         router.query.catalogid,
         createdCatalog.ID,
@@ -91,9 +78,7 @@ function AddEditForm({category}: AddEditFormProps) {
         isClosable: true,
         position: "top"
       })
-      router.push(
-        `/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories`
-      )
+      router.push(`/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories`)
     } catch (e) {
       setSubmitting(false)
     }
@@ -101,10 +86,7 @@ function AddEditForm({category}: AddEditFormProps) {
 
   async function updateCatalog(fields, setSubmitting) {
     try {
-      const updatedCatalog = await categoriesService.update(
-        router.query.catalogid,
-        fields
-      )
+      const updatedCatalog = await categoriesService.update(router.query.catalogid, fields)
       await categoriesService.saveAssignment(
         router.query.catalogid,
         updatedCatalog.ID,
@@ -120,9 +102,7 @@ function AddEditForm({category}: AddEditFormProps) {
         isClosable: true,
         position: "top"
       })
-      router.push(
-        `/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories`
-      )
+      router.push(`/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories`)
     } catch (e) {
       setSubmitting(false)
     }
@@ -193,21 +173,11 @@ function AddEditForm({category}: AddEditFormProps) {
                 <Stack spacing={5}>
                   <InputControl name="Name" label="Category Name" />
                   <TextareaControl name="Description" label="Description" />
-                  <SwitchControl
-                    name="Active"
-                    label="Active"
-                    colorScheme="teal"
-                    size="lg"
-                  />
+                  <SwitchControl name="Active" label="Active" colorScheme="teal" size="lg" />
                   <ButtonGroup>
                     <HStack justifyContent="space-between" w="100%" mb={5}>
                       <Box>
-                        <Button
-                          variant="primaryButton"
-                          type="submit"
-                          isLoading={isSubmitting}
-                          mr="15px"
-                        >
+                        <Button variant="primaryButton" type="submit" isLoading={isSubmitting} mr="15px">
                           Save
                         </Button>
                         <Button
@@ -223,9 +193,7 @@ function AddEditForm({category}: AddEditFormProps) {
                         </Button>
                         <Button
                           onClick={() =>
-                            router.push(
-                              `/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories`
-                            )
+                            router.push(`/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories`)
                           }
                           variant="secondaryButton"
                           isLoading={isSubmitting}
@@ -234,10 +202,7 @@ function AddEditForm({category}: AddEditFormProps) {
                           Cancel
                         </Button>
                       </Box>
-                      <Button
-                        variant="secondaryButton"
-                        onClick={() => deleteCategory(values.ID)}
-                      >
+                      <Button variant="secondaryButton" onClick={() => deleteCategory(values.ID)}>
                         Delete
                       </Button>
                     </HStack>

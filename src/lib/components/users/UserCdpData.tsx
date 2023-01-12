@@ -65,10 +65,7 @@ export default function UserCdpData({user, buyerId, cdpGuest}: UserDataProps) {
             </Box>
           ) : (
             <>
-              <Heading
-                size={{base: "md", md: "lg", lg: "xl"}}
-                mb={expanded ? 6 : 0}
-              >
+              <Heading size={{base: "md", md: "lg", lg: "xl"}} mb={expanded ? 6 : 0}>
                 CDP Data
               </Heading>
               <Collapse in={expanded}>
@@ -79,11 +76,7 @@ export default function UserCdpData({user, buyerId, cdpGuest}: UserDataProps) {
                         First Name:
                       </Text>
 
-                      <Heading
-                        fontSize={"xl"}
-                        fontFamily={"body"}
-                        fontWeight={500}
-                      >
+                      <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                         <>{cdpGuestData?.firstName}</>
                       </Heading>
                     </Box>
@@ -92,11 +85,7 @@ export default function UserCdpData({user, buyerId, cdpGuest}: UserDataProps) {
                         Last Name:
                       </Text>
 
-                      <Heading
-                        fontSize={"xl"}
-                        fontFamily={"body"}
-                        fontWeight={500}
-                      >
+                      <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                         <>{cdpGuestData?.lastName}</>
                       </Heading>
                     </Box>
@@ -105,11 +94,7 @@ export default function UserCdpData({user, buyerId, cdpGuest}: UserDataProps) {
                         Email:
                       </Text>
 
-                      <Heading
-                        fontSize={"xl"}
-                        fontFamily={"body"}
-                        fontWeight={500}
-                      >
+                      <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                         <>{cdpGuestData?.email}</>
                       </Heading>
                     </Box>
@@ -118,11 +103,7 @@ export default function UserCdpData({user, buyerId, cdpGuest}: UserDataProps) {
                         Gender:
                       </Text>
 
-                      <Heading
-                        fontSize={"xl"}
-                        fontFamily={"body"}
-                        fontWeight={500}
-                      >
+                      <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                         <>{cdpGuestData?.gender}</>
                       </Heading>
                     </Box>
@@ -130,11 +111,7 @@ export default function UserCdpData({user, buyerId, cdpGuest}: UserDataProps) {
                       <Text opacity={0.5} fontWeight={"bold"}>
                         Language:
                       </Text>
-                      <Heading
-                        fontSize={"xl"}
-                        fontFamily={"body"}
-                        fontWeight={500}
-                      >
+                      <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                         {cdpGuestData?.language}
                       </Heading>
                     </Box>
@@ -145,14 +122,8 @@ export default function UserCdpData({user, buyerId, cdpGuest}: UserDataProps) {
                         Date of Birth:
                       </Text>
 
-                      <Heading
-                        fontSize={"xl"}
-                        fontFamily={"body"}
-                        fontWeight={500}
-                      >
-                        {new Date(
-                          cdpGuestData?.dateOfBirth
-                        )?.toLocaleString() ?? "Not set"}
+                      <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                        {new Date(cdpGuestData?.dateOfBirth)?.toLocaleString() ?? "Not set"}
                       </Heading>
                     </Box>
                     <Box width="full" pb={2}>
@@ -160,13 +131,8 @@ export default function UserCdpData({user, buyerId, cdpGuest}: UserDataProps) {
                         First seen:
                       </Text>
 
-                      <Heading
-                        fontSize={"xl"}
-                        fontFamily={"body"}
-                        fontWeight={500}
-                      >
-                        {new Date(cdpGuestData?.firstSeen)?.toLocaleString() ??
-                          "Not set"}
+                      <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                        {new Date(cdpGuestData?.firstSeen)?.toLocaleString() ?? "Not set"}
                       </Heading>
                     </Box>
                     <Box width="full" pb={2}>
@@ -174,13 +140,8 @@ export default function UserCdpData({user, buyerId, cdpGuest}: UserDataProps) {
                         Last seen:
                       </Text>
 
-                      <Heading
-                        fontSize={"xl"}
-                        fontFamily={"body"}
-                        fontWeight={500}
-                      >
-                        {new Date(cdpGuestData?.lastSeen)?.toLocaleString() ??
-                          "Not set"}
+                      <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                        {new Date(cdpGuestData?.lastSeen)?.toLocaleString() ?? "Not set"}
                       </Heading>
                     </Box>
                     <Box width="full" pb={2}>
@@ -188,13 +149,8 @@ export default function UserCdpData({user, buyerId, cdpGuest}: UserDataProps) {
                         Modified at:
                       </Text>
 
-                      <Heading
-                        fontSize={"xl"}
-                        fontFamily={"body"}
-                        fontWeight={500}
-                      >
-                        {new Date(cdpGuestData?.modifiedAt)?.toLocaleString() ??
-                          "Not set"}
+                      <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                        {new Date(cdpGuestData?.modifiedAt)?.toLocaleString() ?? "Not set"}
                       </Heading>
                     </Box>
                     <Box width="full" pb={2}>
@@ -202,17 +158,8 @@ export default function UserCdpData({user, buyerId, cdpGuest}: UserDataProps) {
                         CDP Guest ID:
                       </Text>
 
-                      <Heading
-                        fontSize={"xl"}
-                        fontFamily={"body"}
-                        fontWeight={500}
-                      >
-                        <Link
-                          href={
-                            "https://app.boxever.com/#/guests/" +
-                            cdpGuestData?.ref
-                          }
-                        >
+                      <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                        <Link href={"https://app.boxever.com/#/guests/" + cdpGuestData?.ref}>
                           <a target={"_blank"}>{cdpGuestData?.ref}</a>
                         </Link>
                       </Heading>

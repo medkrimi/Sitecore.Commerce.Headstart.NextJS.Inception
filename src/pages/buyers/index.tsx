@@ -1,11 +1,6 @@
-import {Box, Button, ButtonGroup, Icon, Text, useToast} from "@chakra-ui/react"
-import {DeleteIcon, EditIcon} from "@chakra-ui/icons"
-import {
-  buyersService,
-  catalogsService,
-  userGroupsService,
-  usersService
-} from "lib/api"
+import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
+import {Box, Button, ButtonGroup, HStack, Icon, Text, useToast} from "@chakra-ui/react"
+import {buyersService, catalogsService, userGroupsService, usersService} from "lib/api"
 import {useEffect, useState} from "react"
 
 import BuyersDataTable from "lib/components/datatable/datatable"
@@ -54,12 +49,9 @@ const BuyersList = () => {
 
     const requests = buyersList.Items.map(async (buyer) => {
       _buyerListMeta[buyer.ID] = {}
-      _buyerListMeta[buyer.ID]["userGroupsCount"] =
-        await userGroupsService.getUserGroupsCountByBuyerID(buyer.ID)
-      _buyerListMeta[buyer.ID]["usersCount"] =
-        await usersService.getUsersCountByBuyerID(buyer.ID)
-      _buyerListMeta[buyer.ID]["catalogsCount"] =
-        await catalogsService.getCatalogsCountByBuyerID(buyer.ID)
+      _buyerListMeta[buyer.ID]["userGroupsCount"] = await userGroupsService.getUserGroupsCountByBuyerID(buyer.ID)
+      _buyerListMeta[buyer.ID]["usersCount"] = await usersService.getUsersCountByBuyerID(buyer.ID)
+      _buyerListMeta[buyer.ID]["catalogsCount"] = await catalogsService.getCatalogsCountByBuyerID(buyer.ID)
     })
     await Promise.all(requests)
     setBuyersMeta(_buyerListMeta)
@@ -90,16 +82,12 @@ const BuyersList = () => {
     {
       Header: "BUYER ID",
       accessor: "ID",
-      Cell: ({value, row}) => (
-        <Link href={`/buyers/${row.original.ID}`}>{value}</Link>
-      )
+      Cell: ({value, row}) => <Link href={`/buyers/${row.original.ID}`}>{value}</Link>
     },
     {
       Header: "Name",
       accessor: "Name",
-      Cell: ({value, row}) => (
-        <Link href={`/buyers/${row.original.ID}`}>{value}</Link>
-      )
+      Cell: ({value, row}) => <Link href={`/buyers/${row.original.ID}`}>{value}</Link>
     },
     {
       Header: "DEFAULT CATALOG ID",
@@ -129,16 +117,10 @@ const BuyersList = () => {
       Header: "USER GROUPS / USERS",
       Cell: ({row}) => (
         <ButtonGroup>
-          <Button
-            onClick={() => router.push(`/buyers/${row.original.ID}/usergroups`)}
-            variant="secondaryButton"
-          >
+          <Button onClick={() => router.push(`/buyers/${row.original.ID}/usergroups`)} variant="secondaryButton">
             User Groups ({buyersMeta[row.original.ID]["userGroupsCount"]})
           </Button>
-          <Button
-            onClick={() => router.push(`/buyers/${row.original.ID}/users`)}
-            variant="secondaryButton"
-          >
+          <Button onClick={() => router.push(`/buyers/${row.original.ID}/users`)} variant="secondaryButton">
             Users ({buyersMeta[row.original.ID]["usersCount"]})
           </Button>
         </ButtonGroup>
@@ -148,9 +130,7 @@ const BuyersList = () => {
       Header: "CATALOGS",
       Cell: ({row}) => (
         <Link href={`/buyers/${row.original.ID}/catalogs`}>
-          <Button variant="secondaryButton">
-            Catalogs ({buyersMeta[row.original.ID]["catalogsCount"]})
-          </Button>
+          <Button variant="secondaryButton">Catalogs ({buyersMeta[row.original.ID]["catalogsCount"]})</Button>
         </Link>
       )
     },
@@ -165,11 +145,7 @@ const BuyersList = () => {
           >
             Edit
           </Button>
-          <Button
-            variant="secondaryButton"
-            onClick={() => deleteBuyer(row.original.ID)}
-            leftIcon={<DeleteIcon />}
-          >
+          <Button variant="secondaryButton" onClick={() => deleteBuyer(row.original.ID)} leftIcon={<DeleteIcon />}>
             Delete
           </Button>
         </ButtonGroup>
@@ -188,6 +164,15 @@ const ProtectedBuyersList = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
       <Box padding="GlobalPadding">
+        <HStack justifyContent="space-between" w="100%" mb={5}>
+          <Button onClick={() => router.push(`/buyers/add`)} variant="primaryButton" leftIcon={<AddIcon />} size="lg">
+            Create buyer
+          </Button>
+
+          <HStack>
+            <Button variant="secondaryButton">Export CSV</Button>
+          </HStack>
+        </HStack>
         <Card variant="primaryCard">
           <BuyersList />
         </Card>

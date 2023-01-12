@@ -55,25 +55,19 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductInventoryRecords({
-  composedProduct,
-  setComposedProduct
-}: ProductDataProps) {
+export default function ProductInventoryRecords({composedProduct, setComposedProduct}: ProductDataProps) {
   const color = useColorModeValue("textColor.900", "textColor.100")
   const bg = useColorModeValue("brand.500", "brand.500")
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
   const [expanded, setExpanded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [inventoryRecors, setInventoryRecords] =
-    useState<InventoryRecord[]>(null)
+  const [inventoryRecors, setInventoryRecords] = useState<InventoryRecord[]>(null)
 
   useEffect(() => {
     async function GetProdcutSupplier() {
       if (composedProduct?.Product) {
-        var productSupplier = await InventoryRecords.List(
-          composedProduct?.Product?.ID
-        )
+        var productSupplier = await InventoryRecords.List(composedProduct?.Product?.ID)
         setInventoryRecords(productSupplier.Items)
       }
     }
@@ -170,10 +164,7 @@ export default function ProductInventoryRecords({
               </Button>
             </Tooltip>
           </HStack>
-          <Heading
-            position={"relative"}
-            size={{base: "md", md: "lg", lg: "xl"}}
-          >
+          <Heading position={"relative"} size={{base: "md", md: "lg", lg: "xl"}}>
             Inventory Records
             <Tag
               position={"relative"}
@@ -221,8 +212,7 @@ export default function ProductInventoryRecords({
                                   </p>
                                   <Divider variant={"solid"} />
                                   <p>
-                                    {item.Address.FirstName}{" "}
-                                    {item.Address.LastName}
+                                    {item.Address.FirstName} {item.Address.LastName}
                                   </p>
                                   <p>{item.Address.Street1}</p>
                                   <p>
@@ -232,11 +222,7 @@ export default function ProductInventoryRecords({
                                 </Box>
                               </Td>
 
-                              <Td>
-                                {new Date(
-                                  composedProduct?.Product?.Inventory?.LastUpdated
-                                )?.toLocaleString()}
-                              </Td>
+                              <Td>{new Date(composedProduct?.Product?.Inventory?.LastUpdated)?.toLocaleString()}</Td>
                               <Td>
                                 {item.OrderCanExceed ?? false ? (
                                   <CheckIcon boxSize={6} color={okColor} />

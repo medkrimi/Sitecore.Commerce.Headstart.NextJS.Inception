@@ -1,4 +1,5 @@
 import {Orders, Users} from "ordercloud-javascript-sdk"
+
 const d = new Date()
 let day = d.getDate()
 let month = d.getMonth() + 1 //Need the plus 1 since it is an array of 0-11
@@ -38,10 +39,7 @@ async function getTodaysMoney() {
   if (process.env.NEXT_PUBLIC_OC_USELIVEDATA) {
     const ordersList = await Orders.List("All", {
       filters: {
-        DateCreated: [
-          ">" + year + "-" + month + "-01",
-          "<" + year + "-" + month + "-" + day
-        ]
+        DateCreated: [">" + year + "-" + month + "-01", "<" + year + "-" + month + "-" + day]
       }
     })
     result = ordersList.Items.reduce((accumulator, obj) => {
@@ -85,10 +83,7 @@ async function getTotalSales() {
   if (process.env.NEXT_PUBLIC_OC_USELIVEDATA) {
     const ordersList = await Orders.List("All", {
       filters: {
-        DateCreated: [
-          ">" + year + "-01-01",
-          "<" + year + "-" + month + "-" + day
-        ]
+        DateCreated: [">" + year + "-01-01", "<" + year + "-" + month + "-" + day]
       }
     })
     result = ordersList.Items.reduce((accumulator, obj) => {
@@ -109,10 +104,7 @@ async function getPreviousTotalSales() {
   if (process.env.NEXT_PUBLIC_OC_USELIVEDATA) {
     const ordersList = await Orders.List("All", {
       filters: {
-        DateCreated: [
-          ">" + (year - 1) + "-01-01",
-          "<" + (year - 1) + "-" + month + "-" + day
-        ]
+        DateCreated: [">" + (year - 1) + "-01-01", "<" + (year - 1) + "-" + month + "-" + day]
       }
     })
     result = ordersList.Items.reduce((accumulator, obj) => {
@@ -164,10 +156,7 @@ async function getTotalUsers() {
   if (process.env.NEXT_PUBLIC_OC_USELIVEDATA) {
     const usersList = await Orders.List("All", {
       filters: {
-        DateCreated: [
-          ">" + year + "-01-01",
-          "<" + year + "-" + month + "-" + day
-        ]
+        DateCreated: [">" + year + "-01-01", "<" + year + "-" + month + "-" + day]
       }
     })
     result = usersList.Items.length
@@ -185,10 +174,7 @@ async function getPreviousTotalUsers() {
   if (process.env.NEXT_PUBLIC_OC_USELIVEDATA) {
     const usersList = await Orders.List("All", {
       filters: {
-        DateCreated: [
-          ">" + (year - 1) + "-01-01",
-          "<" + (year - 1) + "-" + month + "-" + day
-        ]
+        DateCreated: [">" + (year - 1) + "-01-01", "<" + (year - 1) + "-" + month + "-" + day]
       }
     })
     result = usersList.Items.length
@@ -207,10 +193,7 @@ async function getTotalNewUsers() {
   if (process.env.NEXT_PUBLIC_OC_USELIVEDATA) {
     const usersList = await Orders.List("All", {
       filters: {
-        DateCreated: [
-          ">" + year + "-01-01",
-          "<" + year + "-" + month + "-" + day
-        ]
+        DateCreated: [">" + year + "-01-01", "<" + year + "-" + month + "-" + day]
       }
     })
     result = usersList.Items.length

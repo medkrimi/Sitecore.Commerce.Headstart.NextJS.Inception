@@ -4,12 +4,6 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {ssr: false})
 
 export default function DonutChart(props) {
   return (
-    <ReactApexChart
-      options={props.chartOptions}
-      series={props.chartData}
-      type="donut"
-      width="100%"
-      height="100%"
-    />
+    <ReactApexChart options={props.chartOptions} series={props.chartData} type="donut" width="100%" height="100%" />
   )
 }

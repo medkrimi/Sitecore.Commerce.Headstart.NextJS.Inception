@@ -15,20 +15,8 @@ import {
   Tr,
   VStack
 } from "@chakra-ui/react"
-import {
-  ComposedProduct,
-  GetComposedProduct,
-  RemoveLineItem,
-  UpdateLineItem
-} from "../../services/ordercloud.service"
-import {
-  FormEvent,
-  FunctionComponent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState
-} from "react"
+import {ComposedProduct, GetComposedProduct, RemoveLineItem, UpdateLineItem} from "../../services/ordercloud.service"
+import {FormEvent, FunctionComponent, useCallback, useEffect, useRef, useState} from "react"
 
 import {LineItem} from "ordercloud-javascript-sdk"
 import OcQuantityInput from "./OcQuantityInput"
@@ -47,10 +35,7 @@ interface OcLineItemCardProps {
 //   return `Refund ${"No PDF"}`
 // }
 
-const OcLineItemCard: FunctionComponent<OcLineItemCardProps> = ({
-  lineItem,
-  editable
-}) => {
+const OcLineItemCard: FunctionComponent<OcLineItemCardProps> = ({lineItem, editable}) => {
   const [disabled, setDisabled] = useState(false)
   const [quantity, setQuantity] = useState(lineItem.Quantity)
   const [product, setProduct] = useState<ComposedProduct>()
@@ -115,10 +100,7 @@ const OcLineItemCard: FunctionComponent<OcLineItemCardProps> = ({
       <Th>{priceHelper.formatPrice(lineItem.UnitPrice)}</Th>
       <Th>{priceHelper.formatPrice(lineItem.LineSubtotal)}</Th>
       <Th>
-        <Button
-          variant="secondaryButton"
-          onClick={() => setReturnItemDialogOpen(true)}
-        >
+        <Button variant="secondaryButton" onClick={() => setReturnItemDialogOpen(true)}>
           Return item
         </Button>
       </Th>
@@ -134,12 +116,10 @@ const OcLineItemCard: FunctionComponent<OcLineItemCardProps> = ({
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text display="inline">
-                Once you press the veryfy button in the lower right of this
-                modal an email will be sent to the customer along with the
-                return shipping label to make it easier for them to return this
-                item. Once you have received this item you will be able to mark
-                the return complete and they will be credited for returning this
-                item.
+                Once you press the veryfy button in the lower right of this modal an email will be sent to the customer
+                along with the return shipping label to make it easier for them to return this item. Once you have
+                received this item you will be able to mark the return complete and they will be credited for returning
+                this item.
               </Text>
             </AlertDialogBody>
             <AlertDialogFooter>
@@ -153,11 +133,7 @@ const OcLineItemCard: FunctionComponent<OcLineItemCardProps> = ({
                   Cancel
                 </Button>
                 <Button onClick={requestReturnItem} disabled={loading}>
-                  {loading ? (
-                    <Spinner color="brand.500" />
-                  ) : (
-                    "Verify & Start Return"
-                  )}
+                  {loading ? <Spinner color="brand.500" /> : "Verify & Start Return"}
                 </Button>
               </HStack>
             </AlertDialogFooter>

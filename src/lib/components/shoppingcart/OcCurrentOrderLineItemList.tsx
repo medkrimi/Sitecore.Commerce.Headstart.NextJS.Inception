@@ -8,9 +8,7 @@ interface OcCurrentOrderLineItemListProps {
   editable?: boolean
 }
 
-const OcCurrentOrderLineItemList: FunctionComponent<
-  OcCurrentOrderLineItemListProps
-> = ({emptyMessage, editable}) => {
+const OcCurrentOrderLineItemList: FunctionComponent<OcCurrentOrderLineItemListProps> = ({emptyMessage, editable}) => {
   const [currentOrder, setCurrentOrder] = useState<ComposedOrder>()
 
   useEffect(() => {
@@ -22,13 +20,7 @@ const OcCurrentOrderLineItemList: FunctionComponent<
     GetCart()
   }, [])
 
-  return (
-    <OcLineItemList
-      emptyMessage={emptyMessage}
-      editable={editable}
-      lineItems={currentOrder.Order.LineItems}
-    />
-  )
+  return <OcLineItemList emptyMessage={emptyMessage} editable={editable} lineItems={currentOrder.Order.LineItems} />
 }
 
 export default OcCurrentOrderLineItemList

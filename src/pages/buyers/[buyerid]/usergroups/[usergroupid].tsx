@@ -34,15 +34,7 @@ const UserGroupListItem = () => {
         .then((userGroup) => setuserGroup(userGroup))
     }
   }, [router.query.buyerid, router.query.usergroupid])
-  return (
-    <>
-      {userGroup?.ID ? (
-        <AddEditForm userGroup={userGroup} />
-      ) : (
-        <div> Loading</div>
-      )}
-    </>
-  )
+  return <>{userGroup?.ID ? <AddEditForm userGroup={userGroup} /> : <div> Loading</div>}</>
 }
 const ProtectedBuyerListItem = () => {
   return (

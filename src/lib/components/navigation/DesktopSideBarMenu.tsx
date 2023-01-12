@@ -1,21 +1,6 @@
-import {
-  Button,
-  Flex,
-  Icon,
-  IconButton,
-  Image,
-  Link,
-  Text,
-  useColorModeValue
-} from "@chakra-ui/react"
+import {Button, Flex, Icon, IconButton, Image, Link, Text, useColorModeValue} from "@chakra-ui/react"
 import {FiSettings, FiStar} from "react-icons/fi"
-import {
-  HiChevronDoubleLeft,
-  HiOutlineChartBar,
-  HiOutlineEmojiSad,
-  HiOutlineQrcode,
-  HiOutlineUser
-} from "react-icons/hi"
+import {HiChevronDoubleLeft, HiOutlineChartBar, HiOutlineEmojiSad, HiOutlineQrcode, HiOutlineUser} from "react-icons/hi"
 import React, {useState} from "react"
 
 import {BsCurrencyDollar} from "react-icons/bs"
@@ -46,13 +31,7 @@ const DesktopSideBarMenu = () => {
           background={sidebarBg}
           color={color}
         >
-          <Flex
-            p="5%"
-            flexDir="column"
-            w="100%"
-            alignItems={navSize == "small" ? "center" : "flex-start"}
-            as="nav"
-          >
+          <Flex p="5%" flexDir="column" w="100%" alignItems={navSize == "small" ? "center" : "flex-start"} as="nav">
             {/* <IconButton
             aria-label="Change menu"
             background="none"
@@ -79,11 +58,7 @@ const DesktopSideBarMenu = () => {
                 color="white"
                 _hover={{color: "gray.300"}}
               >
-                <Icon
-                  as={HiOutlineChartBar}
-                  fontSize={navSize == "small" ? "30px" : "35px"}
-                  title="Dashboard"
-                ></Icon>
+                <Icon as={HiOutlineChartBar} fontSize={navSize == "small" ? "30px" : "35px"} title="Dashboard"></Icon>
                 <Text
                   as="span"
                   pl="GlobalPadding"
@@ -106,11 +81,7 @@ const DesktopSideBarMenu = () => {
                   color="white"
                   _hover={{color: "gray.300"}}
                 >
-                  <Icon
-                    as={HiOutlineQrcode}
-                    fontSize={navSize == "small" ? "30px" : "35px"}
-                    title="Products"
-                  ></Icon>
+                  <Icon as={HiOutlineQrcode} fontSize={navSize == "small" ? "30px" : "35px"} title="Products"></Icon>
                   <Text
                     as="span"
                     pl="GlobalPadding"
@@ -134,11 +105,7 @@ const DesktopSideBarMenu = () => {
                   color="white"
                   _hover={{color: "gray.300"}}
                 >
-                  <Icon
-                    as={FiStar}
-                    fontSize={navSize == "small" ? "30px" : "35px"}
-                    title="Promotions"
-                  ></Icon>
+                  <Icon as={FiStar} fontSize={navSize == "small" ? "30px" : "35px"} title="Promotions"></Icon>
                   <Text
                     as="span"
                     pl="GlobalPadding"
@@ -162,11 +129,7 @@ const DesktopSideBarMenu = () => {
                   color="white"
                   _hover={{color: "gray.300"}}
                 >
-                  <Icon
-                    as={BsCurrencyDollar}
-                    fontSize={navSize == "small" ? "30px" : "35px"}
-                    title="Orders"
-                  ></Icon>
+                  <Icon as={BsCurrencyDollar} fontSize={navSize == "small" ? "30px" : "35px"} title="Orders"></Icon>
                   <Text
                     as="span"
                     pl="GlobalPadding"
@@ -190,11 +153,7 @@ const DesktopSideBarMenu = () => {
                   color="white"
                   _hover={{color: "gray.300"}}
                 >
-                  <Icon
-                    as={HiOutlineEmojiSad}
-                    fontSize={navSize == "small" ? "30px" : "35px"}
-                    title="Returns"
-                  ></Icon>
+                  <Icon as={HiOutlineEmojiSad} fontSize={navSize == "small" ? "30px" : "35px"} title="Returns"></Icon>
                   <Text
                     as="span"
                     pl="GlobalPadding"
@@ -218,10 +177,7 @@ const DesktopSideBarMenu = () => {
                   color="white"
                   _hover={{color: "gray.300"}}
                 >
-                  <Icon
-                    as={HiOutlineUser}
-                    fontSize={navSize == "small" ? "30px" : "35px"}
-                  ></Icon>
+                  <Icon as={HiOutlineUser} fontSize={navSize == "small" ? "30px" : "35px"}></Icon>
                   <Text
                     as="span"
                     pl="GlobalPadding"
@@ -246,11 +202,7 @@ const DesktopSideBarMenu = () => {
                   color="white"
                   _hover={{color: "gray.300"}}
                 >
-                  <Icon
-                    as={FiSettings}
-                    fontSize={navSize == "small" ? "30px" : "35px"}
-                    title="Settings"
-                  ></Icon>
+                  <Icon as={FiSettings} fontSize={navSize == "small" ? "30px" : "35px"} title="Settings"></Icon>
                   <Text
                     as="span"
                     pl="GlobalPadding"

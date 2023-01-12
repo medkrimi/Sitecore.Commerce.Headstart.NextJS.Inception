@@ -4,12 +4,6 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {ssr: false})
 
 export default function PolarChart(props) {
   return (
-    <ReactApexChart
-      options={props.chartOptions}
-      series={props.chartData}
-      type="polarArea"
-      width="100%"
-      height="100%"
-    />
+    <ReactApexChart options={props.chartOptions} series={props.chartData} type="polarArea" width="100%" height="100%" />
   )
 }
