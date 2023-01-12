@@ -29,9 +29,10 @@ const CategoryListItem = (props) => {
   const [category, setCategory] = useState({} as Category)
   useEffect(() => {
     const categoryid = props.selectedNode?.id || router.query.categoryid
-    categoriesService.getById(router.query.catalogid, categoryid).then((category) => {
-      setCategory(category)
-    })
+    if (categoryid)
+      categoriesService.getById(router.query.catalogid, categoryid).then((category) => {
+        setCategory(category)
+      })
   }, [props.selectedNode, router.query.catalogid, router.query.categoryid])
   return <>{category?.ID ? <AddEditForm category={category} /> : <div> Loading</div>}</>
 }
