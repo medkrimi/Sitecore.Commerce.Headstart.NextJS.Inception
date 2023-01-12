@@ -41,6 +41,7 @@ const Dashboard = () => {
   const [orders, setOrders] = useState([])
   const [products, setProducts] = useState([])
   const [promotions, setPromotions] = useState([])
+  const [users, setUsers] = useState([])
 
   const [totalTodaysSales, settotalTodaysSales] = useState(Number)
   const [previousTodaysSales, setpreviousTodaysSales] = useState(Number)
@@ -77,13 +78,13 @@ const Dashboard = () => {
     const ordersList = await ordersService.list()
     const productsList = await productsService.list()
     const promotionsList = await promotionsService.list()
-
+    const usersList = await promotionsService.list()
     //Todays Sales
-    const todaysSales = await dashboardService.getTodaysSales()
+    const todaysSales = await dashboardService.getTodaysMoney()
     settotalTodaysSales(todaysSales)
-    const previousTodaysSales = await dashboardService.getPreviousTodaysSales()
+    const previousTodaysSales = await dashboardService.getPreviousTodaysMoney()
     const percentChange = ((todaysSales - previousTodaysSales) / todaysSales) * 100.0
-    setpreviousTodaysSales(percentChange)
+    setpreviousTodaysSales(Math.round(percentChange))
 
     let percentChangeToday = "pos"
     if (todaysSales < previousTodaysSales) {
@@ -97,7 +98,7 @@ const Dashboard = () => {
 
     const previousTotalSales = await dashboardService.getPreviousTotalSales()
     const percentChangeTotalSales = ((totalSales - previousTotalSales) / totalSales) * 100.0
-    setpercentSales(percentChangeTotalSales)
+    setpercentSales(Math.round(percentChangeTotalSales))
 
     let percentChangeTotal = "pos"
     if (totalSales < previousTotalSales) {
@@ -107,11 +108,11 @@ const Dashboard = () => {
 
     //Total Users
     const totalUsers = await dashboardService.getTotalUsers()
-    settotalUsers(totalUsers)
+    settotalUsers(totalUsers.toLocaleString("en-US"))
 
     const previousTotalUsers = await dashboardService.getPreviousTotalUsers()
     const percentChangeTotalUsers = ((totalUsers - previousTotalUsers) / totalUsers) * 100.0
-    setpercentTotalUsers(percentChangeTotalUsers)
+    setpercentTotalUsers(Math.round(percentChangeTotalUsers))
 
     let percentChangeUsers = "pos"
     if (totalUsers < previousTotalUsers) {
@@ -121,11 +122,11 @@ const Dashboard = () => {
 
     //Total New Users
     const totalNewUsers = await dashboardService.getTotalNewUsers()
-    settotalNewUsers(totalNewUsers)
+    settotalNewUsers(totalNewUsers.toLocaleString("en-US"))
 
     const previousTotalNewUsers = await dashboardService.getPreviousTotalNewUsers()
     const percentChangeTotalNewUsers = ((totalNewUsers - previousTotalNewUsers) / totalNewUsers) * 100.0
-    setpercentNewUsers(percentChangeTotalNewUsers)
+    setpercentNewUsers(Math.round(percentChangeTotalNewUsers))
 
     let percentChangeNewUsers = "pos"
     if (totalNewUsers < previousTotalNewUsers) {
@@ -138,6 +139,7 @@ const Dashboard = () => {
     setOrders(ordersList.Items)
     setProducts(productsList.Items)
     setPromotions(promotionsList.Items)
+    setUsers(usersList.Items)
   }
 
   const gradient = colorMode === "light" ? "linear(to-t, brand.300, brand.400)" : "linear(to-t, brand.600, brand.500)"
@@ -348,8 +350,8 @@ const Dashboard = () => {
                               base: "0px"
                             }}
                           >
-                            {totalUsers != null ? (
-                              <i>({totalUsers})</i>
+                            {users != null ? (
+                              <i>({users.length})</i>
                             ) : (
                               <Box pt={2}>
                                 <BrandedSpinner />

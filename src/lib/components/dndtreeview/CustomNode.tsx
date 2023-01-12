@@ -2,9 +2,10 @@ import {NodeModel, ocNodeModel} from "@minoru/react-dnd-treeview"
 
 import {ChevronRightIcon} from "@chakra-ui/icons"
 import React from "react"
-import {Text} from "@chakra-ui/react"
+import {Button, Icon, Text} from "@chakra-ui/react"
 import {TypeIcon} from "./TypeIcon"
 import styles from "./CustomNode.module.css"
+import {HiOutlinePlusCircle} from "react-icons/hi"
 
 declare module "@minoru/react-dnd-treeview" {
   export interface ocNodeModel extends NodeModel {
@@ -53,8 +54,9 @@ export const CustomNode: React.FC<Props> = (props) => {
         <TypeIcon droppable={droppable} type={props.node.nodeType} />
       </div>
       <div className={styles.labelGridItem}>
-        <Text as="b">{props.node.text}</Text>
+        <span>{props.node.text}</span>
       </div>
+      <Icon as={HiOutlinePlusCircle} fontSize="24px" />
     </div>
   )
 }

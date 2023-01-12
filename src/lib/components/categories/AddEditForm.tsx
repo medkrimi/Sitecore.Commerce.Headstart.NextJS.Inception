@@ -6,6 +6,7 @@ import {
   ButtonGroup,
   Container,
   Flex,
+  HStack,
   Heading,
   Link,
   Stack
@@ -154,7 +155,21 @@ function AddEditForm({category}: AddEditFormProps) {
 
   return (
     <>
-      <Card variant="primaryCard">
+      <Box
+        borderRadius="xl"
+        border="1px"
+        borderColor="gray.200"
+        pt="2"
+        pb="2"
+        mb="6"
+        w="100%"
+        width="full"
+        position="relative"
+        _hover={{
+          textDecoration: "none",
+          borderRadius: "10px"
+        }}
+      >
         <Flex flexDirection="column" p="10">
           <Formik
             enableReinitialize
@@ -178,50 +193,61 @@ function AddEditForm({category}: AddEditFormProps) {
                 <Stack spacing={5}>
                   <InputControl name="Name" label="Category Name" />
                   <TextareaControl name="Description" label="Description" />
-                  <SwitchControl name="Active" label="Active" />
+                  <SwitchControl
+                    name="Active"
+                    label="Active"
+                    colorScheme="teal"
+                    size="lg"
+                  />
                   <ButtonGroup>
-                    <Button
-                      variant="primaryButton"
-                      type="submit"
-                      isLoading={isSubmitting}
-                    >
-                      Save
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        resetForm()
-                      }}
-                      type="reset"
-                      variant="secondaryButton"
-                      isLoading={isSubmitting}
-                    >
-                      Reset
-                    </Button>
-                    <Button
-                      onClick={() =>
-                        router.push(
-                          `/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories`
-                        )
-                      }
-                      variant="secondaryButton"
-                      isLoading={isSubmitting}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      variant="secondaryButton"
-                      onClick={() => deleteCategory(values.ID)}
-                      leftIcon={<DeleteIcon />}
-                    >
-                      Delete
-                    </Button>
+                    <HStack justifyContent="space-between" w="100%" mb={5}>
+                      <Box>
+                        <Button
+                          variant="primaryButton"
+                          type="submit"
+                          isLoading={isSubmitting}
+                          mr="15px"
+                        >
+                          Save
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            resetForm()
+                          }}
+                          type="reset"
+                          variant="secondaryButton"
+                          isLoading={isSubmitting}
+                          mr="15px"
+                        >
+                          Reset
+                        </Button>
+                        <Button
+                          onClick={() =>
+                            router.push(
+                              `/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories`
+                            )
+                          }
+                          variant="secondaryButton"
+                          isLoading={isSubmitting}
+                          mr="15px"
+                        >
+                          Cancel
+                        </Button>
+                      </Box>
+                      <Button
+                        variant="secondaryButton"
+                        onClick={() => deleteCategory(values.ID)}
+                      >
+                        Delete
+                      </Button>
+                    </HStack>
                   </ButtonGroup>
                 </Stack>
               </Box>
             )}
           </Formik>
         </Flex>
-      </Card>
+      </Box>
     </>
   )
 }

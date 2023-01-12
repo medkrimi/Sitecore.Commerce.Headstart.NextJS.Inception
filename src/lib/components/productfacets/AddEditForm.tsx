@@ -39,17 +39,17 @@ interface AddEditFormProps {
 
 function AddEditForm({productfacet}: AddEditFormProps) {
   const isAddMode = !productfacet
-  //console.log(isAddMode)
   const router = useRouter()
   const toast = useToast()
   // form validation rules
   const validationSchema = Yup.object().shape({
-    Name: Yup.string().required("Name is required"),
-    xp_Options: Yup.string()
+    Name: Yup.string().required("Name is required")
+    //xp_Options: Yup.string()
   })
 
   const [inputValue, setInputValue] = useState("")
   const [items, setItems] = useState([])
+  let setArrayList = []
 
   const formOptions = {
     resolver: yupResolver(validationSchema, {
@@ -63,11 +63,23 @@ function AddEditForm({productfacet}: AddEditFormProps) {
   if (!isAddMode) {
     formOptions.defaultValues = xpHelper.flattenXpObject(productfacet, "_")
     //TODO Map xp Options to the setItems list
+    if (items.length == 0) {
+      let newItems = []
+      let addnewItem = []
+      addnewItem = productfacet.xp.Options.map((item) => {
+        let newItem = {
+          itemName: item
+        }
+        newItems = newItems.concat(newItem)
+        setItems(newItems)
+      })
+      //console.log(productfacet.xp.Options)
+      //console.log(items)
+    }
   }
 
   function onSubmit(fields, {setStatus, setSubmitting}) {
     setStatus()
-    //console.log(fields)
     //TODO Refactor this to use the Form instead of this loop
     fields.xp_Options = items.map((item) => {
       return item.itemName
@@ -160,6 +172,7 @@ function AddEditForm({productfacet}: AddEditFormProps) {
       <Card variant="primaryCard">
         <Flex flexDirection="column" p="10">
           <Formik
+            enableReinitialize
             initialValues={formOptions.defaultValues}
             validationSchema={validationSchema}
             onSubmit={onSubmit}

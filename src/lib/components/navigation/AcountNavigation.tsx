@@ -11,6 +11,7 @@ import {
   Flex,
   HStack,
   Icon,
+  Image,
   Link,
   Menu,
   MenuButton,
@@ -191,6 +192,44 @@ const MobileNavigation = () => {
               <option value="lib/styles/theme/playsummit/">Play Summit</option>
               <option value="lib/styles/theme/industrial/">Industrial</option>
             </Select>
+
+            <Flex
+              justify="center"
+              direction="column"
+              align="center"
+              w="100%"
+              width="full"
+              pb="10px"
+              pt="90px"
+            >
+              <Image src="/images/SidebarHelpImage.png" w="90px" alt="" />
+              <Flex
+                direction="column"
+                align="center"
+                textAlign="center"
+                mb="12px"
+                me="12px"
+                w="100%"
+                width="full"
+              >
+                <Text fontSize="14px" fontWeight="bold">
+                  Need help?
+                </Text>
+                <Text fontSize="10px">Please check our docs.</Text>
+              </Flex>
+              <Link href="#">
+                <Button
+                  variant="tertiaryButton"
+                  size="sm"
+                  fontWeight="bold"
+                  minW="185px"
+                  m="0"
+                  fontSize="10px"
+                >
+                  Documentation
+                </Button>
+              </Link>
+            </Flex>
           </DrawerBody>
 
           <DrawerFooter></DrawerFooter>

@@ -27,8 +27,8 @@ export const TypeIcon: React.FC<Props> = (props) => {
     case "catalog":
       return <Icon as={MdStorefront} />
     case "category":
-      return <Icon boxSize={6} as={MdLibraryBooks} />
+      return
     default:
-      return <Icon boxSize={6} as={MdLibraryBooks} />
+      return
   }
 }
