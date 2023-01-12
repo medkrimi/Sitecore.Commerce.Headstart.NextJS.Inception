@@ -36,6 +36,7 @@ const OcLineItemList: FunctionComponent<OcLineItemListProps> = ({
             <Th>Quantity</Th>
             <Th>Unit Price</Th>
             <Th>Total</Th>
+            <Th></Th>
           </Tr>
         </Thead>
         <Tbody>
