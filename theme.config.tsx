@@ -5,7 +5,7 @@ const config: DocsThemeConfig = {
   project: {
     link: "https://github.com/SitecoreNA/sitecore-commerce/tree/development/src"
   },
-  docsRepositoryBase: "https://github.com/SitecoreNA/sitecore-commerce/", // base URL for the docs repository - this will only work for team with access to the private repo.
+  docsRepositoryBase: "https://github.com/SitecoreNA/sitecore-commerce/tree/development/src", // base URL for the docs repository - this will only work for team with access to the private repo.
   navigation: {
     next: true,
     prev: true
