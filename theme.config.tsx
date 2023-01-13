@@ -3,7 +3,7 @@ import React from "react"
 
 const config: DocsThemeConfig = {
   project: {
-    link: "https://github.com/SitecoreNA/sitecore-commerce/"
+    link: "https://github.com/SitecoreNA/sitecore-commerce/tree/development/src"
   },
   docsRepositoryBase: "https://github.com/SitecoreNA/sitecore-commerce/", // base URL for the docs repository - this will only work for team with access to the private repo.
   navigation: {
