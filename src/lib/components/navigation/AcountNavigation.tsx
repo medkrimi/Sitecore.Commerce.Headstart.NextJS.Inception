@@ -33,9 +33,9 @@ import {ChevronDownIcon} from "@chakra-ui/icons"
 import Cookies from "universal-cookie"
 import {ItemContent} from "../generic/ItemContent"
 import NextLink from "next/link"
-import {useAuth} from "lib/hooks/useAuth"
 import ProtectedContent from "../auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
+import {useAuth} from "lib/hooks/useAuth"
 
 const MobileNavigation = () => {
   const {Logout} = useAuth()
@@ -184,7 +184,7 @@ const MobileNavigation = () => {
                 </Text>
                 <Text fontSize="10px">Please check our docs.</Text>
               </Flex>
-              <Link href="#">
+              <Link href="/docs">
                 <Button variant="tertiaryButton" size="sm" fontWeight="bold" minW="185px" m="0" fontSize="10px">
                   Documentation
                 </Button>
