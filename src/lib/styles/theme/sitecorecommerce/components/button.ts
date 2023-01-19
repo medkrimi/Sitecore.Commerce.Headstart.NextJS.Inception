@@ -51,7 +51,7 @@ export const Button = {
     tertiaryButton: {
       border: "1px solid",
       borderColor: "gray.300",
-      bgColor: "white",
+      bgColor: "bodyBg",
       color: "black",
       borderRadius: "md",
       fontSize: "12px",

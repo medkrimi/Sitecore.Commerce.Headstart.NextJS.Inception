@@ -16,7 +16,7 @@ export default function BrandedTable({children}) {
     <TableContainer
       width={"full"}
       rounded={20}
-      boxShadow={"md"}
+      //boxShadow={"md"}
       bg={tableHeaderBg}
       color={tableColor}
     >

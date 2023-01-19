@@ -36,12 +36,14 @@ import ProductPriceScheduleAssignments from "lib/components/products/ProductPric
 import ProductSpecs from "lib/components/products/ProductSpecs"
 import ProductSuppliers from "lib/components/products/ProductSupllier"
 import ProductVariants from "lib/components/products/ProductVariants"
-import ProductXpInformation from "lib/components/products/ProductXpInformation"
+//import ProductXpInformation from "lib/components/products/ProductXpInformation"
+import ProductXpCards from "lib/components/products/ProductXpCards"
 import {Products} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import React from "react"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {useRouter} from "next/router"
+import Card from "lib/components/card/Card"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -120,7 +122,7 @@ const ProductDetails = () => {
             >
               <Tooltip label="Refresh Product Data">
                 <Button
-                  colorScheme="brandButtons"
+                  variant="secondaryButton"
                   aria-label="Refresh Product Data"
                   width={{
                     base: "50%",
@@ -142,7 +144,7 @@ const ProductDetails = () => {
               </Tooltip>
               <Tooltip label="Delete Product">
                 <Button
-                  colorScheme="brandButtons"
+                  variant="secondaryButton"
                   aria-label="Delete Product"
                   width={{
                     base: "50%",
@@ -180,93 +182,126 @@ const ProductDetails = () => {
                 <GridItem rowSpan={1} colSpan={6}>
                   <EditorialProgressBar product={composedProduct?.Product} />
                 </GridItem>
-
                 <GridItem
                   rowSpan={1}
                   colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 4}}
                 >
-                  <ProductData
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                  <Card variant="primaryCard" closedText="Product Data">
+                    <ProductData
+                      composedProduct={composedProduct}
+                      setComposedProduct={setComposedProduct}
+                    />
+                  </Card>
                 </GridItem>
                 <GridItem
                   rowSpan={1}
                   colSpan={{base: 6, md: 6, sm: 6, lg: 2, xl: 2}}
                 >
-                  <ProductMediaInformation
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                  <Card variant="primaryCard" closedText="Media">
+                    <ProductMediaInformation
+                      composedProduct={composedProduct}
+                      setComposedProduct={setComposedProduct}
+                    />
+                  </Card>
                 </GridItem>
-                <GridItem rowSpan={3} colSpan={4}>
-                  <ProductXpInformation
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                <GridItem rowSpan={1} colSpan={2}>
+                  <Card
+                    variant="primaryCard"
+                    h={"100%"}
+                    closedText="Extended Properties Cards"
+                  >
+                    <ProductXpCards
+                      composedProduct={composedProduct}
+                      setComposedProduct={setComposedProduct}
+                    />
+                  </Card>
                 </GridItem>
                 <GridItem
                   rowSpan={1}
                   colSpan={{base: 6, md: 6, sm: 6, lg: 4, xl: 2}}
                 >
-                  <ProductCatalogAssignments
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                  <Card
+                    variant="primaryCard"
+                    h={"100%"}
+                    closedText="Catalog Assignments"
+                  >
+                    <ProductCatalogAssignments
+                      composedProduct={composedProduct}
+                      setComposedProduct={setComposedProduct}
+                    />
+                  </Card>
                 </GridItem>
                 <GridItem
                   rowSpan={1}
                   colSpan={{base: 6, md: 6, sm: 6, lg: 4, xl: 2}}
                 >
-                  <ProductInventoryData
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
-                </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 3, xl: 2}}
-                >
-                  <ProductMeasurementData
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                  <Card variant="primaryCard" h={"100%"} closedText="Inventory">
+                    <ProductInventoryData
+                      composedProduct={composedProduct}
+                      setComposedProduct={setComposedProduct}
+                    />
+                  </Card>
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={6}>
-                  <ProductPriceScheduleAssignments
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                  <Card variant="primaryCard" closedText="Price Schedules">
+                    <ProductPriceScheduleAssignments
+                      composedProduct={composedProduct}
+                      setComposedProduct={setComposedProduct}
+                    />
+                  </Card>
                 </GridItem>
                 <GridItem
                   rowSpan={1}
                   colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 4}}
                 >
-                  <ProductSuppliers
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                  <Card variant="primaryCard" h={"100%"} closedText="Supplier">
+                    <ProductSuppliers
+                      composedProduct={composedProduct}
+                      setComposedProduct={setComposedProduct}
+                    />
+                  </Card>
+                </GridItem>
+                <GridItem
+                  rowSpan={1}
+                  colSpan={{base: 6, md: 6, sm: 6, lg: 3, xl: 2}}
+                >
+                  <Card variant="primaryCard" h={"100%"} closedText="Sizes">
+                    <ProductMeasurementData
+                      composedProduct={composedProduct}
+                      setComposedProduct={setComposedProduct}
+                    />
+                  </Card>
+                </GridItem>
+                <GridItem rowSpan={1} colSpan={4}>
+                  <Card variant="primaryCard" h={"100%"} closedText="Specs">
+                    <ProductSpecs
+                      composedProduct={composedProduct}
+                      setComposedProduct={setComposedProduct}
+                    />
+                  </Card>
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={2}>
-                  <ProductSpecs
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
-                </GridItem>
-                <GridItem rowSpan={1} colSpan={6}>
-                  <ProductVariants
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                  <Card variant="primaryCard" h={"100%"} closedText="Variants">
+                    <ProductVariants
+                      composedProduct={composedProduct}
+                      setComposedProduct={setComposedProduct}
+                    />
+                  </Card>
                 </GridItem>
                 <GridItem
                   rowSpan={1}
                   colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 6}}
                 >
-                  <ProductInventoryRecords
-                    composedProduct={composedProduct}
-                    setComposedProduct={setComposedProduct}
-                  />
+                  <Card
+                    variant="primaryCard"
+                    h={"100%"}
+                    closedText="Inventory Records"
+                  >
+                    <ProductInventoryRecords
+                      composedProduct={composedProduct}
+                      setComposedProduct={setComposedProduct}
+                    />
+                  </Card>
                 </GridItem>
               </Grid>
             </Container>
@@ -300,8 +335,15 @@ const ProductDetails = () => {
                   </AlertDialogBody>
 
                   <AlertDialogFooter>
-                    <Button onClick={onClose}>Cancel</Button>
-                    <Button colorScheme="red" onClick={onDelete} ml={3}>
+                    <Button variant="tertiaryButton" onClick={onClose}>
+                      Cancel
+                    </Button>
+                    <Button
+                      variant="tertiaryButton"
+                      colorScheme="red"
+                      onClick={onDelete}
+                      ml={3}
+                    >
                       Delete
                     </Button>
                   </AlertDialogFooter>

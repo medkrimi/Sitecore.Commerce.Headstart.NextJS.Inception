@@ -146,91 +146,89 @@ export default function ProductSpecs({
 
   return (
     <>
-      <BrandedBox isExpaned={expanded} setExpanded={setExpanded}>
-        <>
-          <HStack float={"right"}>
-            <Tooltip label="Add Product Specification">
-              <Button
-                colorScheme="brandButtons"
-                aria-label="Add Product Specification"
-                onClick={onOpen}
-              >
-                <FiPlus />
-              </Button>
-            </Tooltip>
-          </HStack>
-          <Heading size={{base: "sm", md: "md", lg: "md"}}>Specs</Heading>{" "}
-          {(isLoading || !composedProduct?.Product) && expanded ? (
-            <Box pt={6} textAlign={"center"}>
-              Updating... <BrandedSpinner />
-            </Box>
-          ) : (
-            <>
-              <Collapse in={expanded}>
-                <Box width="full" pb={2} pt={4}>
-                  {(composedProduct?.Specs?.length ?? 0) == 0 ? (
-                    <>No Specs</>
-                  ) : (
-                    <BrandedTable>
-                      <Thead>
-                        <Tr>
-                          <Th color={color}>ID</Th>
-                          <Th color={color}>Name</Th>
-                          <Th color={color}>Number Options</Th>
-                          <Th color={color}>Defines Variant</Th>
-                          <Th color={color}>Action</Th>
+      <>
+        <Heading size={{base: "sm", md: "md", lg: "md"}}>Specs</Heading>{" "}
+        {(isLoading || !composedProduct?.Product) && expanded ? (
+          <Box pt={6} textAlign={"center"}>
+            Updating... <BrandedSpinner />
+          </Box>
+        ) : (
+          <>
+            <Box width="full" pb={2} pt={4}>
+              {(composedProduct?.Specs?.length ?? 0) == 0 ? (
+                <>No Specs</>
+              ) : (
+                <BrandedTable>
+                  <Thead>
+                    <Tr>
+                      <Th color={color}>ID</Th>
+                      <Th color={color}>Name</Th>
+                      <Th color={color}>Number Options</Th>
+                      <Th color={color}>Defines Variant</Th>
+                      <Th color={color}>Action</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody alignContent={"center"}>
+                    {composedProduct?.Specs?.map((item, index) => {
+                      return (
+                        <Tr key={index}>
+                          <Td>{item.ID}</Td>
+                          <Td>{item.Name}</Td>
+                          <Td>{item.OptionCount}</Td>
+                          <Td>
+                            {item.DefinesVariant ?? false ? (
+                              <CheckIcon boxSize={6} color={okColor} />
+                            ) : (
+                              <CloseIcon boxSize={6} color={errorColor} />
+                            )}
+                          </Td>
+                          <Td>
+                            <ul>
+                              {item?.Options?.map((item, index) => {
+                                return (
+                                  <li key={index}>
+                                    {item.ID} | {item.Value}
+                                  </li>
+                                )
+                              })}
+                            </ul>
+                          </Td>
+                          <Td>
+                            {" "}
+                            <Tooltip label="Remove specification from Product">
+                              <Button
+                                colorScheme="brandButtons"
+                                aria-label="Remove specification from Product"
+                                variant="tertiaryButton"
+                                onClick={onRemoveSpecification}
+                                data-id={item.ID}
+                              >
+                                <FiTrash2 />
+                              </Button>
+                            </Tooltip>
+                          </Td>
                         </Tr>
-                      </Thead>
-                      <Tbody alignContent={"center"}>
-                        {composedProduct?.Specs?.map((item, index) => {
-                          return (
-                            <Tr key={index}>
-                              <Td>{item.ID}</Td>
-                              <Td>{item.Name}</Td>
-                              <Td>{item.OptionCount}</Td>
-                              <Td>
-                                {item.DefinesVariant ?? false ? (
-                                  <CheckIcon boxSize={6} color={okColor} />
-                                ) : (
-                                  <CloseIcon boxSize={6} color={errorColor} />
-                                )}
-                              </Td>
-                              <Td>
-                                <ul>
-                                  {item?.Options?.map((item, index) => {
-                                    return (
-                                      <li key={index}>
-                                        {item.ID} | {item.Value}
-                                      </li>
-                                    )
-                                  })}
-                                </ul>
-                              </Td>
-                              <Td>
-                                {" "}
-                                <Tooltip label="Remove specification from Product">
-                                  <Button
-                                    colorScheme="brandButtons"
-                                    aria-label="Remove specification from Product"
-                                    onClick={onRemoveSpecification}
-                                    data-id={item.ID}
-                                  >
-                                    <FiTrash2 />
-                                  </Button>
-                                </Tooltip>
-                              </Td>
-                            </Tr>
-                          )
-                        })}
-                      </Tbody>
-                    </BrandedTable>
-                  )}
-                </Box>
-              </Collapse>
-            </>
-          )}
-        </>
-      </BrandedBox>
+                      )
+                    })}
+                  </Tbody>
+                </BrandedTable>
+              )}
+            </Box>
+          </>
+        )}
+      </>
+      <HStack float={"right"}>
+        <Tooltip label="Add Product Specification">
+          <Button
+            colorScheme="brandButtons"
+            aria-label="Add Product Specification"
+            variant="tertiaryButton"
+            onClick={onOpen}
+          >
+            <FiPlus />
+          </Button>
+        </Tooltip>
+      </HStack>
       <AlertDialog
         motionPreset="slideInBottom"
         leastDestructiveRef={cancelRef}
@@ -317,14 +315,19 @@ export default function ProductSpecs({
                         Please choose from the search results to link a spec
                       </Text>
                     )}
-                    <Button width={"45%"} size={"md"} onClick={onClose}>
+                    <Button
+                      width={"45%"}
+                      size={"md"}
+                      variant="tertiaryButton"
+                      onClick={onClose}
+                    >
                       Cancel
                     </Button>
                     <Button
                       float={"right"}
                       width={"45%"}
                       size={"md"}
-                      colorScheme="brandButtons"
+                      variant="tertiaryButton"
                       onClick={onSpecificationLink}
                       ml={3}
                       disabled={!isSpecChosen}

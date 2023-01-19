@@ -105,105 +105,98 @@ export default function ProductVariants({
   return (
     <>
       {" "}
-      <BrandedBox isExpaned={expanded} setExpanded={setExpanded}>
-        <>
-          <HStack float={"right"}>
-            <Tooltip label="Generate variants">
-              <Button
-                colorScheme="brandButtons"
-                aria-label="Generate Variants"
-                onClick={onOpen}
-              >
-                <FiZap />
-              </Button>
-            </Tooltip>
-          </HStack>{" "}
-          <Heading size={{base: "sm", md: "md", lg: "md"}}>Variants</Heading>
-          {(isLoading || !composedProduct?.Product) && expanded ? (
-            <Box pt={6} textAlign={"center"}>
-              Updating... <BrandedSpinner />
+      <>
+        <Heading size={{base: "sm", md: "md", lg: "md"}}>Variants</Heading>
+        {(isLoading || !composedProduct?.Product) && expanded ? (
+          <Box pt={6} textAlign={"center"}>
+            Updating... <BrandedSpinner />
+          </Box>
+        ) : (
+          <>
+            <Box width="full" pb={2} pt={4}>
+              {composedProduct?.Variants?.length ?? 0 > 0 ? (
+                <>
+                  <BrandedTable>
+                    <Thead boxShadow={shadow} bgGradient={gradient}>
+                      <Tr>
+                        <Th color={color}>ID</Th>
+                        <Th color={color}>Name</Th>
+                        <Th color={color}>Is Active?</Th>
+                        <Th color={color}>Action</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody alignContent={"center"}>
+                      {composedProduct?.Variants ? (
+                        <>
+                          {composedProduct?.Variants.map((item, index) => {
+                            return (
+                              <Tr key={index}>
+                                <Td>{item.ID}</Td>
+                                <Td>{item.Name}</Td>
+                                <Td>
+                                  {" "}
+                                  {item?.Active ?? false ? (
+                                    <CheckIcon boxSize={6} color={okColor} />
+                                  ) : (
+                                    <CloseIcon boxSize={6} color={errorColor} />
+                                  )}
+                                </Td>
+                                <Td>
+                                  {item?.Active ?? false ? (
+                                    <Tooltip label="Deactivate Variant">
+                                      <Button
+                                        colorScheme="brandButtons"
+                                        aria-label="Deactivate variant"
+                                        onClick={onVariantStatusChange}
+                                        variant="tertiaryButton"
+                                        data-id={item.ID}
+                                      >
+                                        <FiMinus />
+                                      </Button>
+                                    </Tooltip>
+                                  ) : (
+                                    <Tooltip label="Activate Variant">
+                                      <Button
+                                        colorScheme="brandButtons"
+                                        aria-label="Activate Variant"
+                                        onClick={onVariantStatusChange}
+                                        variant="tertiaryButton"
+                                        data-id={item.ID}
+                                      >
+                                        <FiPlus />
+                                      </Button>
+                                    </Tooltip>
+                                  )}
+                                </Td>
+                              </Tr>
+                            )
+                          })}
+                        </>
+                      ) : (
+                        <>No Variants</>
+                      )}
+                    </Tbody>
+                  </BrandedTable>
+                </>
+              ) : (
+                <>No Variants</>
+              )}
             </Box>
-          ) : (
-            <>
-              <Collapse in={expanded}>
-                <Box width="full" pb={2} pt={4}>
-                  {composedProduct?.Variants?.length ?? 0 > 0 ? (
-                    <>
-                      <BrandedTable>
-                        <Thead boxShadow={shadow} bgGradient={gradient}>
-                          <Tr>
-                            <Th color={color}>ID</Th>
-                            <Th color={color}>Name</Th>
-                            <Th color={color}>Is Active?</Th>
-                            <Th color={color}>Action</Th>
-                          </Tr>
-                        </Thead>
-                        <Tbody alignContent={"center"}>
-                          {composedProduct?.Variants ? (
-                            <>
-                              {composedProduct?.Variants.map((item, index) => {
-                                return (
-                                  <Tr key={index}>
-                                    <Td>{item.ID}</Td>
-                                    <Td>{item.Name}</Td>
-                                    <Td>
-                                      {" "}
-                                      {item?.Active ?? false ? (
-                                        <CheckIcon
-                                          boxSize={6}
-                                          color={okColor}
-                                        />
-                                      ) : (
-                                        <CloseIcon
-                                          boxSize={6}
-                                          color={errorColor}
-                                        />
-                                      )}
-                                    </Td>
-                                    <Td>
-                                      {item?.Active ?? false ? (
-                                        <Tooltip label="Deactivate Variant">
-                                          <Button
-                                            colorScheme="brandButtons"
-                                            aria-label="Deactivate variant"
-                                            onClick={onVariantStatusChange}
-                                            data-id={item.ID}
-                                          >
-                                            <FiMinus />
-                                          </Button>
-                                        </Tooltip>
-                                      ) : (
-                                        <Tooltip label="Activate Variant">
-                                          <Button
-                                            colorScheme="brandButtons"
-                                            aria-label="Activate Variant"
-                                            onClick={onVariantStatusChange}
-                                            data-id={item.ID}
-                                          >
-                                            <FiPlus />
-                                          </Button>
-                                        </Tooltip>
-                                      )}
-                                    </Td>
-                                  </Tr>
-                                )
-                              })}
-                            </>
-                          ) : (
-                            <>No Variants</>
-                          )}
-                        </Tbody>
-                      </BrandedTable>
-                    </>
-                  ) : (
-                    <>No Variants</>
-                  )}
-                </Box>
-              </Collapse>
-            </>
-          )}
-        </>
-      </BrandedBox>
+          </>
+        )}
+      </>
+      <HStack float={"right"}>
+        <Tooltip label="Generate variants">
+          <Button
+            colorScheme="brandButtons"
+            aria-label="Generate Variants"
+            variant="tertiaryButton"
+            onClick={onOpen}
+          >
+            <FiZap />
+          </Button>
+        </Tooltip>
+      </HStack>
       <AlertDialog
         motionPreset="slideInBottom"
         leastDestructiveRef={cancelRef}
@@ -239,10 +232,13 @@ export default function ProductVariants({
                   }}
                 />
                 <AlertDialogFooter>
-                  <Button onClick={onClose}>Cancel</Button>
+                  <Button variant="tertiaryButton" onClick={onClose}>
+                    Cancel
+                  </Button>
                   <Button
                     colorScheme="brandButtons"
                     onClick={onGenerateVariantsClicked}
+                    variant="tertiaryButton"
                     ml={3}
                   >
                     Generate
