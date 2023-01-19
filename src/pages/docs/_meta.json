@@ -5,6 +5,8 @@
     "href": "/dashboard",
     "newWindow": false
   },
-  "index": "Introduction",  
-  "roadmap": "Roadmap"  
+  "---": {
+    "type": "separator"
+  },
+  "index": "Quick start"    
 }

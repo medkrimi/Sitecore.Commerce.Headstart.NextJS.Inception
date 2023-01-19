@@ -82,5 +82,9 @@ To deploy your local project to Vercel, push it to public GitHub/GitLab/Bitbucke
 * ....
 
 ## References
-* [Order Cloud Javascript SDK](https://www.npmjs.com/package/ordercloud-javascript-sdk)
-* [Order Cloud API Reference](https://ordercloud.io/api-reference)
+- [Order Cloud Javascript SDK](https://www.npmjs.com/package/ordercloud-javascript-sdk)
+- [Order Cloud API Reference](https://ordercloud.io/api-reference)
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Chakra UI](https://chakra-ui.com)
+- [TypeScript](https://www.typescriptlang.org)
