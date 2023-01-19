@@ -1,23 +1,85 @@
-# Introduction
- 
-Welcome to Sitecore Commerce Seller App! This is a basic implementation of the Sitecore Commerce using the Order Cloud Javascript SDK. 
-You can use it as a starting point to discover, undrestand and learn Sitecore Commerce.
-This showcase different marketplace scenarios B2B, B2C, B2B2C.   
+# Sitecore Commerce Seller app
+Welcome to Sitecore Commerce Seller App. This is a basic implementation of the Sitecore Commerce using the Order Cloud Javascript SDK. 
+You can use it as a starting point to discover, undrestand and learn more about the Sitecore Commerce Order Cloud capabilities. 
 
+This app showcase different marketplace scenarios and commerce strategies B2B, B2C, B2B2C.
+
+## What is Sitecore Commerce Order Cloud?
+[OrderCloud](https://ordercloud.io/discover/platform-overview) is a B2B, B2C, B2X commerce and marketplace development platform, 
+OrderCloud delivers cloud-based, API-first, headless eCommerce architecture. Limitless customizations and endless freedom for growth to support your complete commerce strategy.
 
 ## What is Sitecore Commerce Seller App?
+A **simple**, **powerful** and **flexible** Commerce Seller Application built on top of Sitecore [Order Cloud API](https://ordercloud.io/api-reference) and the [Javascript SDK](https://www.npmjs.com/package/ordercloud-javascript-sdk) using 
+* NextJS 
+* Chakra UI
 
-A **simple**, **powerful** and **flexible** Commerce Seller App built on top of Sitecore Order Cloud Javascript SDK using NextJS and Chakra UI.
+## What you can do with this app: 
+* Create, read, update delete product catalogs and categories
+* Create, read, update delete products with Extended propreties
+* Create, read, update delete promotions
+* Create, read, update, delete buyers
+* Create, read, update, delete user groups and users
+* Read, Update Orders
 
-## How Does it Work?
+# How do I get started? 
+## STEP 1. Create an [Order Cloud Marketplace instance](https://portal.ordercloud.io)
+## STEP 2. Deploy the application
+### OPTION 1: Using Vercel
+Using the Deploy Button below, you'll deploy on Vercel the Next.js project as well as connect it to your Sitecore Commerce Order Cloud sandbox.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FSitecoreNA%2Fsitecore-commerce%2Ftree%2Fmain)
+
+### OPTION 2: Working locally
+1. Pull the latest version from this github repository
+2. Copy the `.env.local.example` file in the root directory to `.env.local` (ignored by default during your next Git commit):
+
+```bash
+cp .env.local.example .env.local
+```
+
+Then set each variable on `.env.local`:
+`NEXT_PUBLIC_APP_NAME` Application Name used on Page title. 
+`NEXT_PUBLIC_OC_CLIENT_ID` ClientID from portal.ordercloud.io  
+`NEXT_PUBLIC_OC_API_URL`='https://sandboxapi.ordercloud.io' Sandbox URL from portal.ordercloud.io  
+`NEXT_PUBLIC_OC_MARKETPLACE_ID` 
+`NEXT_PUBLIC_OC_MARKETPLACE_NAME`
+`NEXT_PUBLIC_OC_USELIVEANALYTICSDATA`='false'
 
 
 
+Your `.env.local` file should look like this:
 
-## How Can I Use It?
+```bash
+NEXT_PUBLIC_APP_NAME='Sitecore Commerce Seller App'
+NEXT_PUBLIC_OC_CLIENT_ID='****0BAC-****-4711-B01F-1A**4F7*****'
+NEXT_PUBLIC_OC_API_URL='https://sandboxapi.ordercloud.io'
+NEXT_PUBLIC_OC_MARKETPLACE_ID='SitecoreCommerce'
+NEXT_PUBLIC_OC_MARKETPLACE_NAME='Sitecore Commerce'
+NEXT_PUBLIC_OC_USELIVEANALYTICSDATA='false'
+```
+
+3. Run Next.js in development mode
+```bash
+yarn install
+yarn dev
+```
+##
+Your app should be up and running on [http://localhost:3000](http://localhost:3000)! 
+If it doesn't work, post on [GitHub issues](https://github.com/medkrimi/commercenext.js/discussions).
+
+### STEP 3. Deploy on Vercel
+
+To deploy your local project to Vercel, push it to GitHub/GitLab/Bitbucket and [import to Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example).
+
+**Important**: When you import your project on Vercel, make sure to click on **Environment Variables** and set them to match your `.env.local` file.
 
 
+## Not implemented / on the Roadmap
+* Create, read, update, delete sellers and suppliers
+* Create, read, update, delete addresses
+* ....
 
-## Documentation
+## References
 
-The documentation is available at [https://](https://)
+* [Order Cloud Javascript SDK](https://www.npmjs.com/package/ordercloud-javascript-sdk)
+* [Order Cloud API Reference](https://ordercloud.io/api-reference)
