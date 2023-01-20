@@ -21,9 +21,7 @@ export default function TagContainer(props) {
                       position="relative"
                       borderRadius="md"
                       bgColor={props.isEditing ? "bodyBg" : ""}
-                      opacity={
-                        props.toBeDeleted.includes(name) ? "50%" : "100%"
-                      }
+                      opacity={props.toBeDeleted.includes(name) ? "50%" : "100%"}
                       color={props.toBeDeleted.includes(name) ? "red" : ""}
                     >
                       {props.isEditing ? (

@@ -73,6 +73,13 @@ export default function ProductData({composedProduct, setComposedProduct}: Produ
     composedProduct?.Product?.ShipFromAddressID
   ])
 
+  const handleInputChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    if (fieldKey == "name" && e.target.value == "") {
+      return
+    }
+    setFormValues((v) => ({...v, [fieldKey]: e.target.value}))
+  }
+
   const handleNumberInputChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
     setFormValues((v) => ({
       ...v,

@@ -20,10 +20,7 @@ import {
   CheckboxGroup,
   Checkbox
 } from "@chakra-ui/react"
-import {
-  ComposedProduct,
-  GetComposedProduct
-} from "../../services/ordercloud.service"
+import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
 import {ProductXPs} from "lib/types/ProductXPs"
 import {Product, Products} from "ordercloud-javascript-sdk"
 import {ChangeEvent, useEffect, useState} from "react"
@@ -38,28 +35,15 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductXpCards({
-  composedProduct,
-  setComposedProduct
-}: ProductDataProps) {
-  const {
-    isOpen: isOpenAddXP,
-    onOpen: onOpenAddXP,
-    onClose: onCloseAddXP
-  } = useDisclosure()
-  const {
-    isOpen: isOpenEditXP,
-    onOpen: onOpenEditXP,
-    onClose: onCloseEditXP
-  } = useDisclosure()
+export default function ProductXpCards({composedProduct, setComposedProduct}: ProductDataProps) {
+  const {isOpen: isOpenAddXP, onOpen: onOpenAddXP, onClose: onCloseAddXP} = useDisclosure()
+  const {isOpen: isOpenEditXP, onOpen: onOpenEditXP, onClose: onCloseEditXP} = useDisclosure()
 
   const [isAdding, setIsAdding] = useState(false)
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [formValues, setFormValues] = useState<ProductXPs>(
-    Object.assign({}, composedProduct?.Product?.xp)
-  )
+  const [formValues, setFormValues] = useState<ProductXPs>(Object.assign({}, composedProduct?.Product?.xp))
   const [newXpFormName, setNewXpFormName] = useState<string>("")
   const [newXpFormType, setNewXpFormType] = useState<string>("text")
   const [newXpFormValue, setNewXpFormValue] = useState<string | number>("")
@@ -108,10 +92,8 @@ export default function ProductXpCards({
   }
 
   const handleInputChange =
-    (fieldKey: string) =>
-    (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
-      var newVal =
-        e.target.type == "number" ? Number(e.target.value) : e.target.value
+    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
+      var newVal = e.target.type == "number" ? Number(e.target.value) : e.target.value
       var tmpXPs = formValues
       tmpXPs[fieldKey] = newVal
       setFormValues(tmpXPs)
@@ -120,24 +102,15 @@ export default function ProductXpCards({
   const handleEditXP = (e) => {
     if (editing.endsWith("###")) {
       var strValues = newXpFormValue.toString()
-      var tempValues = strValues.includes(",")
-        ? strValues.split(",")
-        : [strValues]
+      var tempValues = strValues.includes(",") ? strValues.split(",") : [strValues]
       console.log("handleEditXP:tempValues", tempValues)
       tempValues = tempValues.includes(e.target.value)
         ? tempValues.filter((ele) => ele !== e.target.value)
         : [...tempValues, e.target.value]
       console.log("after handleEditXP:tempValues", tempValues)
       console.log("handleEditXP:tempValues.join(',')", tempValues.join(","))
-      setNewXpFormValue(
-        tempValues.length > 1 ? tempValues.join(",") : tempValues[0]
-      )
-    } else
-      setNewXpFormValue(
-        typeof formValues[editing] == "string"
-          ? e.target.value
-          : Number(e.target.value)
-      )
+      setNewXpFormValue(tempValues.length > 1 ? tempValues.join(",") : tempValues[0])
+    } else setNewXpFormValue(typeof formValues[editing] == "string" ? e.target.value : Number(e.target.value))
   }
   const handleNewXPChange = (
     e /* :
@@ -158,22 +131,16 @@ export default function ProductXpCards({
       case "value":
         if (newXpFormType == "tag") {
           var strValues = newXpFormValue.toString()
-          var tempValues = strValues.includes(",")
-            ? strValues.split(",")
-            : [strValues]
+          var tempValues = strValues.includes(",") ? strValues.split(",") : [strValues]
           console.log("handleEditXP:tempValues", tempValues)
           tempValues = tempValues.includes(e.target.value)
             ? tempValues.filter((ele) => ele !== e.target.value)
             : [...tempValues, e.target.value]
           console.log("after handleEditXP:tempValues", tempValues)
           console.log("handleEditXP:tempValues.join(',')", tempValues.join(","))
-          setNewXpFormValue(
-            tempValues.length > 1 ? tempValues.join(",") : tempValues[0]
-          )
+          setNewXpFormValue(tempValues.length > 1 ? tempValues.join(",") : tempValues[0])
         } else {
-          setNewXpFormValue(
-            newXpFormType == "number" ? Number(e.target.value) : e.target.value
-          )
+          setNewXpFormValue(newXpFormType == "number" ? Number(e.target.value) : e.target.value)
         }
 
         break
@@ -204,8 +171,7 @@ export default function ProductXpCards({
 
   const onNewProductXP = async () => {
     //console.log(formValues[newXpFormName])
-    const TempXpFormName =
-      newXpFormType == "tag" ? newXpFormName + "###" : newXpFormName
+    const TempXpFormName = newXpFormType == "tag" ? newXpFormName + "###" : newXpFormName
     console.log("TempXpFormName:", TempXpFormName)
     if (formValues[TempXpFormName] !== undefined) {
       toast({
@@ -255,11 +221,7 @@ export default function ProductXpCards({
         return (
           <>
             <Text pt={"20px"}>Value:</Text>
-            <Input
-              type={"number"}
-              name={"value"}
-              onChange={handleNewXPChange}
-            />
+            <Input type={"number"} name={"value"} onChange={handleNewXPChange} />
           </>
         )
       case "tag":
@@ -269,12 +231,7 @@ export default function ProductXpCards({
             <CheckboxGroup>
               {tags.map((x, key) => {
                 return (
-                  <Checkbox
-                    name={"value"}
-                    key={key}
-                    value={x}
-                    onChange={handleNewXPChange}
-                  >
+                  <Checkbox name={"value"} key={key} value={x} onChange={handleNewXPChange}>
                     {x}
                   </Checkbox>
                 )
@@ -287,16 +244,9 @@ export default function ProductXpCards({
     }
   }
   const renderCurrentEditing = () => {
-    const editingType = editing.endsWith("###")
-      ? "tag"
-      : typeof formValues[editing] == "string"
-      ? "text"
-      : "number"
+    const editingType = editing.endsWith("###") ? "tag" : typeof formValues[editing] == "string" ? "text" : "number"
     console.log("editingType:", editingType)
-    console.log(
-      "renderCurrentEditing:formValues[editing].length",
-      formValues[editing]?.length
-    )
+    console.log("renderCurrentEditing:formValues[editing].length", formValues[editing]?.length)
     switch (editingType) {
       case "text":
         if (formValues[editing].length > 60)
@@ -317,12 +267,7 @@ export default function ProductXpCards({
           return (
             <>
               <Text pt={"20px"}>Value:</Text>
-              <Input
-                type={"text"}
-                name={"value"}
-                defaultValue={formValues[editing]}
-                onChange={handleEditXP}
-              />
+              <Input type={"text"} name={"value"} defaultValue={formValues[editing]} onChange={handleEditXP} />
             </>
           )
 
@@ -330,12 +275,7 @@ export default function ProductXpCards({
         return (
           <>
             <Text pt={"20px"}>Value:</Text>
-            <Input
-              type={"number"}
-              name={"value"}
-              defaultValue={formValues[editing]}
-              onChange={handleEditXP}
-            />
+            <Input type={"number"} name={"value"} defaultValue={formValues[editing]} onChange={handleEditXP} />
           </>
         )
       case "tag":
@@ -343,20 +283,11 @@ export default function ProductXpCards({
           <>
             <Text pt={"20px"}>Value:</Text>
             <CheckboxGroup
-              defaultValue={
-                formValues[editing]?.includes(",")
-                  ? formValues[editing].split(",")
-                  : [formValues[editing]]
-              }
+              defaultValue={formValues[editing]?.includes(",") ? formValues[editing].split(",") : [formValues[editing]]}
             >
               {tags.map((x, key) => {
                 return (
-                  <Checkbox
-                    onChange={handleEditXP}
-                    name={"value"}
-                    key={key}
-                    value={x}
-                  >
+                  <Checkbox onChange={handleEditXP} name={"value"} key={key} value={x}>
                     {x}
                   </Checkbox>
                 )
@@ -418,9 +349,7 @@ export default function ProductXpCards({
   return (
     <>
       <>
-        <Heading size={{base: "sm", md: "md", lg: "md"}}>
-          Extended Properties
-        </Heading>
+        <Heading size={{base: "sm", md: "md", lg: "md"}}>Extended Properties</Heading>
 
         {(isLoading || !formValues) && expanded ? (
           <Box pt={6} textAlign={"center"}>
@@ -455,21 +384,12 @@ export default function ProductXpCards({
       {isEditingBasicData ? (
         <HStack float={"right"}>
           <Tooltip label="Save">
-            <Button
-              variant="tertiaryButton"
-              aria-label="Save"
-              onClick={onProductSave}
-            >
+            <Button variant="tertiaryButton" aria-label="Save" onClick={onProductSave}>
               <FiCheck />
             </Button>
           </Tooltip>
           <Tooltip label="Abort">
-            <Button
-              colorScheme="brandButtons"
-              aria-label="Abort"
-              variant="tertiaryButton"
-              onClick={onAbortClicked}
-            >
+            <Button colorScheme="brandButtons" aria-label="Abort" variant="tertiaryButton" onClick={onAbortClicked}>
               <FiX />
             </Button>
           </Tooltip>
@@ -477,11 +397,7 @@ export default function ProductXpCards({
       ) : (
         <HStack float={"right"}>
           <Tooltip label="Edit">
-            <Button
-              aria-label="Edit"
-              variant="tertiaryButton"
-              onClick={onEditClicked}
-            >
+            <Button aria-label="Edit" variant="tertiaryButton" onClick={onEditClicked}>
               <FiEdit />
             </Button>
           </Tooltip>
@@ -511,11 +427,7 @@ export default function ProductXpCards({
 
               <ModalBody mb={"10px"}>
                 <Text>Name:</Text>
-                <Input
-                  type={"text"}
-                  name={"name"}
-                  onChange={handleNewXPChange}
-                />
+                <Input type={"text"} name={"name"} onChange={handleNewXPChange} />
                 <Text pt={"20px"}>Field Type:</Text>
                 <Select onChange={handleNewXPChange} name={"type"}>
                   <option value="text">text</option>
@@ -551,12 +463,7 @@ export default function ProductXpCards({
 
               <ModalBody mb={"10px"}>
                 <Text>Name:</Text>
-                <Input
-                  type={"text"}
-                  name={"name"}
-                  value={editing.replace("###", "")}
-                  readOnly
-                />
+                <Input type={"text"} name={"name"} value={editing.replace("###", "")} readOnly />
                 <Text pt={"20px"}>Field Type:</Text>
                 {renderEditType()}
                 {renderCurrentEditing()}
