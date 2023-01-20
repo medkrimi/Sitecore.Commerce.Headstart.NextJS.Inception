@@ -16,17 +16,9 @@ import {
 } from "@chakra-ui/react"
 import {ChangeEvent, useState} from "react"
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
-import {
-  ComposedProduct,
-  GetComposedProduct
-} from "../../services/ordercloud.service"
+import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
 import {FiCheck, FiEdit, FiMinus, FiPlus, FiX} from "react-icons/fi"
-import {
-  Inventory,
-  Product,
-  Products,
-  RequiredDeep
-} from "ordercloud-javascript-sdk"
+import {Inventory, Product, Products, RequiredDeep} from "ordercloud-javascript-sdk"
 
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
@@ -36,10 +28,7 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductMeasurementData({
-  composedProduct,
-  setComposedProduct
-}: ProductDataProps) {
+export default function ProductMeasurementData({composedProduct, setComposedProduct}: ProductDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
@@ -52,13 +41,12 @@ export default function ProductMeasurementData({
     shipWidth: composedProduct?.Product?.ShipWidth
   })
 
-  const handleNumberInputChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({
-        ...v,
-        [fieldKey]: e.target.value == "" ? 0 : e.target.value
-      }))
-    }
+  const handleNumberInputChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({
+      ...v,
+      [fieldKey]: e.target.value == "" ? 0 : e.target.value
+    }))
+  }
 
   const onEditClicked = (e) => {
     setFormValues((v) => ({
@@ -114,10 +102,7 @@ export default function ProductMeasurementData({
           </Box>
         ) : (
           <>
-            <Heading
-              size={{base: "sm", md: "md", lg: "md"}}
-              mb={expanded ? 6 : 0}
-            >
+            <Heading size={{base: "sm", md: "md", lg: "md"}} mb={expanded ? 6 : 0}>
               Sizes
             </Heading>
             <Collapse in={expanded}>
@@ -172,11 +157,7 @@ export default function ProductMeasurementData({
                   Ship Width:
                 </Text>
                 {isEditingBasicData ? (
-                  <Input
-                    type={"number"}
-                    value={formValues.shipWidth}
-                    onChange={handleNumberInputChange("shipWidth")}
-                  />
+                  <Input type={"number"} value={formValues.shipWidth} onChange={handleNumberInputChange("shipWidth")} />
                 ) : (
                   <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                     {composedProduct?.Product?.ShipWidth ?? "Not set"}
@@ -190,22 +171,12 @@ export default function ProductMeasurementData({
       {isEditingBasicData ? (
         <HStack float={"right"}>
           <Tooltip label="Save">
-            <Button
-              colorScheme="brandButtons"
-              aria-label="Save"
-              variant="tertiaryButton"
-              onClick={onSaveClicked}
-            >
+            <Button colorScheme="brandButtons" aria-label="Save" variant="tertiaryButton" onClick={onSaveClicked}>
               <FiCheck />
             </Button>
           </Tooltip>
           <Tooltip label="Abort">
-            <Button
-              colorScheme="brandButtons"
-              aria-label="Abort"
-              variant="tertiaryButton"
-              onClick={onAbortClicked}
-            >
+            <Button colorScheme="brandButtons" aria-label="Abort" variant="tertiaryButton" onClick={onAbortClicked}>
               <FiX />
             </Button>
           </Tooltip>
@@ -213,12 +184,7 @@ export default function ProductMeasurementData({
       ) : (
         <HStack float={"right"}>
           <Tooltip label="Edit">
-            <Button
-              colorScheme="brandButtons"
-              aria-label="Edit"
-              variant="tertiaryButton"
-              onClick={onEditClicked}
-            >
+            <Button colorScheme="brandButtons" aria-label="Edit" variant="tertiaryButton" onClick={onEditClicked}>
               <FiEdit />
             </Button>
           </Tooltip>

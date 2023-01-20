@@ -29,9 +29,7 @@ const UserListItem = () => {
   const [user, setUser] = useState({} as User)
   useEffect(() => {
     if (router.query.buyerid) {
-      usersService
-        .getById(router.query.buyerid, router.query.userid)
-        .then((user) => setUser(user))
+      usersService.getById(router.query.buyerid, router.query.userid).then((user) => setUser(user))
     }
   }, [router.query.buyerid, router.query.userid])
   return <>{user?.ID ? <AddEditForm user={user} /> : <div> Loading</div>}</>
@@ -40,7 +38,7 @@ const UserListItem = () => {
 const ProtectedBuyerListItem = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
-      <Box padding="20px">
+      <Box padding="GlobalPadding">
         <UserListItem />
       </Box>
     </ProtectedContent>

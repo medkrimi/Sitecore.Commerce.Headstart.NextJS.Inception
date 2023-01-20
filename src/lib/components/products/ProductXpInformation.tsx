@@ -21,21 +21,11 @@ import {
   InputLeftAddon,
   useToast
 } from "@chakra-ui/react"
-import {
-  ComposedProduct,
-  GetComposedProduct
-} from "../../services/ordercloud.service"
+import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
 import {ProductXPs} from "lib/types/ProductXPs"
 import {Product, Products} from "ordercloud-javascript-sdk"
 import {ChangeEvent, useEffect, useState} from "react"
-import {
-  FiCheck,
-  FiX,
-  FiEdit,
-  FiPlus,
-  FiMinus,
-  FiMinusSquare
-} from "react-icons/fi"
+import {FiCheck, FiX, FiEdit, FiPlus, FiMinus, FiMinusSquare} from "react-icons/fi"
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 
@@ -44,23 +34,14 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductXpInformation({
-  composedProduct,
-  setComposedProduct
-}: ProductDataProps) {
-  const {
-    isOpen: isOpenAddXP,
-    onOpen: onOpenAddXP,
-    onClose: onCloseAddXP
-  } = useDisclosure()
+export default function ProductXpInformation({composedProduct, setComposedProduct}: ProductDataProps) {
+  const {isOpen: isOpenAddXP, onOpen: onOpenAddXP, onClose: onCloseAddXP} = useDisclosure()
 
   const [isAdding, setIsAdding] = useState(false)
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [formValues, setFormValues] = useState<ProductXPs>(
-    Object.assign({}, composedProduct?.Product?.xp)
-  )
+  const [formValues, setFormValues] = useState<ProductXPs>(Object.assign({}, composedProduct?.Product?.xp))
   const [newXpFormName, setNewXpFormName] = useState<string>("")
   const [newXpFormType, setNewXpFormType] = useState<string>("text")
   const [newXpFormValue, setNewXpFormValue] = useState<string | number>("")
@@ -88,20 +69,15 @@ export default function ProductXpInformation({
   }
 
   const handleInputChange =
-    (fieldKey: string) =>
-    (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
-      var newVal =
-        e.target.type == "number" ? Number(e.target.value) : e.target.value
+    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
+      var newVal = e.target.type == "number" ? Number(e.target.value) : e.target.value
       var tmpXPs = formValues
       tmpXPs[fieldKey] = newVal
       setFormValues(tmpXPs)
     }
 
   const handleNewXPChange = (
-    e:
-      | ChangeEvent<HTMLInputElement>
-      | ChangeEvent<HTMLTextAreaElement>
-      | ChangeEvent<HTMLSelectElement>
+    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement> | ChangeEvent<HTMLSelectElement>
   ) => {
     //var newVal = e.target.type == "number" ? Number(e.target.value) : e.target.value
     //console.log(e.target.name)
@@ -113,9 +89,7 @@ export default function ProductXpInformation({
         setNewXpFormType(e.target.value)
         break
       case "value":
-        setNewXpFormValue(
-          newXpFormType == "number" ? Number(e.target.value) : e.target.value
-        )
+        setNewXpFormValue(newXpFormType == "number" ? Number(e.target.value) : e.target.value)
         break
       default:
         return
@@ -134,9 +108,7 @@ export default function ProductXpInformation({
     //   "toBeDeleted.filter((thing) => thing !== key)",
     //   toBeDeleted.filter((thing) => thing !== key)
     // )
-    const tempDeleted = toBeDeleted.includes(key)
-      ? toBeDeleted.filter((thing) => thing !== key)
-      : [...toBeDeleted, key]
+    const tempDeleted = toBeDeleted.includes(key) ? toBeDeleted.filter((thing) => thing !== key) : [...toBeDeleted, key]
     setToBeDeleted(tempDeleted)
     setIsLoading(false)
     //console.log(tempDeleted)
@@ -176,25 +148,21 @@ export default function ProductXpInformation({
       case "text":
         return (
           <>
-            <Text pt={"20px"}>Value:</Text>
+            <Text pt={"GlobalPadding"}>Value:</Text>
             <Input type={"text"} name={"value"} onChange={handleNewXPChange} />
           </>
         )
       case "number":
         return (
           <>
-            <Text pt={"20px"}>Value:</Text>
-            <Input
-              type={"number"}
-              name={"value"}
-              onChange={handleNewXPChange}
-            />
+            <Text pt={"GlobalPadding"}>Value:</Text>
+            <Input type={"number"} name={"value"} onChange={handleNewXPChange} />
           </>
         )
       case "tag":
         return (
           <>
-            <Text pt={"20px"}>Value:</Text>
+            <Text pt={"GlobalPadding"}>Value:</Text>
             <Select name={"value"}>
               {["1", "2", "3", "4", "5", "6"].map((x, key) => {
                 return (
@@ -246,9 +214,7 @@ export default function ProductXpInformation({
   return (
     <>
       <>
-        <Heading size={{base: "sm", md: "md", lg: "md"}}>
-          Extended Properties
-        </Heading>
+        <Heading size={{base: "sm", md: "md", lg: "md"}}>Extended Properties</Heading>
 
         {(isLoading || !formValues) && expanded ? (
           <Box pt={6} textAlign={"center"}>
@@ -259,8 +225,7 @@ export default function ProductXpInformation({
             <Box width="full" pb={2} pt={4}>
               <Text opacity={0.5} fontWeight={"bold"}></Text>
               {Object.keys(formValues).map((name, key) => {
-                return isEditingBasicData &&
-                  typeof formValues[name] != "object" ? (
+                return isEditingBasicData && typeof formValues[name] != "object" ? (
                   <HStack key={key} mt={3}>
                     <InputGroup>
                       <InputLeftAddon w={"200px"}>{name}</InputLeftAddon>
@@ -278,22 +243,14 @@ export default function ProductXpInformation({
                         <Input
                           width={"75%"}
                           defaultValue={formValues[name]}
-                          type={
-                            typeof formValues[name] == "string"
-                              ? "text"
-                              : "number"
-                          }
+                          type={typeof formValues[name] == "string" ? "text" : "number"}
                           onChange={handleInputChange(name)}
                           disabled={toBeDeleted.includes(name)}
                         />
                       )}
                       <Tooltip pt={2} label="Remove Extended Property">
                         <Button onClick={onDeleteProductXPClicked(name)}>
-                          {toBeDeleted.includes(name) ? (
-                            <FiMinusSquare />
-                          ) : (
-                            <FiMinus />
-                          )}
+                          {toBeDeleted.includes(name) ? <FiMinusSquare /> : <FiMinus />}
                         </Button>
                       </Tooltip>
                     </InputGroup>
@@ -303,16 +260,11 @@ export default function ProductXpInformation({
                 )
               })}
               {Object.keys(formValues).map((name, key) => {
-                return !isEditingBasicData &&
-                  typeof formValues[name] != "object" ? (
+                return !isEditingBasicData && typeof formValues[name] != "object" ? (
                   <HStack key={key} mt={4}>
                     <InputGroup>
                       <InputLeftAddon w={"200px"}>{name}</InputLeftAddon>
-                      <Input
-                        width={"100%"}
-                        defaultValue={formValues[name]}
-                        readOnly
-                      />
+                      <Input width={"100%"} defaultValue={formValues[name]} readOnly />
                     </InputGroup>
                   </HStack>
                 ) : (
@@ -345,11 +297,7 @@ export default function ProductXpInformation({
             </Button>
           </Tooltip>
           <Tooltip label="Abort">
-            <Button
-              colorScheme="brandButtons"
-              aria-label="Abort"
-              onClick={onAbortClicked}
-            >
+            <Button colorScheme="brandButtons" aria-label="Abort" onClick={onAbortClicked}>
               <FiX />
             </Button>
           </Tooltip>
@@ -387,12 +335,8 @@ export default function ProductXpInformation({
 
               <ModalBody mb={"10px"}>
                 <Text>Name:</Text>
-                <Input
-                  type={"text"}
-                  name={"name"}
-                  onChange={handleNewXPChange}
-                />
-                <Text pt={"20px"}>Field Type:</Text>
+                <Input type={"text"} name={"name"} onChange={handleNewXPChange} />
+                <Text pt={"GlobalPadding"}>Field Type:</Text>
                 <Select onChange={handleNewXPChange} name={"type"}>
                   <option value="text">text</option>
                   <option value="number">number</option>

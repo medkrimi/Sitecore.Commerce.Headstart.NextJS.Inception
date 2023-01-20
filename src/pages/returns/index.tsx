@@ -32,11 +32,7 @@ import {
   useColorMode,
   useColorModeValue
 } from "@chakra-ui/react"
-import {
-  OrderReturn,
-  OrderReturnItem,
-  OrderReturns
-} from "ordercloud-javascript-sdk"
+import {OrderReturn, OrderReturnItem, OrderReturns} from "ordercloud-javascript-sdk"
 import React, {useRef} from "react"
 import {useEffect, useState} from "react"
 
@@ -84,13 +80,7 @@ const TableRow = (orderReturn: OrderReturn) => {
         </LettersCard>
         {orderReturn.FromUser.FirstName} {orderReturn.FromUser.LastName} */}
       </Td>
-      <Td>
-        {textHelper.formatTextTruncate(
-          50,
-          orderReturn.ItemsToReturn.toString(),
-          "..."
-        )}
-      </Td>
+      <Td>{textHelper.formatTextTruncate(50, orderReturn.ItemsToReturn.toString(), "...")}</Td>
       <Td></Td>
       <Td>{priceHelper.formatPrice(orderReturn.RefundAmount)}</Td>
     </Tr>
@@ -189,10 +179,7 @@ const ReturnsPage = () => {
               </MenuItem>
             </MenuList>
           </Menu>
-          <Button
-            variant="secondaryButton"
-            onClick={() => setExportCSVDialogOpen(true)}
-          >
+          <Button variant="secondaryButton" onClick={() => setExportCSVDialogOpen(true)}>
             Export CSV
           </Button>
         </HStack>
@@ -226,10 +213,9 @@ const ReturnsPage = () => {
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text display="inline">
-                Export the select returns to a CSV, once the export button is
-                clicked behind the scenes a job will be kicked off to create the
-                csv and then will automatically download to your downloads
-                folder in the browser.
+                Export the select returns to a CSV, once the export button is clicked behind the scenes a job will be
+                kicked off to create the csv and then will automatically download to your downloads folder in the
+                browser.
               </Text>
             </AlertDialogBody>
             <AlertDialogFooter>

@@ -37,11 +37,7 @@ type UserDataProps = {
   cdpGuest: CdpGuestModel
 }
 
-export default function UserCdpSessionData({
-  user,
-  buyerId,
-  cdpGuest
-}: UserDataProps) {
+export default function UserCdpSessionData({user, buyerId, cdpGuest}: UserDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -72,10 +68,7 @@ export default function UserCdpSessionData({
             </Box>
           ) : (
             <>
-              <Heading
-                size={{base: "md", md: "lg", lg: "xl"}}
-                mb={expanded ? 6 : 0}
-              >
+              <Heading size={{base: "md", md: "lg", lg: "xl"}} mb={expanded ? 6 : 0}>
                 CDP Sessions
               </Heading>
               <Collapse in={expanded}>
@@ -99,38 +92,16 @@ export default function UserCdpSessionData({
                           <>
                             {cdpGuestData?.sessions.map((element, index) => {
                               return (
-                                <Tooltip
-                                  key={index}
-                                  label="Click to see Session Events"
-                                >
-                                  <Tr
-                                    onClick={onSessionClicked(index)}
-                                    cursor={"pointer"}
-                                  >
+                                <Tooltip key={index} label="Click to see Session Events">
+                                  <Tr onClick={onSessionClicked(index)} cursor={"pointer"}>
                                     <Td>{element.sessionType}</Td>
                                     <Td>{element.status}</Td>
                                     <Td>{element.duration} min</Td>
                                     <Td>{element.pointOfSale}</Td>
-                                    <Td>
-                                      {new Date(
-                                        element?.createdAt
-                                      )?.toLocaleString() ?? "Not set"}
-                                    </Td>
-                                    <Td>
-                                      {new Date(
-                                        element?.startedAt
-                                      )?.toLocaleString() ?? "Not set"}
-                                    </Td>
-                                    <Td>
-                                      {new Date(
-                                        element?.endedAt
-                                      )?.toLocaleString() ?? "Not set"}
-                                    </Td>
-                                    <Td>
-                                      {new Date(
-                                        element?.modifiedAt
-                                      )?.toLocaleString() ?? "Not set"}
-                                    </Td>
+                                    <Td>{new Date(element?.createdAt)?.toLocaleString() ?? "Not set"}</Td>
+                                    <Td>{new Date(element?.startedAt)?.toLocaleString() ?? "Not set"}</Td>
+                                    <Td>{new Date(element?.endedAt)?.toLocaleString() ?? "Not set"}</Td>
+                                    <Td>{new Date(element?.modifiedAt)?.toLocaleString() ?? "Not set"}</Td>
                                   </Tr>
                                 </Tooltip>
                               )
@@ -145,8 +116,7 @@ export default function UserCdpSessionData({
                     </BrandedTable>
                     <Center>
                       <Text as="p" mt={4} fontWeight={"bold"}>
-                        {cdpGuestData?.sessions.length} out of{" "}
-                        {cdpGuestData?.sessions.length} Sessions
+                        {cdpGuestData?.sessions.length} out of {cdpGuestData?.sessions.length} Sessions
                       </Text>
                     </Center>
                   </Box>
@@ -156,12 +126,7 @@ export default function UserCdpSessionData({
           )}
         </>
       </BrandedBox>
-      <Modal
-        size={"full"}
-        isOpen={isOpen}
-        onClose={onClose}
-        scrollBehavior={"inside"}
-      >
+      <Modal size={"full"} isOpen={isOpen} onClose={onClose} scrollBehavior={"inside"}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Details about Session EVENTS</ModalHeader>
@@ -183,20 +148,18 @@ export default function UserCdpSessionData({
                   <Tbody alignContent={"center"}>
                     {cdpGuestData ? (
                       <>
-                        {cdpGuestData?.sessions[chosenSession]?.events.map(
-                          (element, index) => {
-                            return (
-                              <Tr key={index}>
-                                <Td>{element.channel}</Td>
-                                <Td>{element.type}</Td>
-                                <Td>{element.status}</Td>
-                                <Td>{element.pointOfSale}</Td>
-                                <Td>{element.arbitraryData.page}</Td>
-                                <Td>{element.arbitraryData.websiteBaseUrl}</Td>
-                              </Tr>
-                            )
-                          }
-                        )}
+                        {cdpGuestData?.sessions[chosenSession]?.events.map((element, index) => {
+                          return (
+                            <Tr key={index}>
+                              <Td>{element.channel}</Td>
+                              <Td>{element.type}</Td>
+                              <Td>{element.status}</Td>
+                              <Td>{element.pointOfSale}</Td>
+                              <Td>{element.arbitraryData.page}</Td>
+                              <Td>{element.arbitraryData.websiteBaseUrl}</Td>
+                            </Tr>
+                          )
+                        })}
                       </>
                     ) : (
                       <Tr>
@@ -207,9 +170,8 @@ export default function UserCdpSessionData({
                 </BrandedTable>
                 <Center>
                   <Text as="p" mt={4} fontWeight={"bold"}>
-                    {cdpGuestData?.sessions[chosenSession]?.events?.length} out
-                    of {cdpGuestData?.sessions[chosenSession]?.events?.length}{" "}
-                    Events
+                    {cdpGuestData?.sessions[chosenSession]?.events?.length} out of{" "}
+                    {cdpGuestData?.sessions[chosenSession]?.events?.length} Events
                   </Text>
                 </Center>
               </Box>
@@ -217,12 +179,7 @@ export default function UserCdpSessionData({
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              size={"lg"}
-              colorScheme="brandButtons"
-              mr={3}
-              onClick={onClose}
-            >
+            <Button size={"lg"} colorScheme="brandButtons" mr={3} onClick={onClose}>
               Close
             </Button>
           </ModalFooter>

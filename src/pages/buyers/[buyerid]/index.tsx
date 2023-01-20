@@ -30,9 +30,7 @@ const BuyerListItem = () => {
   const [buyer, setBuyer] = useState({} as Buyer)
   useEffect(() => {
     if (router.query.buyerid) {
-      buyersService
-        .getById(router.query.buyerid)
-        .then((buyer) => setBuyer(buyer))
+      buyersService.getById(router.query.buyerid).then((buyer) => setBuyer(buyer))
     }
   }, [router.query.buyerid])
   return <>{buyer?.ID ? <AddEditForm buyer={buyer} /> : <div> Loading</div>}</>
@@ -41,7 +39,7 @@ const BuyerListItem = () => {
 const ProtectedBuyerListItem = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
-      <Box padding="20px">
+      <Box padding="GlobalPadding">
         <BuyerListItem />
       </Box>
     </ProtectedContent>

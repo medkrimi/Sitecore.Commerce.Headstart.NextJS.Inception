@@ -1,14 +1,29 @@
-import {ChevronDownIcon, SearchIcon} from "@chakra-ui/icons"
 import {
-  Text,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Box,
   Button,
   Checkbox,
+  CheckboxGroup,
+  Divider,
   FormControl,
   FormLabel,
-  Heading,
   HStack,
+  Heading,
+  Icon,
   IconButton,
   Input,
+  InputGroup,
+  InputLeftElement,
+  Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -16,64 +31,42 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
+  Slider,
+  SliderFilledTrack,
+  SliderMark,
+  SliderThumb,
+  SliderTrack,
+  Spacer,
+  Spinner,
+  Stack,
+  Text,
   Th,
   Thead,
   Tooltip,
   Tr,
+  VStack,
   useColorModeValue,
   useDisclosure,
-  useToast,
-  VStack,
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack,
-  Box,
-  SliderMark,
-  InputGroup,
-  InputLeftElement,
-  Select,
-  Link,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  CheckboxGroup,
-  Stack,
-  Divider,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  AlertDialogFooter,
-  Spinner,
-  Icon,
-  Spacer
+  useToast
 } from "@chakra-ui/react"
 import {ChangeEvent, useEffect, useRef, useState} from "react"
-import {
-  FiRotateCcw,
-  FiPlus,
-  FiList,
-  FiGrid,
-  FiEdit,
-  FiChevronDown,
-  FiChevronUp
-} from "react-icons/fi"
+import {ChevronDownIcon, SearchIcon} from "@chakra-ui/icons"
+import {FiChevronDown, FiChevronUp, FiEdit, FiGrid, FiList, FiPlus, FiRotateCcw} from "react-icons/fi"
+import {HiOutlineViewGrid, HiOutlineViewList} from "react-icons/hi"
 import {Product, Products} from "ordercloud-javascript-sdk"
 
 import {AiOutlineSearch} from "react-icons/ai"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 import {CalculateEditorialProcess} from "./EditorialProgressBar"
+import Card from "../card/Card"
 import {NextSeo} from "next-seo"
 import ProductGrid from "./ProductGrid"
 import ProductList from "./ProductList"
 import {ProductListOptions} from "../../services/ordercloud.service"
 import {ProductXPs} from "lib/types/ProductXPs"
-import Card from "../card/Card"
-import {HiOutlineViewGrid, HiOutlineViewList} from "react-icons/hi"
+import {promotionsService} from "lib/api"
 
 //import Image from "next/image"
 
@@ -82,6 +75,8 @@ interface ProductSearchProps {
 }
 
 export default function ProductSearch({query}: ProductSearchProps) {
+  const [selectedPromotion, setselectedPromotion] = useState("")
+  const [promotions, setPromotions] = useState([])
   //const options: ProductListOptions = {}
   //const optionsSearchOn = ["Name", "Description", "ID"]
   const optionsSearchOnID = "ID"
@@ -90,8 +85,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
   const [optionsSortBy, setOptionsSortBy] = useState("name")
   const toast = useToast()
   const [products, setProducts] = useState<Product<ProductXPs>[]>(null)
-  const [componentProducts, setComponentProducts] =
-    useState<Product<ProductXPs>[]>(null)
+  const [componentProducts, setComponentProducts] = useState<Product<ProductXPs>[]>(null)
   const [isLoading, setIsLoading] = useState(true)
   const sliderColor = useColorModeValue("brand.400", "brand.600")
   const [editorialProgressFilter, setEditorialProgressFilter] = useState(100)
@@ -108,6 +102,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
 
   const [isBulkImportDialogOpen, setBulkImportDialogOpen] = useState(false)
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
+  const [isPromotionDialogOpen, setPromotionDialogOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const cancelRef = useRef()
 
@@ -128,6 +123,10 @@ export default function ProductSearch({query}: ProductSearchProps) {
       setProducts(productItems)
       //setReload(false)
       setIsLoading(false)
+      const promotionsList = await promotionsService.list()
+      let promotionItems = promotionsList.Items
+      setPromotions(promotionItems)
+      console.log(promotionItems)
     }
 
     GetProducts()
@@ -135,11 +134,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
 
   const [searchQuery, setSearchQuery] = useState(query)
   const [selectAllProducts, setSelectAllProducts] = useState(false)
-  const {
-    isOpen: isOpenAddProduct,
-    onOpen: onOpenAddProduct,
-    onClose: onCloseAddProduct
-  } = useDisclosure()
+  const {isOpen: isOpenAddProduct, onOpen: onOpenAddProduct, onClose: onCloseAddProduct} = useDisclosure()
   const {
     isOpen: isOpenMassEditProducts,
     onOpen: onOpenMassEditProducts,
@@ -147,9 +142,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
   } = useDisclosure()
   const [isAdding, setIsAdding] = useState(false)
   const [isMassEditing, setIsMassEditing] = useState(false)
-  const [massEditProducts, setMassEditProducts] = useState<
-    Product<ProductXPs>[]
-  >([])
+  const [massEditProducts, setMassEditProducts] = useState<Product<ProductXPs>[]>([])
   const [formValues, setFormValues] = useState({
     id: "",
     name: "",
@@ -206,20 +199,18 @@ export default function ProductSearch({query}: ProductSearchProps) {
     }, 5000)
   }
 
-  const handleInputChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({...v, [fieldKey]: e.target.value}))
-    }
+  const handleInputChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({...v, [fieldKey]: e.target.value}))
+  }
 
-  const handleCheckboxChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      if (fieldKey == "isActive" && formValues["isInactive"]) {
-        setFormValues((v) => ({...v, ["isInactive"]: false}))
-      } else if (fieldKey == "isInactive" && formValues["isActive"]) {
-        setFormValues((v) => ({...v, ["isActive"]: false}))
-      }
-      setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
+  const handleCheckboxChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    if (fieldKey == "isActive" && formValues["isInactive"]) {
+      setFormValues((v) => ({...v, ["isInactive"]: false}))
+    } else if (fieldKey == "isInactive" && formValues["isActive"]) {
+      setFormValues((v) => ({...v, ["isActive"]: false}))
     }
+    setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
+  }
 
   const onResetSearch = (e) => {
     //console.log("onResetSearch")
@@ -313,15 +304,11 @@ export default function ProductSearch({query}: ProductSearchProps) {
     setSortingChanging(true)
     if (newVal == "editorialProcess") {
       var tmpComponentProducts = [...componentProducts]
-      var newProducts = tmpComponentProducts.sort(
-        (a, b) => CalculateEditorialProcess(a) - CalculateEditorialProcess(b)
-      )
+      var newProducts = tmpComponentProducts.sort((a, b) => CalculateEditorialProcess(a) - CalculateEditorialProcess(b))
       setComponentProducts(newProducts)
     } else if (newVal == "!editorialProcess") {
       var tmpComponentProducts = [...componentProducts]
-      var newProducts = tmpComponentProducts.sort(
-        (a, b) => CalculateEditorialProcess(b) - CalculateEditorialProcess(a)
-      )
+      var newProducts = tmpComponentProducts.sort((a, b) => CalculateEditorialProcess(b) - CalculateEditorialProcess(a))
       setComponentProducts(newProducts)
     } else {
       setOptionsSearch(searchQuery)
@@ -346,14 +333,10 @@ export default function ProductSearch({query}: ProductSearchProps) {
 
     if (optionsSortBy == "editorialProcess") {
       var tmpComponentProducts = [...newProducts]
-      newProducts = tmpComponentProducts.sort(
-        (a, b) => CalculateEditorialProcess(a) - CalculateEditorialProcess(b)
-      )
+      newProducts = tmpComponentProducts.sort((a, b) => CalculateEditorialProcess(a) - CalculateEditorialProcess(b))
     } else if (optionsSortBy == "!editorialProcess") {
       var tmpComponentProducts = [...newProducts]
-      newProducts = tmpComponentProducts.sort(
-        (a, b) => CalculateEditorialProcess(b) - CalculateEditorialProcess(a)
-      )
+      newProducts = tmpComponentProducts.sort((a, b) => CalculateEditorialProcess(b) - CalculateEditorialProcess(a))
     }
 
     setComponentProducts(newProducts)
@@ -400,10 +383,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
                     <MenuList>
                       <MenuItem>
                         <VStack>
-                          <HStack
-                            width={"full"}
-                            justifyContent={"space-between"}
-                          >
+                          <HStack width={"full"} justifyContent={"space-between"}>
                             <Box width={"100%"} pt={8} pb={4} pl={6} pr={6}>
                               <Slider
                                 borderRight={"solid black"}
@@ -411,9 +391,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
                                 aria-label="Editorial Progress Filter"
                                 defaultValue={100}
                                 value={editorialProgressFilter}
-                                onChange={(val) =>
-                                  setEditorialProgressFilter(val)
-                                }
+                                onChange={(val) => setEditorialProgressFilter(val)}
                                 onChangeEnd={onEditorialProgressFilterChanged}
                                 min={0}
                                 max={100}
@@ -457,10 +435,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           </HStack>
                           <Text>Product Status</Text>
                           <CheckboxGroup>
-                            <Stack
-                              spacing={[1, 3]}
-                              direction={["column", "row"]}
-                            >
+                            <Stack spacing={[1, 3]} direction={["column", "row"]}>
                               <Checkbox value="Completed" defaultChecked>
                                 Completed
                               </Checkbox>
@@ -490,11 +465,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
                             <Select
                               onChange={handleSelectChange}
                               w={"60%"}
-                              value={
-                                sortBy.substring(0, 1) == "!"
-                                  ? sortBy.substring(1)
-                                  : sortBy
-                              }
+                              value={sortBy.substring(0, 1) == "!" ? sortBy.substring(1) : sortBy}
                             >
                               <option
                                 value="name"
@@ -535,18 +506,14 @@ export default function ProductSearch({query}: ProductSearchProps) {
                             <Tooltip label="Sort Asc/Desc">
                               <IconButton
                                 aria-label="Sort Asc/Desc"
-                                icon={
-                                  sortDesc ? <FiChevronDown /> : <FiChevronUp />
-                                }
+                                icon={sortDesc ? <FiChevronDown /> : <FiChevronUp />}
                                 onClick={() => {
                                   setSortDesc(!sortDesc)
                                   sortBy.substring(0, 1) == "!"
                                     ? setSortBy(sortBy.substring(1))
                                     : setSortBy("!" + sortBy)
                                   optionsSortBy.substring(0, 1) == "!"
-                                    ? setOptionsSortBy(
-                                        optionsSortBy.substring(1)
-                                      )
+                                    ? setOptionsSortBy(optionsSortBy.substring(1))
                                     : setOptionsSortBy("!" + optionsSortBy)
                                 }}
                                 float="right"
@@ -557,22 +524,16 @@ export default function ProductSearch({query}: ProductSearchProps) {
                       </MenuItem>
                     </MenuList>
                   </Menu>
-                  <Button
-                    variant="secondaryButton"
-                    onClick={onMassEditOpenClicked}
-                  >
+                  <Button variant="secondaryButton" onClick={onMassEditOpenClicked}>
                     Bulk Edit
                   </Button>
-                  <Button
-                    variant="secondaryButton"
-                    onClick={() => setBulkImportDialogOpen(true)}
-                  >
+                  <Button variant="secondaryButton" onClick={() => setPromotionDialogOpen(true)}>
+                    Assign Promotion
+                  </Button>
+                  <Button variant="secondaryButton" onClick={() => setBulkImportDialogOpen(true)}>
                     Bulk Import
                   </Button>
-                  <Button
-                    variant="secondaryButton"
-                    onClick={() => setExportCSVDialogOpen(true)}
-                  >
+                  <Button variant="secondaryButton" onClick={() => setExportCSVDialogOpen(true)}>
                     Export CSV
                   </Button>
                 </HStack>
@@ -642,18 +603,14 @@ export default function ProductSearch({query}: ProductSearchProps) {
                   {toggleViewMode ? (
                     <ProductList
                       products={componentProducts}
-                      onCheckChange={(productid) =>
-                        onMassEditCheckboxChanged(productid)
-                      }
+                      onCheckChange={(productid) => onMassEditCheckboxChanged(productid)}
                       onSort={(columnName) => onSortByNameClicked(columnName)}
                       sortBy={sortBy}
                     />
                   ) : (
                     <ProductGrid
                       products={componentProducts}
-                      onCheck={(productid) =>
-                        onMassEditCheckboxChanged(productid)
-                      }
+                      onCheck={(productid) => onMassEditCheckboxChanged(productid)}
                     />
                   )}
                 </BrandedTable>
@@ -715,10 +672,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
 
                 <FormControl mt={4}>
                   <FormLabel>Is Active</FormLabel>
-                  <Checkbox
-                    value={formValues.isActive ? 1 : 0}
-                    onChange={handleCheckboxChange("setIsActive")}
-                  />
+                  <Checkbox value={formValues.isActive ? 1 : 0} onChange={handleCheckboxChange("setIsActive")} />
                 </FormControl>
               </ModalBody>
 
@@ -745,22 +699,14 @@ export default function ProductSearch({query}: ProductSearchProps) {
               <ModalHeader>Mass Edit Products</ModalHeader>
               <ModalCloseButton />
               <ModalBody pb={6}>
-                <Text>
-                  You have selected {massEditProducts.length} Products
-                </Text>
+                <Text>You have selected {massEditProducts.length} Products</Text>
                 <FormControl mt={4}>
                   <FormLabel>Activate</FormLabel>
-                  <Checkbox
-                    isChecked={formValues.isActive}
-                    onChange={handleCheckboxChange("isActive")}
-                  />
+                  <Checkbox isChecked={formValues.isActive} onChange={handleCheckboxChange("isActive")} />
                 </FormControl>
                 <FormControl mt={4}>
                   <FormLabel>Deactivate</FormLabel>
-                  <Checkbox
-                    isChecked={formValues.isInactive}
-                    onChange={handleCheckboxChange("isInactive")}
-                  />
+                  <Checkbox isChecked={formValues.isInactive} onChange={handleCheckboxChange("isInactive")} />
                 </FormControl>
               </ModalBody>
 
@@ -786,10 +732,9 @@ export default function ProductSearch({query}: ProductSearchProps) {
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text display="inline">
-                Export the selected products to a CSV, once the export button is
-                clicked behind the scenes a job will be kicked off to create the
-                csv and then will automatically download to your downloads
-                folder in the browser.
+                Export the selected products to a CSV, once the export button is clicked behind the scenes a job will be
+                kicked off to create the csv and then will automatically download to your downloads folder in the
+                browser.
               </Text>
             </AlertDialogBody>
             <AlertDialogFooter>
@@ -823,10 +768,9 @@ export default function ProductSearch({query}: ProductSearchProps) {
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text display="inline">
-                Bulk import products from an excel or csv file, once the upload
-                button is clicked behind the scenes a job will be kicked off
-                load each of the products included in your files, once it has
-                completed you will see them appear in your search.
+                Bulk import products from an excel or csv file, once the upload button is clicked behind the scenes a
+                job will be kicked off load each of the products included in your files, once it has completed you will
+                see them appear in your search.
               </Text>
             </AlertDialogBody>
             <AlertDialogFooter>
@@ -841,6 +785,48 @@ export default function ProductSearch({query}: ProductSearchProps) {
                 </Button>
                 <Button onClick={requestImportCSV} disabled={loading}>
                   {loading ? <Spinner color="brand.500" /> : "Import Products"}
+                </Button>
+              </HStack>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+
+      <AlertDialog
+        isOpen={isPromotionDialogOpen}
+        onClose={() => setPromotionDialogOpen(false)}
+        leastDestructiveRef={cancelRef}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Attach a Promotion
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              <Text display="inline">
+                Select a promotion from the dropdown to assign to the previously selected products.
+                <Select title="Select promotion" mt="20px" value={selectedPromotion}>
+                  {!!promotions.length &&
+                    promotions.map((promotion) => (
+                      <option key={promotion.ID} value={promotion.ID}>
+                        {promotion.Name}
+                      </option>
+                    ))}
+                </Select>
+              </Text>
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <HStack justifyContent="space-between" w="100%">
+                <Button
+                  ref={cancelRef}
+                  onClick={() => setPromotionDialogOpen(false)}
+                  disabled={loading}
+                  variant="secondaryButton"
+                >
+                  Cancel
+                </Button>
+                <Button onClick={requestImportCSV} disabled={loading}>
+                  {loading ? <Spinner color="brand.500" /> : "Assign Promotion"}
                 </Button>
               </HStack>
             </AlertDialogFooter>

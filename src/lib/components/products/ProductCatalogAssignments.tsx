@@ -37,10 +37,7 @@ import {
   Products,
   RequiredDeep
 } from "ordercloud-javascript-sdk"
-import {
-  ComposedProduct,
-  GetComposedProduct
-} from "../../services/ordercloud.service"
+import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
 import {FiEdit, FiPlus, FiTrash2} from "react-icons/fi"
 import {useEffect, useState} from "react"
 
@@ -54,18 +51,13 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductCatalogAssignments({
-  composedProduct,
-  setComposedProduct
-}: ProductDataProps) {
-  const [productCatalogAssignments, setProductCatalogAssignments] =
-    useState<Catalog[]>(null)
+export default function ProductCatalogAssignments({composedProduct, setComposedProduct}: ProductDataProps) {
+  const [productCatalogAssignments, setProductCatalogAssignments] = useState<Catalog[]>(null)
   const [chosenCatalog, setChosenCatalog] = useState<Catalog>(null)
   const {isOpen, onOpen, onClose} = useDisclosure()
   const cancelRef = React.useRef()
   const [isLinking, setIsLinking] = useState(false)
-  const [availableCatalogs, setAvailableCatalogs] =
-    useState<Catalog<any>[]>(null)
+  const [availableCatalogs, setAvailableCatalogs] = useState<Catalog<any>[]>(null)
   const [isCatalogChosen, setIsCatalogChosen] = useState(false)
   const [newCatalog, setNewCatalog] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -99,8 +91,7 @@ export default function ProductCatalogAssignments({
 
   const onCategoriesExpandedClick = async (e) => {
     const chosenCatalogId = e.currentTarget.dataset.id
-    const newValue =
-      chosenCatalogId == (chosenCatalog?.ID ?? "") ? "" : chosenCatalogId
+    const newValue = chosenCatalogId == (chosenCatalog?.ID ?? "") ? "" : chosenCatalogId
     if (newValue == "") {
       setChosenCatalog(null)
     } else {
@@ -113,10 +104,7 @@ export default function ProductCatalogAssignments({
     e.preventDefault()
     setIsLoading(true)
     const catalogId = e.currentTarget.dataset.id
-    await Catalogs.DeleteProductAssignment(
-      catalogId,
-      composedProduct?.Product?.ID
-    )
+    await Catalogs.DeleteProductAssignment(catalogId, composedProduct?.Product?.ID)
     var product = await GetComposedProduct(composedProduct?.Product?.ID)
     setComposedProduct(product)
     setChosenCatalog(null)
@@ -170,9 +158,7 @@ export default function ProductCatalogAssignments({
   return (
     <>
       <>
-        <Heading size={{base: "sm", md: "md", lg: "md"}}>
-          Catalog Assignments
-        </Heading>
+        <Heading size={{base: "sm", md: "md", lg: "md"}}>Catalog Assignments</Heading>
         {!composedProduct && expanded ? (
           <Box pt={6} textAlign={"center"}>
             Updating... <BrandedSpinner />
@@ -241,10 +227,7 @@ export default function ProductCatalogAssignments({
               )}
             </Box>
             {chosenCatalog ? (
-              <ProductCategoryAssignments
-                product={composedProduct?.Product}
-                catalog={chosenCatalog}
-              />
+              <ProductCategoryAssignments product={composedProduct?.Product} catalog={chosenCatalog} />
             ) : (
               <></>
             )}
@@ -253,12 +236,7 @@ export default function ProductCatalogAssignments({
       </>
       <HStack float={"right"}>
         <Tooltip label="Add to catalog">
-          <Button
-            colorScheme="brandButtons"
-            variant="tertiaryButton"
-            aria-label="add to catalog"
-            onClick={onOpen}
-          >
+          <Button colorScheme="brandButtons" variant="tertiaryButton" aria-label="add to catalog" onClick={onOpen}>
             <FiPlus />
           </Button>
         </Tooltip>
@@ -273,11 +251,7 @@ export default function ProductCatalogAssignments({
         <AlertDialogOverlay>
           <AlertDialogContent>
             {isLinking ? (
-              <AlertDialogHeader
-                textAlign={"center"}
-                fontSize="lg"
-                fontWeight="bold"
-              >
+              <AlertDialogHeader textAlign={"center"} fontSize="lg" fontWeight="bold">
                 Linking... <BrandedSpinner />
               </AlertDialogHeader>
             ) : (
@@ -315,8 +289,7 @@ export default function ProductCatalogAssignments({
                               onClick={onAvailableCatalogClick}
                               data-id={element.ID}
                             >
-                              <b>Name:</b> {element.Name} | <b>ID:</b>{" "}
-                              {element.ID}
+                              <b>Name:</b> {element.Name} | <b>ID:</b> {element.ID}
                             </ListItem>
                           </Tooltip>
                         ))}
@@ -327,16 +300,9 @@ export default function ProductCatalogAssignments({
                 <AlertDialogFooter>
                   <Box width={"full"}>
                     {isCatalogChosen ? null : (
-                      <Text pb={2}>
-                        Please choose from the search results to link a Catalog
-                      </Text>
+                      <Text pb={2}>Please choose from the search results to link a Catalog</Text>
                     )}
-                    <Button
-                      width={"45%"}
-                      size={"md"}
-                      onClick={onClose}
-                      variant="tertiaryButton"
-                    >
+                    <Button width={"45%"} size={"md"} onClick={onClose} variant="tertiaryButton">
                       Cancel
                     </Button>
                     <Button

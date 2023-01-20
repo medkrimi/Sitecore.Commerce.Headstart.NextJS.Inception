@@ -14,12 +14,7 @@ import {
   Text,
   VStack
 } from "@chakra-ui/react"
-import {
-  buyersService,
-  catalogsService,
-  userGroupsService,
-  usersService
-} from "lib/api"
+import {buyersService, catalogsService, userGroupsService, usersService} from "lib/api"
 import {useEffect, useState} from "react"
 
 import {Buyer} from "ordercloud-javascript-sdk"
@@ -50,12 +45,9 @@ export default function BuyerContextSwitch({...props}) {
     setBuyers(buyersList.Items)
     const requests = buyersList.Items.map(async (buyer) => {
       _buyerListMeta[buyer.ID] = {}
-      _buyerListMeta[buyer.ID]["userGroupsCount"] =
-        await userGroupsService.getUserGroupsCountByBuyerID(buyer.ID)
-      _buyerListMeta[buyer.ID]["usersCount"] =
-        await usersService.getUsersCountByBuyerID(buyer.ID)
-      _buyerListMeta[buyer.ID]["catalogsCount"] =
-        await catalogsService.getCatalogsCountByBuyerID(buyer.ID)
+      _buyerListMeta[buyer.ID]["userGroupsCount"] = await userGroupsService.getUserGroupsCountByBuyerID(buyer.ID)
+      _buyerListMeta[buyer.ID]["usersCount"] = await usersService.getUsersCountByBuyerID(buyer.ID)
+      _buyerListMeta[buyer.ID]["catalogsCount"] = await catalogsService.getCatalogsCountByBuyerID(buyer.ID)
     })
     await Promise.all(requests)
     setBuyersMeta(_buyerListMeta)
@@ -66,8 +58,8 @@ export default function BuyerContextSwitch({...props}) {
       <Box
         bg="white"
         borderRadius="xl"
-        pl="20px"
-        pr="20px"
+        pl="GlobalPadding"
+        pr="GlobalPadding"
         pt="2"
         pb="2"
         mb="6"
@@ -80,12 +72,7 @@ export default function BuyerContextSwitch({...props}) {
           borderRadius: "10px"
         }}
       >
-        <HStack
-          maxWidth="100%"
-          my={{sm: "14px"}}
-          justifyContent="space-between"
-          w="100%"
-        >
+        <HStack maxWidth="100%" my={{sm: "14px"}} justifyContent="space-between" w="100%">
           <HStack>
             <Avatar
               me={{md: "22px"}}
@@ -95,43 +82,23 @@ export default function BuyerContextSwitch({...props}) {
               borderRadius="15px"
             />
             <VStack textAlign="left">
-              <Text
-                fontSize={{sm: "lg", lg: "xl"}}
-                fontWeight="bold"
-                ms={{sm: "8px", md: "0px"}}
-                width="100%"
-              >
+              <Text fontSize={{sm: "lg", lg: "xl"}} fontWeight="bold" ms={{sm: "8px", md: "0px"}} width="100%">
                 {currentBuyer?.Name}
               </Text>
-              <Text
-                fontSize={{sm: "sm", md: "md"}}
-                color="gray.400"
-                width="100%"
-              >
+              <Text fontSize={{sm: "sm", md: "md"}} color="gray.400" width="100%">
                 {currentBuyer?.ID}
               </Text>
             </VStack>
             <Spacer width="40px"></Spacer>
             {buyers.length > 1 && (
               <Menu>
-                <MenuButton
-                  as={Button}
-                  rightIcon={<ChevronDownIcon />}
-                  size="lg"
-                  ml="30px"
-                >
+                <MenuButton as={Button} rightIcon={<ChevronDownIcon />} size="lg" ml="30px">
                   {currentBuyer?.Name}
                 </MenuButton>
                 <MenuList>
                   {buyers.map((buyer, index) => (
                     <>
-                      <MenuItem
-                        key={index}
-                        minH="40px"
-                        onClick={() =>
-                          router.push({query: {buyerid: buyer.ID}})
-                        }
-                      >
+                      <MenuItem key={index} minH="40px" onClick={() => router.push({query: {buyerid: buyer.ID}})}>
                         <Image
                           boxSize="2rem"
                           borderRadius="full"
@@ -148,42 +115,19 @@ export default function BuyerContextSwitch({...props}) {
             )}
           </HStack>
 
-          <Flex
-            direction={{sm: "column", lg: "row"}}
-            w={{sm: "100%", md: "50%", lg: "auto"}}
-          >
+          <Flex direction={{sm: "column", lg: "row"}} w={{sm: "100%", md: "50%", lg: "auto"}}>
             <ButtonGroup>
               <Button
-                onClick={() =>
-                  router.push(`/buyers/${router.query.buyerid}/usergroups`)
-                }
+                onClick={() => router.push(`/buyers/${router.query.buyerid}/usergroups`)}
                 variant="secondaryButton"
               >
                 User Groups ({buyersMeta[buyerid]?.userGroupsCount || "-"})
               </Button>
-              <Button
-                onClick={() =>
-                  router.push(`/buyers/${router.query.buyerid}/users`)
-                }
-                variant="secondaryButton"
-              >
+              <Button onClick={() => router.push(`/buyers/${router.query.buyerid}/users`)} variant="secondaryButton">
                 Users ({buyersMeta[buyerid]?.usersCount || "-"})
               </Button>
-              <Button
-                onClick={() =>
-                  router.push(`/buyers/${router.query.buyerid}/catalogs`)
-                }
-                variant="secondaryButton"
-              >
+              <Button onClick={() => router.push(`/buyers/${router.query.buyerid}/catalogs`)} variant="secondaryButton">
                 Catalogs ({buyersMeta[buyerid]?.catalogsCount || "-"})
-              </Button>
-              <Button
-                onClick={() =>
-                  router.push(`/buyers/${router.query.buyerid}/categories`)
-                }
-                variant="secondaryButton"
-              >
-                Categories ({buyersMeta[buyerid]?.categoriesCount || "-"})
               </Button>
             </ButtonGroup>
           </Flex>

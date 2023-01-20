@@ -1,14 +1,6 @@
 import * as Yup from "yup"
 
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Container,
-  Flex,
-  Heading,
-  Stack
-} from "@chakra-ui/react"
+import {Box, Button, ButtonGroup, Container, Flex, Heading, Stack} from "@chakra-ui/react"
 import {
   InputControl,
   NumberInputControl,
@@ -87,11 +79,7 @@ function AddEditForm({userGroup}: AddEditFormProps) {
 
   async function updateUserGroup(fields, setSubmitting) {
     try {
-      await userGroupsService.update(
-        router.query.buyerid,
-        router.query.usergroupid,
-        fields
-      )
+      await userGroupsService.update(router.query.buyerid, router.query.usergroupid, fields)
       toast({
         id: fields.ID + "-updated",
         title: "Success",
@@ -111,11 +99,7 @@ function AddEditForm({userGroup}: AddEditFormProps) {
     <>
       <Card variant="primaryCard">
         <Flex flexDirection="column" p="10">
-          <Formik
-            initialValues={formOptions.defaultValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}
-          >
+          <Formik initialValues={formOptions.defaultValues} validationSchema={validationSchema} onSubmit={onSubmit}>
             {({
               // most of the usefull available Formik props
               values,
@@ -133,11 +117,7 @@ function AddEditForm({userGroup}: AddEditFormProps) {
                   <InputControl name="Name" label="User Group Name" />
                   <TextareaControl name="Description" label="Description" />
                   <ButtonGroup>
-                    <Button
-                      variant="primaryButton"
-                      type="submit"
-                      isLoading={isSubmitting}
-                    >
+                    <Button variant="primaryButton" type="submit" isLoading={isSubmitting}>
                       Save
                     </Button>
                     <Button
@@ -151,11 +131,7 @@ function AddEditForm({userGroup}: AddEditFormProps) {
                       Reset
                     </Button>
                     <Button
-                      onClick={() =>
-                        router.push(
-                          `/buyers/${router.query.buyerid}/usersgroups`
-                        )
-                      }
+                      onClick={() => router.push(`/buyers/${router.query.buyerid}/usersgroups`)}
                       variant="secondaryButton"
                       isLoading={isSubmitting}
                     >

@@ -1,12 +1,4 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  LinkBox,
-  LinkOverlay,
-  Text,
-  Container
-} from "@chakra-ui/react"
+import {Box, Flex, Heading, LinkBox, LinkOverlay, Text, Container} from "@chakra-ui/react"
 import {NextSeo} from "next-seo"
 import Login from "../lib/components/account/Login"
 import {useRouter} from "next/router"
@@ -18,15 +10,7 @@ const LogOff = () => {
   }
 
   return (
-    <Flex
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
-      minHeight="70vh"
-      gap={4}
-      mb={8}
-      w="full"
-    >
+    <Flex direction="column" alignItems="center" justifyContent="center" minHeight="70vh" gap={4} mb={8} w="full">
       <NextSeo title="LogOff" />
       <Login onLoggedIn={handleOnLoggedIn} />
     </Flex>

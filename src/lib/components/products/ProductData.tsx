@@ -15,10 +15,7 @@ import {
 } from "@chakra-ui/react"
 import {ChangeEvent, useEffect, useState} from "react"
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
-import {
-  ComposedProduct,
-  GetComposedProduct
-} from "../../services/ordercloud.service"
+import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
 import {FiCheck, FiEdit, FiX} from "react-icons/fi"
 import {Product, Products} from "ordercloud-javascript-sdk"
 
@@ -30,10 +27,7 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductData({
-  composedProduct,
-  setComposedProduct
-}: ProductDataProps) {
+export default function ProductData({composedProduct, setComposedProduct}: ProductDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
@@ -79,26 +73,16 @@ export default function ProductData({
     composedProduct?.Product?.ShipFromAddressID
   ])
 
-  const handleInputChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      if (fieldKey == "name" && e.target.value == "") {
-        return
-      }
-      setFormValues((v) => ({...v, [fieldKey]: e.target.value}))
-    }
+  const handleNumberInputChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({
+      ...v,
+      [fieldKey]: e.target.value == "" ? 0 : e.target.value
+    }))
+  }
 
-  const handleNumberInputChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({
-        ...v,
-        [fieldKey]: e.target.value == "" ? 0 : e.target.value
-      }))
-    }
-
-  const handleCheckboxChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
-    }
+  const handleCheckboxChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
+  }
 
   const onEditClicked = (e) => {
     setFormValues((v) => ({
@@ -106,8 +90,7 @@ export default function ProductData({
       ["name"]: composedProduct?.Product?.Name,
       ["id"]: composedProduct?.Product?.ID,
       ["description"]: composedProduct?.Product?.Description,
-      ["defaultPriceScheduleId"]:
-        composedProduct?.Product?.DefaultPriceScheduleID,
+      ["defaultPriceScheduleId"]: composedProduct?.Product?.DefaultPriceScheduleID,
       ["quantityMultiplier"]: composedProduct?.Product?.QuantityMultiplier,
       ["shipFromAddress"]: composedProduct?.Product?.ShipFromAddressID,
       ["returnable"]: composedProduct?.Product?.Returnable,
@@ -124,8 +107,7 @@ export default function ProductData({
       ["name"]: composedProduct?.Product?.Name,
       ["id"]: composedProduct?.Product?.ID,
       ["description"]: composedProduct?.Product?.Description,
-      ["defaultPriceScheduleId"]:
-        composedProduct?.Product?.DefaultPriceScheduleID,
+      ["defaultPriceScheduleId"]: composedProduct?.Product?.DefaultPriceScheduleID,
       ["quantityMultiplier"]: composedProduct?.Product?.QuantityMultiplier,
       ["shipFromAddress"]: composedProduct?.Product?.ShipFromAddressID,
       ["returnable"]: composedProduct?.Product?.Returnable,
@@ -170,49 +152,27 @@ export default function ProductData({
           </Box>
         ) : (
           <>
-            <Heading
-              size={{base: "sm", md: "md", lg: "md"}}
-              mb={expanded ? 6 : 0}
-            >
+            <Heading size={{base: "sm", md: "md", lg: "md"}} mb={expanded ? 6 : 0}>
               Product Data
             </Heading>
             <Collapse in={expanded}>
               <Flex flexDirection={{base: "column", sm: "column", md: "row"}}>
                 <Container>
-                  <Tooltip
-                    label={
-                      isEditingBasicData
-                        ? "Product Name is mandatory to fill"
-                        : ""
-                    }
-                  >
+                  <Tooltip label={isEditingBasicData ? "Product Name is mandatory to fill" : ""}>
                     <Box width="full" pb={2}>
                       <Text>Product Name:</Text>
                       {isEditingBasicData ? (
-                        <Input
-                          value={formValues.name}
-                          onChange={handleInputChange("name")}
-                        />
+                        <Input value={formValues.name} onChange={handleInputChange("name")} />
                       ) : (
-                        <Input
-                          border={"1px"}
-                          value={composedProduct?.Product?.Name}
-                          readOnly
-                        />
+                        <Input border={"1px"} value={composedProduct?.Product?.Name} readOnly />
                       )}
                     </Box>
                   </Tooltip>
-                  <Tooltip
-                    label={isEditingBasicData ? "ID is not changeable" : ""}
-                  >
+                  <Tooltip label={isEditingBasicData ? "ID is not changeable" : ""}>
                     <Box width="full" pb={2}>
                       <Text>ID:</Text>
                       {isEditingBasicData ? (
-                        <Input
-                          readOnly
-                          value={formValues.id}
-                          onChange={handleInputChange("productId")}
-                        />
+                        <Input readOnly value={formValues.id} onChange={handleInputChange("productId")} />
                       ) : (
                         <Input value={composedProduct?.Product?.ID} readOnly />
                       )}
@@ -228,28 +188,16 @@ export default function ProductData({
                           onChange={handleInputChange("defaultPriceScheduleId")}
                         />
                       ) : (
-                        <Input
-                          value={
-                            composedProduct?.Product?.DefaultPriceScheduleID ??
-                            "Not set"
-                          }
-                          readOnly
-                        />
+                        <Input value={composedProduct?.Product?.DefaultPriceScheduleID ?? "Not set"} readOnly />
                       )}
                     </Box>
                   </Tooltip>
                   <Box width="full" pb={2}>
                     <Text>Description:</Text>
                     {isEditingBasicData ? (
-                      <Input
-                        value={formValues.description}
-                        onChange={handleInputChange("description")}
-                      />
+                      <Input value={formValues.description} onChange={handleInputChange("description")} />
                     ) : (
-                      <Input
-                        value={composedProduct?.Product?.Description}
-                        readOnly
-                      />
+                      <Input value={composedProduct?.Product?.Description} readOnly />
                     )}
                   </Box>
                 </Container>
@@ -258,18 +206,9 @@ export default function ProductData({
                     <Box width="full" pb={2}>
                       <Text>Ship from Address:</Text>
                       {isEditingBasicData ? (
-                        <Input
-                          value={formValues.shipFromAddress}
-                          onChange={handleInputChange("shipFromAddress")}
-                        />
+                        <Input value={formValues.shipFromAddress} onChange={handleInputChange("shipFromAddress")} />
                       ) : (
-                        <Input
-                          value={
-                            composedProduct?.Product?.ShipFromAddressID ??
-                            "Not set"
-                          }
-                          readOnly
-                        />
+                        <Input value={composedProduct?.Product?.ShipFromAddressID ?? "Not set"} readOnly />
                       )}
                     </Box>
                   </Tooltip>
@@ -282,13 +221,7 @@ export default function ProductData({
                           onChange={handleInputChange("defaultSupplierId")}
                         />
                       ) : (
-                        <Input
-                          value={
-                            composedProduct?.Product?.DefaultSupplierID ??
-                            "Not set"
-                          }
-                          readOnly
-                        />
+                        <Input value={composedProduct?.Product?.DefaultSupplierID ?? "Not set"} readOnly />
                       )}
                     </Box>
                   </Tooltip>
@@ -316,28 +249,17 @@ export default function ProductData({
                         <Input
                           type={"number"}
                           value={formValues.quantityMultiplier}
-                          onChange={handleNumberInputChange(
-                            "quantityMultiplier"
-                          )}
+                          onChange={handleNumberInputChange("quantityMultiplier")}
                         />
                       ) : (
-                        <Input
-                          value={
-                            composedProduct?.Product?.QuantityMultiplier ??
-                            "Not set"
-                          }
-                          readOnly
-                        />
+                        <Input value={composedProduct?.Product?.QuantityMultiplier ?? "Not set"} readOnly />
                       )}
                     </Box>
                   </Tooltip>
                   <Box width="full" pb={2}>
                     <Text>Returnable? </Text>
                     {isEditingBasicData ? (
-                      <Switch
-                        isChecked={formValues.returnable}
-                        onChange={handleCheckboxChange("returnable")}
-                      />
+                      <Switch isChecked={formValues.returnable} onChange={handleCheckboxChange("returnable")} />
                     ) : (
                       <Switch
                         isChecked={formValues.returnable}
@@ -349,16 +271,9 @@ export default function ProductData({
                   <Box width="full" pb={2}>
                     <Text>Is Active </Text>
                     {isEditingBasicData ? (
-                      <Switch
-                        isChecked={formValues.isActive}
-                        onChange={handleCheckboxChange("isActive")}
-                      />
+                      <Switch isChecked={formValues.isActive} onChange={handleCheckboxChange("isActive")} />
                     ) : (
-                      <Switch
-                        isChecked={formValues.isActive}
-                        isReadOnly
-                        onChange={handleCheckboxChange("isActive")}
-                      />
+                      <Switch isChecked={formValues.isActive} isReadOnly onChange={handleCheckboxChange("isActive")} />
                     )}
                   </Box>
                 </Container>
@@ -370,22 +285,12 @@ export default function ProductData({
       {isEditingBasicData ? (
         <HStack float={"right"}>
           <Tooltip label="Save">
-            <Button
-              colorScheme="brandButtons"
-              aria-label="Save"
-              variant="tertiaryButton"
-              onClick={onSaveClicked}
-            >
+            <Button colorScheme="brandButtons" aria-label="Save" variant="tertiaryButton" onClick={onSaveClicked}>
               <FiCheck />
             </Button>
           </Tooltip>
           <Tooltip label="Abort">
-            <Button
-              colorScheme="brandButtons"
-              aria-label="Abort"
-              variant="tertiaryButton"
-              onClick={onAbortClicked}
-            >
+            <Button colorScheme="brandButtons" aria-label="Abort" variant="tertiaryButton" onClick={onAbortClicked}>
               <FiX color={color} />
             </Button>
           </Tooltip>
@@ -393,12 +298,7 @@ export default function ProductData({
       ) : (
         <HStack float={"right"}>
           <Tooltip label="Edit">
-            <Button
-              colorScheme="brandButtons"
-              aria-label="Edit"
-              variant="tertiaryButton"
-              onClick={onEditClicked}
-            >
+            <Button colorScheme="brandButtons" aria-label="Edit" variant="tertiaryButton" onClick={onEditClicked}>
               <FiEdit color={color} />
             </Button>
           </Tooltip>

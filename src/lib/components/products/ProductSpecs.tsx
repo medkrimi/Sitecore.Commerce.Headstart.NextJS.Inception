@@ -26,20 +26,9 @@ import {
   useDisclosure
 } from "@chakra-ui/react"
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
-import {
-  ComposedProduct,
-  GetComposedProduct
-} from "../../services/ordercloud.service"
+import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
 import {FiPlus, FiTrash2} from "react-icons/fi"
-import {
-  ListPage,
-  Product,
-  Products,
-  RequiredDeep,
-  Spec,
-  SpecProductAssignment,
-  Specs
-} from "ordercloud-javascript-sdk"
+import {ListPage, Product, Products, RequiredDeep, Spec, SpecProductAssignment, Specs} from "ordercloud-javascript-sdk"
 
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
@@ -52,10 +41,7 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductSpecs({
-  composedProduct,
-  setComposedProduct
-}: ProductDataProps) {
+export default function ProductSpecs({composedProduct, setComposedProduct}: ProductDataProps) {
   const color = useColorModeValue("textColor.900", "textColor.100")
   const bg = useColorModeValue("brand.500", "brand.500")
   const okColor = useColorModeValue("okColor.800", "okColor.200")
@@ -76,9 +62,7 @@ export default function ProductSpecs({
     const specId = e.currentTarget.dataset.id
     await Specs.DeleteProductAssignment(specId, composedProduct?.Product?.ID)
 
-    var targetSpec = composedProduct?.Specs?.find(
-      (innerSpec) => innerSpec.ID == specId
-    )
+    var targetSpec = composedProduct?.Specs?.find((innerSpec) => innerSpec.ID == specId)
     if (targetSpec.DefinesVariant) {
       // TODO: ASK in Dialog if Variants shall be regenerated and how?
       // In case a variant spec has been deleted, all the variants have to be regenerated
@@ -137,9 +121,7 @@ export default function ProductSpecs({
       const specIds = composedProduct?.Specs?.map((item) => {
         return item.ID
       })
-      const filteredSpecs = innerSpecs.Items.filter(
-        (innerSpec) => !specIds.includes(innerSpec.ID)
-      )
+      const filteredSpecs = innerSpecs.Items.filter((innerSpec) => !specIds.includes(innerSpec.ID))
       setAvailableSpecs(filteredSpecs)
     })
   }
@@ -239,11 +221,7 @@ export default function ProductSpecs({
         <AlertDialogOverlay>
           <AlertDialogContent>
             {isLinking ? (
-              <AlertDialogHeader
-                textAlign={"center"}
-                fontSize="lg"
-                fontWeight="bold"
-              >
+              <AlertDialogHeader textAlign={"center"} fontSize="lg" fontWeight="bold">
                 Linking... <BrandedSpinner />
               </AlertDialogHeader>
             ) : (
@@ -252,9 +230,7 @@ export default function ProductSpecs({
                   Link Specification to Product
                 </AlertDialogHeader>
 
-                <AlertDialogBody>
-                  Please choose Specification to link
-                </AlertDialogBody>
+                <AlertDialogBody>Please choose Specification to link</AlertDialogBody>
                 <FormControl ml={6}>
                   <Input
                     autoComplete="off"
@@ -299,8 +275,7 @@ export default function ProductSpecs({
                               onClick={onAvailableSpecClick}
                               data-id={element.ID}
                             >
-                              <b>Name:</b> {element.Name} | <b>ID:</b>{" "}
-                              {element.ID}
+                              <b>Name:</b> {element.Name} | <b>ID:</b> {element.ID}
                             </ListItem>
                           </Tooltip>
                         ))}
@@ -310,17 +285,8 @@ export default function ProductSpecs({
                 ) : null}
                 <AlertDialogFooter>
                   <Box width={"full"}>
-                    {isSpecChosen ? null : (
-                      <Text pb={2}>
-                        Please choose from the search results to link a spec
-                      </Text>
-                    )}
-                    <Button
-                      width={"45%"}
-                      size={"md"}
-                      variant="tertiaryButton"
-                      onClick={onClose}
-                    >
+                    {isSpecChosen ? null : <Text pb={2}>Please choose from the search results to link a spec</Text>}
+                    <Button width={"45%"} size={"md"} variant="tertiaryButton" onClick={onClose}>
                       Cancel
                     </Button>
                     <Button

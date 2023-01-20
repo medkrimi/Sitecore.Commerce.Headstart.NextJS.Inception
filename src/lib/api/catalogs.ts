@@ -56,14 +56,10 @@ async function getCatalogsCountByBuyerID(buyerID) {
 async function getCatalogsbyBuyerID(buyerID) {
   console.log("catalogsService::getCatalogsbyBuyerId")
   const catalogsAssignments = await Catalogs.ListAssignments({buyerID: buyerID})
-  let catalogAssignmentsIds = catalogsAssignments.Items.map(
-    (item) => item.CatalogID
-  )
-  console.log(catalogAssignmentsIds)
+  let catalogAssignmentsIds = catalogsAssignments.Items.map((item) => item.CatalogID)
   const catalogsList = await Catalogs.List({
     filters: {ID: catalogAssignmentsIds.join("|")}
   })
-  console.log(catalogsList)
   return catalogsList
 }
 

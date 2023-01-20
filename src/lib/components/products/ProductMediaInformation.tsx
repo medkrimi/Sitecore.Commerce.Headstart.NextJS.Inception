@@ -12,10 +12,7 @@ import {
   Center,
   VStack
 } from "@chakra-ui/react"
-import {
-  ComposedProduct,
-  GetComposedProduct
-} from "../../services/ordercloud.service"
+import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
 import {ProductXPs, XpImage} from "lib/types/ProductXPs"
 import {Product, Products} from "ordercloud-javascript-sdk"
 import {ChangeEvent, useState} from "react"
@@ -28,10 +25,7 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductMediaInformation({
-  composedProduct,
-  setComposedProduct
-}: ProductDataProps) {
+export default function ProductMediaInformation({composedProduct, setComposedProduct}: ProductDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
@@ -57,23 +51,22 @@ export default function ProductMediaInformation({
     setIsEditingBasicData(false)
   }
 
-  const handleInputChange =
-    (fieldKey: number) => (e: ChangeEvent<HTMLInputElement>) => {
-      var newVal = e.target.value
-      var emptyVal = null
-      var tmpImages = [...formValues.images]
-      var tmpImage: XpImage = {
-        Url: newVal,
-        ThumbnailUrl: newVal
-      }
-
-      tmpImages[fieldKey] = tmpImage
-
-      setFormValues((v) => ({
-        ...v,
-        ["images"]: tmpImages
-      }))
+  const handleInputChange = (fieldKey: number) => (e: ChangeEvent<HTMLInputElement>) => {
+    var newVal = e.target.value
+    var emptyVal = null
+    var tmpImages = [...formValues.images]
+    var tmpImage: XpImage = {
+      Url: newVal,
+      ThumbnailUrl: newVal
     }
+
+    tmpImages[fieldKey] = tmpImage
+
+    setFormValues((v) => ({
+      ...v,
+      ["images"]: tmpImages
+    }))
+  }
 
   const onDeleteProductImageClicked = (url: string) => async (e) => {
     setIsLoading(true)
@@ -166,10 +159,7 @@ export default function ProductMediaInformation({
                   return isEditingBasicData ? (
                     <HStack key={key} mt={3}>
                       <Text>{key + 1}</Text>
-                      <Input
-                        value={image.Url}
-                        onChange={handleInputChange(key)}
-                      />
+                      <Input value={image.Url} onChange={handleInputChange(key)} />
                       {key != 0 ? (
                         <Tooltip pt={2} label="Remove Product Image">
                           <Button
@@ -194,9 +184,7 @@ export default function ProductMediaInformation({
                     objectFit="scale-down"
                     mt={4}
                     alt={"Product Image"}
-                    src={
-                      composedProduct?.Product?.xp?.Images[selectedImage].Url
-                    }
+                    src={composedProduct?.Product?.xp?.Images[selectedImage].Url}
                   />
                 ) : (
                   <></>
@@ -208,11 +196,7 @@ export default function ProductMediaInformation({
                         <Text>{key + 1}</Text>
 
                         {(image?.Url ?? "") == "" ? (
-                          <Heading
-                            fontSize={"2xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
+                          <Heading fontSize={"2xl"} fontFamily={"body"} fontWeight={500}>
                             <>No Image</>
                           </Heading>
                         ) : (
@@ -236,16 +220,11 @@ export default function ProductMediaInformation({
                     )
                   })}
                 </HStack>
-                {isEditingBasicData &&
-                formValues?.images[formValues?.images?.length - 1]?.Url !=
-                  "" ? (
+                {isEditingBasicData && formValues?.images[formValues?.images?.length - 1]?.Url != "" ? (
                   <Tooltip label="Add new Product Image">
                     <Box pt={4}>
                       <Center>
-                        <Button
-                          onClick={onNewProductImageClicked}
-                          variant="tertiaryButton"
-                        >
+                        <Button onClick={onNewProductImageClicked} variant="tertiaryButton">
                           <FiPlus />
                         </Button>
                       </Center>
@@ -262,21 +241,12 @@ export default function ProductMediaInformation({
       {isEditingBasicData ? (
         <HStack float={"right"}>
           <Tooltip label="Save">
-            <Button
-              aria-label="Save"
-              onClick={onProductSave}
-              variant="tertiaryButton"
-            >
+            <Button aria-label="Save" onClick={onProductSave} variant="tertiaryButton">
               <FiCheck />
             </Button>
           </Tooltip>
           <Tooltip label="Abort">
-            <Button
-              colorScheme="brandButtons"
-              aria-label="Abort"
-              variant="tertiaryButton"
-              onClick={onAbortClicked}
-            >
+            <Button colorScheme="brandButtons" aria-label="Abort" variant="tertiaryButton" onClick={onAbortClicked}>
               <FiX />
             </Button>
           </Tooltip>
@@ -284,11 +254,7 @@ export default function ProductMediaInformation({
       ) : (
         <HStack float={"right"}>
           <Tooltip label="Edit">
-            <Button
-              aria-label="Edit"
-              variant="tertiaryButton"
-              onClick={onEditClicked}
-            >
+            <Button aria-label="Edit" variant="tertiaryButton" onClick={onEditClicked}>
               <FiEdit />
             </Button>
           </Tooltip>

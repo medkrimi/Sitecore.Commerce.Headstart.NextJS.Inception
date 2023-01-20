@@ -30,10 +30,7 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductSuppliers({
-  composedProduct,
-  setComposedProduct
-}: ProductDataProps) {
+export default function ProductSuppliers({composedProduct, setComposedProduct}: ProductDataProps) {
   const color = useColorModeValue("textColor.900", "textColor.100")
   const bg = useColorModeValue("brand.500", "brand.500")
   const okColor = useColorModeValue("okColor.800", "okColor.200")
@@ -45,9 +42,7 @@ export default function ProductSuppliers({
   useEffect(() => {
     async function GetProdcutSupplier() {
       if (composedProduct?.Product) {
-        var productSupplier = await Products.ListSuppliers(
-          composedProduct?.Product?.ID
-        )
+        var productSupplier = await Products.ListSuppliers(composedProduct?.Product?.ID)
         setSupplier(productSupplier.Items)
       }
     }
@@ -174,10 +169,7 @@ export default function ProductSuppliers({
                             <Switch isChecked={item.Active} isReadOnly />
                           </Td>
                           <Td>
-                            <Switch
-                              isChecked={item.AllBuyersCanOrder}
-                              isReadOnly
-                            />
+                            <Switch isChecked={item.AllBuyersCanOrder} isReadOnly />
                           </Td>
                           <Td>
                             {" "}

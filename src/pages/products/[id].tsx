@@ -16,10 +16,7 @@ import {
   VStack,
   useDisclosure
 } from "@chakra-ui/react"
-import {
-  ComposedProduct,
-  GetComposedProduct
-} from "lib/services/ordercloud.service"
+import {ComposedProduct, GetComposedProduct} from "lib/services/ordercloud.service"
 import {FiRefreshCw, FiTrash2} from "react-icons/fi"
 import {useEffect, useState} from "react"
 
@@ -83,10 +80,7 @@ const ProductDetails = () => {
   useEffect(() => {
     async function LoadProduct() {
       var product = await GetComposedProduct(id as string)
-      if (
-        product?.Product &&
-        composedProduct?.Product?.ID != product.Product.ID
-      ) {
+      if (product?.Product && composedProduct?.Product?.ID != product.Product.ID) {
         setComposedProduct(product)
       }
     }
@@ -133,9 +127,7 @@ const ProductDetails = () => {
                     "2xl": "15%"
                   }}
                   onClick={async (e) => {
-                    var product = await GetComposedProduct(
-                      composedProduct?.Product?.ID
-                    )
+                    var product = await GetComposedProduct(composedProduct?.Product?.ID)
                     setComposedProduct(product)
                   }}
                 >
@@ -182,21 +174,12 @@ const ProductDetails = () => {
                 <GridItem rowSpan={1} colSpan={6}>
                   <EditorialProgressBar product={composedProduct?.Product} />
                 </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 4}}
-                >
+                <GridItem rowSpan={1} colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 4}}>
                   <Card variant="primaryCard" closedText="Product Data">
-                    <ProductData
-                      composedProduct={composedProduct}
-                      setComposedProduct={setComposedProduct}
-                    />
+                    <ProductData composedProduct={composedProduct} setComposedProduct={setComposedProduct} />
                   </Card>
                 </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 2, xl: 2}}
-                >
+                <GridItem rowSpan={1} colSpan={{base: 6, md: 6, sm: 6, lg: 2, xl: 2}}>
                   <Card variant="primaryCard" closedText="Media">
                     <ProductMediaInformation
                       composedProduct={composedProduct}
@@ -205,41 +188,21 @@ const ProductDetails = () => {
                   </Card>
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={2}>
-                  <Card
-                    variant="primaryCard"
-                    h={"100%"}
-                    closedText="Extended Properties Cards"
-                  >
-                    <ProductXpCards
-                      composedProduct={composedProduct}
-                      setComposedProduct={setComposedProduct}
-                    />
+                  <Card variant="primaryCard" h={"100%"} closedText="Extended Properties Cards">
+                    <ProductXpCards composedProduct={composedProduct} setComposedProduct={setComposedProduct} />
                   </Card>
                 </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 4, xl: 2}}
-                >
-                  <Card
-                    variant="primaryCard"
-                    h={"100%"}
-                    closedText="Catalog Assignments"
-                  >
+                <GridItem rowSpan={1} colSpan={{base: 6, md: 6, sm: 6, lg: 4, xl: 2}}>
+                  <Card variant="primaryCard" h={"100%"} closedText="Catalog Assignments">
                     <ProductCatalogAssignments
                       composedProduct={composedProduct}
                       setComposedProduct={setComposedProduct}
                     />
                   </Card>
                 </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 4, xl: 2}}
-                >
+                <GridItem rowSpan={1} colSpan={{base: 6, md: 6, sm: 6, lg: 4, xl: 2}}>
                   <Card variant="primaryCard" h={"100%"} closedText="Inventory">
-                    <ProductInventoryData
-                      composedProduct={composedProduct}
-                      setComposedProduct={setComposedProduct}
-                    />
+                    <ProductInventoryData composedProduct={composedProduct} setComposedProduct={setComposedProduct} />
                   </Card>
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={6}>
@@ -250,53 +213,28 @@ const ProductDetails = () => {
                     />
                   </Card>
                 </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 4}}
-                >
+                <GridItem rowSpan={1} colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 4}}>
                   <Card variant="primaryCard" h={"100%"} closedText="Supplier">
-                    <ProductSuppliers
-                      composedProduct={composedProduct}
-                      setComposedProduct={setComposedProduct}
-                    />
+                    <ProductSuppliers composedProduct={composedProduct} setComposedProduct={setComposedProduct} />
                   </Card>
                 </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 3, xl: 2}}
-                >
+                <GridItem rowSpan={1} colSpan={{base: 6, md: 6, sm: 6, lg: 3, xl: 2}}>
                   <Card variant="primaryCard" h={"100%"} closedText="Sizes">
-                    <ProductMeasurementData
-                      composedProduct={composedProduct}
-                      setComposedProduct={setComposedProduct}
-                    />
+                    <ProductMeasurementData composedProduct={composedProduct} setComposedProduct={setComposedProduct} />
                   </Card>
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={4}>
                   <Card variant="primaryCard" h={"100%"} closedText="Specs">
-                    <ProductSpecs
-                      composedProduct={composedProduct}
-                      setComposedProduct={setComposedProduct}
-                    />
+                    <ProductSpecs composedProduct={composedProduct} setComposedProduct={setComposedProduct} />
                   </Card>
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={2}>
                   <Card variant="primaryCard" h={"100%"} closedText="Variants">
-                    <ProductVariants
-                      composedProduct={composedProduct}
-                      setComposedProduct={setComposedProduct}
-                    />
+                    <ProductVariants composedProduct={composedProduct} setComposedProduct={setComposedProduct} />
                   </Card>
                 </GridItem>
-                <GridItem
-                  rowSpan={1}
-                  colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 6}}
-                >
-                  <Card
-                    variant="primaryCard"
-                    h={"100%"}
-                    closedText="Inventory Records"
-                  >
+                <GridItem rowSpan={1} colSpan={{base: 6, md: 6, sm: 6, lg: 6, xl: 6}}>
+                  <Card variant="primaryCard" h={"100%"} closedText="Inventory Records">
                     <ProductInventoryRecords
                       composedProduct={composedProduct}
                       setComposedProduct={setComposedProduct}
@@ -308,20 +246,11 @@ const ProductDetails = () => {
           </VStack>
         </>
 
-        <AlertDialog
-          motionPreset="slideInBottom"
-          leastDestructiveRef={cancelRef}
-          onClose={onClose}
-          isOpen={isOpen}
-        >
+        <AlertDialog motionPreset="slideInBottom" leastDestructiveRef={cancelRef} onClose={onClose} isOpen={isOpen}>
           <AlertDialogOverlay>
             <AlertDialogContent>
               {isDeleting ? (
-                <AlertDialogHeader
-                  textAlign={"center"}
-                  fontSize="lg"
-                  fontWeight="bold"
-                >
+                <AlertDialogHeader textAlign={"center"} fontSize="lg" fontWeight="bold">
                   Deleting... <BrandedSpinner />
                 </AlertDialogHeader>
               ) : (
@@ -330,20 +259,13 @@ const ProductDetails = () => {
                     Delete Product
                   </AlertDialogHeader>
 
-                  <AlertDialogBody>
-                    Are you sure? You can&apos;t undo this action afterwards.
-                  </AlertDialogBody>
+                  <AlertDialogBody>Are you sure? You can&apos;t undo this action afterwards.</AlertDialogBody>
 
                   <AlertDialogFooter>
                     <Button variant="tertiaryButton" onClick={onClose}>
                       Cancel
                     </Button>
-                    <Button
-                      variant="tertiaryButton"
-                      colorScheme="red"
-                      onClick={onDelete}
-                      ml={3}
-                    >
+                    <Button variant="tertiaryButton" colorScheme="red" onClick={onDelete} ml={3}>
                       Delete
                     </Button>
                   </AlertDialogFooter>

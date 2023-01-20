@@ -17,9 +17,7 @@ const AddressCard = ({address, fontSize = "sm"}: AddressCardProps) => {
   }
   return (
     <div>
-      <Text fontSize={fontSize}>
-        {address.CompanyName || address.FirstName + " " + address.LastName}
-      </Text>
+      <Text fontSize={fontSize}>{address.CompanyName || address.FirstName + " " + address.LastName}</Text>
       <Text fontSize={fontSize}>{address.Street1}</Text>
       {address.Street2 && <Text fontSize={fontSize}>{address.Street2}</Text>}
       <Text fontSize={fontSize}>

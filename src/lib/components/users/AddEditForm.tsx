@@ -58,14 +58,11 @@ function AddEditForm({user}: AddEditFormProps) {
     FirstName: Yup.string().required("First Name is required"),
     LastName: Yup.string().required("Last Name is required"),
     Email: Yup.string().email("Email is invalid").required("Email is required"),
-    Password: Yup.string()
-      .required("Password is required")
-      .min(10, "Password must be at least 6 characters"),
+    Password: Yup.string().required("Password is required").min(10, "Password must be at least 6 characters"),
     ConfirmPassword: Yup.string()
       .transform((x) => (x === "" ? undefined : x))
       .when("Password", (password, schema) => {
-        if (password || isAddMode)
-          return schema.required("Confirm Password is required")
+        if (password || isAddMode) return schema.required("Confirm Password is required")
       })
       .oneOf([Yup.ref("Password")], "Passwords must match")
   })
@@ -114,11 +111,7 @@ function AddEditForm({user}: AddEditFormProps) {
 
   async function updateUser(fields, setSubmitting) {
     try {
-      await usersService.update(
-        router.query.buyerid,
-        router.query.userid,
-        fields
-      )
+      await usersService.update(router.query.buyerid, router.query.userid, fields)
       toast({
         id: fields.ID + "-updated",
         title: "Success",
@@ -138,11 +131,7 @@ function AddEditForm({user}: AddEditFormProps) {
     <>
       <Card variant="primaryCard">
         <Flex flexDirection="column" p="10">
-          <Formik
-            initialValues={formOptions.defaultValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}
-          >
+          <Formik initialValues={formOptions.defaultValues} validationSchema={validationSchema} onSubmit={onSubmit}>
             {({
               // most of the usefull available Formik props
               values,
@@ -175,13 +164,7 @@ function AddEditForm({user}: AddEditFormProps) {
                           type={show ? "text" : "password"}
                           placeholder="Enter password"
                         />
-                        <Button
-                          position="absolute"
-                          right="2px"
-                          top="2px"
-                          size="sm"
-                          onClick={handleClick}
-                        >
+                        <Button position="absolute" right="2px" top="2px" size="sm" onClick={handleClick}>
                           {show ? "Hide" : "Show"}
                         </Button>
                       </Box>
@@ -198,11 +181,7 @@ function AddEditForm({user}: AddEditFormProps) {
                     </>
                   )}
                   <ButtonGroup>
-                    <Button
-                      variant="primaryButton"
-                      type="submit"
-                      isLoading={isSubmitting}
-                    >
+                    <Button variant="primaryButton" type="submit" isLoading={isSubmitting}>
                       Save
                     </Button>
                     <Button
@@ -216,9 +195,7 @@ function AddEditForm({user}: AddEditFormProps) {
                       Reset
                     </Button>
                     <Button
-                      onClick={() =>
-                        router.push(`/buyers/${router.query.buyerid}/users`)
-                      }
+                      onClick={() => router.push(`/buyers/${router.query.buyerid}/users`)}
                       variant="secondaryButton"
                       isLoading={isSubmitting}
                     >

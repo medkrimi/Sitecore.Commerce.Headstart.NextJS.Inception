@@ -28,7 +28,7 @@ export const Input = {
       bg: "inputBg",
       border: "1px",
       borderColor: "gray.200",
-      mb: "20px",
+      mb: "GlobalPadding",
       field: {
         bg: "inputBg",
         border: "1px"

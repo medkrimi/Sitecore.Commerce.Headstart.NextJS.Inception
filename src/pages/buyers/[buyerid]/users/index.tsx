@@ -1,15 +1,5 @@
 import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Container,
-  HStack,
-  Heading,
-  Icon,
-  Text,
-  useToast
-} from "@chakra-ui/react"
+import {Box, Button, ButtonGroup, Container, HStack, Heading, Icon, Text, useToast} from "@chakra-ui/react"
 import {useEffect, useState} from "react"
 
 import Card from "lib/components/card/Card"
@@ -81,11 +71,7 @@ const UsersList = () => {
     {
       Header: "FirstName",
       accessor: "FirstName",
-      Cell: ({value, row}) => (
-        <Link href={`/buyers/${router.query.buyerid}/users/${row.original.ID}`}>
-          {value}
-        </Link>
-      )
+      Cell: ({value, row}) => <Link href={`/buyers/${router.query.buyerid}/users/${row.original.ID}`}>{value}</Link>
     },
     {
       Header: "LastName",
@@ -132,20 +118,12 @@ const UsersList = () => {
         <ButtonGroup>
           <Button
             variant="secondaryButton"
-            onClick={() =>
-              router.push(
-                `/buyers/${router.query.buyerid}/users/${row.original.ID}`
-              )
-            }
+            onClick={() => router.push(`/buyers/${router.query.buyerid}/users/${row.original.ID}`)}
             leftIcon={<EditIcon />}
           >
             Edit
           </Button>
-          <Button
-            variant="secondaryButton"
-            onClick={() => deleteBuyer(row.original.ID)}
-            leftIcon={<DeleteIcon />}
-          >
+          <Button variant="secondaryButton" onClick={() => deleteBuyer(row.original.ID)} leftIcon={<DeleteIcon />}>
             Delete
           </Button>
         </ButtonGroup>
@@ -155,12 +133,10 @@ const UsersList = () => {
 
   return (
     <>
-      <Box padding="20px">
+      <Box padding="GlobalPadding">
         <HStack justifyContent="space-between" w="100%" mb={5}>
           <Button
-            onClick={() =>
-              router.push(`/buyers/${router.query.buyerid}/users/add`)
-            }
+            onClick={() => router.push(`/buyers/${router.query.buyerid}/users/add`)}
             variant="primaryButton"
             leftIcon={<AddIcon />}
             size="lg"

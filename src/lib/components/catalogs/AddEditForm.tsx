@@ -1,14 +1,6 @@
 import * as Yup from "yup"
 
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Container,
-  Flex,
-  Heading,
-  Stack
-} from "@chakra-ui/react"
+import {Box, Button, ButtonGroup, Container, Flex, Heading, Stack} from "@chakra-ui/react"
 import {
   InputControl,
   NumberInputControl,
@@ -69,10 +61,7 @@ function AddEditForm({catalog}: AddEditFormProps) {
   async function createCatalog(fields, setSubmitting) {
     try {
       const createdCatalog = await catalogsService.create(fields)
-      await catalogsService.saveAssignment(
-        router.query.buyerid,
-        createdCatalog.ID
-      )
+      await catalogsService.saveAssignment(router.query.buyerid, createdCatalog.ID)
       toast({
         id: fields.ID + "-created",
         title: "Success",
@@ -91,10 +80,7 @@ function AddEditForm({catalog}: AddEditFormProps) {
   async function updateCatalog(fields, setSubmitting) {
     try {
       const updatedCatalog = await catalogsService.update(fields)
-      await catalogsService.saveAssignment(
-        router.query.buyerid,
-        updatedCatalog.ID
-      )
+      await catalogsService.saveAssignment(router.query.buyerid, updatedCatalog.ID)
       toast({
         id: fields.ID + "-updated",
         title: "Success",
@@ -114,11 +100,7 @@ function AddEditForm({catalog}: AddEditFormProps) {
     <>
       <Card variant="primaryCard">
         <Flex flexDirection="column" p="10">
-          <Formik
-            initialValues={formOptions.defaultValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}
-          >
+          <Formik initialValues={formOptions.defaultValues} validationSchema={validationSchema} onSubmit={onSubmit}>
             {({
               // most of the usefull available Formik props
               values,
@@ -137,11 +119,7 @@ function AddEditForm({catalog}: AddEditFormProps) {
                   <TextareaControl name="Description" label="Description" />
                   <SwitchControl name="Active" label="Active" />
                   <ButtonGroup>
-                    <Button
-                      variant="primaryButton"
-                      type="submit"
-                      isLoading={isSubmitting}
-                    >
+                    <Button variant="primaryButton" type="submit" isLoading={isSubmitting}>
                       Save
                     </Button>
                     <Button
@@ -155,9 +133,7 @@ function AddEditForm({catalog}: AddEditFormProps) {
                       Reset
                     </Button>
                     <Button
-                      onClick={() =>
-                        router.push(`/buyers/${router.query.buyerid}/catalogs`)
-                      }
+                      onClick={() => router.push(`/buyers/${router.query.buyerid}/catalogs`)}
                       variant="secondaryButton"
                       isLoading={isSubmitting}
                     >

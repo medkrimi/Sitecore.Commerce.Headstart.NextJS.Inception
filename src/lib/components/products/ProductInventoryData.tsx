@@ -17,17 +17,9 @@ import {
 } from "@chakra-ui/react"
 import {ChangeEvent, useEffect, useState} from "react"
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
-import {
-  ComposedProduct,
-  GetComposedProduct
-} from "../../services/ordercloud.service"
+import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
 import {FiCheck, FiEdit, FiMinus, FiPlus, FiX} from "react-icons/fi"
-import {
-  Inventory,
-  Product,
-  Products,
-  RequiredDeep
-} from "ordercloud-javascript-sdk"
+import {Inventory, Product, Products, RequiredDeep} from "ordercloud-javascript-sdk"
 
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
@@ -37,10 +29,7 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductInventoryData({
-  composedProduct,
-  setComposedProduct
-}: ProductDataProps) {
+export default function ProductInventoryData({composedProduct, setComposedProduct}: ProductDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
@@ -51,41 +40,34 @@ export default function ProductInventoryData({
     lastUpdated: composedProduct?.Product?.Inventory?.LastUpdated,
     notificationPoint: composedProduct?.Product?.Inventory?.NotificationPoint,
     orderCanExceed: composedProduct?.Product?.Inventory?.OrderCanExceed,
-    variantLevelTracking:
-      composedProduct?.Product?.Inventory?.VariantLevelTracking,
+    variantLevelTracking: composedProduct?.Product?.Inventory?.VariantLevelTracking,
     quantityAvailable: composedProduct?.Product?.Inventory?.QuantityAvailable
   })
 
-  const handleInputChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({...v, [fieldKey]: e.target.value}))
-    }
+  const handleInputChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({...v, [fieldKey]: e.target.value}))
+  }
 
-  const handleNumberInputChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({
-        ...v,
-        [fieldKey]: e.target.value == "" ? 0 : e.target.value
-      }))
-    }
+  const handleNumberInputChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({
+      ...v,
+      [fieldKey]: e.target.value == "" ? 0 : e.target.value
+    }))
+  }
 
-  const handleCheckboxChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
-    }
+  const handleCheckboxChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
+  }
 
   const onEditClicked = (e) => {
     setFormValues((v) => ({
       ...v,
       ["inventoryEnabled"]: composedProduct?.Product?.Inventory?.Enabled,
       ["lastUpdated"]: composedProduct?.Product?.Inventory?.LastUpdated,
-      ["notificationPoint"]:
-        composedProduct?.Product?.Inventory?.NotificationPoint,
+      ["notificationPoint"]: composedProduct?.Product?.Inventory?.NotificationPoint,
       ["orderCanExceed"]: composedProduct?.Product?.Inventory?.OrderCanExceed,
-      ["variantLevelTracking"]:
-        composedProduct?.Product?.Inventory?.VariantLevelTracking,
-      ["quantityAvailable"]:
-        composedProduct?.Product?.Inventory?.QuantityAvailable
+      ["variantLevelTracking"]: composedProduct?.Product?.Inventory?.VariantLevelTracking,
+      ["quantityAvailable"]: composedProduct?.Product?.Inventory?.QuantityAvailable
     }))
     setIsEditingBasicData(true)
     setExpanded(true)
@@ -96,13 +78,10 @@ export default function ProductInventoryData({
       ...v,
       ["inventoryEnabled"]: composedProduct?.Product?.Inventory?.Enabled,
       ["lastUpdated"]: composedProduct?.Product?.Inventory?.LastUpdated,
-      ["notificationPoint"]:
-        composedProduct?.Product?.Inventory?.NotificationPoint,
+      ["notificationPoint"]: composedProduct?.Product?.Inventory?.NotificationPoint,
       ["orderCanExceed"]: composedProduct?.Product?.Inventory?.OrderCanExceed,
-      ["variantLevelTracking"]:
-        composedProduct?.Product?.Inventory?.VariantLevelTracking,
-      ["quantityAvailable"]:
-        composedProduct?.Product?.Inventory?.QuantityAvailable
+      ["variantLevelTracking"]: composedProduct?.Product?.Inventory?.VariantLevelTracking,
+      ["quantityAvailable"]: composedProduct?.Product?.Inventory?.QuantityAvailable
     }))
     setIsEditingBasicData(false)
   }
@@ -113,8 +92,7 @@ export default function ProductInventoryData({
       lastUpdated: composedProduct?.Product?.Inventory?.LastUpdated,
       notificationPoint: composedProduct?.Product?.Inventory?.NotificationPoint,
       orderCanExceed: composedProduct?.Product?.Inventory?.OrderCanExceed,
-      variantLevelTracking:
-        composedProduct?.Product?.Inventory?.VariantLevelTracking,
+      variantLevelTracking: composedProduct?.Product?.Inventory?.VariantLevelTracking,
       quantityAvailable: composedProduct?.Product?.Inventory?.QuantityAvailable
     })
   }, [
@@ -163,10 +141,7 @@ export default function ProductInventoryData({
           </Box>
         ) : (
           <>
-            <Heading
-              size={{base: "sm", md: "md", lg: "md"}}
-              mb={expanded ? 6 : 0}
-            >
+            <Heading size={{base: "sm", md: "md", lg: "md"}} mb={expanded ? 6 : 0}>
               Inventory
             </Heading>
             <Collapse in={expanded}>
@@ -180,11 +155,7 @@ export default function ProductInventoryData({
                       onChange={handleCheckboxChange("InventoryEnabled")}
                     />
                   </Box>
-                  <Tooltip
-                    label={
-                      isEditingBasicData ? "Last Updated Date is readonly" : ""
-                    }
-                  >
+                  <Tooltip label={isEditingBasicData ? "Last Updated Date is readonly" : ""}>
                     <Box width="full" pb={2}>
                       <Text opacity={0.5} fontWeight={"bold"}>
                         Last Updated:
@@ -196,14 +167,8 @@ export default function ProductInventoryData({
                           onChange={handleInputChange("lastUpdated")}
                         />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
-                          {new Date(
-                            composedProduct?.Product?.Inventory?.LastUpdated
-                          )?.toLocaleString() ?? "Not set"}
+                        <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                          {new Date(composedProduct?.Product?.Inventory?.LastUpdated)?.toLocaleString() ?? "Not set"}
                         </Heading>
                       )}
                     </Box>
@@ -217,13 +182,8 @@ export default function ProductInventoryData({
                         onChange={handleNumberInputChange("notificationPoint")}
                       />
                     ) : (
-                      <Heading
-                        fontSize={"xl"}
-                        fontFamily={"body"}
-                        fontWeight={500}
-                      >
-                        {composedProduct?.Product?.Inventory
-                          ?.NotificationPoint ?? "Not set"}
+                      <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                        {composedProduct?.Product?.Inventory?.NotificationPoint ?? "Not set"}
                       </Heading>
                     )}
                   </Box>
@@ -232,10 +192,7 @@ export default function ProductInventoryData({
                       Order can exceed?:
                     </Text>
                     {isEditingBasicData ? (
-                      <Switch
-                        isChecked={formValues.orderCanExceed}
-                        onChange={handleCheckboxChange("orderCanExceed")}
-                      />
+                      <Switch isChecked={formValues.orderCanExceed} onChange={handleCheckboxChange("orderCanExceed")} />
                     ) : (
                       <Switch
                         isChecked={formValues.orderCanExceed}
@@ -267,18 +224,11 @@ export default function ProductInventoryData({
                         <Input
                           type={"number"}
                           value={formValues.quantityAvailable}
-                          onChange={handleNumberInputChange(
-                            "quantityAvailable"
-                          )}
+                          onChange={handleNumberInputChange("quantityAvailable")}
                         />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
-                          {composedProduct?.Product?.Inventory
-                            ?.QuantityAvailable ?? "Not set"}
+                        <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                          {composedProduct?.Product?.Inventory?.QuantityAvailable ?? "Not set"}
                         </Heading>
                       )}
                     </Box>
@@ -292,22 +242,12 @@ export default function ProductInventoryData({
       {isEditingBasicData ? (
         <HStack float={"right"}>
           <Tooltip label="Save">
-            <Button
-              colorScheme="brandButtons"
-              aria-label="Save"
-              variant="tertiaryButton"
-              onClick={onSaveClicked}
-            >
+            <Button colorScheme="brandButtons" aria-label="Save" variant="tertiaryButton" onClick={onSaveClicked}>
               <FiCheck />
             </Button>
           </Tooltip>
           <Tooltip label="Abort">
-            <Button
-              colorScheme="brandButtons"
-              aria-label="Abort"
-              variant="tertiaryButton"
-              onClick={onAbortClicked}
-            >
+            <Button colorScheme="brandButtons" aria-label="Abort" variant="tertiaryButton" onClick={onAbortClicked}>
               <FiX />
             </Button>
           </Tooltip>
@@ -315,12 +255,7 @@ export default function ProductInventoryData({
       ) : (
         <HStack float={"right"}>
           <Tooltip label="Edit">
-            <Button
-              colorScheme="brandButtons"
-              aria-label="Edit"
-              variant="tertiaryButton"
-              onClick={onEditClicked}
-            >
+            <Button colorScheme="brandButtons" aria-label="Edit" variant="tertiaryButton" onClick={onEditClicked}>
               <FiEdit />
             </Button>
           </Tooltip>

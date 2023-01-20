@@ -1,13 +1,5 @@
 import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
-import {
-  Button,
-  ButtonGroup,
-  HStack,
-  Switch,
-  Text,
-  Tooltip,
-  useToast
-} from "@chakra-ui/react"
+import {Button, ButtonGroup, HStack, Switch, Text, Tooltip, useToast} from "@chakra-ui/react"
 import {useEffect, useState} from "react"
 
 import Card from "lib/components/card/Card"
@@ -43,7 +35,6 @@ const CatalogsList = () => {
 
   async function initCatalogsData(buyerid) {
     const catalogsList = await catalogsService.getCatalogsbyBuyerID(buyerid)
-    console.log(catalogsList)
     setCatalogs(catalogsList.Items)
   }
 
@@ -77,13 +68,7 @@ const CatalogsList = () => {
     {
       Header: "Catalog ID",
       accessor: "ID",
-      Cell: ({value, row}) => (
-        <Link
-          href={`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}`}
-        >
-          {value}
-        </Link>
-      )
+      Cell: ({value, row}) => <Link href={`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}`}>{value}</Link>
     },
     {
       Header: "Name",
@@ -106,7 +91,12 @@ const CatalogsList = () => {
     },
     {
       Header: "Category Count",
-      accessor: "CategoryCount"
+      accessor: "CategoryCount",
+      Cell: ({row, value}) => (
+        <Link href={`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}/categories`}>
+          <Button variant="secondaryButton">Categories ({value})</Button>
+        </Link>
+      )
     },
     {
       Header: "Marketplace",
@@ -118,20 +108,12 @@ const CatalogsList = () => {
         <ButtonGroup>
           <Button
             variant="secondaryButton"
-            onClick={() =>
-              router.push(
-                `/buyers/${router.query.buyerid}/catalogs/${row.original.ID}`
-              )
-            }
+            onClick={() => router.push(`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}`)}
             leftIcon={<EditIcon />}
           >
             Edit
           </Button>
-          <Button
-            variant="secondaryButton"
-            onClick={() => deleteCatalog(row.original.ID)}
-            leftIcon={<DeleteIcon />}
-          >
+          <Button variant="secondaryButton" onClick={() => deleteCatalog(row.original.ID)} leftIcon={<DeleteIcon />}>
             Delete
           </Button>
         </ButtonGroup>
@@ -143,9 +125,7 @@ const CatalogsList = () => {
     <>
       <HStack justifyContent="space-between" w="100%" mb={5}>
         <Button
-          onClick={() =>
-            router.push(`/buyers/${router.query.buyerid}/catalogs/add`)
-          }
+          onClick={() => router.push(`/buyers/${router.query.buyerid}/catalogs/add`)}
           variant="primaryButton"
           leftIcon={<AddIcon />}
           size="lg"

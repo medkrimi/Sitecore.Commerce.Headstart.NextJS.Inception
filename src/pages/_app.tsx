@@ -16,7 +16,9 @@ import defaultSEOConfig from "../../next-seo.config"
 axiosService.initializeInterceptors()
 SetConfiguration()
 
-const MyApp = ({Component, pageProps}: AppProps) => {
+const MyApp = ({Component, pageProps, ...appProps}: AppProps) => {
+  if (appProps.router.pathname.startsWith("/docs")) return <Component {...pageProps} />
+
   return (
     <Chakra>
       <Head>

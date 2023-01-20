@@ -44,20 +44,14 @@ type ProductDataProps = {
   catalog: Catalog
 }
 
-export default function ProductCategoryAssignments({
-  product,
-  catalog
-}: ProductDataProps) {
-  const [productCategoryAssignments, setProductCategoryAssignments] =
-    useState<Category[]>(null)
-  const [componentProduct, setComponentProduct] =
-    useState<RequiredDeep<Product<any>>>(product)
+export default function ProductCategoryAssignments({product, catalog}: ProductDataProps) {
+  const [productCategoryAssignments, setProductCategoryAssignments] = useState<Category[]>(null)
+  const [componentProduct, setComponentProduct] = useState<RequiredDeep<Product<any>>>(product)
   const [isLoading, setIsLoading] = useState(false)
   const {isOpen, onOpen, onClose} = useDisclosure()
   const cancelRef = React.useRef()
   const [isLinking, setIsLinking] = useState(false)
-  const [availableCategories, setAvailableCategories] =
-    useState<Category<any>[]>(null)
+  const [availableCategories, setAvailableCategories] = useState<Category<any>[]>(null)
   const [isCategoryChosen, setIsCategoryChosen] = useState(false)
   const [newCategory, setNewCategory] = useState("")
 
@@ -69,12 +63,9 @@ export default function ProductCategoryAssignments({
       let categories: Category[] = []
       if (catalog) {
         setIsLoading(true)
-        const categoryAssignments = await Categories.ListProductAssignments(
-          catalog?.ID,
-          {
-            productID: componentProduct.ID
-          }
-        )
+        const categoryAssignments = await Categories.ListProductAssignments(catalog?.ID, {
+          productID: componentProduct.ID
+        })
 
         await Promise.all(
           categoryAssignments.Items.map(async (item) => {
@@ -95,11 +86,7 @@ export default function ProductCategoryAssignments({
     e.preventDefault()
     setIsLoading(true)
     const categoryId = e.currentTarget.dataset.id
-    await Categories.DeleteProductAssignment(
-      catalog.ID,
-      categoryId,
-      componentProduct.ID
-    )
+    await Categories.DeleteProductAssignment(catalog.ID, categoryId, componentProduct.ID)
     var product = await Products.Get(componentProduct.ID)
     setComponentProduct(product)
     setNewCategory("")
@@ -155,11 +142,7 @@ export default function ProductCategoryAssignments({
         <>
           <HStack float={"right"}>
             <Tooltip label="Add to Category">
-              <Button
-                colorScheme="brandButtons"
-                onClick={onOpen}
-                aria-label="add to category"
-              >
+              <Button colorScheme="brandButtons" onClick={onOpen} aria-label="add to category">
                 <FiPlus />
               </Button>
             </Tooltip>
@@ -228,11 +211,7 @@ export default function ProductCategoryAssignments({
         <AlertDialogOverlay>
           <AlertDialogContent>
             {isLinking ? (
-              <AlertDialogHeader
-                textAlign={"center"}
-                fontSize="lg"
-                fontWeight="bold"
-              >
+              <AlertDialogHeader textAlign={"center"} fontSize="lg" fontWeight="bold">
                 Linking... <BrandedSpinner />
               </AlertDialogHeader>
             ) : (
@@ -241,9 +220,7 @@ export default function ProductCategoryAssignments({
                   Link a Category to Product
                 </AlertDialogHeader>
 
-                <AlertDialogBody>
-                  Please choose Category to link
-                </AlertDialogBody>
+                <AlertDialogBody>Please choose Category to link</AlertDialogBody>
                 <FormControl ml={6}>
                   <Input
                     autoComplete="off"
@@ -272,8 +249,7 @@ export default function ProductCategoryAssignments({
                               onClick={onAvailableCategoryClick}
                               data-id={element.ID}
                             >
-                              <b>Name:</b> {element.Name} | <b>ID:</b>{" "}
-                              {element.ID}
+                              <b>Name:</b> {element.Name} | <b>ID:</b> {element.ID}
                             </ListItem>
                           </Tooltip>
                         ))}
@@ -284,9 +260,7 @@ export default function ProductCategoryAssignments({
                 <AlertDialogFooter>
                   <Box width={"full"}>
                     {isCategoryChosen ? null : (
-                      <Text pb={2}>
-                        Please choose from the search results to link a Category
-                      </Text>
+                      <Text pb={2}>Please choose from the search results to link a Category</Text>
                     )}
                     <Button width={"45%"} size={"md"} onClick={onClose}>
                       Cancel
