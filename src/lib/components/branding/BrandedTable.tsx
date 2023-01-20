@@ -7,7 +7,13 @@ export default function BrandedTable({children}) {
   const tableBorder = useColorModeValue("gray.400", "gray.400")
 
   return (
-    <TableContainer width={"full"} rounded={20} boxShadow={"md"} bg={tableHeaderBg} color={tableColor}>
+    <TableContainer
+      width={"full"}
+      rounded={20}
+      //boxShadow={"md"}
+      bg={tableHeaderBg}
+      color={tableColor}
+    >
       <Table variant="simple">{children}</Table>
     </TableContainer>
   )
