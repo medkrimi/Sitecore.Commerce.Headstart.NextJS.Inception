@@ -41,7 +41,6 @@ import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.ser
 import {FiEdit, FiPlus, FiTrash2} from "react-icons/fi"
 import {useEffect, useState} from "react"
 
-import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 import ProductCategoryAssignments from "./ProductCategoryAssignments"
@@ -64,7 +63,7 @@ export default function ProductCatalogAssignments({composedProduct, setComposedP
   const [isLoading, setIsLoading] = useState(false)
 
   const color = useColorModeValue("textColor.900", "textColor.100")
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(true)
 
   useEffect(() => {
     async function GetProductCatalogAssignments() {
@@ -158,91 +157,90 @@ export default function ProductCatalogAssignments({composedProduct, setComposedP
 
   return (
     <>
-      <BrandedBox isExpaned={expanded} setExpanded={setExpanded}>
-        <>
-          <HStack float={"right"}>
-            <Tooltip label="Add to catalog">
-              <Button colorScheme="brandButtons" aria-label="add to catalog" onClick={onOpen}>
-                <FiPlus />
-              </Button>
-            </Tooltip>
-          </HStack>
-          <Heading size={{base: "md", md: "lg", lg: "xl"}}>Catalog Assignments</Heading>
-          {!composedProduct && expanded ? (
-            <Box pt={6} textAlign={"center"}>
-              Updating... <BrandedSpinner />
-            </Box>
-          ) : (
-            <Collapse in={expanded}>
-              <Box width="full" pb={2} pt={4}>
-                {/* <Text opacity={0.5} fontWeight={"bold"}>
+      <>
+        <Heading size={{base: "sm", md: "md", lg: "md"}}>Catalog Assignments</Heading>
+        {!composedProduct && expanded ? (
+          <Box pt={6} textAlign={"center"}>
+            Updating... <BrandedSpinner />
+          </Box>
+        ) : (
+          <Collapse in={expanded}>
+            <Box width="full" pb={2} pt={4}>
+              {/* <Text opacity={0.5} fontWeight={"bold"}>
             Assignments
           </Text> */}
-                {productCatalogAssignments?.length ?? 0 > 0 ? (
-                  <>
-                    <BrandedTable>
-                      <Thead>
-                        <Tr>
-                          <Th color={color}>ID</Th>
-                          <Th color={color}>Name</Th>
-                          <Th color={color}>Action</Th>
-                        </Tr>
-                      </Thead>
-                      <Tbody alignContent={"center"}>
-                        {productCatalogAssignments ? (
-                          <>
-                            {productCatalogAssignments.map((item, index) => {
-                              return (
-                                <Tr key={index}>
-                                  <Tooltip label="Click to see categories">
-                                    <Td
-                                      data-id={item.ID}
-                                      onClick={onCategoriesExpandedClick}
-                                      _hover={{
-                                        textDecor: "underline",
-                                        cursor: "pointer"
-                                      }}
-                                    >
-                                      {item.ID}
-                                    </Td>
-                                  </Tooltip>
-                                  <Td>{item.Name}</Td>
-                                  <Td>
-                                    {" "}
-                                    <Tooltip label="Remove from Catalog">
-                                      <Button
-                                        colorScheme="brandButtons"
-                                        aria-label="remove from catalog"
-                                        onClick={onRemoveCatalog}
-                                        data-id={item.ID}
-                                      >
-                                        <FiTrash2 />
-                                      </Button>
-                                    </Tooltip>
+              {productCatalogAssignments?.length ?? 0 > 0 ? (
+                <>
+                  <BrandedTable>
+                    <Thead>
+                      <Tr>
+                        <Th color={color}>ID</Th>
+                        <Th color={color}>Name</Th>
+                        <Th color={color}>Action</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody alignContent={"center"}>
+                      {productCatalogAssignments ? (
+                        <>
+                          {productCatalogAssignments.map((item, index) => {
+                            return (
+                              <Tr key={index}>
+                                <Tooltip label="Click to see categories">
+                                  <Td
+                                    data-id={item.ID}
+                                    onClick={onCategoriesExpandedClick}
+                                    _hover={{
+                                      textDecor: "underline",
+                                      cursor: "pointer"
+                                    }}
+                                  >
+                                    {item.ID}
                                   </Td>
-                                </Tr>
-                              )
-                            })}
-                          </>
-                        ) : (
-                          <Text p={4}>No Assignments</Text>
-                        )}
-                      </Tbody>
-                    </BrandedTable>
-                  </>
-                ) : (
-                  <Text p={4}>No Assignments</Text>
-                )}
-              </Box>
-              {chosenCatalog ? (
-                <ProductCategoryAssignments product={composedProduct?.Product} catalog={chosenCatalog} />
+                                </Tooltip>
+                                <Td>{item.Name}</Td>
+                                <Td>
+                                  {" "}
+                                  <Tooltip label="Remove from Catalog">
+                                    <Button
+                                      colorScheme="brandButtons"
+                                      variant="tertiaryButton"
+                                      aria-label="remove from catalog"
+                                      onClick={onRemoveCatalog}
+                                      data-id={item.ID}
+                                    >
+                                      <FiTrash2 />
+                                    </Button>
+                                  </Tooltip>
+                                </Td>
+                              </Tr>
+                            )
+                          })}
+                        </>
+                      ) : (
+                        <Text p={4}>No Assignments</Text>
+                      )}
+                    </Tbody>
+                  </BrandedTable>
+                </>
               ) : (
-                <></>
+                <Text p={4}>No Assignments</Text>
               )}
-            </Collapse>
-          )}
-        </>
-      </BrandedBox>
+            </Box>
+            {chosenCatalog ? (
+              <ProductCategoryAssignments product={composedProduct?.Product} catalog={chosenCatalog} />
+            ) : (
+              <></>
+            )}
+          </Collapse>
+        )}
+      </>
+      <HStack float={"right"}>
+        <Tooltip label="Add to catalog">
+          <Button colorScheme="brandButtons" variant="tertiaryButton" aria-label="add to catalog" onClick={onOpen}>
+            <FiPlus />
+          </Button>
+        </Tooltip>
+      </HStack>
       <AlertDialog
         motionPreset="slideInBottom"
         leastDestructiveRef={cancelRef}
@@ -304,7 +302,7 @@ export default function ProductCatalogAssignments({composedProduct, setComposedP
                     {isCatalogChosen ? null : (
                       <Text pb={2}>Please choose from the search results to link a Catalog</Text>
                     )}
-                    <Button width={"45%"} size={"md"} onClick={onClose}>
+                    <Button width={"45%"} size={"md"} onClick={onClose} variant="tertiaryButton">
                       Cancel
                     </Button>
                     <Button
@@ -312,6 +310,7 @@ export default function ProductCatalogAssignments({composedProduct, setComposedP
                       width={"45%"}
                       size={"md"}
                       colorScheme="brandButtons"
+                      variant="tertiaryButton"
                       onClick={onCatalogLink}
                       ml={3}
                       disabled={!isCatalogChosen}

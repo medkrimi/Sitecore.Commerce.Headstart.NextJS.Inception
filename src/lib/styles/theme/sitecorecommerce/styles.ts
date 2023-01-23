@@ -35,27 +35,26 @@ export const styles = {
       "input[type=text]": {
         bg: "inputBg",
         border: "1px",
-        borderColor: "gray.200",
-        mb: "GlobalPadding"
+        borderColor: "gray.800",
+        mb: "20px"
       },
       input: {
         bg: "inputBg",
         border: "1px",
-        borderColor: "gray.200",
-        mb: "GlobalPadding",
-        borderRadius: "md"
+        borderColor: "gray.800",
+        mb: "20px"
       },
       "input:read-only": {
         bg: "none",
-        border: "0px",
-        PointerEvent: "none",
-        pl: "0px"
+        border: "1px solid",
+        borderColor: "gray.200",
+        PointerEvent: "none"
       },
       ".chakra-input": {
         bg: "inputBg",
         border: "1px",
-        borderColor: "gray.200",
-        mb: "GlobalPadding"
+        borderColor: "gray.800",
+        mb: "20px"
       },
       ".css-1jj9yua": {height: "38px"},
       ".breadcrumb": {

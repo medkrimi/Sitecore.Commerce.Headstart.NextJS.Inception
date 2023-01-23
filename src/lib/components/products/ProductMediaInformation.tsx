@@ -9,7 +9,8 @@ import {
   Tooltip,
   Input,
   Collapse,
-  Center
+  Center,
+  VStack
 } from "@chakra-ui/react"
 import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
 import {ProductXPs, XpImage} from "lib/types/ProductXPs"
@@ -32,6 +33,7 @@ export default function ProductMediaInformation({composedProduct, setComposedPro
   const [formValues, setFormValues] = useState({
     images: composedProduct?.Product?.xp?.Images
   })
+  const [selectedImage, setSelectedImage] = useState(0)
   const [expanded, setExpanded] = useState(true)
 
   const onEditClicked = (e) => {
@@ -140,109 +142,124 @@ export default function ProductMediaInformation({composedProduct, setComposedPro
   }
 
   return (
-    <BrandedBox isExpaned={expanded} setExpanded={setExpanded}>
-      <>
-        {isEditingBasicData ? (
-          <HStack float={"right"}>
-            <Tooltip label="Save">
-              <Button aria-label="Save" onClick={onProductSave}>
-                <FiCheck />
-              </Button>
-            </Tooltip>
-            <Tooltip label="Abort">
-              <Button colorScheme="brandButtons" aria-label="Abort" onClick={onAbortClicked}>
-                <FiX />
-              </Button>
-            </Tooltip>
-          </HStack>
-        ) : (
-          <HStack float={"right"}>
-            <Tooltip label="Edit">
-              <Button aria-label="Edit" onClick={onEditClicked}>
-                <FiEdit />
-              </Button>
-            </Tooltip>
-          </HStack>
-        )}
-        <Heading size={{base: "md", md: "lg", lg: "xl"}}>Media</Heading>
+    <>
+      <Heading size={{base: "sm", md: "md", lg: "md"}}>Media</Heading>
 
-        {(isLoading || !composedProduct?.Product) && expanded ? (
-          <Box pt={6} textAlign={"center"}>
-            Updating... <BrandedSpinner />
-          </Box>
-        ) : (
-          <>
-            <Collapse in={expanded}>
-              <Box width="full" pb={2} pt={4}>
-                <>
-                  <Text opacity={0.5} fontWeight={"bold"}>
-                    Images:
-                  </Text>
-                  {formValues?.images?.map((image, key) => {
-                    return isEditingBasicData ? (
-                      <HStack key={key} mt={3}>
-                        <Text>{key + 1}</Text>
-                        <Input value={image.Url} onChange={handleInputChange(key)} />
-                        {key != 0 ? (
-                          <Tooltip pt={2} label="Remove Product Image">
-                            <Button
-                              onClick={onDeleteProductImageClicked(image.Url)}
-                              //colorScheme={"purple"}
-                            >
-                              <FiMinus />
-                            </Button>
-                          </Tooltip>
-                        ) : (
-                          <></>
-                        )}
-                      </HStack>
-                    ) : (
-                      <></>
-                    )
-                  })}
-                  {composedProduct?.Product?.xp?.Images?.map((image, key) => {
-                    return !isEditingBasicData ? (
-                      <HStack key={key} mt={4}>
-                        <Text>{key + 1}</Text>
-                        <Heading fontSize={"2xl"} fontFamily={"body"} fontWeight={500}>
-                          {(image?.Url ?? "") == "" ? (
-                            <>No Image</>
-                          ) : (
-                            <>
-                              <Image
-                                boxSize="250px"
-                                objectFit="scale-down"
-                                mt={4}
-                                alt={"Product Image"}
-                                src={image?.Url}
-                              />
-                            </>
-                          )}
-                        </Heading>
-                      </HStack>
-                    ) : (
-                      <></>
-                    )
-                  })}
-                  {isEditingBasicData && formValues?.images[formValues?.images?.length - 1]?.Url != "" ? (
-                    <Tooltip label="Add new Product Image">
-                      <Box pt={4}>
-                        <Center>
-                          <Button onClick={onNewProductImageClicked}>
-                            <FiPlus />
+      {(isLoading || !composedProduct?.Product) && expanded ? (
+        <Box pt={6} textAlign={"center"}>
+          Updating... <BrandedSpinner />
+        </Box>
+      ) : (
+        <>
+          <Collapse in={expanded}>
+            <Box width="full" pb={2} pt={4} pl={14}>
+              <>
+                <Text>Images:</Text>
+                {formValues?.images?.map((image, key) => {
+                  return isEditingBasicData ? (
+                    <HStack key={key} mt={3}>
+                      <Text>{key + 1}</Text>
+                      <Input value={image.Url} onChange={handleInputChange(key)} />
+                      {key != 0 ? (
+                        <Tooltip pt={2} label="Remove Product Image">
+                          <Button
+                            onClick={onDeleteProductImageClicked(image.Url)}
+                            variant="tertiaryButton"
+                            //colorScheme={"purple"}
+                          >
+                            <FiMinus />
                           </Button>
-                        </Center>
-                      </Box>
-                    </Tooltip>
+                        </Tooltip>
+                      ) : (
+                        <></>
+                      )}
+                    </HStack>
                   ) : (
                     <></>
-                  )}
-                </>
-              </Box>
-            </Collapse>
-          </>
-        )}
-      </>
-    </BrandedBox>
+                  )
+                })}{" "}
+                {!isEditingBasicData ? (
+                  <Image
+                    boxSize="200px"
+                    objectFit="scale-down"
+                    mt={4}
+                    alt={"Product Image"}
+                    src={composedProduct?.Product?.xp?.Images[selectedImage].Url}
+                  />
+                ) : (
+                  <></>
+                )}
+                <HStack mt={4}>
+                  {composedProduct?.Product?.xp?.Images?.map((image, key) => {
+                    return !isEditingBasicData ? (
+                      <VStack key={key}>
+                        <Text>{key + 1}</Text>
+
+                        {(image?.Url ?? "") == "" ? (
+                          <Heading fontSize={"2xl"} fontFamily={"body"} fontWeight={500}>
+                            <>No Image</>
+                          </Heading>
+                        ) : (
+                          <>
+                            <Image
+                              boxSize="75px"
+                              objectFit="scale-down"
+                              mt={4}
+                              alt={"Product Image"}
+                              src={image?.ThumbnailUrl}
+                              border={key == selectedImage ? "1px solid" : ""}
+                              onClick={() => {
+                                setSelectedImage(key)
+                              }}
+                            />
+                          </>
+                        )}
+                      </VStack>
+                    ) : (
+                      <></>
+                    )
+                  })}
+                </HStack>
+                {isEditingBasicData && formValues?.images[formValues?.images?.length - 1]?.Url != "" ? (
+                  <Tooltip label="Add new Product Image">
+                    <Box pt={4}>
+                      <Center>
+                        <Button onClick={onNewProductImageClicked} variant="tertiaryButton">
+                          <FiPlus />
+                        </Button>
+                      </Center>
+                    </Box>
+                  </Tooltip>
+                ) : (
+                  <></>
+                )}
+              </>
+            </Box>
+          </Collapse>
+        </>
+      )}
+      {isEditingBasicData ? (
+        <HStack float={"right"}>
+          <Tooltip label="Save">
+            <Button aria-label="Save" onClick={onProductSave} variant="tertiaryButton">
+              <FiCheck />
+            </Button>
+          </Tooltip>
+          <Tooltip label="Abort">
+            <Button colorScheme="brandButtons" aria-label="Abort" variant="tertiaryButton" onClick={onAbortClicked}>
+              <FiX />
+            </Button>
+          </Tooltip>
+        </HStack>
+      ) : (
+        <HStack float={"right"}>
+          <Tooltip label="Edit">
+            <Button aria-label="Edit" variant="tertiaryButton" onClick={onEditClicked}>
+              <FiEdit />
+            </Button>
+          </Tooltip>
+        </HStack>
+      )}
+    </>
   )
 }

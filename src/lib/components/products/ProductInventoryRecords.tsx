@@ -44,7 +44,6 @@ import {
 } from "ordercloud-javascript-sdk"
 import React, {useEffect} from "react"
 
-import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 import {ComposedProduct} from "../../services/ordercloud.service"
@@ -150,112 +149,110 @@ export default function ProductInventoryRecords({composedProduct, setComposedPro
 
   return (
     <>
-      <BrandedBox isExpaned={expanded} setExpanded={setExpanded}>
-        <>
-          <HStack float={"right"}>
-            <Tooltip label="Add Product Inventory">
-              <Button
-                colorScheme="brandButtons"
-                aria-label="Add Product Inventory"
-                disabled={true}
-                // onClick={onOpen}
-              >
-                <FiPlus />
-              </Button>
-            </Tooltip>
-          </HStack>
-          <Heading position={"relative"} size={{base: "md", md: "lg", lg: "xl"}}>
-            Inventory Records
-            <Tag
-              position={"relative"}
-              size={"sm"}
-              bg={useColorModeValue("brand.500", "brand.700")}
-              ml={4}
-              color={useColorModeValue("textColor.900", "textColor.100")}
-            >
-              EDITING COMING SOON
-            </Tag>
-          </Heading>
+      <>
+        <Heading position={"relative"} size={{base: "sm", md: "md", lg: "md"}}>
+          Inventory Records
+          <Tag
+            position={"relative"}
+            size={"sm"}
+            bg={useColorModeValue("brand.500", "brand.700")}
+            ml={4}
+            color={useColorModeValue("textColor.900", "textColor.100")}
+          >
+            EDITING COMING SOON
+          </Tag>
+        </Heading>
 
-          {(isLoading || !composedProduct?.Product) && expanded ? (
-            <Box pt={6} textAlign={"center"}>
-              Updating... <BrandedSpinner />
-            </Box>
-          ) : (
-            <>
-              <Collapse in={expanded}>
-                <Box width="full" pb={2} pt={4}>
-                  {(inventoryRecors?.length ?? 0) == 0 ? (
-                    <>No Inventory Records</>
-                  ) : (
-                    <BrandedTable>
-                      <Thead>
-                        <Tr>
-                          <Th color={color}>ID</Th>
-                          <Th color={color}>Quantity</Th>
-                          <Th color={color}>Address</Th>
-                          <Th color={color}>Last Updated</Th>
-                          <Th color={color}>Order can exceed?</Th>
-                          <Th color={color}>Action</Th>
+        {(isLoading || !composedProduct?.Product) && expanded ? (
+          <Box pt={6} textAlign={"center"}>
+            Updating... <BrandedSpinner />
+          </Box>
+        ) : (
+          <>
+            <Box width="full" pb={2} pt={4}>
+              {(inventoryRecors?.length ?? 0) == 0 ? (
+                <>No Inventory Records</>
+              ) : (
+                <BrandedTable>
+                  <Thead>
+                    <Tr>
+                      <Th color={color}>ID</Th>
+                      <Th color={color}>Quantity</Th>
+                      <Th color={color}>Address</Th>
+                      <Th color={color}>Last Updated</Th>
+                      <Th color={color}>Order can exceed?</Th>
+                      <Th color={color}>Action</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody alignContent={"center"}>
+                    {inventoryRecors?.map((item, index) => {
+                      return (
+                        <Tr key={index}>
+                          <Td>{item.ID}</Td>
+                          <Td>{item.QuantityAvailable}</Td>
+                          <Td>
+                            <Box>
+                              <p>
+                                <b>{item.Address.AddressName}</b>
+                              </p>
+                              <Divider variant={"solid"} />
+                              <p>
+                                {item.Address.FirstName} {item.Address.LastName}
+                              </p>
+                              <p>{item.Address.Street1}</p>
+                              <p>
+                                {item.Address.Zip} {item.Address.City}
+                              </p>
+                              <p>{item.Address.Country}</p>
+                            </Box>
+                          </Td>
+
+                          <Td>{new Date(composedProduct?.Product?.Inventory?.LastUpdated)?.toLocaleString()}</Td>
+                          <Td>
+                            {item.OrderCanExceed ?? false ? (
+                              <CheckIcon boxSize={6} color={okColor} />
+                            ) : (
+                              <CloseIcon boxSize={6} color={errorColor} />
+                            )}
+                          </Td>
+                          <Td>
+                            {" "}
+                            <Tooltip label="Remove Inventory Record from Product">
+                              <Button
+                                colorScheme="brandButtons"
+                                aria-label="Remove Inventory Record from Product"
+                                disabled={true}
+                                variant="tertiaryButton"
+                                // onClick={onRemoveSpecification}
+                                data-id={item.ID}
+                              >
+                                <FiTrash2 />
+                              </Button>
+                            </Tooltip>
+                          </Td>
                         </Tr>
-                      </Thead>
-                      <Tbody alignContent={"center"}>
-                        {inventoryRecors?.map((item, index) => {
-                          return (
-                            <Tr key={index}>
-                              <Td>{item.ID}</Td>
-                              <Td>{item.QuantityAvailable}</Td>
-                              <Td>
-                                <Box>
-                                  <p>
-                                    <b>{item.Address.AddressName}</b>
-                                  </p>
-                                  <Divider variant={"solid"} />
-                                  <p>
-                                    {item.Address.FirstName} {item.Address.LastName}
-                                  </p>
-                                  <p>{item.Address.Street1}</p>
-                                  <p>
-                                    {item.Address.Zip} {item.Address.City}
-                                  </p>
-                                  <p>{item.Address.Country}</p>
-                                </Box>
-                              </Td>
-
-                              <Td>{new Date(composedProduct?.Product?.Inventory?.LastUpdated)?.toLocaleString()}</Td>
-                              <Td>
-                                {item.OrderCanExceed ?? false ? (
-                                  <CheckIcon boxSize={6} color={okColor} />
-                                ) : (
-                                  <CloseIcon boxSize={6} color={errorColor} />
-                                )}
-                              </Td>
-                              <Td>
-                                {" "}
-                                <Tooltip label="Remove Inventory Record from Product">
-                                  <Button
-                                    colorScheme="brandButtons"
-                                    aria-label="Remove Inventory Record from Product"
-                                    disabled={true}
-                                    // onClick={onRemoveSpecification}
-                                    data-id={item.ID}
-                                  >
-                                    <FiTrash2 />
-                                  </Button>
-                                </Tooltip>
-                              </Td>
-                            </Tr>
-                          )
-                        })}
-                      </Tbody>
-                    </BrandedTable>
-                  )}
-                </Box>
-              </Collapse>
-            </>
-          )}
-        </>
-      </BrandedBox>
+                      )
+                    })}
+                  </Tbody>
+                </BrandedTable>
+              )}
+            </Box>
+          </>
+        )}
+      </>
+      <HStack float={"right"}>
+        <Tooltip label="Add Product Inventory">
+          <Button
+            colorScheme="brandButtons"
+            aria-label="Add Product Inventory"
+            variant="tertiaryButton"
+            disabled={true}
+            // onClick={onOpen}
+          >
+            <FiPlus />
+          </Button>
+        </Tooltip>
+      </HStack>
       {/* <AlertDialog
         motionPreset="slideInBottom"
         leastDestructiveRef={cancelRef}
