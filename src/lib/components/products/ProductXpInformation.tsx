@@ -213,104 +213,105 @@ export default function ProductXpInformation({composedProduct, setComposedProduc
 
   return (
     <>
-      <BrandedBox isExpaned={expanded} setExpanded={setExpanded}>
-        <>
-          {isEditingBasicData ? (
-            <HStack float={"right"}>
-              <Tooltip label="Save">
-                <Button aria-label="Save" onClick={onProductSave}>
-                  <FiCheck />
-                </Button>
-              </Tooltip>
-              <Tooltip label="Abort">
-                <Button colorScheme="brandButtons" aria-label="Abort" onClick={onAbortClicked}>
-                  <FiX />
-                </Button>
-              </Tooltip>
-            </HStack>
-          ) : (
-            <HStack float={"right"}>
-              <Tooltip label="Edit">
-                <Button aria-label="Edit" onClick={onEditClicked}>
-                  <FiEdit />
-                </Button>
-              </Tooltip>
-            </HStack>
-          )}
-          <Heading size={{base: "md", md: "lg", lg: "xl"}}>Extended Properties</Heading>
+      <>
+        <Heading size={{base: "sm", md: "md", lg: "md"}}>Extended Properties</Heading>
 
-          {(isLoading || !formValues) && expanded ? (
-            <Box pt={6} textAlign={"center"}>
-              Updating... <BrandedSpinner />
-            </Box>
-          ) : (
-            <Collapse in={expanded}>
-              <Box width="full" pb={2} pt={4}>
-                <Text opacity={0.5} fontWeight={"bold"}></Text>
-                {Object.keys(formValues).map((name, key) => {
-                  return isEditingBasicData && typeof formValues[name] != "object" ? (
-                    <HStack key={key} mt={3}>
-                      <InputGroup>
-                        <InputLeftAddon w={"200px"}>{name}</InputLeftAddon>
-                        {formValues[name].length > 90 ? (
-                          <Textarea
-                            width={"75%"}
-                            resize={"none"}
-                            defaultValue={formValues[name]}
-                            onChange={handleInputChange(name)}
-                            h={"300"}
-                          />
-                        ) : (
-                          <Input
-                            width={"75%"}
-                            defaultValue={formValues[name]}
-                            type={typeof formValues[name] == "string" ? "text" : "number"}
-                            onChange={handleInputChange(name)}
-                            disabled={toBeDeleted.includes(name)}
-                          />
-                        )}
-                        <Tooltip pt={2} label="Remove Extended Property">
-                          <Button onClick={onDeleteProductXPClicked(name)}>
-                            {toBeDeleted.includes(name) ? <FiMinusSquare /> : <FiMinus />}
-                          </Button>
-                        </Tooltip>
-                      </InputGroup>
-                    </HStack>
-                  ) : (
-                    <></>
-                  )
-                })}
-                {Object.keys(formValues).map((name, key) => {
-                  return !isEditingBasicData && typeof formValues[name] != "object" ? (
-                    <HStack key={key} mt={4}>
-                      <InputGroup>
-                        <InputLeftAddon w={"200px"}>{name}</InputLeftAddon>
-                        <Input width={"100%"} defaultValue={formValues[name]} readOnly />
-                      </InputGroup>
-                    </HStack>
-                  ) : (
-                    <></>
-                  )
-                })}
-                {isEditingBasicData /*&&
-              formValues?.images[formValues?.images?.length - 1]?.Url != ""*/ ? (
-                  <Tooltip label="Add new Extended Property">
-                    <Box pt={4}>
-                      <Center>
-                        <Button onClick={onOpenAddXP}>
-                          <FiPlus />
+        {(isLoading || !formValues) && expanded ? (
+          <Box pt={6} textAlign={"center"}>
+            Updating... <BrandedSpinner />
+          </Box>
+        ) : (
+          <Collapse in={expanded}>
+            <Box width="full" pb={2} pt={4}>
+              <Text opacity={0.5} fontWeight={"bold"}></Text>
+              {Object.keys(formValues).map((name, key) => {
+                return isEditingBasicData && typeof formValues[name] != "object" ? (
+                  <HStack key={key} mt={3}>
+                    <InputGroup>
+                      <InputLeftAddon w={"200px"}>{name}</InputLeftAddon>
+                      {formValues[name].length > 90 ? (
+                        <Textarea
+                          width={"75%"}
+                          resize={"none"}
+                          defaultValue={formValues[name]}
+                          borderColor={"gray.800"}
+                          onChange={handleInputChange(name)}
+                          h={"300"}
+                          disabled={toBeDeleted.includes(name)}
+                        />
+                      ) : (
+                        <Input
+                          width={"75%"}
+                          defaultValue={formValues[name]}
+                          type={typeof formValues[name] == "string" ? "text" : "number"}
+                          onChange={handleInputChange(name)}
+                          disabled={toBeDeleted.includes(name)}
+                        />
+                      )}
+                      <Tooltip pt={2} label="Remove Extended Property">
+                        <Button onClick={onDeleteProductXPClicked(name)}>
+                          {toBeDeleted.includes(name) ? <FiMinusSquare /> : <FiMinus />}
                         </Button>
-                      </Center>
-                    </Box>
-                  </Tooltip>
+                      </Tooltip>
+                    </InputGroup>
+                  </HStack>
                 ) : (
                   <></>
-                )}
-              </Box>
-            </Collapse>
-          )}
-        </>
-      </BrandedBox>
+                )
+              })}
+              {Object.keys(formValues).map((name, key) => {
+                return !isEditingBasicData && typeof formValues[name] != "object" ? (
+                  <HStack key={key} mt={4}>
+                    <InputGroup>
+                      <InputLeftAddon w={"200px"}>{name}</InputLeftAddon>
+                      <Input width={"100%"} defaultValue={formValues[name]} readOnly />
+                    </InputGroup>
+                  </HStack>
+                ) : (
+                  <></>
+                )
+              })}
+              {isEditingBasicData /*&&
+              formValues?.images[formValues?.images?.length - 1]?.Url != ""*/ ? (
+                <Tooltip label="Add new Extended Property">
+                  <Box pt={4}>
+                    <Center>
+                      <Button onClick={onOpenAddXP}>
+                        <FiPlus />
+                      </Button>
+                    </Center>
+                  </Box>
+                </Tooltip>
+              ) : (
+                <></>
+              )}
+            </Box>
+          </Collapse>
+        )}
+      </>
+      {isEditingBasicData ? (
+        <HStack float={"right"}>
+          <Tooltip label="Save">
+            <Button aria-label="Save" onClick={onProductSave}>
+              <FiCheck />
+            </Button>
+          </Tooltip>
+          <Tooltip label="Abort">
+            <Button colorScheme="brandButtons" aria-label="Abort" onClick={onAbortClicked}>
+              <FiX />
+            </Button>
+          </Tooltip>
+        </HStack>
+      ) : (
+        <HStack float={"right"}>
+          <Tooltip label="Edit">
+            <Button aria-label="Edit" onClick={onEditClicked}>
+              <FiEdit />
+            </Button>
+          </Tooltip>
+        </HStack>
+      )}
+
       <Modal isOpen={isOpenAddXP} onClose={onNewProductXPClosed} size={"xl"}>
         <ModalOverlay backdropFilter="blur(10px) hue-rotate(90deg)" />
         <ModalContent>
