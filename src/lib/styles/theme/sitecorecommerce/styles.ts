@@ -21,6 +21,9 @@ export const styles = {
         my: "15px !important"
       },
       //MOVE THESE TO PROPER PLACE AFTER V1 RELEASE
+      ".chakra-input__group": {
+        isolation: "auto"
+      },
       ".facet-input": {
         input: {
           bg: "inputBg",
