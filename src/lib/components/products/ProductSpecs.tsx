@@ -136,7 +136,7 @@ export default function ProductSpecs({composedProduct, setComposedProduct}: Prod
           </Box>
         ) : (
           <>
-            <Box width="full" pb={2} pt={4}>
+            <Box width="full" pb="50" pt={4}>
               {(composedProduct?.Specs?.length ?? 0) == 0 ? (
                 <>No Specs</>
               ) : (
@@ -181,11 +181,11 @@ export default function ProductSpecs({composedProduct, setComposedProduct}: Prod
                               <Button
                                 colorScheme="brandButtons"
                                 aria-label="Remove specification from Product"
-                                variant="tertiaryButton"
+                                variant="secondaryButton"
                                 onClick={onRemoveSpecification}
                                 data-id={item.ID}
                               >
-                                <FiTrash2 />
+                                Delete
                               </Button>
                             </Tooltip>
                           </Td>
@@ -199,7 +199,7 @@ export default function ProductSpecs({composedProduct, setComposedProduct}: Prod
           </>
         )}
       </>
-      <HStack float={"right"}>
+      <HStack float={"right"} position="absolute" bottom="20px">
         <Tooltip label="Add Product Specification">
           <Button
             colorScheme="brandButtons"
@@ -207,7 +207,7 @@ export default function ProductSpecs({composedProduct, setComposedProduct}: Prod
             variant="tertiaryButton"
             onClick={onOpen}
           >
-            <FiPlus />
+            Add Specs
           </Button>
         </Tooltip>
       </HStack>

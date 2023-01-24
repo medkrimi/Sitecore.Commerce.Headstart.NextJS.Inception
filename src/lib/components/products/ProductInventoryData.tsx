@@ -146,13 +146,14 @@ export default function ProductInventoryData({composedProduct, setComposedProduc
             </Heading>
             <Collapse in={expanded}>
               <Flex flexDirection={{base: "column", sm: "column", md: "row"}}>
-                <Container>
-                  <Box width="full" pb={2}>
+                <Container pb="50">
+                  <Box width="full">
                     <Text>Inventory Enabled?:</Text>
                     <Switch
                       isChecked={formValues.inventoryEnabled}
                       isReadOnly={!isEditingBasicData}
                       onChange={handleCheckboxChange("InventoryEnabled")}
+                      colorScheme="teal"
                     />
                   </Box>
                   <Tooltip label={isEditingBasicData ? "Last Updated Date is readonly" : ""}>
@@ -192,12 +193,17 @@ export default function ProductInventoryData({composedProduct, setComposedProduc
                       Order can exceed?:
                     </Text>
                     {isEditingBasicData ? (
-                      <Switch isChecked={formValues.orderCanExceed} onChange={handleCheckboxChange("orderCanExceed")} />
+                      <Switch
+                        isChecked={formValues.orderCanExceed}
+                        onChange={handleCheckboxChange("orderCanExceed")}
+                        colorScheme="teal"
+                      />
                     ) : (
                       <Switch
                         isChecked={formValues.orderCanExceed}
                         isReadOnly
                         onChange={handleCheckboxChange("orderCanExceed")}
+                        colorScheme="teal"
                       />
                     )}
                   </Box>
@@ -209,6 +215,7 @@ export default function ProductInventoryData({composedProduct, setComposedProduc
                       isChecked={formValues.variantLevelTracking}
                       isReadOnly={!isEditingBasicData}
                       onChange={handleCheckboxChange("variantLevelTracking")}
+                      colorScheme="teal"
                     />
                   </Box>
                   <Tooltip
@@ -240,23 +247,23 @@ export default function ProductInventoryData({composedProduct, setComposedProduc
         )}
       </>
       {isEditingBasicData ? (
-        <HStack float={"right"}>
+        <HStack float={"right"} position="absolute" bottom="20px">
           <Tooltip label="Save">
-            <Button colorScheme="brandButtons" aria-label="Save" variant="tertiaryButton" onClick={onSaveClicked}>
-              <FiCheck />
+            <Button colorScheme="brandButtons" aria-label="Save" variant="primaryButton" onClick={onSaveClicked}>
+              Save
             </Button>
           </Tooltip>
-          <Tooltip label="Abort">
-            <Button colorScheme="brandButtons" aria-label="Abort" variant="tertiaryButton" onClick={onAbortClicked}>
-              <FiX />
+          <Tooltip label="Cancel">
+            <Button colorScheme="brandButtons" aria-label="Cancel" variant="secondaryButton" onClick={onAbortClicked}>
+              Cancel
             </Button>
           </Tooltip>
         </HStack>
       ) : (
-        <HStack float={"right"}>
+        <HStack float={"right"} position="absolute" bottom="20px">
           <Tooltip label="Edit">
             <Button colorScheme="brandButtons" aria-label="Edit" variant="tertiaryButton" onClick={onEditClicked}>
-              <FiEdit />
+              Edit
             </Button>
           </Tooltip>
         </HStack>

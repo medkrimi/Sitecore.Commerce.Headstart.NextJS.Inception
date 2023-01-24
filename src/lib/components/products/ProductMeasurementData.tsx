@@ -103,89 +103,95 @@ export default function ProductMeasurementData({composedProduct, setComposedProd
         ) : (
           <>
             <Heading size={{base: "sm", md: "md", lg: "md"}} mb={expanded ? 6 : 0}>
-              Sizes
+              Shipping Dimensions
             </Heading>
             <Collapse in={expanded}>
-              <Box width="full" pb={2}>
-                <Text>Ship Weight:</Text>
-                {isEditingBasicData ? (
-                  <Input
-                    type={"number"}
-                    value={formValues.shipWeight}
-                    onChange={handleNumberInputChange("shipWeight")}
-                  />
-                ) : (
-                  <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
-                    {composedProduct?.Product?.ShipWeight ?? "Not set"}
-                  </Heading>
-                )}
-              </Box>
-              <Box width="full" pb={2}>
-                <Text opacity={0.5} fontWeight={"bold"}>
-                  Ship Height:
-                </Text>
-                {isEditingBasicData ? (
-                  <Input
-                    type={"number"}
-                    value={formValues.shipHeight}
-                    onChange={handleNumberInputChange("shipHeight")}
-                  />
-                ) : (
-                  <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
-                    {composedProduct?.Product?.ShipHeight ?? "Not set"}
-                  </Heading>
-                )}
-              </Box>
+              <Box width="full" pb="50" pt={4} h="100%">
+                <Box width="full" pb={2}>
+                  <Text>Ship Weight:</Text>
+                  {isEditingBasicData ? (
+                    <Input
+                      type={"number"}
+                      value={formValues.shipWeight}
+                      onChange={handleNumberInputChange("shipWeight")}
+                    />
+                  ) : (
+                    <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                      {composedProduct?.Product?.ShipWeight ?? "Not set"}
+                    </Heading>
+                  )}
+                </Box>
+                <Box width="full" pb={2}>
+                  <Text opacity={0.5} fontWeight={"bold"}>
+                    Ship Height:
+                  </Text>
+                  {isEditingBasicData ? (
+                    <Input
+                      type={"number"}
+                      value={formValues.shipHeight}
+                      onChange={handleNumberInputChange("shipHeight")}
+                    />
+                  ) : (
+                    <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                      {composedProduct?.Product?.ShipHeight ?? "Not set"}
+                    </Heading>
+                  )}
+                </Box>
 
-              <Box width="full" pb={2}>
-                <Text>Ship Length:</Text>
-                {isEditingBasicData ? (
-                  <Input
-                    type={"number"}
-                    value={formValues.shipLength}
-                    onChange={handleNumberInputChange("shipLength")}
-                  />
-                ) : (
-                  <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
-                    {composedProduct?.Product?.ShipLength ?? "Not set"}
-                  </Heading>
-                )}
-              </Box>
+                <Box width="full" pb={2}>
+                  <Text>Ship Length:</Text>
+                  {isEditingBasicData ? (
+                    <Input
+                      type={"number"}
+                      value={formValues.shipLength}
+                      onChange={handleNumberInputChange("shipLength")}
+                    />
+                  ) : (
+                    <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                      {composedProduct?.Product?.ShipLength ?? "Not set"}
+                    </Heading>
+                  )}
+                </Box>
 
-              <Box width="full" pb={2}>
-                <Text opacity={0.5} fontWeight={"bold"}>
-                  Ship Width:
-                </Text>
-                {isEditingBasicData ? (
-                  <Input type={"number"} value={formValues.shipWidth} onChange={handleNumberInputChange("shipWidth")} />
-                ) : (
-                  <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
-                    {composedProduct?.Product?.ShipWidth ?? "Not set"}
-                  </Heading>
-                )}
+                <Box width="full" pb={2}>
+                  <Text opacity={0.5} fontWeight={"bold"}>
+                    Ship Width:
+                  </Text>
+                  {isEditingBasicData ? (
+                    <Input
+                      type={"number"}
+                      value={formValues.shipWidth}
+                      onChange={handleNumberInputChange("shipWidth")}
+                    />
+                  ) : (
+                    <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                      {composedProduct?.Product?.ShipWidth ?? "Not set"}
+                    </Heading>
+                  )}
+                </Box>
               </Box>
             </Collapse>
           </>
         )}
       </>
       {isEditingBasicData ? (
-        <HStack float={"right"}>
+        <HStack float={"right"} position="absolute" bottom="20px">
           <Tooltip label="Save">
-            <Button colorScheme="brandButtons" aria-label="Save" variant="tertiaryButton" onClick={onSaveClicked}>
-              <FiCheck />
+            <Button colorScheme="brandButtons" aria-label="Save" variant="primaryButton" onClick={onSaveClicked}>
+              Save
             </Button>
           </Tooltip>
-          <Tooltip label="Abort">
-            <Button colorScheme="brandButtons" aria-label="Abort" variant="tertiaryButton" onClick={onAbortClicked}>
-              <FiX />
+          <Tooltip label="Cancel">
+            <Button colorScheme="brandButtons" aria-label="Cancel" variant="secondaryButton" onClick={onAbortClicked}>
+              Cancel
             </Button>
           </Tooltip>
         </HStack>
       ) : (
-        <HStack float={"right"}>
+        <HStack float={"right"} position="absolute" bottom="20px">
           <Tooltip label="Edit">
             <Button colorScheme="brandButtons" aria-label="Edit" variant="tertiaryButton" onClick={onEditClicked}>
-              <FiEdit />
+              Edit
             </Button>
           </Tooltip>
         </HStack>

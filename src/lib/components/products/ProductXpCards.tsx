@@ -352,7 +352,7 @@ export default function ProductXpCards({composedProduct, setComposedProduct}: Pr
         <Heading size={{base: "sm", md: "md", lg: "md"}}>Extended Properties</Heading>
 
         {(isLoading || !formValues) && expanded ? (
-          <Box pt={6} textAlign={"center"}>
+          <Box pt={6} textAlign={"center"} pb="50">
             Updating... <BrandedSpinner />
           </Box>
         ) : (
@@ -372,7 +372,7 @@ export default function ProductXpCards({composedProduct, setComposedProduct}: Pr
             <Box pt={4}>
               <Center>
                 <Button variant="tertiaryButton" onClick={onOpenAddXP}>
-                  <FiPlus />
+                  Add XP
                 </Button>
               </Center>
             </Box>
@@ -382,23 +382,23 @@ export default function ProductXpCards({composedProduct, setComposedProduct}: Pr
         )}
       </>
       {isEditingBasicData ? (
-        <HStack float={"right"}>
+        <HStack float={"right"} position="absolute" bottom="20px">
           <Tooltip label="Save">
-            <Button variant="tertiaryButton" aria-label="Save" onClick={onProductSave}>
-              <FiCheck />
+            <Button variant="primaryButton" aria-label="Save" onClick={onProductSave}>
+              Save
             </Button>
           </Tooltip>
-          <Tooltip label="Abort">
-            <Button colorScheme="brandButtons" aria-label="Abort" variant="tertiaryButton" onClick={onAbortClicked}>
-              <FiX />
+          <Tooltip label="Cancel">
+            <Button colorScheme="brandButtons" aria-label="Cancel" variant="secondaryButton" onClick={onAbortClicked}>
+              Cancel
             </Button>
           </Tooltip>
         </HStack>
       ) : (
-        <HStack float={"right"}>
+        <HStack float={"right"} position="absolute" bottom="20px">
           <Tooltip label="Edit">
             <Button aria-label="Edit" variant="tertiaryButton" onClick={onEditClicked}>
-              <FiEdit />
+              Edit
             </Button>
           </Tooltip>
         </HStack>
@@ -413,17 +413,7 @@ export default function ProductXpCards({composedProduct, setComposedProduct}: Pr
             </ModalHeader>
           ) : (
             <>
-              <ModalHeader>
-                Add a new Extended Property
-                <Flex float={"right"}>
-                  <Button colorScheme="purple" mr={3} onClick={onNewProductXP}>
-                    <FiCheck />
-                  </Button>
-                  <Button onClick={onNewProductXPClosed}>
-                    <FiX />
-                  </Button>
-                </Flex>
-              </ModalHeader>
+              <ModalHeader>Add a new Extended Property</ModalHeader>
 
               <ModalBody mb={"10px"}>
                 <Text>Name:</Text>
@@ -435,6 +425,14 @@ export default function ProductXpCards({composedProduct, setComposedProduct}: Pr
                   <option value="tag">tag</option>
                 </Select>
                 {renderCurrentSelection()}
+                <HStack justifyContent="space-between" w="100%">
+                  <Button variant="secondaryButton" onClick={onNewProductXPClosed}>
+                    Cancel
+                  </Button>
+                  <Button variant="primaryButton" mr={3} onClick={onNewProductXP}>
+                    Save
+                  </Button>
+                </HStack>
               </ModalBody>
             </>
           )}
@@ -449,17 +447,7 @@ export default function ProductXpCards({composedProduct, setComposedProduct}: Pr
             </ModalHeader>
           ) : (
             <>
-              <ModalHeader>
-                Edit Extended Property
-                <Flex float={"right"}>
-                  <Button colorScheme="purple" mr={3} onClick={onEditProductXP}>
-                    <FiCheck />
-                  </Button>
-                  <Button onClick={onEditProductXPClosed}>
-                    <FiX />
-                  </Button>
-                </Flex>
-              </ModalHeader>
+              <ModalHeader>Edit Extended Property</ModalHeader>
 
               <ModalBody mb={"10px"}>
                 <Text>Name:</Text>
@@ -467,6 +455,14 @@ export default function ProductXpCards({composedProduct, setComposedProduct}: Pr
                 <Text pt={"20px"}>Field Type:</Text>
                 {renderEditType()}
                 {renderCurrentEditing()}
+                <HStack justifyContent="space-between" w="100%">
+                  <Button variant="secondaryButton" onClick={onEditProductXPClosed}>
+                    Cancel
+                  </Button>
+                  <Button variant="primaryButton" mr={3} onClick={onEditProductXP}>
+                    Save
+                  </Button>
+                </HStack>
               </ModalBody>
             </>
           )}

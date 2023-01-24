@@ -92,7 +92,7 @@ export default function ProductVariants({composedProduct, setComposedProduct}: P
           </Box>
         ) : (
           <>
-            <Box width="full" pb={2} pt={4}>
+            <Box width="full" pb="50" pt={4}>
               {composedProduct?.Variants?.length ?? 0 > 0 ? (
                 <>
                   <BrandedTable>
@@ -164,10 +164,10 @@ export default function ProductVariants({composedProduct, setComposedProduct}: P
           </>
         )}
       </>
-      <HStack float={"right"}>
+      <HStack float={"right"} position="absolute" bottom="20px">
         <Tooltip label="Generate variants">
           <Button colorScheme="brandButtons" aria-label="Generate Variants" variant="tertiaryButton" onClick={onOpen}>
-            <FiZap />
+            Create Variant
           </Button>
         </Tooltip>
       </HStack>

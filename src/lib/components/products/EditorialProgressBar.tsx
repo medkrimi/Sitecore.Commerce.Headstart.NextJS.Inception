@@ -69,7 +69,7 @@ export default function EditorialProgressBar({product}: ProductDataProps) {
         colorScheme={product ? progressColor : "blue"}
       />
       <Tooltip label="Please fill out IMAGE, DESCRIPTION, DEFAULTPRICESCHEDULEID and enable ISACTIVE">
-        <Heading mt={2} size={"md"} color={color}>
+        <Heading mt={2} size={"sm"} color={color} fontWeight="normal">
           Editorial Progress {product && !isLoading ? ": " + editorialProgress + "%" : "..."}
         </Heading>
       </Tooltip>

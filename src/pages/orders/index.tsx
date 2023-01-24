@@ -106,7 +106,7 @@ const OrdersPage = () => {
       <NextSeo title="Orders List" />
       <HStack justifyContent="space-between" w="100%" mb={5}>
         <Link href={`/orders/new`}>
-          <Button variant="primaryButton">New Order</Button>
+          <Button variant="primaryButton">Create Order</Button>
         </Link>
         <HStack>
           <Menu>

@@ -354,7 +354,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
             <>
               <HStack justifyContent="space-between" w="100%" mb={5}>
                 <Link onClick={onOpenAddProduct}>
-                  <Button variant="primaryButton">New Product</Button>
+                  <Button variant="primaryButton">Create Product</Button>
                 </Link>
                 <HStack>
                   <Button
@@ -677,10 +677,14 @@ export default function ProductSearch({query}: ProductSearchProps) {
               </ModalBody>
 
               <ModalFooter>
-                <Button colorScheme="purple" mr={3} onClick={onProductAdd}>
-                  Add
-                </Button>
-                <Button onClick={onCloseAddProduct}>Abort</Button>
+                <HStack justifyContent="space-between" w="100%">
+                  <Button onClick={onCloseAddProduct} variant="secondaryButton">
+                    Cancel
+                  </Button>
+                  <Button colorScheme="purple" mr={3} onClick={onProductAdd} variant="primaryButton">
+                    Add
+                  </Button>
+                </HStack>
               </ModalFooter>
             </>
           )}
@@ -711,10 +715,14 @@ export default function ProductSearch({query}: ProductSearchProps) {
               </ModalBody>
 
               <ModalFooter>
-                <Button colorScheme="purple" mr={3} onClick={onExecuteMassEdit}>
-                  Edit
-                </Button>
-                <Button onClick={onCloseMassEditProducts}>Abort</Button>
+                <HStack justifyContent="space-between" w="100%">
+                  <Button onClick={onCloseMassEditProducts} variant="secondaryButton">
+                    Cancel
+                  </Button>
+                  <Button colorScheme="purple" mr={3} onClick={onExecuteMassEdit} variant="primaryButton">
+                    Save
+                  </Button>
+                </HStack>
               </ModalFooter>
             </>
           )}

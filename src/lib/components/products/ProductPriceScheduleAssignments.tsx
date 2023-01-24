@@ -47,6 +47,7 @@ import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 import React from "react"
+import {priceHelper} from "lib/utils"
 
 type ProductDataProps = {
   composedProduct: ComposedProduct
@@ -278,7 +279,7 @@ export default function ProductPriceScheduleAssignments({composedProduct, setCom
           </Box>
         ) : (
           <>
-            <Box width="full" pb={2} pt={4}>
+            <Box width="full" pb="50" pt={4}>
               {(priceScheduleAssignments?.length ?? 0) == 0 && defaultPriceScheduleAssignment == null ? (
                 <>No Price Schedules</>
               ) : (
@@ -305,7 +306,10 @@ export default function ProductPriceScheduleAssignments({composedProduct, setCom
                               return (
                                 <li key={index}>
                                   Quantity: {item.Quantity} <br />
-                                  Price: {item.Price} <br /> {item.SalePrice ? "Sales Price: " + item.SalePrice : null}
+                                  Price: {priceHelper.formatPrice(item.Price)} <br />{" "}
+                                  {priceHelper.formatPrice(item.SalePrice)
+                                    ? "Sales Price: " + priceHelper.formatPrice(item.SalePrice)
+                                    : null}
                                 </li>
                               )
                             })}
@@ -328,8 +332,10 @@ export default function ProductPriceScheduleAssignments({composedProduct, setCom
                               {item?.priceSchedule.PriceBreaks?.map((item, index) => {
                                 return (
                                   <li key={index}>
-                                    Quantity: {item.Quantity} <br /> Price: {item.Price} <br />
-                                    {item.SalePrice ? "Sales Price: " + item.SalePrice : null}
+                                    Quantity: {item.Quantity} <br /> Price: {priceHelper.formatPrice(item.Price)} <br />
+                                    {priceHelper.formatPrice(item.SalePrice)
+                                      ? "Sales Price: " + priceHelper.formatPrice(item.SalePrice)
+                                      : null}
                                   </li>
                                 )
                               })}
@@ -343,12 +349,12 @@ export default function ProductPriceScheduleAssignments({composedProduct, setCom
                               <Button
                                 colorScheme="brandButtons"
                                 aria-label="Remove Price Schedule from Product"
-                                variant="tertiaryButton"
+                                variant="secondaryButton"
                                 data-buyerId={item.assignment.BuyerID}
                                 data-userGroupId={item.assignment.UserGroupID}
                                 onClick={onPriceScheduleAssignmentRemove}
                               >
-                                <FiTrash2 />
+                                Delete
                               </Button>
                             </Tooltip>
                           </Td>
@@ -362,7 +368,7 @@ export default function ProductPriceScheduleAssignments({composedProduct, setCom
           </>
         )}
       </>
-      <HStack float={"right"}>
+      <HStack float={"right"} position="absolute" bottom="20px">
         <Tooltip label="Add Price Schedule to Product">
           <Button
             colorScheme="brandButtons"
@@ -370,7 +376,7 @@ export default function ProductPriceScheduleAssignments({composedProduct, setCom
             variant="tertiaryButton"
             onClick={onOpen}
           >
-            <FiPlus />
+            Add Price Schedule
           </Button>
         </Tooltip>
       </HStack>

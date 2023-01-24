@@ -222,7 +222,7 @@ export default function ProductXpInformation({composedProduct, setComposedProduc
           </Box>
         ) : (
           <Collapse in={expanded}>
-            <Box width="full" pb={2} pt={4}>
+            <Box width="full" pb="50" pt={4} h="100%">
               <Text opacity={0.5} fontWeight={"bold"}></Text>
               {Object.keys(formValues).map((name, key) => {
                 return isEditingBasicData && typeof formValues[name] != "object" ? (
@@ -290,23 +290,23 @@ export default function ProductXpInformation({composedProduct, setComposedProduc
         )}
       </>
       {isEditingBasicData ? (
-        <HStack float={"right"}>
+        <HStack float={"right"} position="absolute" bottom="20px">
           <Tooltip label="Save">
-            <Button aria-label="Save" onClick={onProductSave}>
-              <FiCheck />
+            <Button aria-label="Save" onClick={onProductSave} variant="primarybutton">
+              Save
             </Button>
           </Tooltip>
-          <Tooltip label="Abort">
-            <Button colorScheme="brandButtons" aria-label="Abort" onClick={onAbortClicked}>
-              <FiX />
+          <Tooltip label="Cancel">
+            <Button colorScheme="brandButtons" aria-label="Cancel" onClick={onAbortClicked} variant="secondaryButton">
+              Cancel
             </Button>
           </Tooltip>
         </HStack>
       ) : (
-        <HStack float={"right"}>
+        <HStack float={"right"} position="absolute" bottom="20px">
           <Tooltip label="Edit">
-            <Button aria-label="Edit" onClick={onEditClicked}>
-              <FiEdit />
+            <Button aria-label="Edit" onClick={onEditClicked} variant="tertiaryButton">
+              Edit
             </Button>
           </Tooltip>
         </HStack>

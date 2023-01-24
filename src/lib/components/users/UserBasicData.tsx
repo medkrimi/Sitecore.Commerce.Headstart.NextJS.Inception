@@ -129,8 +129,8 @@ export default function UserBasicData({user, buyerId}: UserDataProps) {
                   <FiCheck />
                 </Button>
               </Tooltip>
-              <Tooltip label="Abort">
-                <Button colorScheme="brandButtons" aria-label="Abort" onClick={onAbortClicked}>
+              <Tooltip label="Cancel">
+                <Button colorScheme="brandButtons" aria-label="Cancel" onClick={onAbortClicked}>
                   <FiX />
                 </Button>
               </Tooltip>
