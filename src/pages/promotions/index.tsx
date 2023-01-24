@@ -98,7 +98,7 @@ const PromotionsList = () => {
     {
       Header: "Name",
       accessor: "Name",
-      Cell: ({value, row}) => <Link href={`/buyers/${row.original.ID}`}>{value}</Link>
+      Cell: ({value, row}) => <Link href={`/promotions/${row.original.ID}`}>{value}</Link>
     },
     {
       Header: "Code",

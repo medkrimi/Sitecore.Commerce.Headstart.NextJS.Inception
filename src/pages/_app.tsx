@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
+import "react-querybuilder/dist/query-builder.css"
 import "nextjs-breadcrumbs/dist/index.css"
 
 import type {AppProps} from "next/app"
