@@ -91,7 +91,10 @@ function AddEditForm({promotion}: AddEditFormProps) {
   const toast = useToast()
   // form validation rules
   const validationSchema = Yup.object().shape({
-    Name: Yup.string().max(100).required("Name is required"),
+    Name: Yup.string().max(100),
+    Code: Yup.string().max(100).required("Code is required"),
+    EligibleExpression: Yup.string().max(400).required("Eligible Expression is required"),
+    ValueExpression: Yup.string().max(400).required("Value Expression is required"),
     Description: Yup.string().max(100),
     xp_MinReqValue: Yup.number()
   })
@@ -111,8 +114,6 @@ function AddEditForm({promotion}: AddEditFormProps) {
 
   function onSubmit(fields, {setStatus, setSubmitting}) {
     setStatus()
-    console.log("On Sumit")
-    console.log(fields)
     if (isAddMode) {
       const promotion = xpHelper.unflattenXpObject(fields, "_")
       createPromotion(promotion, setSubmitting)
@@ -352,10 +353,10 @@ function AddEditForm({promotion}: AddEditFormProps) {
                                 <Radio value="BOGO">BOGO</Radio>
                               </RadioGroupControl>
 
-                              {values.Type !== "Free-shipping" && values.Type !== "BOGO" && (
+                              {values.xp_Type !== "Free-shipping" && values.xp_Type !== "BOGO" && (
                                 <InputGroup>
                                   <InputLeftElement pointerEvents="none" color="gray.300" fontSize="1.2em">
-                                    {values.Type === "Percentage" ? "%" : "$"}
+                                    {values.xp_Type === "Percentage" ? "%" : "$"}
                                   </InputLeftElement>
                                   <InputControl name="xp_Value" placeholder="Enter amount" />
                                 </InputGroup>

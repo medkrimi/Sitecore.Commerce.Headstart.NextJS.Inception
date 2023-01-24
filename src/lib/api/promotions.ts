@@ -31,7 +31,7 @@ async function create(fields) {
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "")
   console.log(fields)
-  //Promotions.Create(fields)
+  Promotions.Create(fields)
 }
 
 async function update(fields) {
@@ -60,9 +60,8 @@ async function _delete(id) {
 async function buildEligibleExpression(fields) {
   console.log("buildEligibleExpression")
   let eligibleExpression = "" //Default value when no condition has been specified.
-  console.log(fields)
   // Minimum Requirements has been selected
-  switch (fields.xp_MinReq) {
+  switch (fields.xp_MinimumReq) {
     case "min-amount": {
       eligibleExpression = `order.Subtotal>= ${fields.xp_MinReqValue}`
       break
@@ -82,23 +81,22 @@ async function buildEligibleExpression(fields) {
 
 // Simplistic Example to close the loop - then we will use the dnd Expression UI Builder and match to this
 async function buildValueExpression(fields) {
-  console.log("buildValueExpression")
-  let valueExpression = "" //Default value when no condition has been specified.
+  let valueExpression = "0" //Default value when no condition has been specified.
   switch (fields.xp_Type) {
-    case "percentage": {
+    case "Percentage": {
       valueExpression = `order.Subtotal * ${fields.xp_Value / 100})`
       break
     }
-    case "fixed": {
+    case "Fixed": {
       valueExpression = `${fields.xp_Value}`
       break
     }
-    case "free-shipping": {
+    case "Free-shipping": {
       valueExpression = `order.ShippingCost`
     }
 
     default: {
-      valueExpression = "true"
+      valueExpression = "0"
       break
     }
   }
