@@ -209,7 +209,7 @@ const ProductDetails = () => {
           <HStack position="absolute" right="30px" top="67px">
             <EditorialProgressBar product={composedProduct?.Product} />
           </HStack>
-          <HStack justifyContent="space-between" w="100%" mb={5} pl="10px" pr="15px">
+          <HStack justifyContent="space-between" w="100%" pl="10px" pr="15px">
             <HStack justifyContent="space-between" w="100%" mr="208px">
               <Box>
                 <Link onClick={onOpenAddProduct} pr="10px">
@@ -287,7 +287,7 @@ const ProductDetails = () => {
             </HStack>
           </HStack>
           <VStack justifyContent={"space-between"} width={"full"}>
-            <Container maxW={"full"} pb={8}>
+            <Container maxW={"full"} p="10px">
               <Grid
                 templateRows={{
                   base: "repeat(1, 1fr)",

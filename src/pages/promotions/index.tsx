@@ -1,6 +1,22 @@
 import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
-import {Badge, Box, Button, ButtonGroup, HStack, Icon, Stack, Text, useToast} from "@chakra-ui/react"
-import {useEffect, useState} from "react"
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Badge,
+  Box,
+  Button,
+  ButtonGroup,
+  HStack,
+  Icon,
+  Stack,
+  Text,
+  useToast,
+  AlertDialogFooter
+} from "@chakra-ui/react"
+import {useEffect, useRef, useState} from "react"
 
 import Card from "lib/components/card/Card"
 import {IoMdClose} from "react-icons/io"
@@ -32,6 +48,11 @@ export async function getStaticProps() {
 
 const PromotionsList = () => {
   const [promotions, setPromotions] = useState([])
+  const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const cancelRef = useRef()
+  const requestExportCSV = () => {}
+
   const toast = useToast({
     duration: 6000,
     isClosable: true,
@@ -150,14 +171,10 @@ const PromotionsList = () => {
       Header: "ACTIONS",
       Cell: ({row}) => (
         <ButtonGroup>
-          <Button
-            variant="secondaryButton"
-            onClick={() => router.push(`/promotions/${row.original.ID}/`)}
-            leftIcon={<EditIcon />}
-          >
+          <Button variant="secondaryButton" onClick={() => router.push(`/promotions/${row.original.ID}/`)}>
             Edit
           </Button>
-          <Button variant="secondaryButton" onClick={() => deletePromotion(row.original.ID)} leftIcon={<DeleteIcon />}>
+          <Button variant="secondaryButton" onClick={() => deletePromotion(row.original.ID)}>
             Delete
           </Button>
         </ButtonGroup>
@@ -168,6 +185,41 @@ const PromotionsList = () => {
   return (
     <>
       <PromotionsDataTable tableData={promotions} columnsData={columnsData} />
+      <AlertDialog
+        isOpen={isExportCSVDialogOpen}
+        onClose={() => setExportCSVDialogOpen(false)}
+        leastDestructiveRef={cancelRef}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Export Selected Promotions to CSV
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              <Text display="inline">
+                Export the selected promotions to a CSV, once the export button is clicked behind the scenes a job will
+                be kicked off to create the csv and then will automatically download to your downloads folder in the
+                browser.
+              </Text>
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <HStack justifyContent="space-between" w="100%">
+                <Button
+                  ref={cancelRef}
+                  onClick={() => setExportCSVDialogOpen(false)}
+                  disabled={loading}
+                  variant="secondaryButton"
+                >
+                  Cancel
+                </Button>
+                <Button onClick={requestExportCSV} disabled={loading}>
+                  {loading ? <Spinner color="brand.500" /> : "Export Promotions"}
+                </Button>
+              </HStack>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </>
   )
 }
@@ -177,17 +229,14 @@ const ProtectedBuyersList = () => {
     <ProtectedContent hasAccess={appPermissions.OrderManager}>
       <Box padding="GlobalPadding">
         <HStack justifyContent="space-between" w="100%" mb={5}>
-          <Button
-            onClick={() => router.push(`/promotions/add`)}
-            variant="primaryButton"
-            leftIcon={<AddIcon />}
-            size="lg"
-          >
+          <Button onClick={() => router.push(`/promotions/add`)} variant="primaryButton">
             Create promotion
           </Button>
 
           <HStack>
-            <Button variant="secondaryButton">Export CSV</Button>
+            <Button variant="secondaryButton" onClick={() => setExportCSVDialogOpen(true)}>
+              Export CSV
+            </Button>
           </HStack>
         </HStack>
         <Card variant="primaryCard">

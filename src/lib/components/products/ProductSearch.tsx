@@ -352,7 +352,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
             <BrandedSpinner />
           ) : (
             <>
-              <HStack justifyContent="space-between" w="100%" mb={5}>
+              <HStack justifyContent="space-between" w="100%">
                 <Link onClick={onOpenAddProduct}>
                   <Button variant="primaryButton">Create Product</Button>
                 </Link>

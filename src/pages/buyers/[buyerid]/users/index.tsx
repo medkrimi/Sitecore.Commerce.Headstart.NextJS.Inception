@@ -119,11 +119,10 @@ const UsersList = () => {
           <Button
             variant="secondaryButton"
             onClick={() => router.push(`/buyers/${router.query.buyerid}/users/${row.original.ID}`)}
-            leftIcon={<EditIcon />}
           >
             Edit
           </Button>
-          <Button variant="secondaryButton" onClick={() => deleteBuyer(row.original.ID)} leftIcon={<DeleteIcon />}>
+          <Button variant="secondaryButton" onClick={() => deleteBuyer(row.original.ID)}>
             Delete
           </Button>
         </ButtonGroup>
@@ -135,12 +134,7 @@ const UsersList = () => {
     <>
       <Box padding="GlobalPadding">
         <HStack justifyContent="space-between" w="100%" mb={5}>
-          <Button
-            onClick={() => router.push(`/buyers/${router.query.buyerid}/users/add`)}
-            variant="primaryButton"
-            leftIcon={<AddIcon />}
-            size="lg"
-          >
+          <Button onClick={() => router.push(`/buyers/${router.query.buyerid}/users/add`)} variant="primaryButton">
             Create user
           </Button>
 

@@ -138,14 +138,10 @@ const BuyersList = () => {
       Header: "ACTIONS",
       Cell: ({row}) => (
         <ButtonGroup>
-          <Button
-            variant="secondaryButton"
-            onClick={() => router.push(`/buyers/${row.original.ID}/`)}
-            leftIcon={<EditIcon />}
-          >
+          <Button variant="secondaryButton" onClick={() => router.push(`/buyers/${row.original.ID}/`)}>
             Edit
           </Button>
-          <Button variant="secondaryButton" onClick={() => deleteBuyer(row.original.ID)} leftIcon={<DeleteIcon />}>
+          <Button variant="secondaryButton" onClick={() => deleteBuyer(row.original.ID)}>
             Delete
           </Button>
         </ButtonGroup>
@@ -165,7 +161,7 @@ const ProtectedBuyersList = () => {
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
       <Box padding="GlobalPadding">
         <HStack justifyContent="space-between" w="100%" mb={5}>
-          <Button onClick={() => router.push(`/buyers/add`)} variant="primaryButton" leftIcon={<AddIcon />} size="lg">
+          <Button onClick={() => router.push(`/buyers/add`)} variant="primaryButton">
             Create buyer
           </Button>
 
