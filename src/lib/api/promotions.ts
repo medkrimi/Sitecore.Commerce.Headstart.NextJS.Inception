@@ -5,7 +5,9 @@ export const promotionsService = {
   getById,
   create,
   update,
-  delete: _delete
+  delete: _delete,
+  buildEligibleExpression,
+  buildValueExpression
 }
 
 async function list() {
@@ -28,8 +30,8 @@ async function create(fields) {
     .replace(/[^\w\s-]/g, "")
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "")
-
-  //Promotions.Create(fields)
+  console.log(fields)
+  Promotions.Create(fields)
 }
 
 async function update(fields) {
@@ -44,4 +46,59 @@ async function _delete(id) {
   if (id) {
     return await Promotions.Delete(id)
   }
+}
+
+// Expressions Structure
+// Propreties
+//items.any() (true if any item on the order matches filter)
+//items.all() (true if all items match filter)
+//items.quantity()(returns sum of line item quantities matching your specified condition)
+//items.count()(returns number of line items on the order matching your specified condition)
+//items.total() (compare result to a dollar amount)
+
+// Simplistic Example to close the loop - then we will use the dnd Expression UI Builder and match to this
+async function buildEligibleExpression(fields) {
+  console.log("buildEligibleExpression")
+  let eligibleExpression = "" //Default value when no condition has been specified.
+  // Minimum Requirements has been selected
+  switch (fields.xp_MinimumReq) {
+    case "min-amount": {
+      eligibleExpression = `order.Subtotal>= ${fields.xp_MinReqValue}`
+      break
+    }
+    case "min-qty": {
+      eligibleExpression = `items.quantity()>= ${fields.xp_MinReqValue}`
+      break
+    }
+    default: {
+      eligibleExpression = "true"
+      break
+    }
+  }
+
+  return eligibleExpression
+}
+
+// Simplistic Example to close the loop - then we will use the dnd Expression UI Builder and match to this
+async function buildValueExpression(fields) {
+  let valueExpression = "0" //Default value when no condition has been specified.
+  switch (fields.xp_Type) {
+    case "Percentage": {
+      valueExpression = `order.Subtotal * ${fields.xp_Value / 100})`
+      break
+    }
+    case "Fixed": {
+      valueExpression = `${fields.xp_Value}`
+      break
+    }
+    case "Free-shipping": {
+      valueExpression = `order.ShippingCost`
+    }
+
+    default: {
+      valueExpression = "0"
+      break
+    }
+  }
+  return valueExpression
 }
