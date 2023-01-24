@@ -122,11 +122,10 @@ const CategoriesList = (props) => {
                 `/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories/${row.original.ID}`
               )
             }
-            leftIcon={<EditIcon />}
           >
             Edit
           </Button>
-          <Button variant="secondaryButton" onClick={() => deleteCategory(row.original.ID)} leftIcon={<DeleteIcon />}>
+          <Button variant="secondaryButton" onClick={() => deleteCategory(row.original.ID)}>
             Delete
           </Button>
         </ButtonGroup>
@@ -143,8 +142,6 @@ const CategoriesList = (props) => {
               router.push(`/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories/add`)
             }
             variant="primaryButton"
-            leftIcon={<AddIcon />}
-            size="lg"
           >
             Create category
           </Button>

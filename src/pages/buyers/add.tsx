@@ -21,7 +21,7 @@ export async function getStaticProps() {
 function ProtectedAddEditForm() {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
-      <Box padding="20px">
+      <Box pl="GlobalPadding">
         <AddEditForm />
       </Box>
     </ProtectedContent>

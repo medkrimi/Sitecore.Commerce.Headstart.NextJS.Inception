@@ -165,7 +165,7 @@ export default function ProductCatalogAssignments({composedProduct, setComposedP
           </Box>
         ) : (
           <Collapse in={expanded}>
-            <Box width="full" pb={2} pt={4}>
+            <Box width="full" pb="50" pt={4}>
               {/* <Text opacity={0.5} fontWeight={"bold"}>
             Assignments
           </Text> */}
@@ -203,12 +203,12 @@ export default function ProductCatalogAssignments({composedProduct, setComposedP
                                   <Tooltip label="Remove from Catalog">
                                     <Button
                                       colorScheme="brandButtons"
-                                      variant="tertiaryButton"
+                                      variant="secondaryButton"
                                       aria-label="remove from catalog"
                                       onClick={onRemoveCatalog}
                                       data-id={item.ID}
                                     >
-                                      <FiTrash2 />
+                                      Delete
                                     </Button>
                                   </Tooltip>
                                 </Td>
@@ -234,10 +234,10 @@ export default function ProductCatalogAssignments({composedProduct, setComposedP
           </Collapse>
         )}
       </>
-      <HStack float={"right"}>
+      <HStack float={"right"} position="absolute" bottom="20px">
         <Tooltip label="Add to catalog">
           <Button colorScheme="brandButtons" variant="tertiaryButton" aria-label="add to catalog" onClick={onOpen}>
-            <FiPlus />
+            Add to Catalog
           </Button>
         </Tooltip>
       </HStack>

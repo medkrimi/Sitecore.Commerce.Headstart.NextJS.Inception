@@ -86,11 +86,10 @@ const UserGroupsList = () => {
           <Button
             variant="secondaryButton"
             onClick={() => router.push(`/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`)}
-            leftIcon={<EditIcon />}
           >
             Edit
           </Button>
-          <Button variant="secondaryButton" onClick={() => deleteUserGroup(row.original.ID)} leftIcon={<DeleteIcon />}>
+          <Button variant="secondaryButton" onClick={() => deleteUserGroup(row.original.ID)}>
             Delete
           </Button>
         </ButtonGroup>
@@ -102,12 +101,7 @@ const UserGroupsList = () => {
     <>
       <Box padding="GlobalPadding">
         <HStack justifyContent="space-between" w="100%" mb={5}>
-          <Button
-            onClick={() => router.push(`/buyers/${router.query.buyerid}/usergroups/add`)}
-            variant="primaryButton"
-            leftIcon={<AddIcon />}
-            size="lg"
-          >
+          <Button onClick={() => router.push(`/buyers/${router.query.buyerid}/usergroups/add`)} variant="primaryButton">
             Create user group
           </Button>
           <HStack>

@@ -1,5 +1,5 @@
 import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
-import {Button, ButtonGroup, HStack, Switch, Text, Tooltip, useToast} from "@chakra-ui/react"
+import {Box, Button, ButtonGroup, HStack, Switch, Text, Tooltip, useToast} from "@chakra-ui/react"
 import {useEffect, useState} from "react"
 
 import Card from "lib/components/card/Card"
@@ -109,11 +109,10 @@ const CatalogsList = () => {
           <Button
             variant="secondaryButton"
             onClick={() => router.push(`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}`)}
-            leftIcon={<EditIcon />}
           >
             Edit
           </Button>
-          <Button variant="secondaryButton" onClick={() => deleteCatalog(row.original.ID)} leftIcon={<DeleteIcon />}>
+          <Button variant="secondaryButton" onClick={() => deleteCatalog(row.original.ID)}>
             Delete
           </Button>
         </ButtonGroup>
@@ -123,22 +122,19 @@ const CatalogsList = () => {
 
   return (
     <>
-      <HStack justifyContent="space-between" w="100%" mb={5}>
-        <Button
-          onClick={() => router.push(`/buyers/${router.query.buyerid}/catalogs/add`)}
-          variant="primaryButton"
-          leftIcon={<AddIcon />}
-          size="lg"
-        >
-          Create catalog
-        </Button>
-        <HStack>
-          <Button variant="secondaryButton">Export CSV</Button>
+      <Box pl="GlobalPadding">
+        <HStack justifyContent="space-between" w="100%" mb={5}>
+          <Button onClick={() => router.push(`/buyers/${router.query.buyerid}/catalogs/add`)} variant="primaryButton">
+            Create catalog
+          </Button>
+          <HStack>
+            <Button variant="secondaryButton">Export CSV</Button>
+          </HStack>
         </HStack>
-      </HStack>
-      <Card variant="primaryCard">
-        <CatalogsDataTable tableData={catalogs} columnsData={columnsData} />
-      </Card>
+        <Card variant="primaryCard">
+          <CatalogsDataTable tableData={catalogs} columnsData={columnsData} />
+        </Card>
+      </Box>
     </>
   )
 }

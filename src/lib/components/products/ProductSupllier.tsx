@@ -128,15 +128,6 @@ export default function ProductSuppliers({composedProduct, setComposedProduct}: 
       <>
         <Heading position={"relative"} size={{base: "sm", md: "md", lg: "md"}}>
           Supplier
-          <Tag
-            position={"relative"}
-            size={"sm"}
-            bg={useColorModeValue("brand.500", "brand.700")}
-            ml={4}
-            color={useColorModeValue("textColor.900", "textColor.100")}
-          >
-            EDITING COMING SOON
-          </Tag>
         </Heading>
 
         {(isLoading || !composedProduct?.Product) && expanded ? (
@@ -145,7 +136,7 @@ export default function ProductSuppliers({composedProduct, setComposedProduct}: 
           </Box>
         ) : (
           <>
-            <Box width="full" pb={2} pt={4}>
+            <Box width="full" pb="50" pt={4}>
               {(supplier?.length ?? 0) == 0 ? (
                 <>No Supplier</>
               ) : (
@@ -166,10 +157,10 @@ export default function ProductSuppliers({composedProduct, setComposedProduct}: 
                           <Td>{item.ID}</Td>
                           <Td>{item.Name}</Td>
                           <Td>
-                            <Switch isChecked={item.Active} isReadOnly />
+                            <Switch isChecked={item.Active} isReadOnly colorScheme="teal" />
                           </Td>
                           <Td>
-                            <Switch isChecked={item.AllBuyersCanOrder} isReadOnly />
+                            <Switch isChecked={item.AllBuyersCanOrder} isReadOnly colorScheme="teal" />
                           </Td>
                           <Td>
                             {" "}
@@ -178,11 +169,11 @@ export default function ProductSuppliers({composedProduct, setComposedProduct}: 
                                 colorScheme="brandButtons"
                                 aria-label="Remove Supplier from Product"
                                 disabled={true}
-                                variant="tertiaryButton"
+                                variant="secondaryButton"
                                 // onClick={onRemoveSpecification}
                                 data-id={item.ID}
                               >
-                                <FiTrash2 />
+                                Delete
                               </Button>
                             </Tooltip>
                           </Td>
@@ -196,7 +187,7 @@ export default function ProductSuppliers({composedProduct, setComposedProduct}: 
           </>
         )}
       </>
-      <HStack float={"right"}>
+      <HStack float={"right"} position="absolute" bottom="20px">
         <Tooltip label="Add Product Supplier">
           <Button
             colorScheme="brandButtons"
@@ -205,7 +196,7 @@ export default function ProductSuppliers({composedProduct, setComposedProduct}: 
             disabled={true}
             // onClick={onOpen}
           >
-            <FiPlus />
+            Add Supplier
           </Button>
         </Tooltip>
       </HStack>

@@ -152,7 +152,7 @@ export default function ProductMediaInformation({composedProduct, setComposedPro
       ) : (
         <>
           <Collapse in={expanded}>
-            <Box width="full" pb={2} pt={4} pl={14}>
+            <Box width="full" pt={4} pl={14} pb="50">
               <>
                 <Text>Images:</Text>
                 {formValues?.images?.map((image, key) => {
@@ -162,12 +162,8 @@ export default function ProductMediaInformation({composedProduct, setComposedPro
                       <Input value={image.Url} onChange={handleInputChange(key)} />
                       {key != 0 ? (
                         <Tooltip pt={2} label="Remove Product Image">
-                          <Button
-                            onClick={onDeleteProductImageClicked(image.Url)}
-                            variant="tertiaryButton"
-                            //colorScheme={"purple"}
-                          >
-                            <FiMinus />
+                          <Button onClick={onDeleteProductImageClicked(image.Url)} variant="secondaryButton">
+                            Delete
                           </Button>
                         </Tooltip>
                       ) : (
@@ -224,8 +220,8 @@ export default function ProductMediaInformation({composedProduct, setComposedPro
                   <Tooltip label="Add new Product Image">
                     <Box pt={4}>
                       <Center>
-                        <Button onClick={onNewProductImageClicked} variant="tertiaryButton">
-                          <FiPlus />
+                        <Button onClick={onNewProductImageClicked} variant="secondaryButton">
+                          Add Image
                         </Button>
                       </Center>
                     </Box>
@@ -239,23 +235,23 @@ export default function ProductMediaInformation({composedProduct, setComposedPro
         </>
       )}
       {isEditingBasicData ? (
-        <HStack float={"right"}>
+        <HStack float={"right"} position="absolute" bottom="20px">
           <Tooltip label="Save">
-            <Button aria-label="Save" onClick={onProductSave} variant="tertiaryButton">
-              <FiCheck />
+            <Button aria-label="Save" onClick={onProductSave} variant="primaryButton">
+              Save
             </Button>
           </Tooltip>
-          <Tooltip label="Abort">
-            <Button colorScheme="brandButtons" aria-label="Abort" variant="tertiaryButton" onClick={onAbortClicked}>
-              <FiX />
+          <Tooltip label="Cancel">
+            <Button colorScheme="brandButtons" aria-label="Cancel" variant="secondaryButton" onClick={onAbortClicked}>
+              Cancel
             </Button>
           </Tooltip>
         </HStack>
       ) : (
-        <HStack float={"right"}>
+        <HStack float={"right"} position="absolute" bottom="20px">
           <Tooltip label="Edit">
             <Button aria-label="Edit" variant="tertiaryButton" onClick={onEditClicked}>
-              <FiEdit />
+              Edit
             </Button>
           </Tooltip>
         </HStack>

@@ -164,7 +164,7 @@ export default function ProductData({composedProduct, setComposedProduct}: Produ
             </Heading>
             <Collapse in={expanded}>
               <Flex flexDirection={{base: "column", sm: "column", md: "row"}}>
-                <Container>
+                <Container pt="0" pl="0" pr="0" pb="50">
                   <Tooltip label={isEditingBasicData ? "Product Name is mandatory to fill" : ""}>
                     <Box width="full" pb={2}>
                       <Text>Product Name:</Text>
@@ -238,12 +238,14 @@ export default function ProductData({composedProduct, setComposedProduct}: Produ
                       <Switch
                         isChecked={formValues.allSuppliersCanSell}
                         onChange={handleCheckboxChange("allSuppliersCanSell")}
+                        colorScheme="teal"
                       />
                     ) : (
                       <Switch
                         isChecked={formValues.allSuppliersCanSell}
                         isReadOnly
                         onChange={handleCheckboxChange("allSuppliersCanSell")}
+                        colorScheme="teal"
                       />
                     )}
                   </Box>
@@ -266,21 +268,35 @@ export default function ProductData({composedProduct, setComposedProduct}: Produ
                   <Box width="full" pb={2}>
                     <Text>Returnable? </Text>
                     {isEditingBasicData ? (
-                      <Switch isChecked={formValues.returnable} onChange={handleCheckboxChange("returnable")} />
+                      <Switch
+                        isChecked={formValues.returnable}
+                        onChange={handleCheckboxChange("returnable")}
+                        colorScheme="teal"
+                      />
                     ) : (
                       <Switch
                         isChecked={formValues.returnable}
                         isReadOnly
                         onChange={handleCheckboxChange("returnable")}
+                        colorScheme="teal"
                       />
                     )}
                   </Box>
                   <Box width="full" pb={2}>
                     <Text>Is Active </Text>
                     {isEditingBasicData ? (
-                      <Switch isChecked={formValues.isActive} onChange={handleCheckboxChange("isActive")} />
+                      <Switch
+                        isChecked={formValues.isActive}
+                        onChange={handleCheckboxChange("isActive")}
+                        colorScheme="teal"
+                      />
                     ) : (
-                      <Switch isChecked={formValues.isActive} isReadOnly onChange={handleCheckboxChange("isActive")} />
+                      <Switch
+                        isChecked={formValues.isActive}
+                        isReadOnly
+                        onChange={handleCheckboxChange("isActive")}
+                        colorScheme="teal"
+                      />
                     )}
                   </Box>
                 </Container>
@@ -290,23 +306,23 @@ export default function ProductData({composedProduct, setComposedProduct}: Produ
         )}
       </>
       {isEditingBasicData ? (
-        <HStack float={"right"}>
+        <HStack float={"right"} position="absolute" bottom="20px">
           <Tooltip label="Save">
-            <Button colorScheme="brandButtons" aria-label="Save" variant="tertiaryButton" onClick={onSaveClicked}>
-              <FiCheck />
+            <Button colorScheme="brandButtons" aria-label="Save" variant="primaryButton" onClick={onSaveClicked}>
+              Save
             </Button>
           </Tooltip>
-          <Tooltip label="Abort">
-            <Button colorScheme="brandButtons" aria-label="Abort" variant="tertiaryButton" onClick={onAbortClicked}>
-              <FiX color={color} />
+          <Tooltip label="Cancel">
+            <Button colorScheme="brandButtons" aria-label="Cancel" variant="secondaryButton" onClick={onAbortClicked}>
+              Cancel
             </Button>
           </Tooltip>
         </HStack>
       ) : (
-        <HStack float={"right"}>
+        <HStack float={"right"} position="absolute" bottom="20px">
           <Tooltip label="Edit">
             <Button colorScheme="brandButtons" aria-label="Edit" variant="tertiaryButton" onClick={onEditClicked}>
-              <FiEdit color={color} />
+              Edit
             </Button>
           </Tooltip>
         </HStack>
