@@ -41,7 +41,7 @@ import {
   SwitchControl,
   TextareaControl
 } from "formik-chakra-ui"
-import {Formik, useField, useFormikContext} from "formik"
+import {Field, Formik, useField, useFormikContext} from "formik"
 import {Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react"
 import {useEffect, useState} from "react"
 
@@ -93,6 +93,8 @@ function AddEditForm({promotion}: AddEditFormProps) {
   const validationSchema = Yup.object().shape({
     Name: Yup.string().max(100),
     Code: Yup.string().max(100).required("Code is required"),
+    StartDate: Yup.date(),
+    ExpirationDate: Yup.date(),
     EligibleExpression: Yup.string().max(400).required("Eligible Expression is required"),
     ValueExpression: Yup.string().max(400).required("Value Expression is required"),
     Description: Yup.string().max(100),
@@ -240,7 +242,7 @@ function AddEditForm({promotion}: AddEditFormProps) {
                       <ListItem>Code: {values.Code}</ListItem>
                       <Divider mt="15" mb="15" />
                       <ListItem>Start Date: {values.StartDate}</ListItem>
-                      <ListItem>End Date: {values.EndDate}</ListItem>
+                      <ListItem>End Date: {values.ExpirationDate}</ListItem>
                       <Divider mt="15" mb="15" />
                       <ListItem>Can Combine: {values.CanCombine ? "Yes" : "No"}</ListItem>
                       <ListItem>Line Item Level: {values.LineItemLevel ? "Yes" : "No"}</ListItem>
@@ -275,7 +277,7 @@ function AddEditForm({promotion}: AddEditFormProps) {
                               <Divider mt="15" mb="15" />
                               <FormLabel>Start Date</FormLabel>
                               <DatePicker selectedDate={startDate} onChange={setStartDate} />
-                              <div>{startDate.toISOString()}</div>
+                              <input type="hidden" name="StartDate" value={startDate.toISOString()} />
                               <Divider mt="15" mb="15" />
                               <label htmlFor="RedemptionLimit">Redemption Limit</label>
                               <NumberInput defaultValue={100} max={1000} clampValueOnBlur={false}>
@@ -307,7 +309,7 @@ function AddEditForm({promotion}: AddEditFormProps) {
                               <Divider mt="15" mb="15" />
                               <FormLabel>End Date</FormLabel>
                               <DatePicker selectedDate={endDate} onChange={setEndDate} />
-                              <div>{endDate.toISOString()}</div>
+                              <input type="hidden" name="ExpirationDate" value={endDate.toISOString()} />
                               <Divider mt="15" mb="15" />
                               <label htmlFor="RedemptionLimitPerUser">Redemption Limit per user</label>
                               <NumberInput defaultValue={1} max={10} clampValueOnBlur={false}>

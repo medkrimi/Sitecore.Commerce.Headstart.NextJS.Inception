@@ -20,33 +20,6 @@ interface Props {
   showPopperArrow?: boolean
 }
 
-const ReactDatePickerComponent = ({
-  selectedDate,
-  onChange,
-  isClearable = false,
-  showPopperArrow = false,
-  ...props
-}: Props & HTMLAttributes<HTMLElement>) => {
-  return (
-    <>
-      <InputGroup>
-        <ReactDatePicker
-          selected={selectedDate}
-          onChange={onChange}
-          isClearable={isClearable}
-          showPopperArrow={showPopperArrow}
-          className="react-datapicker__input-text"
-          dateFormat="MM/dd/yyyy"
-          customInput={<CustomInput />}
-        />
-        <InputRightElement color="gray.500">
-          <CalendarIcon fontSize="sm" />
-        </InputRightElement>
-      </InputGroup>
-    </>
-  )
-}
-
 const DatePicker = ({selectedDate, onChange, ...props}: Props) => {
   return (
     <>
@@ -65,21 +38,6 @@ const DatePicker = ({selectedDate, onChange, ...props}: Props) => {
       </InputGroup>
     </>
   )
-}
-
-// set className to "light-theme-original"
-{
-  /* <div className={isLight ? "light-theme" : "dark-theme"}>
-<ReactDatePicker
-  selected={selectedDate}
-  onChange={onChange}
-  isClearable={isClearable}
-  showPopperArrow={showPopperArrow}
-  className="react-datapicker__input-text"
-  dateFormat="MM/dd/yyyy"
-  customInput={<CustomInput />}
-/>
-</div> */
 }
 
 export default DatePicker
