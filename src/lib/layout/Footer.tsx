@@ -27,7 +27,7 @@ const Footer = () => {
   const color = useColorModeValue("textColor.900", "textColor.100")
 
   return (
-    <Box bg={bg} color={color}>
+    <Box bg={bg} color={color} as="footer">
       <Box py={10}>
         <Flex
           align={"center"}
@@ -49,8 +49,7 @@ const Footer = () => {
           <FooterLogo />
         </Flex>
         <Text pt={6} fontSize={"sm"} textAlign={"center"}>
-          Copyright © {new Date().getFullYear()} Sitecore.com All Rights
-          Reserved.
+          Copyright © {new Date().getFullYear()} Sitecore.com All Rights Reserved.
         </Text>
       </Box>
     </Box>

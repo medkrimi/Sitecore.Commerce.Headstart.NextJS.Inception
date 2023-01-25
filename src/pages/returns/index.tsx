@@ -1,46 +1,65 @@
-import {ChevronDownIcon} from "@chakra-ui/icons"
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Box,
   Button,
+  Checkbox,
   CheckboxGroup,
   Container,
-  Heading,
+  Divider,
   HStack,
+  Heading,
+  IconButton,
   Link,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  Spinner,
   Stack,
   Table,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
   VStack,
-  Text,
-  Checkbox,
-  Divider,
   useColorMode,
-  useColorModeValue,
-  IconButton
+  useColorModeValue
 } from "@chakra-ui/react"
-import Card from "lib/components/card/Card"
-import LettersCard from "lib/components/card/LettersCard"
-import formatTextTruncate from "lib/utils/formatTextTruncate"
-import {formatDate} from "lib/utils/formatDate"
-import formatPrice from "lib/utils/formatPrice"
-import formatStatus from "lib/utils/formatStatus"
-import {NextSeo} from "next-seo"
-import NextLink from "next/link"
-import {
-  OrderReturns,
-  OrderReturn,
-  OrderReturnItem
-} from "ordercloud-javascript-sdk"
-import React from "react"
+import {OrderReturn, OrderReturnItem, OrderReturns} from "ordercloud-javascript-sdk"
+import React, {useRef} from "react"
 import {useEffect, useState} from "react"
-import {HiOutlineMinusSm} from "react-icons/hi"
+
+import Card from "lib/components/card/Card"
+import {ChevronDownIcon} from "@chakra-ui/icons"
+import NextLink from "next/link"
+import {NextSeo} from "next-seo"
+import {dateHelper} from "lib/utils/date.utils"
+import {priceHelper} from "lib/utils/price.utils"
+import {textHelper} from "lib/utils/text.utils"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
+
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Returns List",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
 
 const TableRow = (orderReturn: OrderReturn) => {
   let currentItems: OrderReturnItem[] = orderReturn.ItemsToReturn
@@ -52,8 +71,8 @@ const TableRow = (orderReturn: OrderReturn) => {
           <Link>{orderReturn.ID}</Link>
         </NextLink>
       </Td>
-      <Td>{formatDate(orderReturn.DateCreated)}</Td>
-      <Td>{formatStatus(orderReturn.Status)}</Td>
+      <Td>{dateHelper.formatDate(orderReturn.DateCreated)}</Td>
+      <Td>{textHelper.formatStatus(orderReturn.Status)}</Td>
       <Td>
         {/* <LettersCard>
           firstname={orderReturn.FromUser.FirstName}, lastname=
@@ -61,11 +80,9 @@ const TableRow = (orderReturn: OrderReturn) => {
         </LettersCard>
         {orderReturn.FromUser.FirstName} {orderReturn.FromUser.LastName} */}
       </Td>
-      <Td>
-        {formatTextTruncate(50, orderReturn.ItemsToReturn.toString(), "...")}
-      </Td>
+      <Td>{textHelper.formatTextTruncate(50, orderReturn.ItemsToReturn.toString(), "...")}</Td>
       <Td></Td>
-      <Td>{formatPrice(orderReturn.RefundAmount)}</Td>
+      <Td>{priceHelper.formatPrice(orderReturn.RefundAmount)}</Td>
     </Tr>
   )
 }
@@ -76,6 +93,12 @@ const ReturnsPage = () => {
     const returnsList = await OrderReturns.List({sortBy: ["DateSubmitted"]})
     setReturns(returnsList.Items)
   }
+
+  const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const cancelRef = useRef()
+
+  const requestExportCSV = () => {}
 
   useEffect(() => {
     getReturns()
@@ -88,13 +111,24 @@ const ReturnsPage = () => {
       <Td colSpan={7}>No returns available</Td>
     </Tr>
   )
+  const showInfiniteScrollBtn = returns.length
+  const loadMoreButton = showInfiniteScrollBtn != 0 && (
+    <HStack justifyContent="center">
+      <Button variant="tertiaryButton">Scroll down to load more returns</Button>
+    </HStack>
+  )
 
   return (
     <Container maxW="full">
       <NextSeo title="Returns" />
-      <Heading as="h2">Returns List</Heading>
-      <HStack justifyContent="space-between" w="100%">
-        <Button variant="primaryButton">New Return</Button>
+      <HStack justifyContent="space-between" w="100%" mb={5}>
+        <Box>
+          {/* <NextLink href="new" passHref>
+            <Link pl="2" pr="2">
+              <Button variant="primaryButton">New Return</Button>
+            </Link>
+          </NextLink> */}
+        </Box>
         <HStack>
           <Menu>
             <MenuButton
@@ -145,16 +179,13 @@ const ReturnsPage = () => {
               </MenuItem>
             </MenuList>
           </Menu>
-          <Button variant="secondaryButton">Export CSV</Button>
+          <Button variant="secondaryButton" onClick={() => setExportCSVDialogOpen(true)}>
+            Export CSV
+          </Button>
         </HStack>
       </HStack>
       <Card variant="primaryCard">
-        <IconButton
-          variant="closePanelButton"
-          aria-label="close panel"
-          icon={<HiOutlineMinusSm />}
-        ></IconButton>
-        <Table margin={30}>
+        <Table>
           <Thead>
             <Tr>
               <Th>ID</Th>
@@ -168,12 +199,53 @@ const ReturnsPage = () => {
           </Thead>
           <Tbody>{returnsContent}</Tbody>
         </Table>
-        <Button variant="tertiaryButton">
-          Scroll down to load more returns
-        </Button>
+        {/* {loadMoreButton} */}
       </Card>
+      <AlertDialog
+        isOpen={isExportCSVDialogOpen}
+        onClose={() => setExportCSVDialogOpen(false)}
+        leastDestructiveRef={cancelRef}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Export Selected Returns to CSV
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              <Text display="inline">
+                Export the select returns to a CSV, once the export button is clicked behind the scenes a job will be
+                kicked off to create the csv and then will automatically download to your downloads folder in the
+                browser.
+              </Text>
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <HStack justifyContent="space-between" w="100%">
+                <Button
+                  ref={cancelRef}
+                  onClick={() => setExportCSVDialogOpen(false)}
+                  disabled={loading}
+                  variant="secondaryButton"
+                >
+                  Cancel
+                </Button>
+                <Button onClick={requestExportCSV} disabled={loading}>
+                  {loading ? <Spinner color="brand.500" /> : "Export Returns"}
+                </Button>
+              </HStack>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Container>
   )
 }
 
-export default ReturnsPage
+const ProtectedReturnsPage = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.OrderManager}>
+      <ReturnsPage />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedReturnsPage

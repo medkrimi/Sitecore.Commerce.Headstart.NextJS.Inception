@@ -1,37 +1,36 @@
-import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 import {
-  useColorModeValue,
-  Heading,
   Box,
   Button,
+  Collapse,
+  HStack,
+  Heading,
+  Tag,
   Tbody,
   Td,
   Th,
   Thead,
   Tooltip,
   Tr,
-  Collapse,
-  HStack,
-  Tag
+  useColorModeValue,
+  Switch
 } from "@chakra-ui/react"
-import {ComposedProduct} from "lib/scripts/OrdercloudService"
-import {Products, ProductSupplier} from "ordercloud-javascript-sdk"
-import React, {useEffect} from "react"
-import {useState} from "react"
+import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 import {FiPlus, FiTrash2} from "react-icons/fi"
+import {ProductSupplier, Products} from "ordercloud-javascript-sdk"
+import React, {useEffect} from "react"
+
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
+import {ComposedProduct} from "../../services/ordercloud.service"
+import {useState} from "react"
 
 type ProductDataProps = {
   composedProduct: ComposedProduct
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductSuppliers({
-  composedProduct,
-  setComposedProduct
-}: ProductDataProps) {
+export default function ProductSuppliers({composedProduct, setComposedProduct}: ProductDataProps) {
   const color = useColorModeValue("textColor.900", "textColor.100")
   const bg = useColorModeValue("brand.500", "brand.500")
   const okColor = useColorModeValue("okColor.800", "okColor.200")
@@ -43,9 +42,7 @@ export default function ProductSuppliers({
   useEffect(() => {
     async function GetProdcutSupplier() {
       if (composedProduct?.Product) {
-        var productSupplier = await Products.ListSuppliers(
-          composedProduct?.Product?.ID
-        )
+        var productSupplier = await Products.ListSuppliers(composedProduct?.Product?.ID)
         setSupplier(productSupplier.Items)
       }
     }
@@ -128,103 +125,82 @@ export default function ProductSuppliers({
 
   return (
     <>
-      <BrandedBox isExpaned={expanded} setExpanded={setExpanded}>
-        <>
-          <HStack float={"right"}>
-            <Tooltip label="Add Product Supplier">
-              <Button
-                colorScheme="brandButtons"
-                aria-label="Add Product Supplier"
-                disabled={true}
-                // onClick={onOpen}
-              >
-                <FiPlus />
-              </Button>
-            </Tooltip>
-          </HStack>
-          <Heading
-            position={"relative"}
-            size={{base: "md", md: "lg", lg: "xl"}}
-          >
-            Supplier
-            <Tag
-              position={"relative"}
-              size={"sm"}
-              bg={useColorModeValue("brand.500", "brand.700")}
-              ml={4}
-              color={useColorModeValue("textColor.900", "textColor.100")}
-            >
-              EDITING COMING SOON
-            </Tag>
-          </Heading>
+      <>
+        <Heading position={"relative"} size={{base: "sm", md: "md", lg: "md"}}>
+          Supplier
+        </Heading>
 
-          {(isLoading || !composedProduct?.Product) && expanded ? (
-            <Box pt={6} textAlign={"center"}>
-              Updating... <BrandedSpinner />
-            </Box>
-          ) : (
-            <>
-              <Collapse in={expanded}>
-                <Box width="full" pb={2} pt={4}>
-                  {(supplier?.length ?? 0) == 0 ? (
-                    <>No Supplier</>
-                  ) : (
-                    <BrandedTable>
-                      <Thead>
-                        <Tr>
-                          <Th color={color}>ID</Th>
-                          <Th color={color}>Name</Th>
-                          <Th color={color}>Is Active</Th>
-                          <Th color={color}>All Buyers can Order</Th>
-                          <Th color={color}>Action</Th>
+        {(isLoading || !composedProduct?.Product) && expanded ? (
+          <Box pt={6} textAlign={"center"}>
+            Updating... <BrandedSpinner />
+          </Box>
+        ) : (
+          <>
+            <Box width="full" pb="50" pt={4}>
+              {(supplier?.length ?? 0) == 0 ? (
+                <>No Supplier</>
+              ) : (
+                <BrandedTable>
+                  <Thead>
+                    <Tr>
+                      <Th color={color}>ID</Th>
+                      <Th color={color}>Name</Th>
+                      <Th color={color}>Is Active</Th>
+                      <Th color={color}>All Buyers can Order</Th>
+                      <Th color={color}>Action</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody alignContent={"center"}>
+                    {supplier?.map((item, index) => {
+                      return (
+                        <Tr key={index}>
+                          <Td>{item.ID}</Td>
+                          <Td>{item.Name}</Td>
+                          <Td>
+                            <Switch isChecked={item.Active} isReadOnly colorScheme="teal" />
+                          </Td>
+                          <Td>
+                            <Switch isChecked={item.AllBuyersCanOrder} isReadOnly colorScheme="teal" />
+                          </Td>
+                          <Td>
+                            {" "}
+                            <Tooltip label="Remove Supplier from Product">
+                              <Button
+                                colorScheme="brandButtons"
+                                aria-label="Remove Supplier from Product"
+                                disabled={true}
+                                variant="secondaryButton"
+                                // onClick={onRemoveSpecification}
+                                data-id={item.ID}
+                              >
+                                Delete
+                              </Button>
+                            </Tooltip>
+                          </Td>
                         </Tr>
-                      </Thead>
-                      <Tbody alignContent={"center"}>
-                        {supplier?.map((item, index) => {
-                          return (
-                            <Tr key={index}>
-                              <Td>{item.ID}</Td>
-                              <Td>{item.Name}</Td>
-                              <Td>
-                                {item.Active ?? false ? (
-                                  <CheckIcon boxSize={6} color={okColor} />
-                                ) : (
-                                  <CloseIcon boxSize={6} color={errorColor} />
-                                )}
-                              </Td>
-                              <Td>
-                                {item.AllBuyersCanOrder ?? false ? (
-                                  <CheckIcon boxSize={6} color={okColor} />
-                                ) : (
-                                  <CloseIcon boxSize={6} color={errorColor} />
-                                )}
-                              </Td>
-                              <Td>
-                                {" "}
-                                <Tooltip label="Remove Supplier from Product">
-                                  <Button
-                                    colorScheme="brandButtons"
-                                    aria-label="Remove Supplier from Product"
-                                    disabled={true}
-                                    // onClick={onRemoveSpecification}
-                                    data-id={item.ID}
-                                  >
-                                    <FiTrash2 />
-                                  </Button>
-                                </Tooltip>
-                              </Td>
-                            </Tr>
-                          )
-                        })}
-                      </Tbody>
-                    </BrandedTable>
-                  )}
-                </Box>
-              </Collapse>
-            </>
-          )}
-        </>
-      </BrandedBox>
+                      )
+                    })}
+                  </Tbody>
+                </BrandedTable>
+              )}
+            </Box>
+          </>
+        )}
+      </>
+      <HStack float={"right"} position="absolute" bottom="20px">
+        <Tooltip label="Add Product Supplier">
+          <Button
+            colorScheme="brandButtons"
+            aria-label="Add Product Supplier"
+            variant="tertiaryButton"
+            disabled={true}
+            // onClick={onOpen}
+          >
+            Add Supplier
+          </Button>
+        </Tooltip>
+      </HStack>
+
       {/* <AlertDialog
         motionPreset="slideInBottom"
         leastDestructiveRef={cancelRef}

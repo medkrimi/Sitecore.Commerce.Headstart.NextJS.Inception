@@ -1,10 +1,4 @@
-import {
-  Box,
-  Progress,
-  Heading,
-  Tooltip,
-  useColorModeValue
-} from "@chakra-ui/react"
+import {Box, Progress, Heading, Tooltip, useColorModeValue} from "@chakra-ui/react"
 import {ProductXPs} from "lib/types/ProductXPs"
 import {Product, RequiredDeep} from "ordercloud-javascript-sdk"
 import {useState, useEffect} from "react"
@@ -13,9 +7,7 @@ type ProductDataProps = {
   product: RequiredDeep<Product<ProductXPs>>
 }
 
-export function CalculateEditorialProcess(
-  product: Product<ProductXPs>
-): number {
+export function CalculateEditorialProcess(product: Product<ProductXPs>): number {
   // TODO: Currently hardcoded, but the idea gets clear
   var totalNumberOfFieldsToEdit = 4
   var currentNumberOfEditedFields = 0
@@ -29,16 +21,11 @@ export function CalculateEditorialProcess(
   if (product?.Active ?? false) {
     currentNumberOfEditedFields++
   }
-  if (
-    (typeof product?.xp?.Images != "undefined"
-      ? product?.xp?.Images[0].Url
-      : "") != ""
-  ) {
+  if ((typeof product?.xp?.Images != "undefined" ? product?.xp?.Images[0].Url : "") != "") {
     currentNumberOfEditedFields++
   }
 
-  var calculatedEditorialProgress =
-    (currentNumberOfEditedFields / totalNumberOfFieldsToEdit) * 100
+  var calculatedEditorialProgress = (currentNumberOfEditedFields / totalNumberOfFieldsToEdit) * 100
 
   return calculatedEditorialProgress
 }
@@ -61,15 +48,9 @@ export default function EditorialProgressBar({product}: ProductDataProps) {
     }
     if (calculatedEditorialProgress <= 25) {
       colorSchema = "red"
-    } else if (
-      calculatedEditorialProgress > 25 &&
-      calculatedEditorialProgress <= 50
-    ) {
+    } else if (calculatedEditorialProgress > 25 && calculatedEditorialProgress <= 50) {
       colorSchema = "orange"
-    } else if (
-      calculatedEditorialProgress > 50 &&
-      calculatedEditorialProgress <= 75
-    ) {
+    } else if (calculatedEditorialProgress > 50 && calculatedEditorialProgress <= 75) {
       colorSchema = "yellow"
     } else {
       colorSchema = "green"
@@ -88,9 +69,8 @@ export default function EditorialProgressBar({product}: ProductDataProps) {
         colorScheme={product ? progressColor : "blue"}
       />
       <Tooltip label="Please fill out IMAGE, DESCRIPTION, DEFAULTPRICESCHEDULEID and enable ISACTIVE">
-        <Heading mt={2} size={"md"} color={color}>
-          Editorial Progress{" "}
-          {product && !isLoading ? ": " + editorialProgress + "%" : "..."}
+        <Heading mt={2} size={"sm"} color={color} fontWeight="normal">
+          Editorial Progress {product && !isLoading ? ": " + editorialProgress + "%" : "..."}
         </Heading>
       </Tooltip>
     </>

@@ -1,60 +1,64 @@
 import {
-  Badge,
-  Container,
-  Flex,
-  Text,
-  Divider,
-  IconButton,
-  Box,
-  Tbody,
-  Table,
-  Td,
-  Tr,
-  Button,
   AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
   AlertDialogBody,
+  AlertDialogContent,
   AlertDialogFooter,
-  Textarea,
-  useToast,
-  Spinner,
-  useColorModeValue,
-  useColorMode,
-  HStack,
-  Heading,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Box,
+  Button,
+  Container,
+  Divider,
+  Flex,
   Grid,
   GridItem,
-  VStack,
+  HStack,
+  Heading,
+  IconButton,
   Input,
-  Link
+  Link,
+  Spacer,
+  Spinner,
+  Table,
+  Tbody,
+  Td,
+  Text,
+  Textarea,
+  Tr,
+  VStack,
+  useDisclosure,
+  useToast
 } from "@chakra-ui/react"
-import {formatDate} from "lib/utils/formatDate"
-import {NextSeo} from "next-seo"
-import {useRouter} from "next/router"
-import NextLink from "next/link"
-import {
-  IntegrationEvents,
-  OrderReturn,
-  OrderReturns,
-  OrderWorksheet,
-  Orders
-} from "ordercloud-javascript-sdk"
+import {IntegrationEvents, OrderReturn, OrderReturns, OrderWorksheet, Orders} from "ordercloud-javascript-sdk"
 import React, {FunctionComponent, useEffect, useRef, useState} from "react"
+import {dateHelper, priceHelper} from "lib/utils/"
 import AddressCard from "../../lib/components/card/AddressCard"
-import formatPrice from "lib/utils/formatPrice"
-import {
-  GetAuthenticationStatus,
-  OcAuthState
-} from "lib/scripts/OrdercloudService"
-import OcLineItemList from "lib/components/shoppingcart/OcLineItemList"
-import {HiOutlineMinusSm} from "react-icons/hi"
 import Card from "lib/components/card/Card"
+import {HiOutlineMinusSm} from "react-icons/hi"
 import LettersCard from "lib/components/card/LettersCard"
+import NextLink from "next/link"
+import {NextSeo} from "next-seo"
+import OcLineItemList from "lib/components/shoppingcart/OcLineItemList"
+import {useRouter} from "next/router"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
+
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Order Details",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
 
 const OrderConfirmationPage: FunctionComponent = () => {
-  const [authState, setAuthState] = useState<OcAuthState>()
   const router = useRouter()
   const [orderWorksheet, setOrderWorksheet] = useState({} as OrderWorksheet)
   const [orderReturns, setOrderReturns] = useState({} as OrderReturn[])
@@ -65,6 +69,14 @@ const OrderConfirmationPage: FunctionComponent = () => {
   const [loading, setLoading] = useState(false)
   const cancelRef = useRef()
   const toast = useToast()
+  const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
+  const requestExportCSV = () => {}
+
+  const [isExportPDFDialogOpen, setExportPDFDialogOpen] = useState(false)
+  const requestExportPDF = () => {}
+
+  const [isPrintLabelDialogOpen, setPrintLabelDialogOpen] = useState(false)
+  const requestPrintLabel = () => {}
 
   const requestRefund = () => {
     setOrderReturn({
@@ -74,16 +86,11 @@ const OrderConfirmationPage: FunctionComponent = () => {
     })
   }
 
-  const handleReturnCommentChange = (
-    event: React.FormEvent<HTMLTextAreaElement>
-  ) => {
+  const handleReturnCommentChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
     setReturnComments(event.currentTarget.value)
   }
 
   useEffect(() => {
-    let authState = GetAuthenticationStatus()
-    setAuthState(authState)
-
     const getOrder = async () => {
       const orderId = router.query.orderid as string
       if (!orderId) {
@@ -152,21 +159,13 @@ const OrderConfirmationPage: FunctionComponent = () => {
     )
   }
 
-  const showRefundBtn =
-    !authState?.isAdmin &&
-    orderWorksheet.Order.Status === "Completed" &&
-    !orderReturns.length
+  const showRefundBtn = orderWorksheet.Order.Status === "Completed" && !orderReturns.length
 
-  const showShipBtn =
-    authState?.isAdmin && orderWorksheet.Order.Status === "Open"
+  const showShipBtn = orderWorksheet.Order.Status === "Open"
 
-  const refundBtn = showRefundBtn && (
-    <Button onClick={() => setRefundDialogOpen(true)}>Request Refund</Button>
-  )
+  const refundBtn = showRefundBtn && <Button onClick={() => setRefundDialogOpen(true)}>Request Refund</Button>
 
-  const shipBtn = showShipBtn && (
-    <Button onClick={() => setOrderShip(true)}>Ship Order</Button>
-  )
+  const shipBtn = showShipBtn && <Button onClick={() => setOrderShip(true)}>Ship Order</Button>
 
   const actionButtons = (showRefundBtn || showShipBtn) && (
     <Flex justifyContent="flex-start" marginBottom={10}>
@@ -186,193 +185,160 @@ const OrderConfirmationPage: FunctionComponent = () => {
 
   return (
     <>
-      <NextSeo title={`Order ${orderWorksheet.Order.ID}`} />
-      <Container maxW="full" marginTop={30} marginBottom={30}>
+      <Container maxW="full">
         <NextSeo title="Order Details" />
-        <Heading as="h2" marginTop={5}>
-          Order Details
-        </Heading>
-        <HStack justifyContent="space-between" w="100%">
+        <HStack justifyContent="space-between" w="100%" mb={5}>
           <NextLink href="new" passHref>
             <Link pl="2" pr="2">
-              <Button variant="primaryButton">New Order</Button>
+              <Link href={`/orders/new`}>
+                <Button variant="primaryButton">Place re-order</Button>
+              </Link>
             </Link>
           </NextLink>
           <HStack>
-            <Button variant="secondaryButton">Print Shipping Label</Button>
-            <Button variant="secondaryButton">Export PDF</Button>
-            <Button variant="secondaryButton">Export CSV</Button>
+            <Button variant="secondaryButton" onClick={() => setPrintLabelDialogOpen(true)}>
+              Print Shipping Label
+            </Button>
+            <Button variant="secondaryButton" onClick={() => setExportPDFDialogOpen(true)}>
+              Export PDF
+            </Button>
+            <Button variant="secondaryButton" onClick={() => setExportCSVDialogOpen(true)}>
+              Export CSV
+            </Button>
           </HStack>
         </HStack>
         <Card variant="primaryCard">
-          <IconButton
-            variant="closePanelButton"
-            aria-label="close panel"
-            icon={<HiOutlineMinusSm />}
-          ></IconButton>
-          <Flex flexDirection="column" p="10">
-            <HStack justifyContent="space-between" w="100%">
-              <Heading pb="20px">Order Information</Heading>
-              <Text>Status: {orderStatus}</Text>
-            </HStack>
+          <HStack justifyContent="space-between" w="100%" pr="60px">
+            <Text fontSize="20px" fontWeight="600" pb="GlobalPadding" color="gray.300">
+              Order Information
+            </Text>
+            <Text>Status: {orderStatus}</Text>
+          </HStack>
 
-            <HStack>
-              <LettersCard
-                FirstName={orderWorksheet.Order.FromUser.FirstName}
-                LastName={orderWorksheet.Order.FromUser.LastName}
-              />
-              <VStack textAlign="left" w="100%">
-                <HStack textAlign="left" w="100%">
-                  <Text textAlign="left">
-                    {orderWorksheet.Order.FromUser.FirstName}
-                  </Text>
-                  <Text textAlign="left">
-                    {orderWorksheet.Order.FromUser.LastName}
-                  </Text>
-                </HStack>
-                <Text textAlign="left" w="100%">
-                  {orderWorksheet.Order.FromUser.Phone}
+          <HStack>
+            <LettersCard
+              FirstName={orderWorksheet.Order.FromUser.FirstName}
+              LastName={orderWorksheet.Order.FromUser.LastName}
+            />
+            <VStack textAlign="left" w="100%">
+              <HStack textAlign="left" w="100%">
+                <Text textAlign="left">
+                  {orderWorksheet.Order.FromUser.FirstName} &nbsp;
+                  {orderWorksheet.Order.FromUser.LastName}
                 </Text>
-                <Text textAlign="left" w="100%">
-                  {orderWorksheet.Order.FromUser.Email}
-                </Text>
+              </HStack>
+              <Text textAlign="left" w="100%">
+                {orderWorksheet.Order.FromUser.Phone}
+              </Text>
+              <Text textAlign="left" w="100%">
+                {orderWorksheet.Order.FromUser.Email}
+              </Text>
+            </VStack>
+          </HStack>
+          <Grid templateColumns="repeat(3, 1fr)" gap={20} pt="20">
+            <GridItem w="100%">
+              <VStack>
+                <Text width="full">Invoice Number</Text>
+                <Input placeholder="Invoice Number" defaultValue={orderWorksheet.Order.ID}></Input>
+                <Spacer pt="25px"></Spacer>
+                <Text width="full">Billing Address</Text>
+                <AddressCard
+                  Street1={orderWorksheet.Order.BillingAddress?.Street1}
+                  Street2={orderWorksheet.Order.BillingAddress?.Street2}
+                  City={orderWorksheet.Order.BillingAddress?.City}
+                  State={orderWorksheet.Order.BillingAddress?.State}
+                  Zip={orderWorksheet.Order.BillingAddress?.Zip}
+                />
+                <Spacer pt="25px"></Spacer>
+                <Text width="full">Buyer Comments</Text>
+                <Textarea defaultValue={orderWorksheet.Order.Comments} />
               </VStack>
-            </HStack>
-            <Grid templateColumns="repeat(3, 1fr)" gap={20} pt="20">
-              <GridItem w="100%">
+            </GridItem>
+            <GridItem w="100%">
+              <VStack>
+                <Text width="full">Order Placed</Text>
+                <Input
+                  placeholder="Order Placed"
+                  defaultValue={dateHelper.formatDate(orderWorksheet.Order.DateSubmitted)}
+                ></Input>
+                <Spacer pt="25px"></Spacer>
+                <Text width="full">Shipping Address</Text>
+                <AddressCard
+                  Street1={orderWorksheet.LineItems[0].ShippingAddress?.Street1}
+                  Street2={orderWorksheet.LineItems[0].ShippingAddress?.Street2}
+                  City={orderWorksheet.LineItems[0].ShippingAddress?.City}
+                  State={orderWorksheet.LineItems[0].ShippingAddress?.State}
+                  Zip={orderWorksheet.LineItems[0].ShippingAddress?.Zip}
+                />
+              </VStack>
+            </GridItem>
+            <GridItem w="100%" justifyContent="center" key={orderWorksheet.Order.ID}>
+              <Box border="1px" borderColor="gray.200" padding="GlobalPadding" w="100%" maxW="450px">
                 <VStack>
-                  <Text width="full">Invoice Number</Text>
-                  <Input
-                    placeholder="Invoice Number"
-                    defaultValue={orderWorksheet.Order.ID}
-                  ></Input>
-                  <Text width="full">Billing Address</Text>
-                  <AddressCard
-                    Street1={orderWorksheet.Order.BillingAddress.Street1}
-                    Street2={orderWorksheet.Order.BillingAddress.Street2}
-                    City={orderWorksheet.Order.BillingAddress.City}
-                    State={orderWorksheet.Order.BillingAddress.State}
-                    Zip={orderWorksheet.Order.BillingAddress.Zip}
-                  />
-                  <Text width="full" pt="20px">
-                    Buyer Comments
-                  </Text>
-                  <Textarea defaultValue={orderWorksheet.Order.Comments} />
+                  <Text>Order Recap</Text>
+                  <Divider border="1px" borderColor="gray.200" />
+                  <Flex flexDirection="column" marginLeft={10} w="full" pr="10" pl="10">
+                    <Table size="sm" width="full" maxWidth="100%" marginBottom={5}>
+                      <Tbody>
+                        <Tr>
+                          <Td>Subtotal</Td>
+                          <Td textAlign="right">
+                            <Text fontWeight="bold">{priceHelper.formatPrice(orderWorksheet.Order.Subtotal)}</Text>
+                          </Td>
+                        </Tr>
+                        <Tr>
+                          <Td>Promotion Discount</Td>
+                          <Td textAlign="right">
+                            <Text fontWeight="bold">
+                              -{priceHelper.formatPrice(orderWorksheet.Order.PromotionDiscount)}
+                            </Text>
+                          </Td>
+                        </Tr>
+                        <Tr>
+                          <Td>Shipping</Td>
+                          <Td textAlign="right">
+                            <Text fontWeight="bold">{priceHelper.formatPrice(orderWorksheet.Order.ShippingCost)}</Text>
+                          </Td>
+                        </Tr>
+                        <Tr>
+                          <Td>Tax</Td>
+                          <Td textAlign="right">
+                            <Text fontWeight="bold">{priceHelper.formatPrice(orderWorksheet.Order.TaxCost)}</Text>
+                          </Td>
+                        </Tr>
+                        <Tr>
+                          <Td>Order Total</Td>
+                          <Td textAlign="right">
+                            <Text fontWeight="bold">{priceHelper.formatPrice(orderWorksheet.Order.Total)}</Text>
+                          </Td>
+                        </Tr>
+                      </Tbody>
+                    </Table>
+                  </Flex>
                 </VStack>
-              </GridItem>
-              <GridItem w="100%">
-                <VStack>
-                  <Text width="full">Order Placed</Text>
-                  <Input
-                    placeholder="Order Placed"
-                    defaultValue={formatDate(
-                      orderWorksheet.Order.DateSubmitted
-                    )}
-                  ></Input>
-                  <Text width="full">Shipping Address</Text>
-                  <AddressCard
-                    Street1={
-                      orderWorksheet.LineItems[0].ShippingAddress.Street1
-                    }
-                    Street2={
-                      orderWorksheet.LineItems[0].ShippingAddress.Street2
-                    }
-                    City={orderWorksheet.LineItems[0].ShippingAddress.City}
-                    State={orderWorksheet.LineItems[0].ShippingAddress.State}
-                    Zip={orderWorksheet.LineItems[0].ShippingAddress.Zip}
-                  />
-                </VStack>
-              </GridItem>
-              <GridItem w="100%" justifyContent="center">
-                <Box
-                  border="1px"
-                  borderColor="gray.200"
-                  padding="20px"
-                  w="100%"
-                  maxW="450px"
-                >
-                  <VStack>
-                    <Text>Order Recap</Text>
-                    <Divider border="1px" borderColor="gray.200" />
-                    <Flex
-                      flexDirection="column"
-                      marginLeft={10}
-                      w="full"
-                      pr="10"
-                      pl="10"
-                    >
-                      <Table
-                        size="sm"
-                        width="full"
-                        maxWidth="100%"
-                        marginBottom={5}
-                      >
-                        <Tbody>
-                          <Tr>
-                            <Td>Subtotal</Td>
-                            <Td textAlign="right">
-                              <Text fontWeight="bold">
-                                {formatPrice(orderWorksheet.Order.Subtotal)}
-                              </Text>
-                            </Td>
-                          </Tr>
-                          <Tr>
-                            <Td>Promotion Discount</Td>
-                            <Td textAlign="right">
-                              <Text fontWeight="bold">
-                                -
-                                {formatPrice(
-                                  orderWorksheet.Order.PromotionDiscount
-                                )}
-                              </Text>
-                            </Td>
-                          </Tr>
-                          <Tr>
-                            <Td>Shipping</Td>
-                            <Td textAlign="right">
-                              <Text fontWeight="bold">
-                                {formatPrice(orderWorksheet.Order.ShippingCost)}
-                              </Text>
-                            </Td>
-                          </Tr>
-                          <Tr>
-                            <Td>Tax</Td>
-                            <Td textAlign="right">
-                              <Text fontWeight="bold">
-                                {formatPrice(orderWorksheet.Order.TaxCost)}
-                              </Text>
-                            </Td>
-                          </Tr>
-                          <Tr>
-                            <Td>Order Total</Td>
-                            <Td textAlign="right">
-                              <Text fontWeight="bold">
-                                {formatPrice(orderWorksheet.Order.Total)}
-                              </Text>
-                            </Td>
-                          </Tr>
-                        </Tbody>
-                      </Table>
-                    </Flex>
-                  </VStack>
-                </Box>
-              </GridItem>
-            </Grid>
-          </Flex>
+              </Box>
+            </GridItem>
+          </Grid>
         </Card>
         {actionButtons}
         <Card variant="primaryCard">
-          <IconButton
-            variant="closePanelButton"
-            aria-label="close panel"
-            icon={<HiOutlineMinusSm />}
-          ></IconButton>
-          <Flex flexDirection="column" p="10">
-            <OcLineItemList
-              lineItems={orderWorksheet.LineItems}
-              editable={false}
-            />
-          </Flex>
+          <HStack justifyContent="space-between" w="100%" pr="60px" mb="30px">
+            <VStack alignContent="left" align="flex-start">
+              <Text fontSize="20px" fontWeight="600" color="gray.300">
+                Ship From
+              </Text>
+              <Text fontSize="18px">Distributor Main Warehouse</Text>
+              <Text fontSize="14px">123 First Avenue, Minneapolis, MN 55347</Text>
+            </VStack>
+            <VStack alignContent="right" align="flex-end">
+              <Text fontSize="GlobalPadding" fontWeight="600" color="gray.300" textAlign="right">
+                Ship Method
+              </Text>
+              <Text textAlign="right">FEDEX 2 DAY SHIPPING, EST ARRIVAL DATE 1/1/2023</Text>
+            </VStack>
+          </HStack>
+
+          <OcLineItemList lineItems={orderWorksheet.LineItems} editable={false} />
         </Card>
       </Container>
       <AlertDialog
@@ -387,11 +353,10 @@ const OrderConfirmationPage: FunctionComponent = () => {
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text display="inline">
-                A return for this order will be requested and if approved will
-                refund the balance of
+                A return for this order will be requested and if approved will refund the balance of
               </Text>{" "}
               <Text display="inline" color="brand.500" fontWeight="bold">
-                {formatPrice(orderWorksheet.Order.Total)}
+                {priceHelper.formatPrice(orderWorksheet.Order.Total)}
               </Text>
               <Textarea
                 marginTop={8}
@@ -400,11 +365,12 @@ const OrderConfirmationPage: FunctionComponent = () => {
                 onChange={handleReturnCommentChange}
               />
             </AlertDialogBody>
-            <AlertDialogFooter>
+            <AlertDialogFooter justifyContent="space-between" w="100%">
               <Button
                 ref={cancelRef}
                 onClick={() => setRefundDialogOpen(false)}
                 disabled={loading}
+                variant="secondaryButton"
               >
                 Cancel
               </Button>
@@ -415,8 +381,123 @@ const OrderConfirmationPage: FunctionComponent = () => {
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
+      <AlertDialog
+        isOpen={isExportCSVDialogOpen}
+        onClose={() => setExportCSVDialogOpen(false)}
+        leastDestructiveRef={cancelRef}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Export Selected Orders to CSV
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              <Text display="inline">
+                Export the selected orders to a CSV, once the export button is clicked behind the scenes a job will be
+                kicked off to create the csv and then will automatically download to your downloads folder in the
+                browser.
+              </Text>
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <HStack justifyContent="space-between" w="100%">
+                <Button
+                  ref={cancelRef}
+                  onClick={() => setExportCSVDialogOpen(false)}
+                  disabled={loading}
+                  variant="secondaryButton"
+                >
+                  Cancel
+                </Button>
+                <Button onClick={requestExportCSV} disabled={loading}>
+                  {loading ? <Spinner color="brand.500" /> : "Export Orders CSV"}
+                </Button>
+              </HStack>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+
+      <AlertDialog
+        isOpen={isExportPDFDialogOpen}
+        onClose={() => setExportPDFDialogOpen(false)}
+        leastDestructiveRef={cancelRef}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Export Selected Orders to PDF
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              <Text display="inline">
+                Export the selected orders to a PDF, once the export button is clicked behind the scense a job will be
+                kicked off to create the pdf and then will automatically download to your downloads folder in the
+                browser.
+              </Text>
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <HStack justifyContent="space-between" w="100%">
+                <Button
+                  ref={cancelRef}
+                  onClick={() => setExportPDFDialogOpen(false)}
+                  disabled={loading}
+                  variant="secondaryButton"
+                >
+                  Cancel
+                </Button>
+                <Button onClick={requestExportPDF} disabled={loading}>
+                  {loading ? <Spinner color="brand.500" /> : "Export Orders PDF"}
+                </Button>
+              </HStack>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+
+      <AlertDialog
+        isOpen={isPrintLabelDialogOpen}
+        onClose={() => setPrintLabelDialogOpen(false)}
+        leastDestructiveRef={cancelRef}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Print Labels for Selected Orders
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              <Text display="inline">
+                Print Labels for the selected orders onto an Avery label, once the button is clicked behind the scenes a
+                job will be kicked off to create the labels in PDF format and then will automatically download to your
+                downloads folder in the browser.
+              </Text>
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <HStack justifyContent="space-between" w="100%">
+                <Button
+                  ref={cancelRef}
+                  onClick={() => setPrintLabelDialogOpen(false)}
+                  disabled={loading}
+                  variant="secondaryButton"
+                >
+                  Cancel
+                </Button>
+                <Button onClick={requestPrintLabel} disabled={loading}>
+                  {loading ? <Spinner color="brand.500" /> : "Print Labels"}
+                </Button>
+              </HStack>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </>
   )
 }
 
-export default OrderConfirmationPage
+const ProtectedOrderConfirmationPage = () => {
+  return (
+    <ProtectedContent hasAccess={appPermissions.OrderManager}>
+      <OrderConfirmationPage />
+    </ProtectedContent>
+  )
+}
+
+export default ProtectedOrderConfirmationPage

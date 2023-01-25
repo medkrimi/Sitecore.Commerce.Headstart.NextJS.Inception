@@ -1,41 +1,42 @@
-import type {StyleFunctionProps} from "@chakra-ui/styled-system"
-import {colors} from "./colors"
-import {components} from "./components"
-import {config} from "./config"
 import {extendTheme} from "@chakra-ui/react"
+import type {StyleFunctionProps} from "@chakra-ui/styled-system"
+import {globalColors} from "./colors"
+import {config} from "./config"
 import {fonts} from "./fonts"
+import {semanticTokens} from "./tokens"
 import {mode} from "@chakra-ui/theme-tools"
+
+import {styles} from "./styles"
+import {breakpoints} from "./foundations/breakpoints"
+import {Button} from "./components/button"
+import {Button as IconButton} from "./components/button"
+import {Badge} from "./components/badge"
+import {Link} from "./components/link"
+import {Input} from "./components/input"
+import {Input as Textarea} from "./components/input"
+import {Card} from "./components/card"
+
+import {MdLabel} from "react-icons/md"
+import {getChartByID} from "apexcharts"
+import {NodeNextRequest} from "next/dist/server/base-http/node"
 
 // import { layouts } from "./layouts";
 
-const customTheme = extendTheme({
+export default extendTheme({
   fonts,
-  colors,
+  colors: globalColors,
   config,
-  components,
-  // layouts,
-  breakpoints: {
-    sm: "320px",
-    md: "768px",
-    lg: "960px",
-    xl: "1200px"
-  },
-  styles: {
-    global: (props: StyleFunctionProps) => ({
-      // styles for the `body`
+  breakpoints, // Breakpoints
+  semanticTokens,
+  styles,
+  components: {
+    Card, // Card component
+    Link, // Link styles
+    Badge, // Badge styles
+    Button, // Button styles
+    IconButton, // IconButton styles
 
-      body: {
-        bg: mode("bodyBg.100", "bodyBg.900")(props),
-        color: mode("gray.800", "white")(props),
-
-        fontSize: "sm",
-
-        _dark: {
-          color: "textColor.100"
-        }
-      }
-    })
+    Input, // Input styles
+    Textarea
   }
 })
-
-export default customTheme

@@ -1,56 +1,73 @@
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Button,
   Checkbox,
+  CheckboxGroup,
   Container,
-  Heading,
+  Divider,
+  Flex,
   HStack,
+  Heading,
+  IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  Spinner,
+  Stack,
   Table,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
-  useColorMode,
-  useColorModeValue,
-  Text,
-  CheckboxGroup,
-  Stack,
-  VStack,
-  Divider,
-  IconButton
+  VStack
 } from "@chakra-ui/react"
-import {NextSeo} from "next-seo"
-import {Me, Orders} from "ordercloud-javascript-sdk"
-import {useEffect, useState} from "react"
-import Link from "../../lib/components/navigation/Link"
-import {formatDate} from "lib/utils/formatDate"
-import formatPrice from "lib/utils/formatPrice"
-import {
-  GetAuthenticationStatus,
-  OcAuthState
-} from "lib/scripts/OrdercloudService"
-import formatStatus from "lib/utils/formatStatus"
-import LettersCard from "lib/components/card/LettersCard"
-import formatTextTruncate from "lib/utils/formatTextTruncate"
-import {ChevronDownIcon} from "@chakra-ui/icons"
-import Card from "lib/components/card/Card"
-import {HiOutlineMinusSm} from "react-icons/hi"
+import {useEffect, useRef, useState} from "react"
 
+import Card from "lib/components/card/Card"
+import {ChevronDownIcon} from "@chakra-ui/icons"
+import LettersCard from "lib/components/card/LettersCard"
+import Link from "../../lib/components/navigation/Link"
+import {NextSeo} from "next-seo"
+import {Orders} from "ordercloud-javascript-sdk"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
+import {dateHelper} from "lib/utils/date.utils"
+import {priceHelper} from "lib/utils/price.utils"
+import {textHelper} from "lib/utils/text.utils"
+
+/* This declare the page title and enable the breadcrumbs in the content header section. */
+export async function getServerSideProps() {
+  return {
+    props: {
+      header: {
+        title: "Orders List",
+        metas: {
+          hasBreadcrumbs: true,
+          hasBuyerContextSwitch: false
+        }
+      }
+    }
+  }
+}
 const OrdersPage = () => {
   const [orders, setOrders] = useState([])
-  const [authState, setAuthState] = useState<OcAuthState>()
+  const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const cancelRef = useRef()
+
+  const requestExportCSV = () => {}
 
   useEffect(() => {
     const getOrders = async () => {
-      const state = GetAuthenticationStatus()
-      setAuthState(state)
-      const ordersList = state?.isAdmin
-        ? await Orders.List("All")
-        : await Me.ListOrders()
+      const ordersList = await Orders.List("All")
       setOrders(ordersList.Items)
     }
     getOrders()
@@ -63,22 +80,19 @@ const OrdersPage = () => {
           <Checkbox pr="10px"></Checkbox>
           <Link href={`/orders/${order.ID}`}>{order.ID}</Link>
         </Td>
-        <Td>{formatDate(order.DateSubmitted)}</Td>
-        <Td>{formatStatus(order.Status)}</Td>
+        <Td>{dateHelper.formatDate(order.DateSubmitted)}</Td>
+        <Td>{textHelper.formatStatus(order.Status)}</Td>
         <Td>
           <HStack>
-            <LettersCard
-              FirstName={order.FromUser.FirstName}
-              LastName={order.FromUser.LastName}
-            />
+            <LettersCard FirstName={order.FromUser.FirstName} LastName={order.FromUser.LastName} />
             <Text>
               {order.FromUser.FirstName} {order.FromUser.LastName}
             </Text>
           </HStack>
         </Td>
-        <Td>{formatTextTruncate(50, order.OrderItem, "...")}</Td>
+        <Td>{textHelper.formatTextTruncate(50, order.OrderItem, "...")}</Td>
         <Td>{order.LineItemCount}</Td>
-        <Td>{formatPrice(order.Total)}</Td>
+        <Td>{priceHelper.formatPrice(order.Total)}</Td>
       </Tr>
     ))
   ) : (
@@ -90,11 +104,10 @@ const OrdersPage = () => {
   return (
     <Container maxW="full">
       <NextSeo title="Orders List" />
-      <Heading as="h2" marginTop={5}>
-        Orders List
-      </Heading>
-      <HStack justifyContent="space-between" w="100%">
-        <Button variant="primaryButton">New Order</Button>
+      <HStack justifyContent="space-between" w="100%" mb={5}>
+        <Link href={`/orders/new`}>
+          <Button variant="primaryButton">Create Order</Button>
+        </Link>
         <HStack>
           <Menu>
             <MenuButton
@@ -145,16 +158,13 @@ const OrdersPage = () => {
               </MenuItem>
             </MenuList>
           </Menu>
-          <Button variant="secondaryButton">Export CSV</Button>
+          <Button variant="secondaryButton" onClick={() => setExportCSVDialogOpen(true)}>
+            Export CSV
+          </Button>
         </HStack>
       </HStack>
       <Card variant="primaryCard">
-        <IconButton
-          variant="closePanelButton"
-          aria-label="close panel"
-          icon={<HiOutlineMinusSm />}
-        ></IconButton>
-        <Table margin={30}>
+        <Table>
           <Thead>
             <Tr>
               <Th>ID</Th>
@@ -168,12 +178,50 @@ const OrdersPage = () => {
           </Thead>
           <Tbody>{ordersContent}</Tbody>
         </Table>
-        <Button variant="tertiaryButton">
-          Scroll down to load more orders
-        </Button>
       </Card>
+      <AlertDialog
+        isOpen={isExportCSVDialogOpen}
+        onClose={() => setExportCSVDialogOpen(false)}
+        leastDestructiveRef={cancelRef}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Export Selected Orders to CSV
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              <Text display="inline">
+                Export the selected orders to a CSV, once the export button is clicked behind the scenes a job will be
+                kicked off to create the csv and then will automatically download to your downloads folder in the
+                browser.
+              </Text>
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <HStack justifyContent="space-between" w="100%">
+                <Button
+                  ref={cancelRef}
+                  onClick={() => setExportCSVDialogOpen(false)}
+                  disabled={loading}
+                  variant="secondaryButton"
+                >
+                  Cancel
+                </Button>
+                <Button onClick={requestExportCSV} disabled={loading}>
+                  {loading ? <Spinner color="brand.500" /> : "Export Orders"}
+                </Button>
+              </HStack>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Container>
   )
 }
 
-export default OrdersPage
+const ProtectedOrdersPage = () => (
+  <ProtectedContent hasAccess={appPermissions.OrderManager}>
+    <OrdersPage />
+  </ProtectedContent>
+)
+
+export default ProtectedOrdersPage

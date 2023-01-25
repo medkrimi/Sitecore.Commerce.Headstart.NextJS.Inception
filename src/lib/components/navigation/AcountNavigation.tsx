@@ -1,42 +1,45 @@
 import {
-  Menu,
-  Text,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  HStack,
-  Flex,
-  useColorModeValue,
-  Icon,
   Avatar,
-  Link,
   Button,
   Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
   DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
   DrawerFooter,
-  useDisclosure,
+  DrawerHeader,
+  DrawerOverlay,
+  Flex,
+  HStack,
+  Icon,
+  Image,
+  Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Select,
+  Show,
+  Text,
   Tooltip,
   useColorMode,
-  Select,
-  useMediaQuery,
-  Show
+  useColorModeValue,
+  useDisclosure
 } from "@chakra-ui/react"
-import NextLink from "next/link"
-import {BsSun, BsMoonStarsFill} from "react-icons/bs"
-import {Me, RequiredDeep} from "ordercloud-javascript-sdk"
-
+import {BsMoonStarsFill, BsSun} from "react-icons/bs"
 import {HiOutlineBell, HiOutlineCog} from "react-icons/hi"
-import {ChevronDownIcon} from "@chakra-ui/icons"
-import {ItemContent} from "../generic/ItemContent"
 import React, {useState} from "react"
+
+import {ChevronDownIcon} from "@chakra-ui/icons"
 import Cookies from "universal-cookie"
-import {Logout} from "lib/scripts/OrdercloudService"
+import {ItemContent} from "../generic/ItemContent"
+import NextLink from "next/link"
+import ProtectedContent from "../auth/ProtectedContent"
+import {appPermissions} from "lib/constants/app-permissions.config"
+import {useAuth} from "lib/hooks/useAuth"
 
 const MobileNavigation = () => {
+  const {Logout} = useAuth()
+  let usersToken = typeof window !== "undefined" ? localStorage.getItem("usersToken") : ""
   let menuBg = useColorModeValue("white", "navy.800")
   const {isOpen, onOpen, onClose} = useDisclosure()
   const btnRef = React.useRef()
@@ -64,7 +67,7 @@ const MobileNavigation = () => {
     <HStack>
       <Menu>
         <MenuButton>
-          <Icon as={HiOutlineBell} />
+          <Icon as={HiOutlineBell} fontSize="24px" />
         </MenuButton>
         <MenuList p="16px 8px" bg={menuBg}>
           <Flex flexDirection="column">
@@ -102,63 +105,59 @@ const MobileNavigation = () => {
         <MenuButton>
           <HStack>
             <Avatar
-              name="Chris Janning"
-              src="/images/avatars/avatar1.png"
+              name={usersToken}
+              src={`https://robohash.org/{usersToken}.png`}
               borderRadius="50%"
-              mr="10px"
-              ml="30px"
-              size="sm"
+              mr="0"
+              ml="15px"
+              size="md"
+              border=".5px solid #ccc"
             />
             <Show breakpoint="(min-width: 900px)">
-              <Text fontSize="12px">Chris Janning</Text>
+              <Text fontSize="18px" color="gray.500">
+                {usersToken}
+              </Text>
               <ChevronDownIcon ml="10px" />
             </Show>
           </HStack>
         </MenuButton>
         <MenuList>
-          <MenuItem>
-            <NextLink href="#" passHref>
-              <Link pl="2" pr="2">
-                Manage Profile
-              </Link>
-            </NextLink>
-          </MenuItem>
-          <MenuItem>
-            <NextLink href="#" passHref>
-              <Link pl="2" pr="2">
-                Notifications
-              </Link>
-            </NextLink>
-          </MenuItem>
-          <MenuItem>
-            <NextLink href="/logoff" passHref>
-              <Link pl="2" pr="2" onClick={() => Logout()}>
-                Log out
-              </Link>
-            </NextLink>
+          <ProtectedContent hasAccess={appPermissions.MeManager}>
+            <MenuItem>
+              <NextLink href="#" passHref>
+                <Link pl="2" pr="2">
+                  Manage Profile
+                </Link>
+              </NextLink>
+            </MenuItem>
+          </ProtectedContent>
+          <ProtectedContent hasAccess={appPermissions.MeManager}>
+            <MenuItem>
+              <NextLink href="#" passHref>
+                <Link pl="2" pr="2">
+                  Notifications
+                </Link>
+              </NextLink>
+            </MenuItem>
+          </ProtectedContent>
+          <MenuItem onClick={() => Logout()}>
+            <Text pl="2" pr="2">
+              Log Out
+            </Text>
           </MenuItem>
         </MenuList>
       </Menu>
       <Button ref={btnRef} onClick={onOpen} variant="unstyled">
-        <Icon as={HiOutlineCog} />
+        <Icon as={HiOutlineCog} fontSize="24px" />
       </Button>
-      <Drawer
-        isOpen={isOpen}
-        placement="right"
-        onClose={onClose}
-        finalFocusRef={btnRef}
-      >
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose} finalFocusRef={btnRef}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader color={color}>Application Settings</DrawerHeader>
 
           <DrawerBody color={color}>
-            <Tooltip
-              label={
-                colorMode === "dark" ? "Set Light Model" : "Set Dark Model"
-              }
-            >
+            <Tooltip label={colorMode === "dark" ? "Set Light Model" : "Set Dark Model"}>
               <Button
                 colorScheme="brandButtons"
                 aria-label="Toggle Color Mode"
@@ -171,18 +170,26 @@ const MobileNavigation = () => {
               </Button>
             </Tooltip>
             <Text mt="10">Change Theme:</Text>
-            <Select
-              id="ThemeDropdown"
-              onChange={selectChange}
-              placeholder="Select a theme"
-              value={currenttheme}
-            >
-              <option value="lib/styles/theme/sitecorecommerce/">
-                Sitecore Commerce
-              </option>
+            <Select id="ThemeDropdown" onChange={selectChange} placeholder="Select a theme" value={currenttheme}>
+              <option value="lib/styles/theme/sitecorecommerce/">Sitecore Commerce</option>
               <option value="lib/styles/theme/playsummit/">Play Summit</option>
               <option value="lib/styles/theme/industrial/">Industrial</option>
             </Select>
+
+            <Flex justify="center" direction="column" align="center" w="100%" width="full" pb="10px" pt="90px">
+              <Image src="/images/SidebarHelpImage.png" w="90px" alt="" />
+              <Flex direction="column" align="center" textAlign="center" mb="12px" me="12px" w="100%" width="full">
+                <Text fontSize="14px" fontWeight="bold">
+                  Need help?
+                </Text>
+                <Text fontSize="10px">Please check our docs.</Text>
+              </Flex>
+              <Link href="/docs">
+                <Button variant="tertiaryButton" size="sm" fontWeight="bold" minW="185px" m="0" fontSize="10px">
+                  Documentation
+                </Button>
+              </Link>
+            </Flex>
           </DrawerBody>
 
           <DrawerFooter></DrawerFooter>

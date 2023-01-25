@@ -22,16 +22,7 @@ import {
   useDisclosure,
   Divider
 } from "@chakra-ui/react"
-import {
-  Filters,
-  LineItem,
-  LineItems,
-  Order,
-  Orders,
-  Promotion,
-  User,
-  Users
-} from "ordercloud-javascript-sdk"
+import {Filters, LineItem, LineItems, Order, Orders, Promotion, User, Users} from "ordercloud-javascript-sdk"
 import {ChangeEvent, useEffect, useState} from "react"
 import {FiCheck, FiEdit, FiX} from "react-icons/fi"
 import BrandedBox from "../branding/BrandedBox"
@@ -102,10 +93,7 @@ export default function UserOrderData({user, buyerId}: UserDataProps) {
             </Box>
           ) : (
             <>
-              <Heading
-                size={{base: "md", md: "lg", lg: "xl"}}
-                mb={expanded ? 6 : 0}
-              >
+              <Heading size={{base: "md", md: "lg", lg: "xl"}} mb={expanded ? 6 : 0}>
                 Orders
               </Heading>
               <Collapse in={expanded}>
@@ -131,23 +119,14 @@ export default function UserOrderData({user, buyerId}: UserDataProps) {
                         <>
                           {userOrders?.map((element, index) => {
                             return (
-                              <Tooltip
-                                key={index}
-                                label="Click to see Order Details"
-                              >
-                                <Tr
-                                  onClick={onOrderClicked(index)}
-                                  cursor={"pointer"}
-                                >
+                              <Tooltip key={index} label="Click to see Order Details">
+                                <Tr onClick={onOrderClicked(index)} cursor={"pointer"}>
                                   <Td>{element.ID}</Td>
                                   <Td>
                                     {element.IsSubmitted ?? false ? (
                                       <CheckIcon boxSize={6} color={okColor} />
                                     ) : (
-                                      <CloseIcon
-                                        boxSize={6}
-                                        color={errorColor}
-                                      />
+                                      <CloseIcon boxSize={6} color={errorColor} />
                                     )}
                                   </Td>
                                   <Td>{element.Status}</Td>
@@ -157,18 +136,8 @@ export default function UserOrderData({user, buyerId}: UserDataProps) {
                                   <Td>{element.TaxCost}</Td>
                                   <Td>{element.Total}</Td>
                                   <Td>{element.Currency}</Td>
-                                  <Td>
-                                    {" "}
-                                    {new Date(
-                                      element?.DateCreated
-                                    )?.toLocaleString() ?? "Not set"}
-                                  </Td>
-                                  <Td>
-                                    {" "}
-                                    {new Date(
-                                      element?.DateSubmitted
-                                    )?.toLocaleString() ?? "Not set"}
-                                  </Td>
+                                  <Td> {new Date(element?.DateCreated)?.toLocaleString() ?? "Not set"}</Td>
+                                  <Td> {new Date(element?.DateSubmitted)?.toLocaleString() ?? "Not set"}</Td>
                                 </Tr>
                               </Tooltip>
                             )
@@ -187,12 +156,7 @@ export default function UserOrderData({user, buyerId}: UserDataProps) {
           )}
         </>
       </BrandedBox>
-      <Modal
-        size={"full"}
-        isOpen={isOpen}
-        onClose={onClose}
-        scrollBehavior={"inside"}
-      >
+      <Modal size={"full"} isOpen={isOpen} onClose={onClose} scrollBehavior={"inside"}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Order Details</ModalHeader>
@@ -238,18 +202,8 @@ export default function UserOrderData({user, buyerId}: UserDataProps) {
                           <Td>{orderDetails?.order?.TaxCost}</Td>
                           <Td>{orderDetails?.order?.Total}</Td>
                           <Td>{orderDetails?.order?.Currency}</Td>
-                          <Td>
-                            {" "}
-                            {new Date(
-                              orderDetails?.order?.DateCreated
-                            )?.toLocaleString() ?? "Not set"}
-                          </Td>
-                          <Td>
-                            {" "}
-                            {new Date(
-                              orderDetails?.order?.DateSubmitted
-                            )?.toLocaleString() ?? "Not set"}
-                          </Td>
+                          <Td> {new Date(orderDetails?.order?.DateCreated)?.toLocaleString() ?? "Not set"}</Td>
+                          <Td> {new Date(orderDetails?.order?.DateSubmitted)?.toLocaleString() ?? "Not set"}</Td>
                         </Tr>
                       </>
                     ) : (
@@ -340,17 +294,8 @@ export default function UserOrderData({user, buyerId}: UserDataProps) {
                               <Td>{element.Description}</Td>
                               <Td>{element.EligibleExpression}</Td>
                               <Td>{element.ValueExpression}</Td>
-                              <Td>
-                                {" "}
-                                {new Date(
-                                  element?.StartDate
-                                )?.toLocaleString() ?? "Not set"}
-                              </Td>
-                              <Td>
-                                {new Date(
-                                  element?.ExpirationDate
-                                )?.toLocaleString() ?? "Not set"}
-                              </Td>
+                              <Td> {new Date(element?.StartDate)?.toLocaleString() ?? "Not set"}</Td>
+                              <Td>{new Date(element?.ExpirationDate)?.toLocaleString() ?? "Not set"}</Td>
                             </Tr>
                           )
                         })}
@@ -374,12 +319,7 @@ export default function UserOrderData({user, buyerId}: UserDataProps) {
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              size={"lg"}
-              colorScheme="brandButtons"
-              mr={3}
-              onClick={onClose}
-            >
+            <Button size={"lg"} colorScheme="brandButtons" mr={3} onClick={onClose}>
               Close
             </Button>
           </ModalFooter>

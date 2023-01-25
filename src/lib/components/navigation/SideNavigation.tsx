@@ -1,38 +1,36 @@
-import {
-  Container,
-  HStack,
-  VStack,
-  Divider,
-  Box,
-  Flex,
-  Image,
-  Text,
-  Link,
-  Button,
-  Icon,
-  IconButton,
-  useMediaQuery
-} from "@chakra-ui/react"
+import {VStack, useMediaQuery, Flex} from "@chakra-ui/react"
 import React, {useEffect, useState} from "react"
-import NextLink from "next/link"
-import {
-  HiOutlineChartBar,
-  HiOutlineEmojiSad,
-  HiOutlineQrcode,
-  HiOutlineUser
-} from "react-icons/hi"
-import {FiStar, FiSettings, FiMenu} from "react-icons/fi"
-import {BsCurrencyDollar} from "react-icons/bs"
+
 import MobileSideBarMenu from "./MobileSideBarMenu"
 import DesktopSideBarMenu from "./DesktopSideBarMenu"
 
 const SideNavigation = () => {
   const [isMobile] = useMediaQuery("(max-width: 768px)")
-
   return (
-    <VStack justifyContent="flex-start">
-      {isMobile ? <MobileSideBarMenu /> : <DesktopSideBarMenu />}
-    </VStack>
+    <Flex
+      pos="sticky"
+      top="0px"
+      left="2"
+      h="95vh"
+      borderRadius={{
+        xl: "30px",
+        lg: "30px",
+        md: "30px",
+        sm: "15px",
+        base: "15px"
+      }}
+      w={{
+        xl: "250px",
+        lg: "250px",
+        md: "250px",
+        sm: "75px",
+        base: "75px"
+      }}
+      flexDir="column"
+      justifyContent="flex-start"
+    >
+      <VStack justifyContent="flex-start">{isMobile ? <MobileSideBarMenu /> : <DesktopSideBarMenu />}</VStack>
+    </Flex>
   )
 }
 

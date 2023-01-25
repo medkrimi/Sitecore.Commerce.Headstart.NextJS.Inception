@@ -1,29 +1,27 @@
-import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 import {
   Box,
   Button,
-  Heading,
-  HStack,
-  Tooltip,
-  useColorModeValue,
-  Text,
+  Checkbox,
+  Collapse,
   Container,
   Flex,
-  Collapse,
+  HStack,
+  Heading,
   Input,
-  Checkbox,
-  useToast,
   ListItem,
-  UnorderedList,
-  OrderedList
+  OrderedList,
+  Text,
+  Tooltip,
+  useColorModeValue
 } from "@chakra-ui/react"
-import {getGuestContext, getGuestRefByEmail} from "lib/scripts/CDPService"
-import {JsonLd} from "next-seo/lib/jsonld/jsonld"
-import {User, Users} from "ordercloud-javascript-sdk"
 import {ChangeEvent, useEffect, useState} from "react"
+import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 import {FiCheck, FiEdit, FiX} from "react-icons/fi"
+import {User, Users} from "ordercloud-javascript-sdk"
+
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
+import {JsonLd} from "next-seo/lib/jsonld/jsonld"
 
 type UserDataProps = {
   user: User
@@ -55,15 +53,13 @@ export default function UserBasicData({user, buyerId}: UserDataProps) {
     setComponentUser(user)
   }, [user])
 
-  const handleInputChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({...v, [fieldKey]: e.target.value}))
-    }
+  const handleInputChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({...v, [fieldKey]: e.target.value}))
+  }
 
-  const handleCheckboxChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
-    }
+  const handleCheckboxChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
+  }
 
   const onEditClicked = (e) => {
     setFormValues((v) => ({
@@ -129,20 +125,12 @@ export default function UserBasicData({user, buyerId}: UserDataProps) {
           {isEditingBasicData ? (
             <HStack float={"right"}>
               <Tooltip label="Save">
-                <Button
-                  colorScheme="brandButtons"
-                  aria-label="Save"
-                  onClick={onSaveClicked}
-                >
+                <Button colorScheme="brandButtons" aria-label="Save" onClick={onSaveClicked}>
                   <FiCheck />
                 </Button>
               </Tooltip>
-              <Tooltip label="Abort">
-                <Button
-                  colorScheme="brandButtons"
-                  aria-label="Abort"
-                  onClick={onAbortClicked}
-                >
+              <Tooltip label="Cancel">
+                <Button colorScheme="brandButtons" aria-label="Cancel" onClick={onAbortClicked}>
                   <FiX />
                 </Button>
               </Tooltip>
@@ -150,11 +138,7 @@ export default function UserBasicData({user, buyerId}: UserDataProps) {
           ) : (
             <HStack float={"right"}>
               <Tooltip label="Edit">
-                <Button
-                  colorScheme="brandButtons"
-                  aria-label="Edit"
-                  onClick={onEditClicked}
-                >
+                <Button colorScheme="brandButtons" aria-label="Edit" onClick={onEditClicked}>
                   <FiEdit />
                 </Button>
               </Tooltip>
@@ -166,10 +150,7 @@ export default function UserBasicData({user, buyerId}: UserDataProps) {
             </Box>
           ) : (
             <>
-              <Heading
-                size={{base: "md", md: "lg", lg: "xl"}}
-                mb={expanded ? 6 : 0}
-              >
+              <Heading size={{base: "md", md: "lg", lg: "xl"}} mb={expanded ? 6 : 0}>
                 OrderCloud Data
               </Heading>
               <Collapse in={expanded}>
@@ -180,39 +161,22 @@ export default function UserBasicData({user, buyerId}: UserDataProps) {
                         Username:
                       </Text>
                       {isEditingBasicData ? (
-                        <Input
-                          value={formValues.username}
-                          onChange={handleInputChange("name")}
-                        />
+                        <Input value={formValues.username} onChange={handleInputChange("name")} />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
+                        <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                           {componentUser?.Username}
                         </Heading>
                       )}
                     </Box>
-                    <Tooltip
-                      label={isEditingBasicData ? "ID is not changeable" : ""}
-                    >
+                    <Tooltip label={isEditingBasicData ? "ID is not changeable" : ""}>
                       <Box width="full" pb={2}>
                         <Text opacity={0.5} fontWeight={"bold"}>
                           ID:
                         </Text>
                         {isEditingBasicData ? (
-                          <Input
-                            disabled={true}
-                            value={formValues.id}
-                            onChange={handleInputChange("id")}
-                          />
+                          <Input disabled={true} value={formValues.id} onChange={handleInputChange("id")} />
                         ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
+                          <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                             {componentUser?.ID}
                           </Heading>
                         )}
@@ -223,16 +187,9 @@ export default function UserBasicData({user, buyerId}: UserDataProps) {
                         First Name:
                       </Text>
                       {isEditingBasicData ? (
-                        <Input
-                          value={formValues.firstname}
-                          onChange={handleInputChange("firstname")}
-                        />
+                        <Input value={formValues.firstname} onChange={handleInputChange("firstname")} />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
+                        <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                           {componentUser?.FirstName}
                         </Heading>
                       )}
@@ -242,16 +199,9 @@ export default function UserBasicData({user, buyerId}: UserDataProps) {
                         Last Name:
                       </Text>
                       {isEditingBasicData ? (
-                        <Input
-                          value={formValues.lastname}
-                          onChange={handleInputChange("lastname")}
-                        />
+                        <Input value={formValues.lastname} onChange={handleInputChange("lastname")} />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
+                        <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                           {componentUser?.LastName ?? "Not set"}
                         </Heading>
                       )}
@@ -261,16 +211,9 @@ export default function UserBasicData({user, buyerId}: UserDataProps) {
                         Email:
                       </Text>
                       {isEditingBasicData ? (
-                        <Input
-                          value={formValues.email}
-                          onChange={handleInputChange("email")}
-                        />
+                        <Input value={formValues.email} onChange={handleInputChange("email")} />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
+                        <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                           {componentUser?.Email}
                         </Heading>
                       )}
@@ -282,16 +225,9 @@ export default function UserBasicData({user, buyerId}: UserDataProps) {
                         Phone:
                       </Text>
                       {isEditingBasicData ? (
-                        <Input
-                          value={formValues.phone}
-                          onChange={handleInputChange("phone")}
-                        />
+                        <Input value={formValues.phone} onChange={handleInputChange("phone")} />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
+                        <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                           {componentUser?.Phone ?? "Not set"}
                         </Heading>
                       )}
@@ -308,14 +244,8 @@ export default function UserBasicData({user, buyerId}: UserDataProps) {
                             onChange={handleInputChange("datecreated")}
                           />
                         ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {new Date(
-                              componentUser?.DateCreated
-                            )?.toLocaleString() ?? "Not set"}
+                          <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                            {new Date(componentUser?.DateCreated)?.toLocaleString() ?? "Not set"}
                           </Heading>
                         )}
                       </Box>
@@ -331,14 +261,8 @@ export default function UserBasicData({user, buyerId}: UserDataProps) {
                           onChange={handleInputChange("termsaccepted")}
                         />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
-                          {new Date(
-                            componentUser?.TermsAccepted
-                          )?.toLocaleString() ?? "Not set"}
+                        <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
+                          {new Date(componentUser?.TermsAccepted)?.toLocaleString() ?? "Not set"}
                         </Heading>
                       )}
                     </Box>
@@ -347,16 +271,9 @@ export default function UserBasicData({user, buyerId}: UserDataProps) {
                         Active?:
                       </Text>
                       {isEditingBasicData ? (
-                        <Checkbox
-                          isChecked={formValues.active}
-                          onChange={handleCheckboxChange("active")}
-                        />
+                        <Checkbox isChecked={formValues.active} onChange={handleCheckboxChange("active")} />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
+                        <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                           {componentUser?.Active ?? false ? (
                             <CheckIcon boxSize={6} color={okColor} />
                           ) : (
@@ -372,21 +289,15 @@ export default function UserBasicData({user, buyerId}: UserDataProps) {
                         Available Roles:
                       </Text>
 
-                      <Heading
-                        fontSize={"xl"}
-                        fontFamily={"body"}
-                        fontWeight={500}
-                      >
+                      <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                         <OrderedList>
-                          {componentUser?.AvailableRoles.map(
-                            (element, index) => {
-                              return (
-                                <ListItem mt={4} key={index}>
-                                  {element}
-                                </ListItem>
-                              )
-                            }
-                          )}
+                          {componentUser?.AvailableRoles.map((element, index) => {
+                            return (
+                              <ListItem mt={4} key={index}>
+                                {element}
+                              </ListItem>
+                            )
+                          })}
                         </OrderedList>
                       </Heading>
                     </Box>

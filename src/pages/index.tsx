@@ -11,15 +11,7 @@ const Home = () => {
   }
 
   return (
-    <Flex
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
-      minHeight="70vh"
-      gap={4}
-      mb={8}
-      w="full"
-    >
+    <Flex direction="column" alignItems="center" justifyContent="center" minHeight="70vh" gap={4} mb={8} w="full">
       <NextSeo title="Home" />
       <Login onLoggedIn={handleOnLoggedIn} />
     </Flex>

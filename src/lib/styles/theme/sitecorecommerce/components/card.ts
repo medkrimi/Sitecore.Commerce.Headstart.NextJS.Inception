@@ -27,6 +27,7 @@ export const Card = {
     primaryCard: {
       p: "28px 10px 0px 0px",
       my: {sm: "26px", lg: "26px"},
+      mt: {sm: "15px", lg: "30px"},
       _dark: {
         border: "1px solid",
         borderColor: "gray.300",

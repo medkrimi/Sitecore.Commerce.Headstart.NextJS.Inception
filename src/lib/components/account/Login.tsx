@@ -1,94 +1,51 @@
-import {
-  ChangeEvent,
-  FormEvent,
-  FunctionComponent,
-  useCallback,
-  useEffect,
-  useState
-} from "react"
-import {
-  Button,
-  VStack,
-  HStack,
-  Input,
-  Text,
-  Heading,
-  Box,
-  useColorMode,
-  useColorModeValue,
-  Checkbox,
-  Alert,
-  AlertIcon
-} from "@chakra-ui/react"
+import {Box, Button, Checkbox, FormControl, FormLabel, HStack, Heading, Input, Text, VStack} from "@chakra-ui/react"
+import {ChangeEvent, FormEvent, FunctionComponent, useCallback, useState} from "react"
+
+import Card from "../card/Card"
 import HeaderLogo from "../branding/HeaderLogo"
-import {
-  GetAuthenticationStatus,
-  Login,
-  OcAuthState
-} from "lib/scripts/OrdercloudService"
+import {useAuth} from "lib/hooks/useAuth"
 
 interface OcLoginFormProps {
   title?: string
   onLoggedIn: () => void
 }
 
-const OcLoginForm: FunctionComponent<OcLoginFormProps> = ({
-  title = "Sign into your account",
-  onLoggedIn
-}) => {
-  const [authState, setAuthState] = useState<OcAuthState>(null)
-  const [isLoading, setIsLoading] = useState(true)
+const OcLoginForm: FunctionComponent<OcLoginFormProps> = ({title = "Sign into your account", onLoggedIn}) => {
+  const {Login, isAuthenticated} = useAuth()
+  const [isLoading, setIsLoading] = useState(false)
   const [formValues, setFormValues] = useState({
     identifier: "",
     password: "",
     remember: false
   })
 
-  const handleInputChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({...v, [fieldKey]: e.target.value}))
-    }
+  const handleInputChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({...v, [fieldKey]: e.target.value}))
+  }
 
-  const handleCheckboxChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
-    }
+  const handleCheckboxChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
+  }
 
   const handleSubmit = useCallback(
-    (e: FormEvent) => {
-      setIsLoading(true)
-      e.preventDefault()
-      Login(formValues.identifier, formValues.password, formValues.remember)
-      setIsLoading(false)
-      onLoggedIn()
+    async (e: FormEvent) => {
+      try {
+        setIsLoading(true)
+        e.preventDefault()
+        await Login(formValues.identifier, formValues.password, formValues.remember)
+        onLoggedIn()
+      } finally {
+        setIsLoading(false)
+      }
     },
-    [
-      formValues.identifier,
-      formValues.password,
-      formValues.remember,
-      onLoggedIn
-    ]
+    [formValues.identifier, formValues.password, formValues.remember, onLoggedIn, Login]
   )
 
-  useEffect(() => {
-    var authState = GetAuthenticationStatus()
-    setAuthState(authState)
-    if (!authState?.isAnonymous) {
-      onLoggedIn()
-    }
-
-    setIsLoading(false)
-  }, [onLoggedIn])
-
-  const {colorMode, toggleColorMode} = useColorMode()
-  const bg = useColorModeValue("gray.400", "gray.600")
-  const color = useColorModeValue("textColor.900", "textColor.100")
-
   return (
-    <>
-      {authState?.isAnonymous ? (
-        <form name="ocLoginForm" onSubmit={handleSubmit}>
-          <VStack width="full" bg={bg} color={color} p={10} rounded={10}>
+    !isAuthenticated && (
+      <form name="ocLoginForm" onSubmit={handleSubmit}>
+        <Card variant="primaryCard" showclosebutton="false">
+          <VStack width="full" p={10}>
             <HeaderLogo />
             <Heading as="h1" py={6}>
               {title}
@@ -101,65 +58,56 @@ const OcLoginForm: FunctionComponent<OcLoginFormProps> = ({
                 {error.message}{" "}
               </Alert>
             )} */}
-
-            <Box width="full">
-              <Text fontWeight={"bold"}>Username</Text>
-              <Input
-                type="text"
-                id="identifier"
-                name="identifier"
-                placeholder="Enter username"
-                value={formValues.identifier}
-                onChange={handleInputChange("identifier")}
-                required
-                size="md"
-              />
-            </Box>
-            <Box width="full">
-              <Text fontWeight={"bold"}>Password</Text>
-              <Input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Enter password"
-                value={formValues.password}
-                onChange={handleInputChange("password")}
-                required
-                size="md"
-              />
-            </Box>
-
-            <Box width="full">
-              <HStack>
-                <Checkbox
-                  id="remember"
-                  name="remember"
-                  checked={formValues.remember}
-                  onChange={handleCheckboxChange("remember")}
-                  size="lg"
-                  mx={1}
-                  py={2}
-                  colorScheme="brandButtons"
+            <FormControl>
+              <Box width="full">
+                <FormLabel>Username</FormLabel>
+                <Input
+                  type="text"
+                  id="identifier"
+                  name="identifier"
+                  placeholder="Enter username"
+                  value={formValues.identifier}
+                  onChange={handleInputChange("identifier")}
+                  required
                 />
-                <Text>Keep me logged in</Text>
-              </HStack>
-            </Box>
+              </Box>
+              <Box width="full">
+                <FormLabel>Password</FormLabel>
+                <Input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Enter password"
+                  value={formValues.password}
+                  onChange={handleInputChange("password")}
+                  required
+                />
+              </Box>
 
-            <Button
-              disabled={isLoading}
-              type="submit"
-              colorScheme="brandButtons"
-              width="full"
-              onClick={handleSubmit}
-            >
-              Sign in
-            </Button>
+              <Box width="full">
+                <HStack>
+                  <Checkbox
+                    id="remember"
+                    name="remember"
+                    checked={formValues.remember}
+                    onChange={handleCheckboxChange("remember")}
+                    size="lg"
+                    mx={1}
+                    py={2}
+                    colorScheme="brandButtons"
+                  />
+                  <Text>Keep me logged in</Text>
+                </HStack>
+              </Box>
+
+              <Button disabled={isLoading} type="submit" width="full" onClick={handleSubmit}>
+                Sign in
+              </Button>
+            </FormControl>
           </VStack>
-        </form>
-      ) : (
-        <></>
-      )}
-    </>
+        </Card>
+      </form>
+    )
   )
 }
 

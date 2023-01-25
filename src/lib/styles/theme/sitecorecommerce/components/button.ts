@@ -26,17 +26,12 @@ export const Button = {
   // Three Variants are identified : Primary, Secondary and Tertiary
   variants: {
     primaryButton: {
-      color: "white",
-      bgColor: "black",
+      color: "PrimaryButtonText",
+      bgColor: "PrimaryButtonBG",
       borderRadius: "md",
       fontSize: "12px",
       fontWeight: "normal",
-      _dark: {
-        border: "1px solid",
-        borderColor: "gray.300",
-        bgColor: "gray.800",
-        color: "white"
-      }
+      borderColor: "PrimaryButtonOutline"
     },
     secondaryButton: {
       border: "1px solid",
@@ -56,7 +51,7 @@ export const Button = {
     tertiaryButton: {
       border: "1px solid",
       borderColor: "gray.300",
-      bgColor: "white",
+      bgColor: "bodyBg",
       color: "black",
       borderRadius: "md",
       fontSize: "12px",
@@ -69,12 +64,17 @@ export const Button = {
       }
     },
     closePanelButton: {
-      bg: "gray.200",
-      color: "white",
+      borderColor: "gray.200",
+      border: "1px",
+      color: "gray.200",
       borderRadius: "50%",
       position: "absolute",
-      right: "20px",
-      top: "20px"
+      right: "10px",
+      top: "10px",
+      minWidth: "30px",
+      width: "30px",
+      minHeight: "30px",
+      height: "30px"
     }
   },
   // The default size and variant values
