@@ -1,24 +1,13 @@
 import * as Yup from "yup"
-
-import {Box, Button, ButtonGroup, Container, Flex, HStack, Heading, Link, Stack} from "@chakra-ui/react"
-import {Catalog, Category} from "ordercloud-javascript-sdk"
-import {
-  InputControl,
-  NumberInputControl,
-  PercentComplete,
-  SelectControl,
-  SwitchControl,
-  TextareaControl
-} from "formik-chakra-ui"
-
-import Card from "../card/Card"
-import {DeleteIcon} from "@chakra-ui/icons"
+import {Box, Button, ButtonGroup, Flex, HStack, Stack} from "@chakra-ui/react"
+import {Category} from "ordercloud-javascript-sdk"
+import {InputControl, SwitchControl, TextareaControl} from "formik-chakra-ui"
 import {Formik} from "formik"
 import {categoriesService} from "lib/api"
 import {useRouter} from "next/router"
-import {useToast} from "@chakra-ui/react"
 import {xpHelper} from "lib/utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 export {AddEditForm}
 
@@ -29,7 +18,8 @@ function AddEditForm({category}: AddEditFormProps) {
   const isAddMode = !category
   console.log(category)
   const router = useRouter()
-  const toast = useToast()
+  const successToast = useSuccessToast()
+  const errorToast = useErrorToast()
   // form validation rules
   const validationSchema = Yup.object().shape({
     Name: Yup.string().max(100).required("Name is required"),
@@ -69,14 +59,8 @@ function AddEditForm({category}: AddEditFormProps) {
         router.query.buyerid,
         router.query.usergroupid
       )
-      toast({
-        id: fields.ID + "-created",
-        title: "Success",
-        description: "Category created successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Category created successfully."
       })
       router.push(`/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories`)
     } catch (e) {
@@ -93,14 +77,8 @@ function AddEditForm({category}: AddEditFormProps) {
         router.query.buyerid,
         router.query.usergroupid
       )
-      toast({
-        id: fields.ID + "-updated",
-        title: "Success",
-        description: "Category updated successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Category updated successfully."
       })
       router.push(`/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories`)
     } catch (e) {
@@ -111,24 +89,12 @@ function AddEditForm({category}: AddEditFormProps) {
   async function deleteCategory(categoryid) {
     try {
       await categoriesService.delete(router.query.catalogid, categoryid)
-      toast({
-        id: categoryid + "-deleted",
-        title: "Success",
-        description: "Category deleted successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Category deleted successfully."
       })
     } catch (e) {
-      toast({
-        id: categoryid + "fail-deleted",
-        title: "Error",
-        description: "Category delete failed",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      errorToast({
+        description: "Category delete failed"
       })
     }
   }

@@ -1,24 +1,13 @@
 import * as Yup from "yup"
-
-import {Box, Button, ButtonGroup, Container, Flex, Heading, Stack} from "@chakra-ui/react"
-import {
-  InputControl,
-  NumberInputControl,
-  PercentComplete,
-  SelectControl,
-  SwitchControl,
-  TextareaControl
-} from "formik-chakra-ui"
-
-import Card from "../card/Card"
+import {Box, Button, ButtonGroup, Card, Flex, Stack} from "@chakra-ui/react"
+import {InputControl, TextareaControl} from "formik-chakra-ui"
 import {Formik} from "formik"
-import {NextSeo} from "next-seo"
 import {UserGroup} from "ordercloud-javascript-sdk"
 import {useRouter} from "next/router"
-import {useToast} from "@chakra-ui/react"
-import {userGroupsService} from "../../api"
 import {xpHelper} from "../../utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
+import {useSuccessToast} from "lib/hooks/useToast"
+import {userGroupsService} from "lib/api"
 
 export {AddEditForm}
 
@@ -28,7 +17,7 @@ interface AddEditFormProps {
 function AddEditForm({userGroup}: AddEditFormProps) {
   const isAddMode = !userGroup
   const router = useRouter()
-  const toast = useToast()
+  const successToast = useSuccessToast()
   // form validation rules
   const validationSchema = Yup.object().shape({
     Name: Yup.string().max(100).required("Name is required"),
@@ -62,14 +51,8 @@ function AddEditForm({userGroup}: AddEditFormProps) {
   async function createUserGroup(fields, setSubmitting) {
     try {
       await userGroupsService.create(router.query.buyerid, fields)
-      toast({
-        id: fields.ID + "-created",
-        title: "Success",
-        description: "User Group created successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "User Group created successfully."
       })
       router.push(`/buyers/${router.query.buyerid}/usergroups/`)
     } catch (e) {
@@ -80,14 +63,8 @@ function AddEditForm({userGroup}: AddEditFormProps) {
   async function updateUserGroup(fields, setSubmitting) {
     try {
       await userGroupsService.update(router.query.buyerid, router.query.usergroupid, fields)
-      toast({
-        id: fields.ID + "-updated",
-        title: "Success",
-        description: "Buyer updated successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Buyer updated successfully."
       })
       router.push(`/buyers/${router.query.buyerid}/usergroups/`)
     } catch (e) {

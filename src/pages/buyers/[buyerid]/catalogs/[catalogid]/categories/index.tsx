@@ -1,21 +1,6 @@
-import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Container,
-  Grid,
-  GridItem,
-  HStack,
-  Heading,
-  Icon,
-  Text,
-  useToast
-} from "@chakra-ui/react"
-import {useEffect, useRef, useState} from "react"
-
+import {Box, Button, ButtonGroup, Grid, GridItem, HStack, Heading} from "@chakra-ui/react"
+import {useEffect, useState} from "react"
 import Card from "lib/components/card/Card"
-import CategoriesDataTable from "lib/components/datatable/datatable"
 import Link from "lib/components/navigation/Link"
 import ProtectedAddEditForm from "./add"
 import ProtectedCategoryItem from "./[categoryid]"
@@ -24,6 +9,7 @@ import TreeView from "lib/components/dndtreeview/TreeView"
 import {categoriesService} from "lib/api"
 import {ocNodeModel} from "@minoru/react-dnd-treeview"
 import {useRouter} from "next/router"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -46,7 +32,8 @@ const CategoriesList = (props) => {
   const [categoriesTreeView, setCategoriesTreeView] = useState([])
   const [selectedNode, setSelectedNode] = useState<ocNodeModel>(null)
   const router = useRouter()
-  const toast = useToast()
+  const errorToast = useErrorToast()
+  const successToast = useSuccessToast()
   useEffect(() => {
     initCategoriesData(router.query.catalogid)
   }, [router.query.catalogid])
@@ -75,7 +62,7 @@ const CategoriesList = (props) => {
     try {
       await categoriesService.delete(router.query.catalogid, categoryid)
       initCategoriesData(router.query.buyerid)
-      toast({
+      successToast({
         id: categoryid + "-deleted",
         title: "Success",
         description: "Category deleted successfully.",
@@ -85,7 +72,7 @@ const CategoriesList = (props) => {
         position: "top"
       })
     } catch (e) {
-      toast({
+      errorToast({
         id: categoryid + "fail-deleted",
         title: "Error",
         description: "Category delete failed",

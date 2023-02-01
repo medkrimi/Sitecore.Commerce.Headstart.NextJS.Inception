@@ -18,16 +18,15 @@ import {
   Select,
   Input,
   InputGroup,
-  InputLeftAddon,
-  useToast
+  InputLeftAddon
 } from "@chakra-ui/react"
 import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
 import {ProductXPs} from "lib/types/ProductXPs"
 import {Product, Products} from "ordercloud-javascript-sdk"
 import {ChangeEvent, useEffect, useState} from "react"
-import {FiCheck, FiX, FiEdit, FiPlus, FiMinus, FiMinusSquare} from "react-icons/fi"
-import BrandedBox from "../branding/BrandedBox"
+import {FiCheck, FiX, FiPlus, FiMinus, FiMinusSquare} from "react-icons/fi"
 import BrandedSpinner from "../branding/BrandedSpinner"
+import {useErrorToast} from "lib/hooks/useToast"
 
 type ProductDataProps = {
   composedProduct: ComposedProduct
@@ -47,7 +46,7 @@ export default function ProductXpInformation({composedProduct, setComposedProduc
   const [newXpFormValue, setNewXpFormValue] = useState<string | number>("")
   const [toBeDeleted, setToBeDeleted] = useState<string[]>([])
   const [expanded, setExpanded] = useState(true)
-  const toast = useToast()
+  const errorToast = useErrorToast()
 
   useEffect(() => {
     setFormValues(Object.assign({}, composedProduct?.Product?.xp))
@@ -117,12 +116,9 @@ export default function ProductXpInformation({composedProduct, setComposedProduc
   const onNewProductXP = async () => {
     //console.log(formValues[newXpFormName])
     if (formValues[newXpFormName] !== undefined) {
-      toast({
+      errorToast({
         title: "Validation Error",
-        description: "Extended property of that name already exists",
-        status: "error",
-        duration: 9000,
-        isClosable: true
+        description: "Extended property of that name already exists"
       })
       return
     }

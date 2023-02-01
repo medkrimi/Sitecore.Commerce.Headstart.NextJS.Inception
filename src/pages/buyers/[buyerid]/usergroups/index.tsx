@@ -1,4 +1,4 @@
-import {Box, Button, ButtonGroup, HStack, useToast} from "@chakra-ui/react"
+import {Box, Button, ButtonGroup, HStack} from "@chakra-ui/react"
 import {useEffect, useState} from "react"
 import Card from "lib/components/card/Card"
 import Link from "lib/components/navigation/Link"
@@ -6,6 +6,7 @@ import React from "react"
 import UserGroupsDataTable from "lib/components/datatable/datatable"
 import {useRouter} from "next/router"
 import {userGroupsService} from "lib/api"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -26,7 +27,8 @@ export async function getServerSideProps() {
 const UserGroupsList = () => {
   const [userGroups, setUserGroup] = useState([])
   const router = useRouter()
-  const toast = useToast()
+  const successToast = useSuccessToast()
+  const errorToast = useErrorToast()
   useEffect(() => {
     initUserGroupsData(router.query.buyerid)
   }, [router.query.buyerid])
@@ -40,24 +42,12 @@ const UserGroupsList = () => {
     try {
       await userGroupsService.delete(router.query.buyerid, userGroupid)
       initUserGroupsData(router.query.buyerid)
-      toast({
-        id: userGroupid + "-deleted",
-        title: "Success",
-        description: "Buyer deleted successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Buyer deleted successfully."
       })
     } catch (e) {
-      toast({
-        id: userGroupid + "fail-deleted",
-        title: "Error",
-        description: "Buyer delete failed",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      errorToast({
+        description: "Buyer delete failed"
       })
     }
   }

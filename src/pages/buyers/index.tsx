@@ -1,8 +1,6 @@
-import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
-import {Box, Button, ButtonGroup, HStack, Icon, Text, useToast} from "@chakra-ui/react"
+import {Box, Button, ButtonGroup, HStack, Icon, Text} from "@chakra-ui/react"
 import {buyersService, catalogsService, userGroupsService, usersService} from "lib/api"
 import {useEffect, useState} from "react"
-
 import BuyersDataTable from "lib/components/datatable/datatable"
 import Card from "lib/components/card/Card"
 import {IoMdClose} from "react-icons/io"
@@ -13,6 +11,7 @@ import React from "react"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {dateHelper} from "lib/utils/date.utils"
 import router from "next/router"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getStaticProps() {
@@ -32,12 +31,8 @@ export async function getStaticProps() {
 const BuyersList = () => {
   const [buyers, setBuyers] = useState([])
   const [buyersMeta, setBuyersMeta] = useState({})
-
-  const toast = useToast({
-    duration: 6000,
-    isClosable: true,
-    position: "top"
-  })
+  const successToast = useSuccessToast()
+  const errorToast = useErrorToast()
 
   useEffect(() => {
     initBuyersData()
@@ -62,18 +57,12 @@ const BuyersList = () => {
     try {
       await buyersService.delete(id)
       initBuyersData()
-      toast({
-        id: id + "-deleted",
-        title: "Success",
-        description: "Buyer deleted successfully.",
-        status: "success"
+      successToast({
+        description: "Buyer deleted successfully."
       })
     } catch (e) {
-      toast({
-        id: id + "fail-deleted",
-        title: "Error",
-        description: "Buyer delete failed",
-        status: "error"
+      errorToast({
+        description: "Buyer delete failed"
       })
     }
   }

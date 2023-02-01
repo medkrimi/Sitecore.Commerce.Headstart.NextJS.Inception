@@ -1,18 +1,16 @@
 import * as Yup from "yup"
-
-import {Box, Button, ButtonGroup, Flex, FormLabel, HStack, Icon, Input, Stack, Text} from "@chakra-ui/react"
-import {InputControl, NumberInputControl, PercentComplete, SelectControl, SwitchControl} from "formik-chakra-ui"
-
+import {Box, Button, ButtonGroup, Flex, FormLabel, HStack, Icon, Stack, Text} from "@chakra-ui/react"
+import {InputControl} from "formik-chakra-ui"
 import {ProductFacet} from "ordercloud-javascript-sdk"
 import Card from "../card/Card"
 import {Field, Formik} from "formik"
 import {useRouter} from "next/router"
-import {useToast} from "@chakra-ui/react"
 import {xpHelper} from "../../utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
 import {productfacetsService} from "lib/api/productfacets"
 import {useState} from "react"
-import {HiOutlineSparkles, HiOutlineX} from "react-icons/hi"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
+import {HiOutlineX} from "react-icons/hi"
 
 export {AddEditForm}
 
@@ -23,7 +21,8 @@ interface AddEditFormProps {
 function AddEditForm({productfacet}: AddEditFormProps) {
   const isAddMode = !productfacet
   const router = useRouter()
-  const toast = useToast()
+  const successToast = useSuccessToast()
+  const errorToast = useErrorToast()
   // form validation rules
   const validationSchema = Yup.object().shape({
     Name: Yup.string().required("Name is required")
@@ -93,14 +92,8 @@ function AddEditForm({productfacet}: AddEditFormProps) {
   async function createProductFacet(fields, setSubmitting) {
     try {
       await productfacetsService.create(fields)
-      toast({
-        id: fields.ID + "-created",
-        title: "Success",
-        description: "Product Facet created successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Product Facet created successfully."
       })
       router.push(".")
     } catch (e) {
@@ -111,14 +104,8 @@ function AddEditForm({productfacet}: AddEditFormProps) {
   async function updateProductFacet(fields, setSubmitting) {
     try {
       await productfacetsService.update(fields)
-      toast({
-        id: fields.ID + "-updated",
-        title: "Success",
-        description: "Product Facet updated successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Product Facet updated successfully."
       })
       router.push(".")
     } catch (e) {
@@ -129,24 +116,12 @@ function AddEditForm({productfacet}: AddEditFormProps) {
     try {
       await productfacetsService.delete(router.query.id)
       router.push(".")
-      toast({
-        id: router.query.id + "-deleted",
-        title: "Success",
-        description: "Product Facet deleted successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Product Facet deleted successfully."
       })
     } catch (e) {
-      toast({
-        id: router.query.id + "fail-deleted",
-        title: "Error",
-        description: "Product Facet delete failed",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      errorToast({
+        description: "Product Facet delete failed"
       })
     }
   }

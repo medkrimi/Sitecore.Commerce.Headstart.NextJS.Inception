@@ -1,46 +1,16 @@
 import * as Yup from "yup"
-
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Container,
-  Flex,
-  Heading,
-  Icon,
-  Input,
-  InputGroup,
-  InputRightElement,
-  List,
-  ListIcon,
-  ListItem,
-  Stack,
-  useColorMode,
-  useColorModeValue,
-  useDisclosure
-} from "@chakra-ui/react"
-import {
-  CheckboxContainer,
-  CheckboxControl,
-  InputControl,
-  NumberInputControl,
-  PercentComplete,
-  SelectControl,
-  SwitchControl,
-  TextareaControl
-} from "formik-chakra-ui"
+import {Box, Button, ButtonGroup, Flex, Heading, List, ListIcon, ListItem, Stack} from "@chakra-ui/react"
+import {InputControl, SwitchControl} from "formik-chakra-ui"
 import {ErrorMessage, Field, Formik} from "formik"
-import {useReducer, useState} from "react"
-
+import {useState} from "react"
 import Card from "../card/Card"
 import {MdCheckCircle} from "react-icons/md"
-import {NextSeo} from "next-seo"
 import {User} from "ordercloud-javascript-sdk"
 import {useRouter} from "next/router"
-import {useToast} from "@chakra-ui/react"
 import {usersService} from "../../api"
 import {xpHelper} from "../../utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
+import {useSuccessToast} from "lib/hooks/useToast"
 
 export {AddEditForm}
 interface AddEditFormProps {
@@ -49,7 +19,7 @@ interface AddEditFormProps {
 function AddEditForm({user}: AddEditFormProps) {
   const isAddMode = !user
   const router = useRouter()
-  const toast = useToast()
+  const successToast = useSuccessToast()
   const [show, setShow] = useState(false)
   const handleClick = () => setShow(!show)
   // form validation rules
@@ -94,14 +64,8 @@ function AddEditForm({user}: AddEditFormProps) {
   async function createUser(fields, setSubmitting) {
     try {
       await usersService.create(router.query.buyerid, fields)
-      toast({
-        id: fields.ID + "-created",
-        title: "Success",
-        description: "User created successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "User created successfully."
       })
       router.push(`/buyers/${router.query.buyerid}/users/`)
     } catch (e) {
@@ -112,14 +76,8 @@ function AddEditForm({user}: AddEditFormProps) {
   async function updateUser(fields, setSubmitting) {
     try {
       await usersService.update(router.query.buyerid, router.query.userid, fields)
-      toast({
-        id: fields.ID + "-updated",
-        title: "Success",
-        description: "User updated successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "User updated successfully."
       })
       router.push(`/buyers/${router.query.buyerid}/users/`)
     } catch (e) {
