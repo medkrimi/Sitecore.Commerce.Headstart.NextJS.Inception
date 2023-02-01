@@ -1,17 +1,17 @@
 # Sitecore Commerce Seller app
-Welcome to Sitecore Commerce Seller App. This is a basic implementation of the Sitecore Commerce using the Order Cloud Javascript SDK. 
-You can use it as a starting point to discover, undrestand and learn more about the Sitecore Commerce Order Cloud capabilities. 
+Welcome to Sitecore Commerce Seller App. This is a basic implementation of the Sitecore Commerce using the OrderCloud Javascript SDK. 
+You can use it as a starting point to discover, understand, and learn more about the Sitecore Commerce OrderCloud capabilities. 
 
-This app showcase different marketplace scenarios and commerce strategies B2B, B2C, B2B2C.
+This app showcase different marketplace scenarios and commerce strategies: B2B, B2C, B2B2C.
 
-## What is Sitecore Commerce Order Cloud?
+## What is Sitecore Commerce OrderCloud?
 ----
 [OrderCloud](https://ordercloud.io/discover/platform-overview) is a B2B, B2C, B2X commerce and marketplace development platform, 
 OrderCloud delivers cloud-based, API-first, headless eCommerce architecture. Limitless customizations and endless freedom for growth to support your complete commerce strategy.
 
 ## What is Sitecore Commerce Seller App?
 ----
-A **simple**, **powerful** and **flexible** Commerce Seller Application built on top of Sitecore [Order Cloud API](https://ordercloud.io/api-reference) and the [Javascript SDK](https://www.npmjs.com/package/ordercloud-javascript-sdk) built with:
+A **simple**, **powerful** and **flexible** Commerce Seller Application built on top of Sitecore [OrderCloud API](https://ordercloud.io/api-reference) and the [Javascript SDK](https://www.npmjs.com/package/ordercloud-javascript-sdk) built with:
 * React
 * Next.JS
 * Typescript
@@ -29,10 +29,10 @@ A **simple**, **powerful** and **flexible** Commerce Seller Application built on
 * Read, Update Orders
 
 ## Requirement
-Create an Order Cloud Marketplace instance (https://portal.ordercloud.io)
+Create an OrderCloud Marketplace instance (https://portal.ordercloud.io)
 
 ## How do I get started? 
-Using the Deploy Button below, you'll deploy on Vercel the Next.js project as well as connect it to your Sitecore Commerce Order Cloud sandbox.
+Using the Deploy Button below, you'll deploy on Vercel the Next.js project as well as connect it to your Sitecore Commerce OrderCloud sandbox.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FSitecoreNA%2Fsitecore-commerce%2Ftree%2Fmain)
 
@@ -82,8 +82,8 @@ To deploy your local project to Vercel, push it to public GitHub/GitLab/Bitbucke
 * ....
 
 ## References
-- [Order Cloud Javascript SDK](https://www.npmjs.com/package/ordercloud-javascript-sdk)
-- [Order Cloud API Reference](https://ordercloud.io/api-reference)
+- [OrderCloud Javascript SDK](https://www.npmjs.com/package/ordercloud-javascript-sdk)
+- [OrderCloud API Reference](https://ordercloud.io/api-reference)
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 - [Chakra UI](https://chakra-ui.com)
