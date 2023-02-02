@@ -1,7 +1,5 @@
-import {Grid, GridItem, StackDivider, Text, VStack} from "@chakra-ui/react"
 import React, {useEffect, useState} from "react"
 import {Tree, ocNodeModel} from "@minoru/react-dnd-treeview"
-
 import {CustomDragPreview} from "./CustomDragPreview"
 import {CustomNode} from "./CustomNode"
 import {DndProvider} from "react-dnd"
@@ -38,6 +36,7 @@ function TreeView(props) {
               isSelected={node.id === props.selectedNode?.id}
               onToggle={onToggle}
               onSelect={props.handleSelect}
+              onCategoryCreate={props.handleCategoryCreate}
             />
           )}
           dragPreviewRender={(monitorProps) => <CustomDragPreview monitorProps={monitorProps} />}

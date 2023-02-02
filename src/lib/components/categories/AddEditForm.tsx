@@ -1,5 +1,5 @@
 import * as Yup from "yup"
-import {Box, Button, ButtonGroup, Flex, HStack, Stack} from "@chakra-ui/react"
+import {Box, Button, ButtonGroup, Flex, HStack, Stack, Heading} from "@chakra-ui/react"
 import {Category} from "ordercloud-javascript-sdk"
 import {InputControl, SwitchControl, TextareaControl} from "formik-chakra-ui"
 import {Formik} from "formik"
@@ -8,18 +8,22 @@ import {useRouter} from "next/router"
 import {xpHelper} from "lib/utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
 import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
+import {useEffect} from "react"
 
 export {AddEditForm}
 
 interface AddEditFormProps {
   category?: Category
+  headerComponent?: React.ReactNode
+  parentId?: string
+  onSuccess?: (category: Category) => void
 }
-function AddEditForm({category}: AddEditFormProps) {
-  const isAddMode = !category
-  console.log(category)
+function AddEditForm({category, headerComponent, parentId, onSuccess}: AddEditFormProps) {
+  const isCreating = !category
   const router = useRouter()
   const successToast = useSuccessToast()
   const errorToast = useErrorToast()
+
   // form validation rules
   const validationSchema = Yup.object().shape({
     Name: Yup.string().max(100).required("Name is required"),
@@ -35,23 +39,33 @@ function AddEditForm({category}: AddEditFormProps) {
   }
 
   // set default form values if user passed in props
-  if (!isAddMode) {
+  if (!isCreating) {
     formOptions.defaultValues = xpHelper.flattenXpObject(category, "_")
+    console.log(JSON.stringify(formOptions.defaultValues))
   }
 
-  function onSubmit(fields, {setStatus, setSubmitting}) {
+  useEffect(() => {
+    formOptions.defaultValues = xpHelper.flattenXpObject(category, "_")
+  }, [category?.ID])
+
+  async function onSubmit(fields, {setStatus, setSubmitting}) {
     setStatus()
-    if (isAddMode) {
-      const catalog = xpHelper.unflattenXpObject(fields, "_")
-      createCatalog(catalog, setSubmitting)
+    if (isCreating) {
+      const category = xpHelper.unflattenXpObject(fields, "_")
+      await createCategory(category, setSubmitting)
     } else {
-      const catalog = xpHelper.unflattenXpObject(fields, "_")
-      updateCatalog(catalog, setSubmitting)
+      const category = xpHelper.unflattenXpObject(fields, "_")
+      await updateCategory(category, setSubmitting)
+    }
+
+    if (onSuccess) {
+      onSuccess(category)
     }
   }
 
-  async function createCatalog(fields, setSubmitting) {
+  async function createCategory(fields, setSubmitting) {
     try {
+      fields.ParentID = parentId
       const createdCatalog = await categoriesService.create(router.query.catalogid, fields)
       await categoriesService.saveAssignment(
         router.query.catalogid,
@@ -68,7 +82,7 @@ function AddEditForm({category}: AddEditFormProps) {
     }
   }
 
-  async function updateCatalog(fields, setSubmitting) {
+  async function updateCategory(fields, setSubmitting) {
     try {
       const updatedCatalog = await categoriesService.update(router.query.catalogid, fields)
       await categoriesService.saveAssignment(
@@ -97,6 +111,9 @@ function AddEditForm({category}: AddEditFormProps) {
         description: "Category delete failed"
       })
     }
+    if (onSuccess) {
+      onSuccess(category)
+    }
   }
 
   return (
@@ -116,6 +133,7 @@ function AddEditForm({category}: AddEditFormProps) {
           borderRadius: "10px"
         }}
       >
+        {headerComponent}
         <Flex flexDirection="column" p="10">
           <Formik
             enableReinitialize
@@ -168,9 +186,11 @@ function AddEditForm({category}: AddEditFormProps) {
                           Cancel
                         </Button>
                       </Box>
-                      <Button variant="secondaryButton" onClick={() => deleteCategory(values.ID)}>
-                        Delete
-                      </Button>
+                      {!isCreating && (
+                        <Button variant="secondaryButton" onClick={() => deleteCategory(values.ID)}>
+                          Delete
+                        </Button>
+                      )}
                     </HStack>
                   </ButtonGroup>
                 </Stack>
