@@ -1,23 +1,14 @@
 import * as Yup from "yup"
-
-import {Box, Button, ButtonGroup, Container, Flex, Heading, Stack} from "@chakra-ui/react"
-import {
-  InputControl,
-  NumberInputControl,
-  PercentComplete,
-  SelectControl,
-  SwitchControl,
-  TextareaControl
-} from "formik-chakra-ui"
-
+import {Box, Button, ButtonGroup, Flex, Stack} from "@chakra-ui/react"
+import {InputControl, SwitchControl, TextareaControl} from "formik-chakra-ui"
 import Card from "../card/Card"
 import {Catalog} from "ordercloud-javascript-sdk"
 import {Formik} from "formik"
 import {catalogsService} from "lib/api"
 import {useRouter} from "next/router"
-import {useToast} from "@chakra-ui/react"
 import {xpHelper} from "lib/utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
+import {useSuccessToast} from "lib/hooks/useToast"
 
 export {AddEditForm}
 
@@ -27,7 +18,7 @@ interface AddEditFormProps {
 function AddEditForm({catalog}: AddEditFormProps) {
   const isAddMode = !catalog
   const router = useRouter()
-  const toast = useToast()
+  const successToast = useSuccessToast()
   // form validation rules
   const validationSchema = Yup.object().shape({
     Name: Yup.string().max(100).required("Name is required"),
@@ -62,14 +53,8 @@ function AddEditForm({catalog}: AddEditFormProps) {
     try {
       const createdCatalog = await catalogsService.create(fields)
       await catalogsService.saveAssignment(router.query.buyerid, createdCatalog.ID)
-      toast({
-        id: fields.ID + "-created",
-        title: "Success",
-        description: "Catalog created successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Catalog created successfully."
       })
       router.push(`/buyers/${router.query.buyerid}/catalogs`)
     } catch (e) {
@@ -81,14 +66,8 @@ function AddEditForm({catalog}: AddEditFormProps) {
     try {
       const updatedCatalog = await catalogsService.update(fields)
       await catalogsService.saveAssignment(router.query.buyerid, updatedCatalog.ID)
-      toast({
-        id: fields.ID + "-updated",
-        title: "Success",
-        description: "Catalog updated successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Catalog updated successfully."
       })
       router.push(`/buyers/${router.query.buyerid}/catalogs`)
     } catch (e) {

@@ -34,7 +34,6 @@ import React, {FunctionComponent, useEffect, useRef, useState} from "react"
 import {dateHelper, priceHelper} from "lib/utils/"
 import AddressCard from "../../lib/components/card/AddressCard"
 import Card from "lib/components/card/Card"
-import {HiOutlineMinusSm} from "react-icons/hi"
 import LettersCard from "lib/components/card/LettersCard"
 import NextLink from "next/link"
 import {NextSeo} from "next-seo"
@@ -42,6 +41,7 @@ import OcLineItemList from "lib/components/shoppingcart/OcLineItemList"
 import {useRouter} from "next/router"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
+import {useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -68,7 +68,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
   const [orderShip, setOrderShip] = useState(false)
   const [loading, setLoading] = useState(false)
   const cancelRef = useRef()
-  const toast = useToast()
+  const successToast = useSuccessToast()
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
   const requestExportCSV = () => {}
 
@@ -134,13 +134,9 @@ const OrderConfirmationPage: FunctionComponent = () => {
         setOrderReturn({} as OrderReturn)
         setLoading(false)
         setRefundDialogOpen(false)
-        toast({
+        successToast({
           title: "Refund requested!",
-          description: "If approved, amount will be credited to you",
-          status: "success",
-          duration: 8000,
-          isClosable: true,
-          position: "top"
+          description: "If approved, amount will be credited to you"
         })
       } catch {
         setRefundDialogOpen(false)
@@ -149,7 +145,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
     if (orderReturn?.OrderID) {
       createReturn()
     }
-  }, [orderReturn, toast])
+  }, [orderReturn, successToast])
 
   if (!orderWorksheet?.Order?.ID) {
     return (

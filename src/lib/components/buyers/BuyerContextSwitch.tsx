@@ -28,18 +28,18 @@ export default function BuyerContextSwitch({...props}) {
   const router = useRouter()
   const buyerid = router.query.buyerid.toString()
 
-  // Bug to be fixed - first load does not display the currentBuyer infos.
-  // Adding buyers to dependencies trigger an infinite loop on the useEffect.
-  // Have to talk to crhistian to check if in this case the useEffect is the right way to do it because we don't want to hit the server on every change.
   useEffect(() => {
-    initBuyersData(buyerid)
+    initBuyersData()
+  }, [])
+
+  useEffect(() => {
     if (buyers.length > 0 && buyerid) {
       const _currentBuyer = buyers.find((buyer) => buyer.ID === buyerid)
       setCurrentBuyer(_currentBuyer)
     }
-  }, [buyerid])
+  }, [buyerid, buyers])
 
-  async function initBuyersData(buyerid) {
+  async function initBuyersData() {
     let _buyerListMeta = {}
     const buyersList = await buyersService.list()
     setBuyers(buyersList.Items)

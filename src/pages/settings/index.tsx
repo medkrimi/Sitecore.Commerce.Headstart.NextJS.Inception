@@ -53,7 +53,7 @@ const SettingsPage = () => {
 
 const ProtectedSettingsPage = () => {
   return (
-    <ProtectedContent hasAccess={appPermissions.MeManager}>
+    <ProtectedContent hasAccess={appPermissions.SettingsManager}>
       <SettingsPage />
     </ProtectedContent>
   )

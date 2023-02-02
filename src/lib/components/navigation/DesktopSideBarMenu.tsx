@@ -191,7 +191,7 @@ const DesktopSideBarMenu = () => {
                 </Link>
               </NextLink>
             </ProtectedContent>
-            <ProtectedContent hasAccess={appPermissions.MeManager}>
+            <ProtectedContent hasAccess={appPermissions.SettingsManager}>
               <NextLink href="/settings" passHref>
                 <Link
                   pl="2"

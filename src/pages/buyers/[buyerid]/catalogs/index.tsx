@@ -1,13 +1,12 @@
-import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
-import {Box, Button, ButtonGroup, HStack, Switch, Text, Tooltip, useToast} from "@chakra-ui/react"
+import {Box, Button, ButtonGroup, HStack, Switch, Tooltip} from "@chakra-ui/react"
 import {useEffect, useState} from "react"
-
 import Card from "lib/components/card/Card"
 import CatalogsDataTable from "lib/components/datatable/datatable"
 import Link from "lib/components/navigation/Link"
 import React from "react"
 import {catalogsService} from "lib/api"
 import {useRouter} from "next/router"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -28,7 +27,8 @@ export async function getServerSideProps() {
 const CatalogsList = () => {
   const [catalogs, setCatalogs] = useState([])
   const router = useRouter()
-  const toast = useToast()
+  const successToast = useSuccessToast()
+  const errorToast = useErrorToast()
   useEffect(() => {
     initCatalogsData(router.query.buyerid)
   }, [router.query.buyerid])
@@ -42,24 +42,12 @@ const CatalogsList = () => {
     try {
       await catalogsService.delete(catalogid)
       initCatalogsData(router.query.buyerid)
-      toast({
-        id: catalogid + "-deleted",
-        title: "Success",
-        description: "Buyer deleted successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Buyer deleted successfully."
       })
     } catch (e) {
-      toast({
-        id: catalogid + "fail-deleted",
-        title: "Error",
-        description: "Buyer delete failed",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      errorToast({
+        description: "Buyer delete failed"
       })
     }
   }

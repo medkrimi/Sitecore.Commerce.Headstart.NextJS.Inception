@@ -13,7 +13,6 @@ import {
   FormControl,
   FormLabel,
   HStack,
-  Heading,
   Icon,
   IconButton,
   Input,
@@ -41,21 +40,16 @@ import {
   Spinner,
   Stack,
   Text,
-  Th,
-  Thead,
   Tooltip,
-  Tr,
   VStack,
   useColorModeValue,
-  useDisclosure,
-  useToast
+  useDisclosure
 } from "@chakra-ui/react"
 import {ChangeEvent, useEffect, useRef, useState} from "react"
-import {ChevronDownIcon, SearchIcon} from "@chakra-ui/icons"
-import {FiChevronDown, FiChevronUp, FiEdit, FiGrid, FiList, FiPlus, FiRotateCcw} from "react-icons/fi"
+import {ChevronDownIcon} from "@chakra-ui/icons"
+import {FiChevronDown, FiChevronUp} from "react-icons/fi"
 import {HiOutlineViewGrid, HiOutlineViewList} from "react-icons/hi"
 import {Product, Products} from "ordercloud-javascript-sdk"
-
 import {AiOutlineSearch} from "react-icons/ai"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
@@ -67,8 +61,7 @@ import ProductList from "./ProductList"
 import {ProductListOptions} from "../../services/ordercloud.service"
 import {ProductXPs} from "lib/types/ProductXPs"
 import {promotionsService} from "lib/api"
-
-//import Image from "next/image"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 interface ProductSearchProps {
   query: string
@@ -83,7 +76,8 @@ export default function ProductSearch({query}: ProductSearchProps) {
   const optionsSearchType = "ExactPhrasePrefix"
   const [optionsSearch, setOptionsSearch] = useState("")
   const [optionsSortBy, setOptionsSortBy] = useState("name")
-  const toast = useToast()
+  const successToast = useSuccessToast()
+  const errorToast = useErrorToast()
   const [products, setProducts] = useState<Product<ProductXPs>[]>(null)
   const [componentProducts, setComponentProducts] = useState<Product<ProductXPs>[]>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -163,12 +157,8 @@ export default function ProductSearch({query}: ProductSearchProps) {
   // TODO Add more properties in Add handling
   const onProductAdd = async (e) => {
     if (formValues.id == "" || formValues.name == "") {
-      toast({
-        title: "Missing Properties",
-        description: "Please fill out ID and NAME to add the product",
-        status: "error",
-        duration: 9000,
-        isClosable: true
+      errorToast({
+        description: "Please fill out ID and NAME to add the product"
       })
       return
     }
@@ -229,12 +219,9 @@ export default function ProductSearch({query}: ProductSearchProps) {
     var deactivate = formValues.isInactive
     var newActivationStatus = activate ? true : deactivate ? false : null
     if (newActivationStatus == null) {
-      toast({
+      errorToast({
         title: "No Activation Status set",
-        description: "Please choose at least 1 activation status",
-        status: "error",
-        duration: 9000,
-        isClosable: true
+        description: "Please choose at least 1 activation status"
       })
       setIsMassEditing(false)
       return
@@ -288,12 +275,9 @@ export default function ProductSearch({query}: ProductSearchProps) {
 
   const onMassEditOpenClicked = async (e) => {
     if (massEditProducts.length == 0) {
-      toast({
+      errorToast({
         title: "No Products selected",
-        description: "Please select at least 1 Product for mass editing",
-        status: "error",
-        duration: 9000,
-        isClosable: true
+        description: "Please select at least 1 Product for mass editing"
       })
     } else {
       onOpenMassEditProducts()

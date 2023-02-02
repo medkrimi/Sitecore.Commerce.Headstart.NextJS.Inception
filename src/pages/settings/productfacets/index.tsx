@@ -11,7 +11,6 @@ import {
   Container,
   Divider,
   HStack,
-  Heading,
   IconButton,
   Menu,
   MenuButton,
@@ -37,9 +36,8 @@ import {NextSeo} from "next-seo"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {productfacetsService} from "lib/api/productfacets"
-import {textHelper} from "lib/utils"
-import router, {useRouter} from "next/router"
-import {useToast} from "@chakra-ui/react"
+import {useRouter} from "next/router"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -58,7 +56,8 @@ export async function getServerSideProps() {
 
 const ProductFacetsPage = () => {
   const router = useRouter()
-  const toast = useToast()
+  const successToast = useSuccessToast()
+  const errorToast = useErrorToast()
   const [productfacets, setProductFacets] = useState([])
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -83,24 +82,12 @@ const ProductFacetsPage = () => {
     try {
       await productfacetsService.delete(productfacetid)
       initProductFacetsData(router.query.buyerid)
-      toast({
-        id: productfacetid + "-deleted",
-        title: "Success",
-        description: "Product Facet deleted successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Product Facet deleted successfully."
       })
     } catch (e) {
-      toast({
-        id: productfacetid + "fail-deleted",
-        title: "Error",
-        description: "Product Facet delete failed",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      errorToast({
+        description: "Product Facet delete failed"
       })
     }
   }
