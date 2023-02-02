@@ -1,11 +1,12 @@
 import {Button, Flex, Icon, Image, Link, Text} from "@chakra-ui/react"
 import {FiSettings, FiStar} from "react-icons/fi"
-import {HiOutlineChartBar, HiOutlineEmojiSad, HiOutlineQrcode, HiOutlineUser} from "react-icons/hi"
-import React from "react"
+import {HiOutlineChartBar, HiOutlineEmojiSad, HiOutlineQrcode, HiOutlineUser, HiOutlineUserGroup} from "react-icons/hi"
+import {TbBuildingWarehouse, TbShoppingCartDiscount, TbShoppingCartPlus, TbTruckReturn} from "react-icons/tb"
 
 import {BsCurrencyDollar} from "react-icons/bs"
 import NextLink from "next/link"
 import ProtectedContent from "../auth/ProtectedContent"
+import React from "react"
 import {appPermissions} from "lib/constants/app-permissions.config"
 
 const MobileSideBarMenu = () => {
@@ -41,28 +42,35 @@ const MobileSideBarMenu = () => {
           <ProtectedContent hasAccess={appPermissions.ProductManager}>
             <NextLink href="/promotions" passHref>
               <Link pl="2" pr="2" pb="15px">
-                <Icon as={FiStar} fontSize="30px" title="Promotions"></Icon>
+                <Icon as={TbShoppingCartDiscount} fontSize="30px" title="Promotions"></Icon>
               </Link>
             </NextLink>
           </ProtectedContent>
           <ProtectedContent hasAccess={appPermissions.OrderManager}>
             <NextLink href="/orders" passHref>
               <Link pl="2" pr="2" pb="15px">
-                <Icon as={BsCurrencyDollar} fontSize="30px" title="Orders"></Icon>
+                <Icon as={TbShoppingCartPlus} fontSize="30px" title="Orders"></Icon>
               </Link>
             </NextLink>
           </ProtectedContent>
           <ProtectedContent hasAccess={appPermissions.OrderManager}>
             <NextLink href="/returns" passHref>
               <Link pl="2" pr="2" pb="15px">
-                <Icon as={HiOutlineEmojiSad} fontSize="30px" title="Returns" color="white"></Icon>
+                <Icon as={TbTruckReturn} fontSize="30px" title="Returns" color="white"></Icon>
               </Link>
             </NextLink>
           </ProtectedContent>
           <ProtectedContent hasAccess={appPermissions.BuyerManager}>
             <NextLink href="/buyers" passHref>
               <Link pl="2" pr="2" pb="15px">
-                <Icon as={HiOutlineUser} fontSize="30px"></Icon>
+                <Icon as={HiOutlineUserGroup} fontSize="30px"></Icon>
+              </Link>
+            </NextLink>
+          </ProtectedContent>
+          <ProtectedContent hasAccess={appPermissions.SupplierManager}>
+            <NextLink href="/suppliers" passHref>
+              <Link pl="2" pr="2" pb="15px">
+                <Icon as={TbBuildingWarehouse} fontSize="30px"></Icon>
               </Link>
             </NextLink>
           </ProtectedContent>
