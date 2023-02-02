@@ -50,6 +50,8 @@ import DatePicker from "../datepicker/DatePicker"
 import {ExpressionBuilder} from "./ExpressionBuilder"
 import {MdCheckCircle} from "react-icons/md"
 import {Promotion} from "ordercloud-javascript-sdk"
+import {appPromotions} from "../../constants/app-promotions.config"
+import {json} from "stream/consumers"
 import {promotionsService} from "lib/api"
 import {useRouter} from "next/router"
 import {useToast} from "@chakra-ui/react"
@@ -198,6 +200,12 @@ function AddEditForm({promotion}: AddEditFormProps) {
     }
   }
 
+  const updateExpressions = (value, setFieldValue) => {
+    const promo = appPromotions.find((item) => item.Name === value)
+    setFieldValue("EligibleExpression", promo?.EligibleExpression)
+    setFieldValue("ValueExpression", promo?.ValueExpression)
+  }
+
   return (
     <>
       <Card variant="primaryCard">
@@ -212,7 +220,7 @@ function AddEditForm({promotion}: AddEditFormProps) {
             values,
             errors,
             touched,
-            handleBlur,
+            handleChange,
             handleSubmit,
             isSubmitting,
             setFieldValue,
@@ -370,12 +378,30 @@ function AddEditForm({promotion}: AddEditFormProps) {
                         <TabPanel>
                           <SimpleGrid columns={2} spacing={10}>
                             <Box>
-                              <EligibleExpressionField name="EligibleExpression" label="Eligible Expression" />
+                              <TextareaControl name="EligibleExpression" label="Eligible Expression" />
                             </Box>
                             <Box>
                               <TextareaControl name="ValueExpression" label="Value Expression" />
                             </Box>
                           </SimpleGrid>
+                          <Box>
+                            <label>Predefined Promotion Templates</label>
+                            <SelectControl
+                              name="PromotionTemplate"
+                              selectProps={{placeholder: "Select from promotion predefined templates"}}
+                              onChange={(e) => {
+                                handleChange(e)
+                                const value = (e.target as HTMLSelectElement).value
+                                updateExpressions(value, setFieldValue)
+                              }}
+                            >
+                              {appPromotions.map((item, index) => (
+                                <option key={item.Name}>{item.Name}</option>
+                              ))}
+                            </SelectControl>
+                          </Box>
+                          <Divider mt="15" mb="15" />
+                          <label>Expression Builder</label>
                           <ExpressionBuilder />
                         </TabPanel>
                       </TabPanels>
