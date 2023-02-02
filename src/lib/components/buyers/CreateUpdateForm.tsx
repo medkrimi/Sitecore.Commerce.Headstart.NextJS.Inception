@@ -1,12 +1,13 @@
 import * as Yup from "yup"
 import {Box, Button, ButtonGroup, Flex, Stack} from "@chakra-ui/react"
 import {InputControl, NumberInputControl, PercentComplete, SelectControl, SwitchControl} from "formik-chakra-ui"
-import {Buyer} from "ordercloud-javascript-sdk"
+import {Buyer, Catalog} from "ordercloud-javascript-sdk"
 import Card from "../card/Card"
 import {Formik} from "formik"
-import {buyersService} from "../../api"
+import {buyersService, catalogsService} from "../../api"
 import {useRouter} from "next/router"
 import {useCreateUpdateForm} from "lib/hooks/useCreateUpdateForm"
+import {useEffect, useState} from "react"
 
 export {CreateUpdateForm}
 
@@ -26,6 +27,16 @@ function CreateUpdateForm({buyer}: CreateUpdateFormProps) {
     createBuyer,
     updateBuyer
   )
+  const [catalogs, setCatalogs] = useState([] as Catalog[])
+
+  useEffect(() => {
+    initCatalogsData()
+  }, [])
+
+  async function initCatalogsData() {
+    const response = await catalogsService.list()
+    setCatalogs(response.Items)
+  }
 
   async function createBuyer(fields: Buyer) {
     await buyersService.create(fields)
@@ -60,20 +71,19 @@ function CreateUpdateForm({buyer}: CreateUpdateFormProps) {
             resetForm
           }) => (
             <Box as="form" onSubmit={handleSubmit as any}>
-              {JSON.stringify(values)}
-              <PercentComplete />
               <Stack spacing={5}>
                 <InputControl name="Name" label="Buyer Name" />
                 <SwitchControl name="Active" label="Active" />
-                {/* Complete this with getCatalogList one we create the catalog.service*/}
                 <SelectControl
                   name="DefaultCatalogID"
                   label="Default Catalog"
                   selectProps={{placeholder: "Select option"}}
                 >
-                  <option value="PlayShop">PlayShop</option>
-                  <option value="PlayShop1">catalog 2</option>
-                  <option value="PlayShop2">catalog 3</option>
+                  {catalogs.map((catalog) => (
+                    <option value={catalog.ID} key={catalog.ID}>
+                      {catalog.Name}
+                    </option>
+                  ))}
                 </SelectControl>
                 <NumberInputControl name="xp_MarkupPercent" label="Markup percent" />
                 <InputControl name="xp_URL" label="Url" />
