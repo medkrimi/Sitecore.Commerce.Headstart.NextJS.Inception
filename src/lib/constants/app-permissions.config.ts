@@ -1,15 +1,10 @@
 import {ApiRole} from "ordercloud-javascript-sdk"
 
 type AppPermission =
-  |
   | "OrderManager"
- 
   | "ProductManager"
- 
   | "BuyerManager"
- 
   | "ReportViewer"
- 
   | "MeManager"
   | "SupplierManager"
   | "SettingsManager"
