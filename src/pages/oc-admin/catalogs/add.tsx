@@ -1,4 +1,4 @@
-import {AddEditForm} from "lib/components/catalogs"
+import {CreateUpdateForm} from "lib/components/catalogs"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 
@@ -21,7 +21,7 @@ export async function getServerSideProps() {
 const ProtectedAddEditForm = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
-      <AddEditForm />
+      <CreateUpdateForm />
     </ProtectedContent>
   )
 }
