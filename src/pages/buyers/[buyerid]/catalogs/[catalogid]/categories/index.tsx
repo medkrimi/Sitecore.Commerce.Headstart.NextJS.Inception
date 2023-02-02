@@ -20,7 +20,7 @@ import TreeView from "lib/components/dndtreeview/TreeView"
 import {categoriesService} from "lib/api"
 import {ocNodeModel} from "@minoru/react-dnd-treeview"
 import {useRouter} from "next/router"
-import {AddEditForm} from "lib/components/categories"
+import {CreateUpdateForm} from "lib/components/categories"
 import {Category} from "ordercloud-javascript-sdk"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
@@ -127,7 +127,7 @@ const CategoriesList = (props) => {
             </GridItem>
             <GridItem pl="2" area={"main"}>
               {selectedNode ? (
-                <AddEditForm
+                <CreateUpdateForm
                   category={selectedNode.data}
                   onSuccess={onCategoryCreateSuccess}
                   headerComponent={
@@ -137,7 +137,7 @@ const CategoriesList = (props) => {
                   }
                 />
               ) : (
-                <AddEditForm
+                <CreateUpdateForm
                   onSuccess={onCategoryCreateSuccess}
                   category={{Name: "", Description: "", Active: false, ParentID: ""}}
                   headerComponent={
@@ -158,7 +158,7 @@ const CategoriesList = (props) => {
           <ModalHeader>Create category</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <AddEditForm parentId={parentIdToCreate} onSuccess={onCategoryCreateSuccess} />
+            <CreateUpdateForm parentId={parentIdToCreate} onSuccess={onCategoryCreateSuccess} />
           </ModalBody>
         </ModalContent>
       </Modal>

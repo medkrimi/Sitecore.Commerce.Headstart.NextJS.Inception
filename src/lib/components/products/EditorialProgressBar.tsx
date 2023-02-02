@@ -8,7 +8,6 @@ type ProductDataProps = {
 }
 
 export function CalculateEditorialProcess(product: Product<ProductXPs>): number {
-  // TODO: Currently hardcoded, but the idea gets clear
   var totalNumberOfFieldsToEdit = 4
   var currentNumberOfEditedFields = 0
 
@@ -25,13 +24,13 @@ export function CalculateEditorialProcess(product: Product<ProductXPs>): number 
     currentNumberOfEditedFields++
   }
 
-  var calculatedEditorialProgress = (currentNumberOfEditedFields / totalNumberOfFieldsToEdit) * 100
+  var calculatedProgress = (currentNumberOfEditedFields / totalNumberOfFieldsToEdit) * 100
 
-  return calculatedEditorialProgress
+  return calculatedProgress
 }
 
 export default function EditorialProgressBar({product}: ProductDataProps) {
-  const [editorialProgress, setEditorialProgress] = useState(0)
+  const [progress, setProgress] = useState(0)
   const [progressColor, setProgressColor] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const color = useColorModeValue("textColor.900", "textColor.100")
@@ -39,18 +38,18 @@ export default function EditorialProgressBar({product}: ProductDataProps) {
   useEffect(() => {
     setIsLoading(true)
 
-    var calculatedEditorialProgress = CalculateEditorialProcess(product)
-    setEditorialProgress(calculatedEditorialProgress)
+    var calculatedProgress = CalculateEditorialProcess(product)
+    setProgress(calculatedProgress)
 
     let colorSchema = ""
-    if (calculatedEditorialProgress == 0) {
+    if (calculatedProgress == 0) {
       colorSchema = "blue"
     }
-    if (calculatedEditorialProgress <= 25) {
+    if (calculatedProgress <= 25) {
       colorSchema = "red"
-    } else if (calculatedEditorialProgress > 25 && calculatedEditorialProgress <= 50) {
+    } else if (calculatedProgress > 25 && calculatedProgress <= 50) {
       colorSchema = "orange"
-    } else if (calculatedEditorialProgress > 50 && calculatedEditorialProgress <= 75) {
+    } else if (calculatedProgress > 50 && calculatedProgress <= 75) {
       colorSchema = "yellow"
     } else {
       colorSchema = "green"
@@ -59,20 +58,28 @@ export default function EditorialProgressBar({product}: ProductDataProps) {
     setIsLoading(false)
   }, [product])
 
+  const heading = (
+    <Heading mt={2} size={"sm"} color={color} fontWeight="normal">
+      Editorial Progress {product && !isLoading ? ": " + progress + "%" : "..."}
+    </Heading>
+  )
+
   return (
-    <>
+    <Box>
       <Progress
         hasStripe={true}
         isIndeterminate={!product}
-        value={editorialProgress}
+        value={progress}
         size={"lg"}
         colorScheme={product ? progressColor : "blue"}
       />
-      <Tooltip label="Please fill out IMAGE, DESCRIPTION, DEFAULTPRICESCHEDULEID and enable ISACTIVE">
-        <Heading mt={2} size={"sm"} color={color} fontWeight="normal">
-          Editorial Progress {product && !isLoading ? ": " + editorialProgress + "%" : "..."}
-        </Heading>
-      </Tooltip>
-    </>
+      {progress < 100 ? (
+        <Tooltip label="Please upload image, and define Description, Default Price Schedule ID, and set Active to true">
+          {heading}
+        </Tooltip>
+      ) : (
+        heading
+      )}
+    </Box>
   )
 }

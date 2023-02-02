@@ -1,1 +1,1 @@
-export * from "./AddEditForm"
+export * from "./CreateUpdateForm"
