@@ -1,16 +1,14 @@
 import * as Yup from "yup"
-
 import {Box, Button, ButtonGroup, Flex, Stack} from "@chakra-ui/react"
 import {InputControl, NumberInputControl, PercentComplete, SelectControl, SwitchControl} from "formik-chakra-ui"
-
 import {Buyer} from "ordercloud-javascript-sdk"
 import Card from "../card/Card"
 import {Formik} from "formik"
 import {buyersService} from "../../api"
 import {useRouter} from "next/router"
-import {useToast} from "@chakra-ui/react"
 import {xpHelper} from "../../utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
+import {useSuccessToast} from "lib/hooks/useToast"
 
 export {AddEditForm}
 
@@ -21,7 +19,7 @@ interface AddEditFormProps {
 function AddEditForm({buyer}: AddEditFormProps) {
   const isAddMode = !buyer
   const router = useRouter()
-  const toast = useToast()
+  const successToast = useSuccessToast()
   // form validation rules
   const validationSchema = Yup.object().shape({
     Name: Yup.string().required("Name is required"),
@@ -55,14 +53,8 @@ function AddEditForm({buyer}: AddEditFormProps) {
   async function createBuyer(fields, setSubmitting) {
     try {
       await buyersService.create(fields)
-      toast({
-        id: fields.ID + "-created",
-        title: "Success",
-        description: "Buyer created successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Buyer created successfully."
       })
       router.push(".")
     } catch (e) {
@@ -73,14 +65,8 @@ function AddEditForm({buyer}: AddEditFormProps) {
   async function updateBuyer(fields, setSubmitting) {
     try {
       await buyersService.update(fields)
-      toast({
-        id: fields.ID + "-updated",
-        title: "Success",
-        description: "Buyer updated successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Buyer updated successfully."
       })
       router.push(".")
     } catch (e) {

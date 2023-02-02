@@ -36,7 +36,7 @@ const UserGroupListItem = () => {
   }, [router.query.buyerid, router.query.usergroupid])
   return <>{userGroup?.ID ? <AddEditForm userGroup={userGroup} /> : <div> Loading</div>}</>
 }
-const ProtectedBuyerListItem = () => {
+const ProtectedUserGroupListItem = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
       <Box padding="GlobalPadding">
@@ -46,4 +46,4 @@ const ProtectedBuyerListItem = () => {
   )
 }
 
-export default ProtectedBuyerListItem
+export default ProtectedUserGroupListItem
