@@ -5,8 +5,8 @@ import {Box} from "@chakra-ui/react"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {User} from "ordercloud-javascript-sdk"
 import {appPermissions} from "lib/constants/app-permissions.config"
+import {supplierUsersService} from "../../../../lib/api"
 import {useRouter} from "next/router"
-import {usersService} from "../../../../lib/api"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -16,7 +16,7 @@ export async function getServerSideProps() {
         title: "Update user",
         metas: {
           hasBreadcrumbs: true,
-          hasBuyerContextSwitch: false
+          hasSupplierContextSwitch: false
         }
       },
       revalidate: 5 * 60
@@ -28,16 +28,16 @@ const UserListItem = () => {
   const router = useRouter()
   const [user, setUser] = useState({} as User)
   useEffect(() => {
-    if (router.query.buyerid) {
-      usersService.getById(router.query.buyerid, router.query.userid).then((user) => setUser(user))
+    if (router.query.supplierid) {
+      supplierUsersService.getById(router.query.supplierid, router.query.userid).then((user) => setUser(user))
     }
-  }, [router.query.buyerid, router.query.userid])
-  return <>{user?.ID ? <AddEditForm user={user} ocService={usersService} /> : <div> Loading</div>}</>
+  }, [router.query.supplierid, router.query.userid])
+  return <>{user?.ID ? <AddEditForm user={user} ocService={supplierUsersService} /> : <div> Loading</div>}</>
 }
 
-const ProtectedBuyerListItem = () => {
+const ProtectedSupplierListItem = () => {
   return (
-    <ProtectedContent hasAccess={appPermissions.BuyerManager}>
+    <ProtectedContent hasAccess={appPermissions.SupplierManager}>
       <Box padding="GlobalPadding">
         <UserListItem />
       </Box>
@@ -45,4 +45,4 @@ const ProtectedBuyerListItem = () => {
   )
 }
 
-export default ProtectedBuyerListItem
+export default ProtectedSupplierListItem

@@ -8,5 +8,10 @@
   "---": {
     "type": "separator"
   },
-  "index": "Quick start"    
+  "index": "Quick start",
+  "manage-permissions": {
+    "title":"Manage Permissions",
+    "type": "page",
+    "newWindow": false
+  }
 }
