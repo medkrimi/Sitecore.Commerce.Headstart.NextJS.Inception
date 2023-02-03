@@ -1,4 +1,4 @@
-import {AddEditForm} from "../../../../lib/components/usergroups"
+import {CreateUpdateForm} from "../../../../lib/components/usergroups"
 import {Box} from "@chakra-ui/react"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
@@ -24,7 +24,7 @@ const ProtectedAddEditForm = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
       <Box padding="GlobalPadding">
-        <AddEditForm ocService={userGroupsService} />
+        <CreateUpdateForm ocService={userGroupsService} />
       </Box>
     </ProtectedContent>
   )

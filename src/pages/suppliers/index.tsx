@@ -1,8 +1,6 @@
-import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
 import {Box, Button, ButtonGroup, HStack, Icon, Text, useToast} from "@chakra-ui/react"
-import {catalogsService, supplierUserGroupsService, supplierUsersService, suppliersService} from "lib/api"
+import {supplierUserGroupsService, supplierUsersService, suppliersService} from "lib/api"
 import {useEffect, useState} from "react"
-
 import Card from "lib/components/card/Card"
 import {IoMdClose} from "react-icons/io"
 import Link from "lib/components/navigation/Link"

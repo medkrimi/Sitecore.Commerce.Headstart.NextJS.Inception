@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react"
-
-import {AddEditForm} from "../../../../lib/components/usergroups/AddEditForm"
+import {CreateUpdateForm} from "../../../../lib/components/usergroups/CreateUpdateForm"
 import {Box} from "@chakra-ui/react"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {UserGroup} from "ordercloud-javascript-sdk"
@@ -37,7 +36,7 @@ const UserGroupListItem = () => {
   return (
     <>
       {userGroup?.ID ? (
-        <AddEditForm userGroup={userGroup} ocService={supplierUserGroupsService} />
+        <CreateUpdateForm userGroup={userGroup} ocService={supplierUserGroupsService} />
       ) : (
         <div> Loading</div>
       )}
