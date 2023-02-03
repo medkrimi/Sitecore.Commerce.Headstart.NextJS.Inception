@@ -1,101 +1,56 @@
 import * as Yup from "yup"
-
 import {Box, Button, ButtonGroup, Flex, Stack} from "@chakra-ui/react"
-import {InputControl, NumberInputControl, PercentComplete, SelectControl, SwitchControl} from "formik-chakra-ui"
-
+import {InputControl, PercentComplete, SwitchControl} from "formik-chakra-ui"
 import Card from "../card/Card"
 import {Formik} from "formik"
 import {Supplier} from "ordercloud-javascript-sdk"
 import {suppliersService} from "../../api"
 import {useRouter} from "next/router"
-import {useToast} from "@chakra-ui/react"
-import {xpHelper} from "../../utils/xp.utils"
-import {yupResolver} from "@hookform/resolvers/yup"
+import {useCreateUpdateForm} from "lib/hooks/useCreateUpdateForm"
 
-export {AddEditForm}
+export {CreateUpdateForm}
 
-interface AddEditFormProps {
+interface CreateUpdateFormProps {
   supplier?: Supplier
 }
 
-function AddEditForm({supplier}: AddEditFormProps) {
-  const isAddMode = !supplier
+function CreateUpdateForm({supplier}: CreateUpdateFormProps) {
   const router = useRouter()
-  const toast = useToast()
-  // form validation rules
-  const validationSchema = Yup.object().shape({
+  const formShape = {
     Name: Yup.string().required("Name is required"),
     Active: Yup.bool(),
     AllBuyersCanOrder: Yup.bool()
-  })
+  }
+  const {isCreating, successToast, validationSchema, initialValues, onSubmit} = useCreateUpdateForm<Supplier>(
+    supplier,
+    formShape,
+    createSupplier,
+    updateSupplier
+  )
 
-  const formOptions = {
-    resolver: yupResolver(validationSchema, {
-      stripUnknown: true,
-      abortEarly: false
-    }),
-    defaultValues: {}
+  async function createSupplier(fields: Supplier) {
+    await suppliersService.create(fields)
+    successToast({
+      description: "Supplier created successfully."
+    })
+    router.push(".")
   }
 
-  // set default form values if user passed in props
-  if (!isAddMode) {
-    formOptions.defaultValues = xpHelper.flattenXpObject(supplier, "_")
-  }
-
-  function onSubmit(fields, {setStatus, setSubmitting}) {
-    setStatus()
-    if (isAddMode) {
-      const supplier = xpHelper.unflattenXpObject(fields, "_")
-      createSupplier(supplier, setSubmitting)
-    } else {
-      const supplier = xpHelper.unflattenXpObject(fields, "_")
-      updateSupplier(supplier, setSubmitting)
-    }
-  }
-
-  async function createSupplier(fields, setSubmitting) {
-    try {
-      await suppliersService.create(fields)
-      toast({
-        id: fields.ID + "-created",
-        title: "Success",
-        description: "Supplier created successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
-      })
-      router.push(".")
-    } catch (e) {
-      setSubmitting(false)
-    }
-  }
-
-  async function updateSupplier(fields, setSubmitting) {
-    try {
-      await suppliersService.update(fields)
-      toast({
-        id: fields.ID + "-updated",
-        title: "Success",
-        description: "Supplier updated successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
-      })
-      router.push(".")
-    } catch (e) {
-      setSubmitting(false)
-    }
+  async function updateSupplier(fields: Supplier) {
+    await suppliersService.update(fields)
+    successToast({
+      description: "Supplier updated successfully."
+    })
+    router.push(".")
   }
 
   return (
     <>
       <Card variant="primaryCard">
         <Flex flexDirection="column" p="10">
-          <Formik initialValues={formOptions.defaultValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+          <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
             {({
-              // most of the usefull available Formik props
+              // most of the useful available Formik props
               values,
               errors,
               touched,
@@ -111,7 +66,7 @@ function AddEditForm({supplier}: AddEditFormProps) {
                   <InputControl name="Name" label="Supplier Name" />
                   <SwitchControl name="Active" label="Active" />
                   <SwitchControl name="AllBuyersCanOrder" label="All Buyers Can Order" />
-                  {isAddMode ? (
+                  {isCreating ? (
                     <PercentComplete />
                   ) : (
                     <InputControl name="DateCreated" label="Date created" isReadOnly />

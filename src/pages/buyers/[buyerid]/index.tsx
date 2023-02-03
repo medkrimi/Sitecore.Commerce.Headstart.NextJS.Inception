@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react"
-
 import {CreateUpdateForm} from "lib/components/buyers"
 import {Box} from "@chakra-ui/react"
 import {Buyer} from "ordercloud-javascript-sdk"

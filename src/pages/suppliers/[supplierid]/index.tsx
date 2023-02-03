@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react"
-
-import {AddEditForm} from "lib/components/suppliers"
+import {CreateUpdateForm} from "lib/components/suppliers"
 import {Box} from "@chakra-ui/react"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {Supplier} from "ordercloud-javascript-sdk"
@@ -33,7 +32,7 @@ const SupplierListItem = () => {
       suppliersService.getById(router.query.supplierid).then((supplier) => setSupplier(supplier))
     }
   }, [router.query.supplierid])
-  return <>{supplier?.ID ? <AddEditForm supplier={supplier} /> : <div> Loading</div>}</>
+  return <>{supplier?.ID ? <CreateUpdateForm supplier={supplier} /> : <div> Loading</div>}</>
 }
 
 const ProtectedSupplierListItem = () => {
