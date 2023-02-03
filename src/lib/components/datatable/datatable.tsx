@@ -23,7 +23,11 @@ import React, {useMemo} from "react"
 import {TiArrowSortedDown, TiArrowSortedUp, TiArrowUnsorted} from "react-icons/ti"
 import {useGlobalFilter, usePagination, useSortBy, useTable} from "react-table"
 
-function SearchDataTable(props) {
+interface SearchDataTableProps {
+  columnsData
+  tableData
+}
+function SearchDataTable(props: SearchDataTableProps) {
   const {columnsData, tableData} = props
   const columns = useMemo(() => columnsData, [columnsData])
   const data = useMemo(() => tableData, [tableData])
