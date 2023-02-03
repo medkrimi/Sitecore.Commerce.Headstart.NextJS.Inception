@@ -32,7 +32,7 @@ const UserListItem = () => {
       supplierUsersService.getById(router.query.supplierid, router.query.userid).then((user) => setUser(user))
     }
   }, [router.query.supplierid, router.query.userid])
-  return <>{user?.ID ? <AddEditForm user={user} /> : <div> Loading</div>}</>
+  return <>{user?.ID ? <AddEditForm user={user} ocService={supplierUsersService} /> : <div> Loading</div>}</>
 }
 
 const ProtectedSupplierListItem = () => {
