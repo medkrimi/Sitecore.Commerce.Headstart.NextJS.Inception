@@ -19,7 +19,7 @@ export async function getServerSideProps() {
   }
 }
 
-const ProtectedAddEditForm = () => {
+const ProtectedCreateUpdateForm = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
       <Box pl="GlobalPadding">
@@ -29,4 +29,4 @@ const ProtectedAddEditForm = () => {
   )
 }
 
-export default ProtectedAddEditForm
+export default ProtectedCreateUpdateForm
