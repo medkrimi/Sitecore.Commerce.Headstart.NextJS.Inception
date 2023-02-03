@@ -10,30 +10,19 @@ import {
   CheckboxGroup,
   Container,
   Divider,
-  Flex,
   HStack,
-  Heading,
-  IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   Spinner,
   Stack,
-  Table,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  Tr,
   VStack
 } from "@chakra-ui/react"
 import {useEffect, useRef, useState} from "react"
-
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
-import LettersCard from "lib/components/card/LettersCard"
 import Link from "../../lib/components/navigation/Link"
 import {NextSeo} from "next-seo"
 import {Orders} from "ordercloud-javascript-sdk"
@@ -41,7 +30,7 @@ import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {dateHelper} from "lib/utils/date.utils"
 import {priceHelper} from "lib/utils/price.utils"
-import {textHelper} from "lib/utils/text.utils"
+import SearchDataTable from "lib/components/datatable/datatable"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -73,33 +62,36 @@ const OrdersPage = () => {
     getOrders()
   }, [])
 
-  const ordersContent = orders.length ? (
-    orders.map((order) => (
-      <Tr key={order.ID}>
-        <Td>
-          <Checkbox pr="10px"></Checkbox>
-          <Link href={`/orders/${order.ID}`}>{order.ID}</Link>
-        </Td>
-        <Td>{dateHelper.formatDate(order.DateSubmitted)}</Td>
-        <Td>{textHelper.formatStatus(order.Status)}</Td>
-        <Td>
-          <HStack>
-            <LettersCard FirstName={order.FromUser.FirstName} LastName={order.FromUser.LastName} />
-            <Text>
-              {order.FromUser.FirstName} {order.FromUser.LastName}
-            </Text>
-          </HStack>
-        </Td>
-        <Td>{textHelper.formatTextTruncate(50, order.OrderItem, "...")}</Td>
-        <Td>{order.LineItemCount}</Td>
-        <Td>{priceHelper.formatPrice(order.Total)}</Td>
-      </Tr>
-    ))
-  ) : (
-    <Tr>
-      <Td colSpan={7}>No orders have been submitted</Td>
-    </Tr>
-  )
+  const columnsData = [
+    {
+      Header: "ORDER ID",
+      accessor: "ID",
+      Cell: ({value, row}) => <Link href={`/orders/${row.original.ID}`}>{value}</Link>
+    },
+    {
+      Header: "DATE SUBMITTED",
+      accessor: "DateSubmitted",
+      Cell: ({value}) => dateHelper.formatDate(value)
+    },
+    {
+      Header: "STATUS",
+      accessor: "Status"
+    },
+    {
+      Header: "CUSTOMER",
+      accessor: "FromUserID",
+      Cell: ({row}) => `${row.original.FromUser.FirstName} ${row.original.FromUser.LastName}`
+    },
+    {
+      Header: "# OF LINE ITEMS",
+      accessor: "LineItemCount"
+    },
+    {
+      Header: "TOTAL",
+      accessor: "Total",
+      Cell: ({value}) => priceHelper.formatPrice(value)
+    }
+  ]
 
   return (
     <Container maxW="full">
@@ -146,14 +138,7 @@ const OrdersPage = () => {
                     </Stack>
                   </CheckboxGroup>
                   <Divider />
-                  <HStack>
-                    {/*<Button size="md" bg={boxBgColor} color={color}>
-                      Clear
-                    </Button>
-                  <Button size="md" bg={boxBgColor} color={color}>
-                      Submit
-                    </Button> */}
-                  </HStack>
+                  <HStack></HStack>
                 </VStack>
               </MenuItem>
             </MenuList>
@@ -164,21 +149,9 @@ const OrdersPage = () => {
         </HStack>
       </HStack>
       <Card variant="primaryCard">
-        <Table>
-          <Thead>
-            <Tr>
-              <Th>ID</Th>
-              <Th>Date</Th>
-              <Th>Status</Th>
-              <Th>Customer</Th>
-              <Th>Products</Th>
-              <Th># of Line Items</Th>
-              <Th>Revenue</Th>
-            </Tr>
-          </Thead>
-          <Tbody>{ordersContent}</Tbody>
-        </Table>
+        <SearchDataTable tableData={orders} columnsData={columnsData} />
       </Card>
+
       <AlertDialog
         isOpen={isExportCSVDialogOpen}
         onClose={() => setExportCSVDialogOpen(false)}
