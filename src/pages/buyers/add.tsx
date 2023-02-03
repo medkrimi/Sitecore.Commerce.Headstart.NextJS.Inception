@@ -18,7 +18,7 @@ export async function getStaticProps() {
   }
 }
 
-function ProtectedAddEditForm() {
+function ProtectedCreateUpdateForm() {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
       <Box pl="GlobalPadding">
@@ -28,4 +28,4 @@ function ProtectedAddEditForm() {
   )
 }
 
-export default ProtectedAddEditForm
+export default ProtectedCreateUpdateForm

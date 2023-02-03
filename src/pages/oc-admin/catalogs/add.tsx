@@ -18,7 +18,7 @@ export async function getServerSideProps() {
   }
 }
 
-const ProtectedAddEditForm = () => {
+const ProtectedCreateUpdateForm = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
       <CreateUpdateForm />
@@ -26,4 +26,4 @@ const ProtectedAddEditForm = () => {
   )
 }
 
-export default ProtectedAddEditForm
+export default ProtectedCreateUpdateForm
