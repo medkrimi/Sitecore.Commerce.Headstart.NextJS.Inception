@@ -1,11 +1,12 @@
 import {useEffect, useState} from "react"
 
-import {AddEditForm} from "lib/components/usergroups/AddEditForm"
+import {AddEditForm} from "../../../../lib/components/usergroups/AddEditForm"
+import {Box} from "@chakra-ui/react"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {UserGroup} from "ordercloud-javascript-sdk"
 import {appPermissions} from "lib/constants/app-permissions.config"
+import {supplierUserGroupsService} from "../../../../lib/api"
 import {useRouter} from "next/router"
-import {userGroupsService} from "lib/api"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -15,7 +16,7 @@ export async function getServerSideProps() {
         title: "Edit user group",
         metas: {
           hasBreadcrumbs: true,
-          hasBuyerContextSwitch: true
+          hasSupplierContextSwitch: false
         }
       },
       revalidate: 5 * 60
@@ -27,22 +28,30 @@ const UserGroupListItem = () => {
   const router = useRouter()
   const [userGroup, setuserGroup] = useState({} as UserGroup)
   useEffect(() => {
-    if (router.query.buyerid && router.query.usergroupid) {
-      userGroupsService
-        .getById(router.query.buyerid, router.query.usergroupid)
+    if (router.query.supplierid && router.query.usergroupid) {
+      supplierUserGroupsService
+        .getById(router.query.supplierid, router.query.usergroupid)
         .then((userGroup) => setuserGroup(userGroup))
     }
-  }, [router.query.buyerid, router.query.usergroupid])
+  }, [router.query.supplierid, router.query.usergroupid])
   return (
-    <>{userGroup?.ID ? <AddEditForm userGroup={userGroup} ocService={userGroupsService} /> : <div> Loading</div>}</>
+    <>
+      {userGroup?.ID ? (
+        <AddEditForm userGroup={userGroup} ocService={supplierUserGroupsService} />
+      ) : (
+        <div> Loading</div>
+      )}
+    </>
   )
 }
-const ProtectedBuyerListItem = () => {
+const ProtectedSupplierListItem = () => {
   return (
-    <ProtectedContent hasAccess={appPermissions.BuyerManager}>
-      <UserGroupListItem />
+    <ProtectedContent hasAccess={appPermissions.SupplierManager}>
+      <Box padding="GlobalPadding">
+        <UserGroupListItem />
+      </Box>
     </ProtectedContent>
   )
 }
 
-export default ProtectedBuyerListItem
+export default ProtectedSupplierListItem

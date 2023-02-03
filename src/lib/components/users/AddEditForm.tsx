@@ -1,27 +1,33 @@
 import * as Yup from "yup"
+
 import {Box, Button, ButtonGroup, Flex, Heading, List, ListIcon, ListItem, Stack} from "@chakra-ui/react"
-import {InputControl, SwitchControl} from "formik-chakra-ui"
 import {ErrorMessage, Field, Formik} from "formik"
-import {useState} from "react"
+import {InputControl, SwitchControl} from "formik-chakra-ui"
+
 import Card from "../card/Card"
 import {MdCheckCircle} from "react-icons/md"
 import {User} from "ordercloud-javascript-sdk"
 import {useRouter} from "next/router"
-import {usersService} from "../../api"
+import {useState} from "react"
+import {useSuccessToast} from "lib/hooks/useToast"
 import {xpHelper} from "../../utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
-import {useSuccessToast} from "lib/hooks/useToast"
 
 export {AddEditForm}
 interface AddEditFormProps {
   user?: User
+  ocService: any
 }
-function AddEditForm({user}: AddEditFormProps) {
+function AddEditForm({user, ocService}: AddEditFormProps) {
   const isAddMode = !user
-  const router = useRouter()
+  let router = useRouter()
   const successToast = useSuccessToast()
   const [show, setShow] = useState(false)
   const handleClick = () => setShow(!show)
+  let parentId
+  if (router.query.buyerid !== undefined) parentId = router.query.buyerid
+  if (router.query.supplierid !== undefined) parentId = router.query.supplierid
+
   // form validation rules
   const validationSchema = Yup.object().shape({
     Username: Yup.string().max(100).required("Name is required"),
@@ -63,11 +69,11 @@ function AddEditForm({user}: AddEditFormProps) {
 
   async function createUser(fields, setSubmitting) {
     try {
-      await usersService.create(router.query.buyerid, fields)
+      await ocService.create(parentId, fields)
       successToast({
         description: "User created successfully."
       })
-      router.push(`/buyers/${router.query.buyerid}/users/`)
+      router.back()
     } catch (e) {
       setSubmitting(false)
     }
@@ -75,11 +81,11 @@ function AddEditForm({user}: AddEditFormProps) {
 
   async function updateUser(fields, setSubmitting) {
     try {
-      await usersService.update(router.query.buyerid, router.query.userid, fields)
+      await ocService.update(parentId, router.query.userid, fields)
       successToast({
         description: "User updated successfully."
       })
-      router.push(`/buyers/${router.query.buyerid}/users/`)
+      router.back()
     } catch (e) {
       setSubmitting(false)
     }
@@ -110,34 +116,34 @@ function AddEditForm({user}: AddEditFormProps) {
                   <InputControl name="Email" label="Email" />
                   <InputControl name="Phone" label="Phone" />
                   <SwitchControl name="Active" label="Active" />
-                  {isAddMode && (
-                    <>
-                      <label htmlFor="Password">Password</label>
-                      <Box position="relative">
-                        <Field
-                          style={{width: "100%"}}
-                          label="Password"
-                          name="Password"
-                          pr="4.5rem"
-                          type={show ? "text" : "password"}
-                          placeholder="Enter password"
-                        />
-                        <Button position="absolute" right="2px" top="2px" size="sm" onClick={handleClick}>
-                          {show ? "Hide" : "Show"}
-                        </Button>
-                      </Box>
-                      <ErrorMessage name="Password" />
-                      <label htmlFor="ConfirmPassword">Confirm Password</label>
+                  {/* {isAddMode && (  This has been commented to fix a validation bug duing update */}
+                  <>
+                    <label htmlFor="Password">Password</label>
+                    <Box position="relative">
                       <Field
-                        label="Confirm Password"
-                        name="ConfirmPassword"
+                        style={{width: "100%"}}
+                        label="Password"
+                        name="Password"
                         pr="4.5rem"
                         type={show ? "text" : "password"}
                         placeholder="Enter password"
                       />
-                      <ErrorMessage name="ConfirmPassword" />
-                    </>
-                  )}
+                      <Button position="absolute" right="2px" top="2px" size="sm" onClick={handleClick}>
+                        {show ? "Hide" : "Show"}
+                      </Button>
+                    </Box>
+                    <ErrorMessage name="Password" />
+                    <label htmlFor="ConfirmPassword">Confirm Password</label>
+                    <Field
+                      label="Confirm Password"
+                      name="ConfirmPassword"
+                      pr="4.5rem"
+                      type={show ? "text" : "password"}
+                      placeholder="Enter password"
+                    />
+                    <ErrorMessage name="ConfirmPassword" />
+                  </>
+                  {/* )} */}
                   <ButtonGroup>
                     <Button variant="primaryButton" type="submit" isLoading={isSubmitting}>
                       Save
@@ -152,11 +158,7 @@ function AddEditForm({user}: AddEditFormProps) {
                     >
                       Reset
                     </Button>
-                    <Button
-                      onClick={() => router.push(`/buyers/${router.query.buyerid}/users`)}
-                      variant="secondaryButton"
-                      isLoading={isSubmitting}
-                    >
+                    <Button onClick={() => router.back()} variant="secondaryButton" isLoading={isSubmitting}>
                       Cancel
                     </Button>
                   </ButtonGroup>

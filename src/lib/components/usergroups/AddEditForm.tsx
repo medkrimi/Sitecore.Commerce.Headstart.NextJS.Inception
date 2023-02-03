@@ -1,23 +1,30 @@
 import * as Yup from "yup"
+
 import {Box, Button, ButtonGroup, Card, Flex, Stack} from "@chakra-ui/react"
 import {InputControl, TextareaControl} from "formik-chakra-ui"
+
 import {Formik} from "formik"
 import {UserGroup} from "ordercloud-javascript-sdk"
 import {useRouter} from "next/router"
+import {useSuccessToast} from "lib/hooks/useToast"
 import {xpHelper} from "../../utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
-import {useSuccessToast} from "lib/hooks/useToast"
-import {userGroupsService} from "lib/api"
 
 export {AddEditForm}
 
 interface AddEditFormProps {
   userGroup?: UserGroup
+  ocService: any
 }
-function AddEditForm({userGroup}: AddEditFormProps) {
+function AddEditForm({userGroup, ocService}: AddEditFormProps) {
   const isAddMode = !userGroup
   const router = useRouter()
   const successToast = useSuccessToast()
+
+  let parentId
+  if (router.query.buyerid !== undefined) parentId = router.query.buyerid
+  if (router.query.supplierid !== undefined) parentId = router.query.supplierid
+
   // form validation rules
   const validationSchema = Yup.object().shape({
     Name: Yup.string().max(100).required("Name is required"),
@@ -50,11 +57,11 @@ function AddEditForm({userGroup}: AddEditFormProps) {
 
   async function createUserGroup(fields, setSubmitting) {
     try {
-      await userGroupsService.create(router.query.buyerid, fields)
+      await ocService.create(parentId, fields)
       successToast({
         description: "User Group created successfully."
       })
-      router.push(`/buyers/${router.query.buyerid}/usergroups/`)
+      router.back()
     } catch (e) {
       setSubmitting(false)
     }
@@ -62,11 +69,11 @@ function AddEditForm({userGroup}: AddEditFormProps) {
 
   async function updateUserGroup(fields, setSubmitting) {
     try {
-      await userGroupsService.update(router.query.buyerid, router.query.usergroupid, fields)
+      await ocService.update(parentId, router.query.usergroupid, fields)
       successToast({
         description: "Buyer updated successfully."
       })
-      router.push(`/buyers/${router.query.buyerid}/usergroups/`)
+      router.back()
     } catch (e) {
       setSubmitting(false)
     }
@@ -107,11 +114,7 @@ function AddEditForm({userGroup}: AddEditFormProps) {
                     >
                       Reset
                     </Button>
-                    <Button
-                      onClick={() => router.push(`/buyers/${router.query.buyerid}/usersgroups`)}
-                      variant="secondaryButton"
-                      isLoading={isSubmitting}
-                    >
+                    <Button onClick={() => router.back()} variant="secondaryButton" isLoading={isSubmitting}>
                       Cancel
                     </Button>
                   </ButtonGroup>
