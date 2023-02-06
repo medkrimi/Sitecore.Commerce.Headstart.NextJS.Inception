@@ -73,6 +73,18 @@ yarn dev
 Your app should be up and running on [http://localhost:3000](http://localhost:3000)! 
 If it doesn't work, post on [GitHub issues](https://github.com/medkrimi/commercenext.js/discussions).
 
+### Seeding a new marketplace
+
+In some cases it may be useful to have your own marketplace. Maybe you need to create data for a specific workflow, or perhaps you want to insulate yourself from unwanted data changes right before a demo. To make this easy we've included a CLI command that will create a marketplace for you and pre-populate it with products from the play shop marketplace. 
+
+```bash
+npm run seed -- -u=YOUR_PORTAL_USERNAME -p=YOUR_PORTAL_PASSWORD -n=YOUR_MARKETPLACE_NAME
+```
+
+Next, find the admin client ID and set it as NEXT_PUBLIC_OC_CLIENT_ID in your .env file. 
+
+Finally log in as `initialadminuser` with the password `Testingsetup123!`
+
 ### Deploy on Vercel
 To deploy your local project to Vercel, push it to public GitHub/GitLab/Bitbucket repository then [import to Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example).
 

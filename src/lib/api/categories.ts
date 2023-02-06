@@ -13,7 +13,7 @@ export const categoriesService = {
 
 async function list(catalogID) {
   console.log("categoriesService::List")
-  return await Categories.List(catalogID, {depth: "99"})
+  return await Categories.List(catalogID, {depth: "all", pageSize: 100})
 }
 
 async function listAssignements(catalogID) {
