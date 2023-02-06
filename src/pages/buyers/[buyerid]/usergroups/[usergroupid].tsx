@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react"
-
-import {AddEditForm} from "../../../../lib/components/usergroups/AddEditForm"
+import {CreateUpdateForm} from "../../../../lib/components/usergroups/CreateUpdateForm"
 import {Box} from "@chakra-ui/react"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {UserGroup} from "ordercloud-javascript-sdk"
@@ -34,9 +33,13 @@ const UserGroupListItem = () => {
         .then((userGroup) => setuserGroup(userGroup))
     }
   }, [router.query.buyerid, router.query.usergroupid])
-  return <>{userGroup?.ID ? <AddEditForm userGroup={userGroup} /> : <div> Loading</div>}</>
+  return (
+    <>
+      {userGroup?.ID ? <CreateUpdateForm userGroup={userGroup} ocService={userGroupsService} /> : <div> Loading</div>}
+    </>
+  )
 }
-const ProtectedBuyerListItem = () => {
+const ProtectedUserGroupListItem = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
       <Box padding="GlobalPadding">
@@ -46,4 +49,4 @@ const ProtectedBuyerListItem = () => {
   )
 }
 
-export default ProtectedBuyerListItem
+export default ProtectedUserGroupListItem

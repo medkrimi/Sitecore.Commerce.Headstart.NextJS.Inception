@@ -12,10 +12,8 @@ import {
   ModalHeader,
   ModalOverlay,
   useDisclosure,
-  Flex,
   Select,
   Input,
-  useToast,
   Textarea,
   CheckboxGroup,
   Checkbox
@@ -24,11 +22,9 @@ import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.ser
 import {ProductXPs} from "lib/types/ProductXPs"
 import {Product, Products} from "ordercloud-javascript-sdk"
 import {ChangeEvent, useEffect, useState} from "react"
-import {FiCheck, FiX, FiEdit, FiPlus} from "react-icons/fi"
-import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
-import {HiOutlineX} from "react-icons/hi"
 import TagContainer from "../generic/tagContainer"
+import {useErrorToast} from "lib/hooks/useToast"
 
 type ProductDataProps = {
   composedProduct: ComposedProduct
@@ -51,7 +47,7 @@ export default function ProductXpCards({composedProduct, setComposedProduct}: Pr
   const [expanded, setExpanded] = useState(true)
   const [editing, setEditing] = useState("")
   //const [editingType, setEditingType] = useState("text")
-  const toast = useToast()
+  const errorToast = useErrorToast()
   const tags = ["1", "2", "3", "4", "5", "6"]
 
   useEffect(() => {
@@ -174,12 +170,9 @@ export default function ProductXpCards({composedProduct, setComposedProduct}: Pr
     const TempXpFormName = newXpFormType == "tag" ? newXpFormName + "###" : newXpFormName
     console.log("TempXpFormName:", TempXpFormName)
     if (formValues[TempXpFormName] !== undefined) {
-      toast({
+      errorToast({
         title: "Validation Error",
-        description: "Extended property of that name already exists",
-        status: "error",
-        duration: 9000,
-        isClosable: true
+        description: "Extended property of that name already exists"
       })
       return
     }

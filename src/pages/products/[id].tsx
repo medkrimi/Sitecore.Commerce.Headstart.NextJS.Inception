@@ -8,13 +8,10 @@ import {
   Box,
   Button,
   Container,
-  Flex,
   Grid,
   GridItem,
   HStack,
-  Heading,
   Link,
-  Tooltip,
   VStack,
   Menu,
   useDisclosure,
@@ -23,7 +20,6 @@ import {
   MenuItem,
   Checkbox,
   CheckboxGroup,
-  Stack,
   Divider,
   Text,
   SimpleGrid,
@@ -33,7 +29,6 @@ import {
   ModalOverlay,
   ModalHeader,
   ModalContent,
-  useToast,
   ModalCloseButton,
   ModalBody,
   FormControl,
@@ -42,13 +37,10 @@ import {
   ModalFooter
 } from "@chakra-ui/react"
 import {ComposedProduct, GetComposedProduct} from "lib/services/ordercloud.service"
-import {FiRefreshCw, FiTrash2} from "react-icons/fi"
 import {ChangeEvent, useEffect, useState} from "react"
-
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import EditorialProgressBar from "lib/components/products/EditorialProgressBar"
 import {NextSeo} from "next-seo"
-import NextLink from "next/link"
 import ProductCatalogAssignments from "lib/components/products/ProductCatalogAssignments"
 import ProductData from "lib/components/products/ProductData"
 import ProductInventoryData from "lib/components/products/ProductInventoryData"
@@ -59,7 +51,6 @@ import ProductPriceScheduleAssignments from "lib/components/products/ProductPric
 import ProductSpecs from "lib/components/products/ProductSpecs"
 import ProductSuppliers from "lib/components/products/ProductSupllier"
 import ProductVariants from "lib/components/products/ProductVariants"
-//import ProductXpInformation from "lib/components/products/ProductXpInformation"
 import ProductXpCards from "lib/components/products/ProductXpCards"
 import {Product, Products} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
@@ -68,6 +59,7 @@ import {appPermissions} from "lib/constants/app-permissions.config"
 import {useRouter} from "next/router"
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
+import {useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -86,7 +78,7 @@ export async function getServerSideProps() {
 
 const ProductDetails = () => {
   const router = useRouter()
-  const toast = useToast()
+  const successToast = useSuccessToast()
   const {isOpen: isOpenAddProduct, onOpen: onOpenAddProduct, onClose: onCloseAddProduct} = useDisclosure()
   const [selectedLanguage, setselectedLanguage] = useState("")
   const {id} = router.query
@@ -143,12 +135,9 @@ const ProductDetails = () => {
   // TODO Add more properties in Add handling
   const onProductAdd = async (e) => {
     if (formValues.id == "" || formValues.name == "") {
-      toast({
+      successToast({
         title: "Missing Properties",
-        description: "Please fill out ID and NAME to add the product",
-        status: "error",
-        duration: 9000,
-        isClosable: true
+        description: "Please fill out ID and NAME to add the product"
       })
       return
     }

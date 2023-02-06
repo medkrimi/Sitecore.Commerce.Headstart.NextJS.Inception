@@ -1,6 +1,13 @@
 import {ApiRole} from "ordercloud-javascript-sdk"
 
-type AppPermission = "OrderManager" | "ProductManager" | "BuyerManager" | "ReportViewer" | "MeManager"
+type AppPermission =
+  | "OrderManager"
+  | "ProductManager"
+  | "BuyerManager"
+  | "ReportViewer"
+  | "MeManager"
+  | "SupplierManager"
+  | "SettingsManager"
 
 export const appPermissions: Record<AppPermission, ApiRole[]> = {
   OrderManager: ["OrderAdmin"],
@@ -14,6 +21,8 @@ export const appPermissions: Record<AppPermission, ApiRole[]> = {
     "CategoryAdmin",
     "CategoryReader"
   ],
+  SupplierManager: ["SupplierAdmin", "SupplierAddressAdmin", "SupplierUserAdmin", "SupplierUserGroupAdmin"],
   ReportViewer: ["OrderAdmin", "ProductAdmin"],
-  MeManager: ["MeAdmin", "MeXpAdmin"]
+  MeManager: ["MeAdmin", "MeXpAdmin"],
+  SettingsManager: ["ProductFacetAdmin"]
 }

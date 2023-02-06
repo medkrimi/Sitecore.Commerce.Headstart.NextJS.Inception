@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react"
-
-import {AddEditForm} from "lib/components/catalogs/AddEditForm"
+import {CreateUpdateForm} from "lib/components/catalogs/CreateUpdateForm"
 import {Catalog} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
@@ -31,7 +30,7 @@ const CatalogListItem = () => {
       catalogsService.getById(router.query.catalogid).then((catalog) => setCatalog(catalog))
     }
   }, [router.query.catalogid])
-  return <>{catalog?.ID ? <AddEditForm catalog={catalog} /> : <div> Loading</div>}</>
+  return <>{catalog?.ID ? <CreateUpdateForm catalog={catalog} /> : <div> Loading</div>}</>
 }
 
 const ProtectedBuyerListItem = () => {

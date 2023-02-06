@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react"
-
-import {AddEditForm} from "lib/components/buyers"
+import {CreateUpdateForm} from "lib/components/buyers"
 import {Box} from "@chakra-ui/react"
 import {Buyer} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
@@ -33,7 +32,7 @@ const BuyerListItem = () => {
       buyersService.getById(router.query.buyerid).then((buyer) => setBuyer(buyer))
     }
   }, [router.query.buyerid])
-  return <>{buyer?.ID ? <AddEditForm buyer={buyer} /> : <div> Loading</div>}</>
+  return <>{buyer?.ID ? <CreateUpdateForm buyer={buyer} /> : <div> Loading</div>}</>
 }
 
 const ProtectedBuyerListItem = () => {

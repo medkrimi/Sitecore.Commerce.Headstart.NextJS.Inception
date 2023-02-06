@@ -1,4 +1,3 @@
-import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
 import {
   AlertDialog,
   AlertDialogBody,
@@ -13,7 +12,6 @@ import {
   Icon,
   Stack,
   Text,
-  useToast,
   AlertDialogFooter,
   Spinner
 } from "@chakra-ui/react"
@@ -30,6 +28,7 @@ import {appPermissions} from "lib/constants/app-permissions.config"
 import {dateHelper} from "lib/utils/date.utils"
 import {promotionsService} from "lib/api"
 import router from "next/router"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getStaticProps() {
@@ -54,11 +53,8 @@ const PromotionsList = () => {
   const cancelRef = useRef()
   const requestExportCSV = () => {}
 
-  const toast = useToast({
-    duration: 6000,
-    isClosable: true,
-    position: "top"
-  })
+  const successToast = useSuccessToast()
+  const errorToast = useErrorToast()
 
   useEffect(() => {
     initPromotionsData()
@@ -73,18 +69,12 @@ const PromotionsList = () => {
     try {
       await promotionsService.delete(id)
       initPromotionsData()
-      toast({
-        id: id + "-deleted",
-        title: "Success",
-        description: "Promotion deleted successfully.",
-        status: "success"
+      successToast({
+        description: "Promotion deleted successfully."
       })
     } catch (e) {
-      toast({
-        id: id + "fail-deleted",
-        title: "Error",
-        description: "Promotion delete failed",
-        status: "error"
+      errorToast({
+        description: "Promotion delete failed"
       })
     }
   }

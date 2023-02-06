@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react"
-
-import {AddEditForm} from "lib/components/usergroups/AddEditForm"
+import {CreateUpdateForm} from "lib/components/usergroups/CreateUpdateForm"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {UserGroup} from "ordercloud-javascript-sdk"
 import {appPermissions} from "lib/constants/app-permissions.config"
@@ -33,7 +32,11 @@ const UserGroupListItem = () => {
         .then((userGroup) => setuserGroup(userGroup))
     }
   }, [router.query.buyerid, router.query.usergroupid])
-  return <>{userGroup?.ID ? <AddEditForm userGroup={userGroup} /> : <div> Loading</div>}</>
+  return (
+    <>
+      {userGroup?.ID ? <CreateUpdateForm userGroup={userGroup} ocService={userGroupsService} /> : <div> Loading</div>}
+    </>
+  )
 }
 const ProtectedBuyerListItem = () => {
   return (

@@ -1,7 +1,15 @@
 import {Button, Flex, Icon, IconButton, Image, Link, Text, useColorModeValue} from "@chakra-ui/react"
 import {FiSettings, FiStar} from "react-icons/fi"
-import {HiChevronDoubleLeft, HiOutlineChartBar, HiOutlineEmojiSad, HiOutlineQrcode, HiOutlineUser} from "react-icons/hi"
+import {
+  HiChevronDoubleLeft,
+  HiOutlineChartBar,
+  HiOutlineEmojiSad,
+  HiOutlineQrcode,
+  HiOutlineUser,
+  HiOutlineUserGroup
+} from "react-icons/hi"
 import React, {useState} from "react"
+import {TbBuildingWarehouse, TbShoppingCartDiscount, TbShoppingCartPlus, TbTruckReturn} from "react-icons/tb"
 
 import {BsCurrencyDollar} from "react-icons/bs"
 import NextLink from "next/link"
@@ -105,7 +113,11 @@ const DesktopSideBarMenu = () => {
                   color="white"
                   _hover={{color: "gray.300"}}
                 >
-                  <Icon as={FiStar} fontSize={navSize == "small" ? "30px" : "35px"} title="Promotions"></Icon>
+                  <Icon
+                    as={TbShoppingCartDiscount}
+                    fontSize={navSize == "small" ? "30px" : "35px"}
+                    title="Promotions"
+                  ></Icon>
                   <Text
                     as="span"
                     pl="GlobalPadding"
@@ -129,7 +141,7 @@ const DesktopSideBarMenu = () => {
                   color="white"
                   _hover={{color: "gray.300"}}
                 >
-                  <Icon as={BsCurrencyDollar} fontSize={navSize == "small" ? "30px" : "35px"} title="Orders"></Icon>
+                  <Icon as={TbShoppingCartPlus} fontSize={navSize == "small" ? "30px" : "35px"} title="Orders"></Icon>
                   <Text
                     as="span"
                     pl="GlobalPadding"
@@ -153,7 +165,7 @@ const DesktopSideBarMenu = () => {
                   color="white"
                   _hover={{color: "gray.300"}}
                 >
-                  <Icon as={HiOutlineEmojiSad} fontSize={navSize == "small" ? "30px" : "35px"} title="Returns"></Icon>
+                  <Icon as={TbTruckReturn} fontSize={navSize == "small" ? "30px" : "35px"} title="Returns"></Icon>
                   <Text
                     as="span"
                     pl="GlobalPadding"
@@ -177,7 +189,7 @@ const DesktopSideBarMenu = () => {
                   color="white"
                   _hover={{color: "gray.300"}}
                 >
-                  <Icon as={HiOutlineUser} fontSize={navSize == "small" ? "30px" : "35px"}></Icon>
+                  <Icon as={HiOutlineUserGroup} fontSize={navSize == "small" ? "30px" : "35px"}></Icon>
                   <Text
                     as="span"
                     pl="GlobalPadding"
@@ -191,7 +203,32 @@ const DesktopSideBarMenu = () => {
                 </Link>
               </NextLink>
             </ProtectedContent>
-            <ProtectedContent hasAccess={appPermissions.MeManager}>
+            <ProtectedContent hasAccess={appPermissions.SupplierManager}>
+              <NextLink href="/suppliers" passHref>
+                <Link
+                  pl="2"
+                  pr="2"
+                  pb="15px"
+                  verticalAlign="middle"
+                  display="flex"
+                  color="white"
+                  _hover={{color: "gray.300"}}
+                >
+                  <Icon as={TbBuildingWarehouse} fontSize={navSize == "small" ? "30px" : "35px"}></Icon>
+                  <Text
+                    as="span"
+                    pl="GlobalPadding"
+                    hidden={navSize == "small" ? true : false}
+                    title="Suppliers"
+                    fontSize={navSize == "small" ? "16px" : "21px"}
+                    pt="2px"
+                  >
+                    Suppliers
+                  </Text>
+                </Link>
+              </NextLink>
+            </ProtectedContent>
+            <ProtectedContent hasAccess={appPermissions.SettingsManager}>
               <NextLink href="/settings" passHref>
                 <Link
                   pl="2"

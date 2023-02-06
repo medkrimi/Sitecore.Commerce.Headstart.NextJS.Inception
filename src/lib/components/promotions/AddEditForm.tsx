@@ -1,23 +1,16 @@
 import * as Yup from "yup"
-
 import {
   Box,
   Button,
   ButtonGroup,
-  Container,
   Divider,
-  Flex,
   FormLabel,
   Grid,
   GridItem,
   HStack,
   Heading,
-  Input,
   InputGroup,
   InputLeftElement,
-  InputRightElement,
-  Link,
-  ListIcon,
   ListItem,
   NumberDecrementStepper,
   NumberIncrementStepper,
@@ -27,36 +20,24 @@ import {
   Radio,
   Select,
   SimpleGrid,
-  Stack,
   UnorderedList
 } from "@chakra-ui/react"
-import {CheckIcon, DeleteIcon} from "@chakra-ui/icons"
-import {
-  CheckboxSingleControl,
-  InputControl,
-  NumberInputControl,
-  PercentComplete,
-  RadioGroupControl,
-  SelectControl,
-  SwitchControl,
-  TextareaControl
-} from "formik-chakra-ui"
-import {Field, Formik, useField, useFormikContext} from "formik"
+import {DeleteIcon} from "@chakra-ui/icons"
+import {InputControl, RadioGroupControl, SwitchControl, TextareaControl} from "formik-chakra-ui"
+import {Formik, useField, useFormikContext} from "formik"
 import {Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react"
 import {useEffect, useState} from "react"
-
 import Card from "../card/Card"
 import DatePicker from "../datepicker/DatePicker"
 import {ExpressionBuilder} from "./ExpressionBuilder"
-import {MdCheckCircle} from "react-icons/md"
 import {Promotion} from "ordercloud-javascript-sdk"
 import {appPromotions} from "../../constants/app-promotions.config"
 import {json} from "stream/consumers"
 import {promotionsService} from "lib/api"
 import {useRouter} from "next/router"
-import {useToast} from "@chakra-ui/react"
 import {xpHelper} from "lib/utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 export {AddEditForm}
 
@@ -90,7 +71,8 @@ function AddEditForm({promotion}: AddEditFormProps) {
   const [endDate, setEndDate] = useState(new Date())
   const isAddMode = !promotion
   const router = useRouter()
-  const toast = useToast()
+  const successToast = useSuccessToast()
+  const errorToast = useErrorToast()
   // form validation rules
   const validationSchema = Yup.object().shape({
     Name: Yup.string().max(100),
@@ -136,14 +118,8 @@ function AddEditForm({promotion}: AddEditFormProps) {
         router.query.buyerid,
         router.query.usergroupid
       )*/
-      toast({
-        id: fields.ID + "-created",
-        title: "Success",
-        description: "Promotion created successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Promotion created successfully."
       })
       router.push(`/promotions`)
     } catch (e) {
@@ -160,14 +136,8 @@ function AddEditForm({promotion}: AddEditFormProps) {
         router.query.buyerid,
         router.query.usergroupid
       )*/
-      toast({
-        id: fields.ID + "-updated",
-        title: "Success",
-        description: "Promotion updated successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Promotion updated successfully."
       })
       router.push(`/promotions`)
     } catch (e) {
@@ -178,24 +148,12 @@ function AddEditForm({promotion}: AddEditFormProps) {
   async function deletePromotion(promotionid) {
     try {
       await promotionsService.delete(promotionid)
-      toast({
-        id: promotionid + "-deleted",
-        title: "Success",
-        description: "Promotion deleted successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Promotion deleted successfully."
       })
     } catch (e) {
-      toast({
-        id: promotionid + "fail-deleted",
-        title: "Error",
-        description: "Promotion delete failed",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      errorToast({
+        description: "Promotion delete failed"
       })
     }
   }
