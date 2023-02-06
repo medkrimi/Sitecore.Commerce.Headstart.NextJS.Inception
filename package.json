@@ -16,7 +16,8 @@
     "up-latest": "yarn up --latest",
     "release": "cross-env HUSKY=0 standard-version",
     "push-release": "git push --follow-tags origin main",
-    "pre-commit": "yarn lint && yarn tsc --noEmit && yarn build"
+    "pre-commit": "yarn lint && yarn tsc --noEmit && yarn build",
+    "seed": "seeding seed playshop-marketplace.yml"
   },
   "engines": {
     "npm": "Please use yarn",
@@ -58,6 +59,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@ordercloud/seeding": "^1.0.31",
     "@types/date-fns": "^2.6.0",
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.15",
