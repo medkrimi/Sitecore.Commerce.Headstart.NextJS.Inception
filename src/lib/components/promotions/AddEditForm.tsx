@@ -1,4 +1,5 @@
 import * as Yup from "yup"
+
 import {
   Box,
   Button,
@@ -22,13 +23,15 @@ import {
   SimpleGrid,
   UnorderedList
 } from "@chakra-ui/react"
-import {DeleteIcon} from "@chakra-ui/icons"
-import {InputControl, RadioGroupControl, SwitchControl, TextareaControl} from "formik-chakra-ui"
 import {Formik, useField, useFormikContext} from "formik"
+import {InputControl, RadioGroupControl, SelectControl, SwitchControl, TextareaControl} from "formik-chakra-ui"
 import {Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react"
 import {useEffect, useState} from "react"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
+
 import Card from "../card/Card"
 import DatePicker from "../datepicker/DatePicker"
+import {DeleteIcon} from "@chakra-ui/icons"
 import {ExpressionBuilder} from "./ExpressionBuilder"
 import {Promotion} from "ordercloud-javascript-sdk"
 import {appPromotions} from "../../constants/app-promotions.config"
@@ -37,7 +40,6 @@ import {promotionsService} from "lib/api"
 import {useRouter} from "next/router"
 import {xpHelper} from "lib/utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
-import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 export {AddEditForm}
 

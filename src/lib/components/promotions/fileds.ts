@@ -6,29 +6,41 @@ export const validator = (r: RuleType) => !!r.value
 
 export const fields: Field[] = [
   {
-    name: "firstName",
-    label: "First Name",
-    placeholder: "Enter first name",
-    validator
-  },
-  {
-    name: "lastName",
-    label: "Last Name",
-    placeholder: "Enter last name",
+    name: "ProductName",
+    label: "Product Name",
+    placeholder: "Enter product name",
     defaultOperator: "beginsWith",
     validator
   },
-  {name: "age", label: "Age", inputType: "number", validator},
   {
-    name: "gender",
-    label: "Gender",
-    operators: defaultOperators.filter((op) => op.name === "="),
-    valueEditorType: "radio",
-    values: [
-      {name: "M", label: "Male"},
-      {name: "F", label: "Female"},
-      {name: "O", label: "Other"}
-    ]
+    name: "ProductId",
+    label: "Product ID",
+    placeholder: "Enter product id",
+    validator
   },
-  {name: "birthdate", label: "Birth Date", inputType: "date"}
+  {
+    name: "CategoryName",
+    label: "Category Name",
+    placeholder: "Enter category name",
+    defaultOperator: "beginsWith",
+    validator
+  },
+  {
+    name: "CategoryId",
+    label: "Category ID",
+    placeholder: "Enter category id",
+    validator
+  },
+  {
+    name: "Quantity",
+    label: "Quantity",
+    placeholder: "Enter quantity",
+    validator
+  },
+  {
+    name: "TotalOrderAmount",
+    label: "Total Order Amount",
+    placeholder: "Enter amount",
+    validator
+  }
 ]
