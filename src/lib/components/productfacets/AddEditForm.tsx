@@ -48,15 +48,13 @@ function AddEditForm({productfacet}: AddEditFormProps) {
     if (items.length == 0) {
       let newItems = []
       let addnewItem = []
-      addnewItem = productfacet.xp.Options.map((item) => {
+      addnewItem = (productfacet.xp?.Options || []).map((item) => {
         let newItem = {
           itemName: item
         }
         newItems = newItems.concat(newItem)
         setItems(newItems)
       })
-      //console.log(productfacet.xp.Options)
-      //console.log(items)
     }
   }
 

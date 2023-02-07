@@ -48,6 +48,13 @@ Objects:
       xp: {
         IsPermission: true
       }
+    - ID: SettingsManager
+      Name: Settings Manager
+      Roles:
+        - ProductFacetAdmin
+      xp: {
+        IsPermission: true
+      }
     - ID: SupplierManager
       Name: Supplier Manager
       Roles:
@@ -115,6 +122,9 @@ Objects:
     - ID: SupplierManager
       Name: Supplier Manager
       Description: Associated with the SupplierManager security profile
+    - ID: SettingsManager
+      Name: Settings Manager
+      Description: Associated with the SettingsManager security profile
   AdminAddresses: []
   MessageSenders: []
   ApiClients:
@@ -5139,6 +5149,11 @@ Assignments:
       SupplierID: null
       UserID: null
       UserGroupID: SupplierManager
+    - SecurityProfileID: SettingsManager
+      BuyerID: null
+      SupplierID: null
+      UserID: null
+      UserGroupID: SettingsManager
   AdminUserGroupAssignments: 
     - UserGroupID: BuyerManager
       UserID: initial-admin-user
@@ -5149,6 +5164,8 @@ Assignments:
     - UserGroupID: ProductManager
       UserID: initial-admin-user
     - UserGroupID: SupplierManager
+      UserID: initial-admin-user
+    - UserGroupID: SettingsManager
       UserID: initial-admin-user
   ApiClientAssignments: []
   ProductAssignments: []
