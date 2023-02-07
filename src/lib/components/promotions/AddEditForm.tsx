@@ -1,4 +1,5 @@
 import * as Yup from "yup"
+
 import {
   Box,
   Button,
@@ -22,20 +23,23 @@ import {
   SimpleGrid,
   UnorderedList
 } from "@chakra-ui/react"
-import {DeleteIcon} from "@chakra-ui/icons"
-import {InputControl, RadioGroupControl, SwitchControl, TextareaControl} from "formik-chakra-ui"
 import {Formik, useField, useFormikContext} from "formik"
+import {InputControl, RadioGroupControl, SelectControl, SwitchControl, TextareaControl} from "formik-chakra-ui"
 import {Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react"
 import {useEffect, useState} from "react"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
+
 import Card from "../card/Card"
 import DatePicker from "../datepicker/DatePicker"
+import {DeleteIcon} from "@chakra-ui/icons"
 import {ExpressionBuilder} from "./ExpressionBuilder"
 import {Promotion} from "ordercloud-javascript-sdk"
+import {appPromotions} from "../../constants/app-promotions.config"
+import {json} from "stream/consumers"
 import {promotionsService} from "lib/api"
 import {useRouter} from "next/router"
 import {xpHelper} from "lib/utils/xp.utils"
 import {yupResolver} from "@hookform/resolvers/yup"
-import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 export {AddEditForm}
 
@@ -156,6 +160,12 @@ function AddEditForm({promotion}: AddEditFormProps) {
     }
   }
 
+  const updateExpressions = (value, setFieldValue) => {
+    const promo = appPromotions.find((item) => item.Name === value)
+    setFieldValue("EligibleExpression", promo?.EligibleExpression)
+    setFieldValue("ValueExpression", promo?.ValueExpression)
+  }
+
   return (
     <>
       <Card variant="primaryCard">
@@ -170,7 +180,7 @@ function AddEditForm({promotion}: AddEditFormProps) {
             values,
             errors,
             touched,
-            handleBlur,
+            handleChange,
             handleSubmit,
             isSubmitting,
             setFieldValue,
@@ -328,12 +338,30 @@ function AddEditForm({promotion}: AddEditFormProps) {
                         <TabPanel>
                           <SimpleGrid columns={2} spacing={10}>
                             <Box>
-                              <EligibleExpressionField name="EligibleExpression" label="Eligible Expression" />
+                              <TextareaControl name="EligibleExpression" label="Eligible Expression" />
                             </Box>
                             <Box>
                               <TextareaControl name="ValueExpression" label="Value Expression" />
                             </Box>
                           </SimpleGrid>
+                          <Box>
+                            <label>Predefined Promotion Templates</label>
+                            <SelectControl
+                              name="PromotionTemplate"
+                              selectProps={{placeholder: "Select from promotion predefined templates"}}
+                              onChange={(e) => {
+                                handleChange(e)
+                                const value = (e.target as HTMLSelectElement).value
+                                updateExpressions(value, setFieldValue)
+                              }}
+                            >
+                              {appPromotions.map((item, index) => (
+                                <option key={item.Name}>{item.Name}</option>
+                              ))}
+                            </SelectControl>
+                          </Box>
+                          <Divider mt="15" mb="15" />
+                          <label>Expression Builder</label>
                           <ExpressionBuilder />
                         </TabPanel>
                       </TabPanels>
