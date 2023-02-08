@@ -1,9 +1,14 @@
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 import {Checkbox, Flex, Heading, Image, Link, Spacer, Text, Tooltip, VStack, useColorModeValue} from "@chakra-ui/react"
-
 import {textHelper} from "lib/utils/text.utils"
+import {Product} from "ordercloud-javascript-sdk"
 
-const ProductCard = (props) => {
+interface ProductCardProps {
+  product: Product
+  selected: boolean
+  onProductSelected: (productId: string, selected: boolean) => void
+}
+const ProductCard = (props: ProductCardProps) => {
   const product = props.product
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
@@ -20,7 +25,7 @@ const ProductCard = (props) => {
       shadow="xl"
     >
       <Flex w="full" alignItems={"flex-start"}>
-        <Checkbox onChange={props.onCheck(product.ID)} />
+        <Checkbox isChecked={props.selected} onChange={(e) => props.onProductSelected(product.ID, e.target.checked)} />
         <Spacer />
         <Spacer />
         <Link href={"/products/" + product.ID}>

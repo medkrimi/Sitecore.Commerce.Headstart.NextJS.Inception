@@ -10,6 +10,7 @@ import {
   Checkbox,
   CheckboxGroup,
   Divider,
+  Flex,
   FormControl,
   FormLabel,
   HStack,
@@ -61,7 +62,7 @@ import ProductList from "./ProductList"
 import {ProductListOptions} from "../../services/ordercloud.service"
 import {ProductXPs} from "lib/types/ProductXPs"
 import {promotionsService} from "lib/api"
-import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
+import {useErrorToast} from "lib/hooks/useToast"
 
 interface ProductSearchProps {
   query: string
@@ -70,13 +71,9 @@ interface ProductSearchProps {
 export default function ProductSearch({query}: ProductSearchProps) {
   const [selectedPromotion, setselectedPromotion] = useState("")
   const [promotions, setPromotions] = useState([])
-  //const options: ProductListOptions = {}
-  //const optionsSearchOn = ["Name", "Description", "ID"]
-  const optionsSearchOnID = "ID"
   const optionsSearchType = "ExactPhrasePrefix"
   const [optionsSearch, setOptionsSearch] = useState("")
   const [optionsSortBy, setOptionsSortBy] = useState("name")
-  const successToast = useSuccessToast()
   const errorToast = useErrorToast()
   const [products, setProducts] = useState<Product<ProductXPs>[]>(null)
   const [componentProducts, setComponentProducts] = useState<Product<ProductXPs>[]>(null)
@@ -86,7 +83,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
   const [sortBy, setSortBy] = useState("name")
   const [sortingChanging, setSortingChanging] = useState(false)
   const [sortDesc, setSortDesc] = useState(false)
-  //const [reload, setReload] = useState(false)
   const labelStyles = {
     mt: "2",
     ml: "-2.5",
@@ -115,28 +111,25 @@ export default function ProductSearch({query}: ProductSearchProps) {
       let productItems = productList.Items
       setComponentProducts(productItems)
       setProducts(productItems)
-      //setReload(false)
       setIsLoading(false)
       const promotionsList = await promotionsService.list()
       let promotionItems = promotionsList.Items
       setPromotions(promotionItems)
-      console.log(promotionItems)
     }
 
     GetProducts()
   }, [optionsSearch, optionsSearchType, optionsSortBy])
 
   const [searchQuery, setSearchQuery] = useState(query)
-  const [selectAllProducts, setSelectAllProducts] = useState(false)
   const {isOpen: isOpenAddProduct, onOpen: onOpenAddProduct, onClose: onCloseAddProduct} = useDisclosure()
   const {
     isOpen: isOpenMassEditProducts,
-    onOpen: onOpenMassEditProducts,
+    onOpen: onOpenselectedProductIds,
     onClose: onCloseMassEditProducts
   } = useDisclosure()
   const [isAdding, setIsAdding] = useState(false)
   const [isMassEditing, setIsMassEditing] = useState(false)
-  const [massEditProducts, setMassEditProducts] = useState<Product<ProductXPs>[]>([])
+  const [selectedProductIds, setSelectedProductIds] = useState<string[]>([])
   const [formValues, setFormValues] = useState({
     id: "",
     name: "",
@@ -146,12 +139,10 @@ export default function ProductSearch({query}: ProductSearchProps) {
   })
 
   const onSearchClicked = async () => {
-    //console.log("onSearchClicked")
     setOptionsSortBy("name")
     setSortBy("name")
     setEditorialProgressFilter(100)
     setOptionsSearch(searchQuery)
-    //setReload(true)
   }
 
   // TODO Add more properties in Add handling
@@ -202,12 +193,20 @@ export default function ProductSearch({query}: ProductSearchProps) {
     setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
   }
 
+  const handleToggleSelectAllProducts = () => {
+    if (products.length === selectedProductIds.length) {
+      setSelectedProductIds([])
+    } else {
+      setSelectedProductIds(products.map((p) => p.ID))
+    }
+  }
+
   const onResetSearch = (e) => {
     //console.log("onResetSearch")
     setSearchQuery("")
     setOptionsSortBy("name")
     setSortBy("name")
-    setMassEditProducts([])
+    setSelectedProductIds([])
     //setReload(true)
     setEditorialProgressFilter(100)
     setSortDesc(false)
@@ -227,60 +226,60 @@ export default function ProductSearch({query}: ProductSearchProps) {
       return
     }
 
-    await Promise.all(
-      massEditProducts.map(async (element) => {
-        var editedProduct: Product = {
-          Name: element.Name,
-          Active: newActivationStatus
-        }
+    const requests = selectedProductIds.map((productId) => Products.Patch(productId, {Active: newActivationStatus}))
+    const responses = await Promise.all(requests)
 
-        await Products.Patch(element.ID, editedProduct)
-      })
-    )
+    const updatedProducts = products.map((p) => {
+      const responseProduct = responses.find((r) => r.ID === p.ID)
+      if (responseProduct) {
+        p.Active = responseProduct.Active
+      }
+      return p
+    })
+    setProducts(updatedProducts)
 
-    setTimeout(() => {
-      setOptionsSearch(searchQuery)
-      //setReload(true)
-      setIsMassEditing(false)
-      setMassEditProducts([])
-      onCloseMassEditProducts()
-      setFormValues((v) => ({
-        ...v,
-        ["isActive"]: false,
-        ["isInactive"]: false,
-        ["name"]: "",
-        ["id"]: "",
-        ["description"]: ""
-      }))
-      setEditorialProgressFilter(100)
-    }, 5000)
+    const updatedComponentProducts = componentProducts.map((p) => {
+      const responseProduct = responses.find((r) => r.ID === p.ID)
+      if (responseProduct) {
+        p.Active = responseProduct.Active
+      }
+      return p
+    })
+    setComponentProducts(updatedComponentProducts)
+
+    setOptionsSearch(searchQuery)
+    setIsMassEditing(false)
+    setSelectedProductIds([])
+    onCloseMassEditProducts()
+    setFormValues((v) => ({
+      ...v,
+      ["isActive"]: false,
+      ["isInactive"]: false,
+      ["name"]: "",
+      ["id"]: "",
+      ["description"]: ""
+    }))
+    setEditorialProgressFilter(100)
   }
 
-  const onMassEditCheckboxChanged = (productId: string) => (e) => {
-    //console.log(productId)
-    var product = componentProducts.find((element) => element.ID == productId)
-    var isChecked = e.target.checked
-    var productsToEdit = massEditProducts
-    if (isChecked) {
-      productsToEdit.push(product)
-      setMassEditProducts(productsToEdit)
+  const handleProductSelected = (productId: string, selected: boolean) => {
+    if (selected) {
+      const newselectedProductIds = [...selectedProductIds, productId]
+      setSelectedProductIds(newselectedProductIds)
     } else {
-      var newProductsToEdit = productsToEdit.splice(
-        productsToEdit.findIndex((element) => element.ID != productId),
-        1
-      )
-      setMassEditProducts(newProductsToEdit)
+      const newselectedProductIds = selectedProductIds.filter((pID) => pID !== productId)
+      setSelectedProductIds(newselectedProductIds)
     }
   }
 
   const onMassEditOpenClicked = async (e) => {
-    if (massEditProducts.length == 0) {
+    if (selectedProductIds.length == 0) {
       errorToast({
         title: "No Products selected",
         description: "Please select at least 1 Product for mass editing"
       })
     } else {
-      onOpenMassEditProducts()
+      onOpenselectedProductIds()
     }
   }
 
@@ -296,7 +295,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
       setComponentProducts(newProducts)
     } else {
       setOptionsSearch(searchQuery)
-      //setReload(true)
       if (newVal != "") {
         setOptionsSortBy(newVal)
       }
@@ -439,53 +437,15 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           </CheckboxGroup>
                           <Divider />
                           <HStack>
-                            {/*<Button size="md" bg={boxBgColor} color={color}>
-                      Clear
-                    </Button>
-                  <Button size="md" bg={boxBgColor} color={color}>
-                      Submit
-                    </Button> */}
-
                             <Select
                               onChange={handleSelectChange}
                               w={"60%"}
                               value={sortBy.substring(0, 1) == "!" ? sortBy.substring(1) : sortBy}
                             >
-                              <option
-                                value="name"
-                                /* selected={
-                              optionsSortBy == "name" ||
-                              optionsSortBy == "!name"
-                            } */
-                              >
-                                Name
-                              </option>
-                              <option
-                                value="ID"
-                                /* selected={
-                              optionsSortBy == "ID" || optionsSortBy == "!ID"
-                            } */
-                              >
-                                Product ID
-                              </option>
-                              <option
-                                value="editorialProcess"
-                                /* selected={
-                              optionsSortBy == "editorialProcess" ||
-                              optionsSortBy == "!editorialProcess"
-                            } */
-                              >
-                                Progress
-                              </option>
-                              <option
-                                value="Active"
-                                /* selected={
-                              optionsSortBy == "Active" ||
-                              optionsSortBy == "!Active"
-                            } */
-                              >
-                                Active
-                              </option>
+                              <option value="name">Name</option>
+                              <option value="ID">Product ID</option>
+                              <option value="editorialProcess">Progress</option>
+                              <option value="Active">Active</option>
                             </Select>
                             <Tooltip label="Sort Asc/Desc">
                               <IconButton
@@ -524,7 +484,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
               </HStack>
               <Card showclosebutton="false">
                 <HStack justifyContent="space-between">
-                  <Text fontWeight={"bold"} p={3} float={"left"}>
+                  <Text fontWeight={"bold"} marginLeft={8}>
                     Total Products: {componentProducts.length}
                   </Text>
                   <Box>
@@ -571,15 +531,6 @@ export default function ProductSearch({query}: ProductSearchProps) {
                           }}
                         />
                       </InputGroup>
-                      {/* <Tooltip label="Search for Products">
-                        <IconButton
-                          aria-label="Search"
-                          icon={<SearchIcon />}
-                          onClick={onSearchClicked}
-                          float="right"
-                        />
-                        MOVE THIS TO ENTER BUTTON TO MATCH OTHER AREAS
-                      </Tooltip> */}
                     </HStack>
                   </Box>
                 </HStack>
@@ -587,14 +538,18 @@ export default function ProductSearch({query}: ProductSearchProps) {
                   {toggleViewMode ? (
                     <ProductList
                       products={componentProducts}
-                      onCheckChange={(productid) => onMassEditCheckboxChanged(productid)}
+                      selectedProductIds={selectedProductIds}
+                      onToggleSelectAllProducts={handleToggleSelectAllProducts}
+                      onProductSelected={handleProductSelected}
                       onSort={(columnName) => onSortByNameClicked(columnName)}
                       sortBy={sortBy}
                     />
                   ) : (
                     <ProductGrid
                       products={componentProducts}
-                      onCheck={(productid) => onMassEditCheckboxChanged(productid)}
+                      selectedProductIds={selectedProductIds}
+                      onToggleSelectAllProducts={handleToggleSelectAllProducts}
+                      onProductSelected={handleProductSelected}
                     />
                   )}
                 </BrandedTable>
@@ -687,7 +642,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
               <ModalHeader>Mass Edit Products</ModalHeader>
               <ModalCloseButton />
               <ModalBody pb={6}>
-                <Text>You have selected {massEditProducts.length} Products</Text>
+                <Text>You have selected {selectedProductIds.length} Products</Text>
                 <FormControl mt={4}>
                   <FormLabel>Activate</FormLabel>
                   <Checkbox isChecked={formValues.isActive} onChange={handleCheckboxChange("isActive")} />
