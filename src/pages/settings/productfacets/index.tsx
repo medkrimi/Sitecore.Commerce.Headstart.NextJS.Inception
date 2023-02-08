@@ -6,31 +6,23 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
+  ButtonGroup,
   Checkbox,
   CheckboxGroup,
   Container,
-  Divider,
   HStack,
-  IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   Spinner,
   Stack,
-  Table,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  Tr,
   VStack
 } from "@chakra-ui/react"
 import {useEffect, useRef, useState} from "react"
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
-import {HiOutlineMinusSm} from "react-icons/hi"
 import Link from "../../../lib/components/navigation/Link"
 import {NextSeo} from "next-seo"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
@@ -38,6 +30,7 @@ import {appPermissions} from "lib/constants/app-permissions.config"
 import {productfacetsService} from "lib/api/productfacets"
 import {useRouter} from "next/router"
 import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
+import SearchDataTable from "lib/components/datatable/datatable"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -78,7 +71,7 @@ const ProductFacetsPage = () => {
     setProductFacets(productfacetList.Items)
   }
 
-  async function deleteProductFacets(productfacetid) {
+  async function deleteProductFacet(productfacetid) {
     try {
       await productfacetsService.delete(productfacetid)
       initProductFacetsData(router.query.buyerid)
@@ -92,27 +85,35 @@ const ProductFacetsPage = () => {
     }
   }
 
-  const productfacetsContent = productfacets.length ? (
-    productfacets.map((productfacets) => (
-      <Tr key={productfacets.ID}>
-        <Td>
-          <Checkbox pr="10px"></Checkbox>
-          <Link href={`/settings/productfacets/${productfacets.ID}`}>{productfacets.Name}</Link>
-        </Td>
-        <Td>{productfacets.ID}</Td>
-        <Td>{productfacets.xp_Options}</Td>
-        <Td>
-          <Button onClick={() => deleteProductFacets(productfacets.ID)} disabled={loading} variant="tertiaryButton">
+  const columnsData = [
+    {
+      Header: "NAME",
+      accessor: "Name",
+      Cell: ({value, row}) => <Link href={`/settings/productfacets/${row.original.ID}`}>{value}</Link>
+    },
+    {
+      Header: "ID",
+      accessor: "ID"
+    },
+    {
+      Header: "FACET OPTIONS",
+      accessor: "xp.Options",
+      Cell: ({value}) => (value || []).join(", ")
+    },
+    {
+      Header: "ACTIONS",
+      Cell: ({row}) => (
+        <ButtonGroup>
+          <Button variant="secondaryButton" onClick={() => router.push(`/settings/productfacets/${row.original.ID}/`)}>
+            Edit
+          </Button>
+          <Button variant="secondaryButton" onClick={() => deleteProductFacet(row.original.ID)}>
             Delete
           </Button>
-        </Td>
-      </Tr>
-    ))
-  ) : (
-    <Tr>
-      <Td colSpan={7}>No Product Facets have been created</Td>
-    </Tr>
-  )
+        </ButtonGroup>
+      )
+    }
+  ]
 
   return (
     <Container maxW="full">
@@ -122,70 +123,13 @@ const ProductFacetsPage = () => {
           <Button variant="primaryButton">New Product Facet</Button>
         </Link>
         <HStack>
-          <Menu>
-            <MenuButton
-              px={4}
-              py={2}
-              transition="all 0.2s"
-              borderRadius="md"
-              borderWidth="1px"
-              _hover={{bg: "gray.400"}}
-              _expanded={{bg: "blue.400"}}
-              _focus={{boxShadow: "outline"}}
-            >
-              Filters <ChevronDownIcon />
-            </MenuButton>
-            <MenuList>
-              <MenuItem>
-                <VStack>
-                  <Text>Product Facet Status</Text>
-                  <CheckboxGroup>
-                    <Stack spacing={[1, 3]} direction={["column", "row"]}>
-                      <Checkbox value="Completed" defaultChecked>
-                        Completed
-                      </Checkbox>
-                      <Checkbox value="AwaitingApproval" defaultChecked>
-                        Awaiting Approval
-                      </Checkbox>
-                      <Checkbox value="Canceled" defaultChecked>
-                        Canceled
-                      </Checkbox>
-                      <Checkbox value="Active" defaultChecked>
-                        Active
-                      </Checkbox>
-                    </Stack>
-                  </CheckboxGroup>
-                  <Divider />
-                  <HStack>
-                    {/*<Button size="md" bg={boxBgColor} color={color}>
-                      Clear
-                    </Button>
-                  <Button size="md" bg={boxBgColor} color={color}>
-                      Submit
-                    </Button> */}
-                  </HStack>
-                </VStack>
-              </MenuItem>
-            </MenuList>
-          </Menu>
           <Button variant="secondaryButton" onClick={() => setExportCSVDialogOpen(true)}>
             Export CSV
           </Button>
         </HStack>
       </HStack>
       <Card variant="primaryCard">
-        <IconButton variant="closePanelButton" aria-label="close panel" icon={<HiOutlineMinusSm />}></IconButton>
-        <Table>
-          <Thead>
-            <Tr>
-              <Th>Name</Th>
-              <Th>ID</Th>
-              <Th>Facet Options</Th>
-              <Th></Th>
-            </Tr>
-          </Thead>
-          <Tbody>{productfacetsContent}</Tbody>
-        </Table>
+        <SearchDataTable tableData={productfacets} columnsData={columnsData}></SearchDataTable>
       </Card>
       <AlertDialog
         isOpen={isExportCSVDialogOpen}
