@@ -123,43 +123,6 @@ const ProductFacetsPage = () => {
           <Button variant="primaryButton">New Product Facet</Button>
         </Link>
         <HStack>
-          <Menu>
-            <MenuButton
-              px={4}
-              py={2}
-              transition="all 0.2s"
-              borderRadius="md"
-              borderWidth="1px"
-              _hover={{bg: "gray.400"}}
-              _expanded={{bg: "blue.400"}}
-              _focus={{boxShadow: "outline"}}
-            >
-              Filters <ChevronDownIcon />
-            </MenuButton>
-            <MenuList>
-              <MenuItem>
-                <VStack>
-                  <Text>Product Facet Status</Text>
-                  <CheckboxGroup>
-                    <Stack spacing={[1, 3]} direction={["column", "row"]}>
-                      <Checkbox value="Completed" defaultChecked>
-                        Completed
-                      </Checkbox>
-                      <Checkbox value="AwaitingApproval" defaultChecked>
-                        Awaiting Approval
-                      </Checkbox>
-                      <Checkbox value="Canceled" defaultChecked>
-                        Canceled
-                      </Checkbox>
-                      <Checkbox value="Active" defaultChecked>
-                        Active
-                      </Checkbox>
-                    </Stack>
-                  </CheckboxGroup>
-                </VStack>
-              </MenuItem>
-            </MenuList>
-          </Menu>
           <Button variant="secondaryButton" onClick={() => setExportCSVDialogOpen(true)}>
             Export CSV
           </Button>
