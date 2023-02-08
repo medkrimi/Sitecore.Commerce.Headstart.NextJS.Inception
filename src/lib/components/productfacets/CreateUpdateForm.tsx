@@ -6,7 +6,7 @@ import Card from "../card/Card"
 import {Field, Formik} from "formik"
 import {useRouter} from "next/router"
 import {productfacetsService} from "lib/api/productfacets"
-import {useEffect, useState} from "react"
+import {useEffect, useState, KeyboardEvent} from "react"
 import {HiOutlineX} from "react-icons/hi"
 import {useCreateUpdateForm} from "lib/hooks/useCreateUpdateForm"
 import {xpHelper} from "lib/utils"
@@ -32,14 +32,15 @@ function CreateUpdateForm({productfacet}: CreateUpdateFormProps) {
   const [facetOptions, setFacetOptions] = useState([])
 
   useEffect(() => {
-    setFacetOptions(productfacet.xp?.Options || [])
-  }, [productfacet.xp?.Options])
+    setFacetOptions(productfacet?.xp?.Options || [])
+  }, [productfacet?.xp?.Options])
 
   function onSubmit(fields, {setStatus, setSubmitting}) {
     setStatus()
     fields.xp_Options = facetOptions
     const productfacet = xpHelper.unflattenXpObject(fields, "_") as ProductFacet
     if (isCreating) {
+      createProductFacet(productfacet)
     } else {
       updateProductFacet(productfacet)
     }
@@ -90,6 +91,13 @@ function CreateUpdateForm({productfacet}: CreateUpdateFormProps) {
   const reset = () => {
     setFacetOptions(productfacet.xp?.Options || [])
     setInputValue("")
+  }
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault() // prevent form from being submitted
+      handleAddButtonClick()
+    }
   }
 
   return (
@@ -167,6 +175,7 @@ function CreateUpdateForm({productfacet}: CreateUpdateFormProps) {
                           type="text"
                           value={inputValue}
                           onChange={(event) => setInputValue(event.target.value)}
+                          onKeyDown={handleKeyDown}
                           className="add-facet-option-input"
                           placeholder="Add a facet value..."
                         />
