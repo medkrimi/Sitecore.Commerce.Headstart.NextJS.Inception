@@ -1,4 +1,4 @@
-import {Promotions} from "ordercloud-javascript-sdk"
+import {RuleGroupType} from "react-querybuilder"
 
 export const appPromotions = [
   {
@@ -64,3 +64,20 @@ export const appPromotions = [
       " \"((items.quantity(ProductID='XYZ')/2) - (items.quantity(ProductID='XYZ') % 2 * .5)) * items.total (ProductID='XYZ') / items.quantity(ProductID='XYZ')\""
   }
 ]
+
+export const defaultQuery: RuleGroupType = {
+  combinator: "and",
+  not: false,
+  rules: [
+    {
+      field: "ProductId",
+      operator: "=",
+      value: "tennis-shoes"
+    },
+    {
+      field: "CategoryId",
+      operator: "=",
+      value: "shoes"
+    }
+  ]
+}

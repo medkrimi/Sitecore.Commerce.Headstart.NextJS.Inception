@@ -1,21 +1,17 @@
 import * as ReactDnD from "react-dnd"
 import * as ReactDndHtml5Backend from "react-dnd-html5-backend"
-
 import {ChakraProvider, extendTheme} from "@chakra-ui/react"
-
 import {QueryBuilder} from "react-querybuilder"
 import {QueryBuilderChakra} from "@react-querybuilder/chakra"
 import {QueryBuilderDnD} from "@react-querybuilder/dnd"
-import type {RuleGroupType} from "react-querybuilder"
 import {fields} from "./fileds"
 import {useState} from "react"
+import {defaultQuery} from "lib/constants/app-promotions.config"
 
 const chakraTheme = extendTheme()
 
-const initialQuery: RuleGroupType = {combinator: "and", rules: []}
-
 export const ExpressionBuilder = () => {
-  const [query, setQuery] = useState(initialQuery)
+  const [query, setQuery] = useState(defaultQuery)
 
   return (
     <QueryBuilderDnD dnd={{...ReactDnD, ...ReactDndHtml5Backend}}>
