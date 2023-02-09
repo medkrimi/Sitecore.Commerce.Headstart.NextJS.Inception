@@ -1,6 +1,5 @@
-import {Box, Container} from "@chakra-ui/react"
-
-import {AddEditForm} from "../../lib/components/promotions/AddEditForm"
+import {Box} from "@chakra-ui/react"
+import {CreateUpdateForm} from "../../lib/components/promotions/CreateUpdateForm"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 
@@ -20,14 +19,14 @@ export async function getStaticProps() {
   }
 }
 
-function ProtectedAddEditForm() {
+function ProtectedCreateUpdateForm() {
   return (
     <ProtectedContent hasAccess={appPermissions.OrderManager}>
       <Box padding="20px">
-        <AddEditForm />
+        <CreateUpdateForm />
       </Box>
     </ProtectedContent>
   )
 }
 
-export default ProtectedAddEditForm
+export default ProtectedCreateUpdateForm
