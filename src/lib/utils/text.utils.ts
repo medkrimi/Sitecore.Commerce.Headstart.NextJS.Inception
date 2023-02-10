@@ -27,11 +27,11 @@ function formatTextTruncate(len: number, str: string, ending: string): string {
   }
   return str
   //TODO FIX
-  if (str.length > len) {
-    return str.substring(0, len - ending.length) + ending
-  } else {
-    return str
-  }
+  // if (str.length > len) {
+  //   return str.substring(0, len - ending.length) + ending
+  // } else {
+  //   return str
+  // }
 }
 
 function capitalizeFirstLetter(string) {

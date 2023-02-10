@@ -5,7 +5,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
-  Box,
   Button,
   HStack,
   Image,
@@ -19,7 +18,6 @@ import {ComposedProduct, GetComposedProduct, RemoveLineItem, UpdateLineItem} fro
 import {FormEvent, FunctionComponent, useCallback, useEffect, useRef, useState} from "react"
 
 import {LineItem} from "ordercloud-javascript-sdk"
-import OcQuantityInput from "./OcQuantityInput"
 import {priceHelper} from "../../utils/price.utils"
 
 interface OcLineItemCardProps {

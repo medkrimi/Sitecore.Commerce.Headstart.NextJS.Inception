@@ -1,4 +1,4 @@
-import {Image, Box, Flex, Link, Text, useColorMode} from "@chakra-ui/react"
+import {Image, Link, useColorMode} from "@chakra-ui/react"
 import NextLink from "next/link"
 
 const FooterLogo = () => {

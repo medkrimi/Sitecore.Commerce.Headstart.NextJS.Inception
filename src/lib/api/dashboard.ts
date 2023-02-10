@@ -1,4 +1,4 @@
-import {Orders, Users} from "ordercloud-javascript-sdk"
+import {Orders} from "ordercloud-javascript-sdk"
 
 const d = new Date()
 let day = d.getDate()

@@ -1,4 +1,4 @@
-import {Badge, Box, HStack, Text} from "@chakra-ui/react"
+import {Badge, HStack, Text} from "@chakra-ui/react"
 
 export default function LettersCard(props) {
   var str = new String(props.FirstName)

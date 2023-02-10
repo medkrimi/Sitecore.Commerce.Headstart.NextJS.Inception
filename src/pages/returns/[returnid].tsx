@@ -10,24 +10,18 @@ import {
   GridItem,
   HStack,
   Heading,
-  IconButton,
-  Link,
-  Spacer,
-  Text,
-  useColorMode,
-  useColorModeValue
+  Spacer
 } from "@chakra-ui/react"
 import {FunctionComponent, useEffect, useState} from "react"
 import {OrderReturn, OrderReturns, Payment, Payments} from "ordercloud-javascript-sdk"
 import {dateHelper, priceHelper} from "lib/utils"
 
 import Card from "lib/components/card/Card"
-import NextLink from "next/link"
 import {NextSeo} from "next-seo"
 import OcOrderReturnItemList from "lib/components/returns/OcOrderReturnItem"
-import {useRouter} from "next/router"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
+import {useRouter} from "next/router"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {

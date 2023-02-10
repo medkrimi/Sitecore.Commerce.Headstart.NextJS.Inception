@@ -1,7 +1,8 @@
+import {Flex, Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react"
+
 import {FunctionComponent} from "react"
-import OcLineItemCard from "./OcLineItemCard"
-import {Grid, GridItem, Box, HStack, Table, Thead, Th, Tr, Tbody, Flex} from "@chakra-ui/react"
 import {LineItem} from "ordercloud-javascript-sdk"
+import OcLineItemCard from "./OcLineItemCard"
 
 interface OcLineItemListProps {
   emptyMessage?: string

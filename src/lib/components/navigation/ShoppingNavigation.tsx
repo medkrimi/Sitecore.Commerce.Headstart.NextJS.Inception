@@ -1,5 +1,5 @@
 import NextLink from "next/link"
-import {Box, Flex, Link, VStack, Heading, Text} from "@chakra-ui/react"
+import {Flex, Link, VStack, Text} from "@chakra-ui/react"
 
 const ShoppingNavigation = () => {
   return (

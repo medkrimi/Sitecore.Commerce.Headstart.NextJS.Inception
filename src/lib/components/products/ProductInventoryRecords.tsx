@@ -1,47 +1,20 @@
 import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
   Box,
   Button,
-  Checkbox,
-  Collapse,
   Divider,
-  FormControl,
   HStack,
   Heading,
-  Input,
-  ListItem,
-  Tag,
   Tbody,
   Td,
-  Text,
   Th,
   Thead,
   Tooltip,
   Tr,
-  UnorderedList,
-  useColorModeValue,
-  useDisclosure
+  useColorModeValue
 } from "@chakra-ui/react"
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
-import {FiPlus, FiTrash2} from "react-icons/fi"
-import {
-  InventoryRecord,
-  InventoryRecords,
-  ListPage,
-  Product,
-  ProductSupplier,
-  Products,
-  RequiredDeep,
-  Spec,
-  SpecProductAssignment,
-  Specs,
-  Supplier
-} from "ordercloud-javascript-sdk"
+import {FiTrash2} from "react-icons/fi"
+import {InventoryRecord, InventoryRecords} from "ordercloud-javascript-sdk"
 import React, {useEffect} from "react"
 
 import BrandedSpinner from "../branding/BrandedSpinner"

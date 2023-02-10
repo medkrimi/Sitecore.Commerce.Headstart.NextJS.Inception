@@ -1,4 +1,4 @@
-import {Image, HStack, Link, Text, AspectRatio, useColorMode} from "@chakra-ui/react"
+import {Image, HStack, Link, useColorMode} from "@chakra-ui/react"
 import NextLink from "next/link"
 
 const HeaderLogo = () => {

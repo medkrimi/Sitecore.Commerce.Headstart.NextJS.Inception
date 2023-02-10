@@ -1,7 +1,5 @@
 import type {Field, RuleType} from "react-querybuilder"
 
-import {defaultOperators} from "react-querybuilder"
-
 export const validator = (r: RuleType) => !!r.value
 
 export const fields: Field[] = [

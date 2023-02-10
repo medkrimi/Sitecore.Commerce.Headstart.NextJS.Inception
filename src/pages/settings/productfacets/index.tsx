@@ -28,6 +28,8 @@ import {
   VStack
 } from "@chakra-ui/react"
 import {useEffect, useRef, useState} from "react"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
+
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
 import {HiOutlineMinusSm} from "react-icons/hi"
@@ -36,8 +38,6 @@ import {NextSeo} from "next-seo"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {productfacetsService} from "lib/api/productfacets"
-import {useRouter} from "next/router"
-import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -55,12 +55,11 @@ export async function getServerSideProps() {
 }
 
 const ProductFacetsPage = () => {
-  const router = useRouter()
   const successToast = useSuccessToast()
   const errorToast = useErrorToast()
   const [productfacets, setProductFacets] = useState([])
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [loading] = useState(false)
   const cancelRef = useRef()
 
   const requestExportCSV = () => {}
@@ -73,7 +72,7 @@ const ProductFacetsPage = () => {
     getProductFacets()
   }, [])
 
-  async function initProductFacetsData(productfacetid) {
+  async function initProductFacetsData() {
     const productfacetList = await productfacetsService.getAll()
     setProductFacets(productfacetList.Items)
   }
@@ -81,7 +80,7 @@ const ProductFacetsPage = () => {
   async function deleteProductFacets(productfacetid) {
     try {
       await productfacetsService.delete(productfacetid)
-      initProductFacetsData(router.query.buyerid)
+      initProductFacetsData()
       successToast({
         description: "Product Facet deleted successfully."
       })

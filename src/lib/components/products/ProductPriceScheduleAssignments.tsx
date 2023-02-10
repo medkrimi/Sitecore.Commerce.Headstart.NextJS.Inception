@@ -7,8 +7,6 @@ import {
   AlertDialogOverlay,
   Box,
   Button,
-  Collapse,
-  Flex,
   FormControl,
   HStack,
   Heading,
@@ -22,7 +20,6 @@ import {
   Tooltip,
   Tr,
   UnorderedList,
-  color,
   useColorModeValue,
   useDisclosure
 } from "@chakra-ui/react"
@@ -31,19 +28,14 @@ import {
   Buyers,
   PriceSchedule,
   PriceSchedules,
-  Product,
   ProductAssignment,
   Products,
-  RequiredDeep,
   UserGroup,
   UserGroups
 } from "ordercloud-javascript-sdk"
-import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
-import {FiPlus, FiTrash2} from "react-icons/fi"
 import {useEffect, useState} from "react"
 
-import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 import React from "react"

@@ -1,8 +1,8 @@
-import {VStack, useMediaQuery, Flex} from "@chakra-ui/react"
-import React, {useEffect, useState} from "react"
+import {Flex, VStack, useMediaQuery} from "@chakra-ui/react"
 
-import MobileSideBarMenu from "./MobileSideBarMenu"
 import DesktopSideBarMenu from "./DesktopSideBarMenu"
+import MobileSideBarMenu from "./MobileSideBarMenu"
+import React from "react"
 
 const SideNavigation = () => {
   const [isMobile] = useMediaQuery("(max-width: 768px)")

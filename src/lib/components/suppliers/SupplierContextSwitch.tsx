@@ -14,14 +14,7 @@ import {
   Text,
   VStack
 } from "@chakra-ui/react"
-import {
-  catalogsService,
-  supplierUserGroupsService,
-  supplierUsersService,
-  suppliersService,
-  userGroupsService,
-  usersService
-} from "lib/api"
+import {supplierUserGroupsService, supplierUsersService, suppliersService} from "lib/api"
 import {useEffect, useState} from "react"
 
 import {ChevronDownIcon} from "@chakra-ui/icons"

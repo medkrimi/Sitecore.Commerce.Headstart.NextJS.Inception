@@ -1,25 +1,20 @@
 import {
   Box,
   Button,
-  Collapse,
   HStack,
   Heading,
-  Tag,
+  Switch,
   Tbody,
   Td,
   Th,
   Thead,
   Tooltip,
   Tr,
-  useColorModeValue,
-  Switch
+  useColorModeValue
 } from "@chakra-ui/react"
-import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
-import {FiPlus, FiTrash2} from "react-icons/fi"
 import {ProductSupplier, Products} from "ordercloud-javascript-sdk"
 import React, {useEffect} from "react"
 
-import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 import {ComposedProduct} from "../../services/ordercloud.service"
@@ -30,13 +25,10 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductSuppliers({composedProduct, setComposedProduct}: ProductDataProps) {
+export default function ProductSuppliers({composedProduct}: ProductDataProps) {
   const color = useColorModeValue("textColor.900", "textColor.100")
-  const bg = useColorModeValue("brand.500", "brand.500")
-  const okColor = useColorModeValue("okColor.800", "okColor.200")
-  const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
-  const [expanded, setExpanded] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [expanded] = useState(false)
+  const [isLoading] = useState(false)
   const [supplier, setSupplier] = useState<ProductSupplier[]>(null)
 
   useEffect(() => {

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export interface PromotionXPs {
   Tier: string
   Type: string

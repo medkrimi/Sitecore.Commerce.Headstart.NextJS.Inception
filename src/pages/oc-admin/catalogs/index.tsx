@@ -1,13 +1,14 @@
 import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
 import {Button, ButtonGroup, HStack} from "@chakra-ui/react"
 import {useEffect, useState} from "react"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
+
 import Card from "lib/components/card/Card"
 import CatalogsDataTable from "lib/components/datatable/datatable"
 import Link from "lib/components/navigation/Link"
 import React from "react"
 import {catalogsService} from "lib/api"
 import {useRouter} from "next/router"
-import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -31,10 +32,10 @@ const CatalogsList = () => {
   const successToast = useSuccessToast()
   const errorToast = useErrorToast()
   useEffect(() => {
-    initCatalogsData(router.query.buyerid)
-  }, [router.query.buyerid])
+    initCatalogsData()
+  }, [])
 
-  async function initCatalogsData(buyerid) {
+  async function initCatalogsData() {
     const catalogsList = await catalogsService.list()
     setCatalogs(catalogsList.Items)
   }
@@ -42,7 +43,7 @@ const CatalogsList = () => {
   async function deleteCatalog(catalogid) {
     try {
       await catalogsService.delete(catalogid)
-      initCatalogsData(router.query.buyerid)
+      initCatalogsData()
       successToast({
         description: "Buyer deleted successfully."
       })

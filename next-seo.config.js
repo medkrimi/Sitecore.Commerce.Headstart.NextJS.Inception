@@ -12,15 +12,15 @@ const defaultSEOConfig = {
     images: [
       {
         url: "",
-        alt: "",
-      },
+        alt: ""
+      }
     ],
-    site_name: "",
+    site_name: ""
   },
   twitter: {
     handle: "",
-    cardType: "",
-  },
-};
+    cardType: ""
+  }
+}
 
-export default defaultSEOConfig;
+export default defaultSEOConfig

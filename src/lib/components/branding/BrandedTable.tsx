@@ -1,4 +1,4 @@
-import {useColorMode, useColorModeValue, Box, TableContainer, Table} from "@chakra-ui/react"
+import {useColorModeValue, TableContainer, Table} from "@chakra-ui/react"
 
 export default function BrandedTable({children}) {
   const tableHeaderBg = useColorModeValue("white.000", "gray.900")

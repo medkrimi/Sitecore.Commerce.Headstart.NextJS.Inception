@@ -1,7 +1,7 @@
-import {AuthContext} from "lib/context/auth-context"
-import {useAuth} from "lib/hooks/useAuth"
-import React, {PropsWithChildren, useEffect, useState} from "react"
 import {AccessQualifier, isAllowedAccess} from "../../hooks/useHasAccess"
+import React, {useEffect, useState} from "react"
+
+import {useAuth} from "lib/hooks/useAuth"
 
 interface ProtectedContentProps {
   /**

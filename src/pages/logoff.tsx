@@ -1,6 +1,6 @@
-import {Box, Flex, Heading, LinkBox, LinkOverlay, Text, Container} from "@chakra-ui/react"
-import {NextSeo} from "next-seo"
+import {Flex} from "@chakra-ui/react"
 import Login from "../lib/components/account/Login"
+import {NextSeo} from "next-seo"
 import {useRouter} from "next/router"
 
 const LogOff = () => {

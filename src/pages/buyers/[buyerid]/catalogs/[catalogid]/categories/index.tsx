@@ -14,14 +14,15 @@ import {
   useDisclosure
 } from "@chakra-ui/react"
 import {useEffect, useState} from "react"
+
 import Card from "lib/components/card/Card"
+import {Category} from "ordercloud-javascript-sdk"
+import {CreateUpdateForm} from "lib/components/categories"
 import React from "react"
 import TreeView from "lib/components/dndtreeview/TreeView"
 import {categoriesService} from "lib/api"
 import {ocNodeModel} from "@minoru/react-dnd-treeview"
 import {useRouter} from "next/router"
-import {CreateUpdateForm} from "lib/components/categories"
-import {Category} from "ordercloud-javascript-sdk"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -92,7 +93,7 @@ const CategoriesList = (props) => {
 
   const onCategoryCreateSuccess = async (category: Category) => {
     onCloseCategoryCreate()
-    await initCategoriesData(router.query.catalogid)
+    await initCategoriesData(category?.ID)
   }
 
   return (

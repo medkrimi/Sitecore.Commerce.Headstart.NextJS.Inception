@@ -1,4 +1,4 @@
-import {OrderReturn, OrderReturns, Payment, Payments} from "ordercloud-javascript-sdk"
+import {OrderReturns} from "ordercloud-javascript-sdk"
 
 export const returnsService = {
   getAll,
@@ -32,7 +32,7 @@ async function create(fields) {
   //OrderReturns.Create(fields)
 }
 
-async function update(fields) {
+async function update() {
   //console.log("returnsService::update")
   //console.log(fields)
   //OrderReturns.Patch(fields.ID, fields)

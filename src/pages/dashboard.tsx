@@ -13,7 +13,6 @@ import {
   SimpleGrid,
   Text,
   VStack,
-  useColorMode,
   useColorModeValue
 } from "@chakra-ui/react"
 import {HiOutlineCurrencyDollar, HiOutlineFolderOpen, HiOutlineUserAdd, HiOutlineUserCircle} from "react-icons/hi"
@@ -32,12 +31,8 @@ import TotalSales from "lib/components/analytics/PercentChangeTile"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {priceHelper} from "lib/utils/price.utils"
 import useHasAccess from "lib/hooks/useHasAccess"
-import {useRouter} from "next/router"
 
 const Dashboard = () => {
-  const {push} = useRouter()
-  const {colorMode, toggleColorMode} = useColorMode()
-
   const [orders, setOrders] = useState([])
   const [products, setProducts] = useState([])
   const [promotions, setPromotions] = useState([])
@@ -58,7 +53,7 @@ const Dashboard = () => {
   const [canViewReports, setCanViewReports] = useState(false)
   const hasAccessToViewReports = useHasAccess(appPermissions.ReportViewer)
 
-  const [dashboardListMeta, setDashboardMeta] = useState({})
+  //const [DashboardMeta, setDashboardMeta] = useState({})
 
   const boxBgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
 
@@ -134,7 +129,7 @@ const Dashboard = () => {
     }
     setpercentNewUsersChange(percentChangeNewUsers)
 
-    setDashboardMeta(_dashboardListMeta)
+    //setDashboardMeta(_dashboardListMeta)
     //setBuyers(buyersList.Items)
     setOrders(ordersList.Items)
     setProducts(productsList.Items)
@@ -142,7 +137,7 @@ const Dashboard = () => {
     setUsers(usersList.Items)
   }
 
-  const gradient = colorMode === "light" ? "linear(to-t, brand.300, brand.400)" : "linear(to-t, brand.600, brand.500)"
+  //const gradient = colorMode === "light" ? "linear(to-t, brand.300, brand.400)" : "linear(to-t, brand.600, brand.500)"
   const color = useColorModeValue("boxTextColor.900", "boxTextColor.100")
 
   if (!canViewReports) {

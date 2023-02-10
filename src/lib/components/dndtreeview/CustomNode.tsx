@@ -2,7 +2,7 @@ import {NodeModel, ocNodeModel} from "@minoru/react-dnd-treeview"
 
 import {ChevronRightIcon} from "@chakra-ui/icons"
 import React from "react"
-import {Button, Icon, Text} from "@chakra-ui/react"
+import {Button, Icon} from "@chakra-ui/react"
 import {TypeIcon} from "./TypeIcon"
 import styles from "./CustomNode.module.css"
 import {HiOutlinePlusCircle} from "react-icons/hi"

@@ -1,4 +1,4 @@
-import {IntegrationEvents, OrderWorksheet, Orders} from "ordercloud-javascript-sdk"
+import {IntegrationEvents, Orders} from "ordercloud-javascript-sdk"
 
 export const ordersService = {
   list,
@@ -33,7 +33,7 @@ async function create(fields) {
   //Orders.Create(fields)
 }
 
-async function update(fields) {
+async function update() {
   //console.log("ordersService::update")
   //console.log(fields)
   //Orders.Patch(fields.ID, fields)

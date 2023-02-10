@@ -16,8 +16,6 @@ import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.ser
 import {ProductXPs, XpImage} from "lib/types/ProductXPs"
 import {Product, Products} from "ordercloud-javascript-sdk"
 import {ChangeEvent, useState} from "react"
-import {FiCheck, FiX, FiEdit, FiPlus, FiMinus} from "react-icons/fi"
-import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 
 type ProductDataProps = {

@@ -93,8 +93,8 @@ async function buildValueExpression(fields) {
     }
     case "Free-shipping": {
       valueExpression = `order.ShippingCost`
+      break
     }
-
     default: {
       valueExpression = "0"
       break

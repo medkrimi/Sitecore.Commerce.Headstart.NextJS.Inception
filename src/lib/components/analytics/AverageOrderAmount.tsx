@@ -1,15 +1,13 @@
-import {Flex, Text, Box, useColorModeValue} from "@chakra-ui/react"
-import React, {useEffect, useState} from "react"
-import LineChart from "../charts/LineChart"
+import {Box, Flex, Text, useColorModeValue} from "@chakra-ui/react"
+import React, {useEffect} from "react"
+
 import Card from "../card/Card"
-import {dashboardService} from "lib/api"
+import LineChart from "../charts/LineChart"
 
 export default function AverageOrderAmount() {
   const boxBgColor = useColorModeValue("boxBgColor.100", "boxBgColor.600")
   const color = useColorModeValue("boxTextColor.900", "boxTextColor.100")
   const headingColor = useColorModeValue("boxTextColor.400", "boxTextColor.300")
-  const [totalSales, settotalSales] = useState([Number])
-  const [totalPreviousYearSales, settotalPreviousYearSales] = useState([Number])
   //const [chartData, setchartData] = useState()
   let chartData = require("../../mockdata/dashboard_data.json")
   console.log(chartData)

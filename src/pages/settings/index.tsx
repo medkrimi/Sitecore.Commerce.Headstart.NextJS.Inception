@@ -1,4 +1,4 @@
-import {Container, HStack, Heading, Icon, Link, Text, useColorModeValue} from "@chakra-ui/react"
+import {Container, HStack, Icon, Link, Text, useColorModeValue} from "@chakra-ui/react"
 
 import Card from "lib/components/card/Card"
 import {HiOutlineFilter} from "react-icons/hi"

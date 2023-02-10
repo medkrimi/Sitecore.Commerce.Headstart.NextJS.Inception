@@ -1,5 +1,3 @@
-import {last} from "lodash"
-
 export const styles = {
   // styles for the `body`
   global: {

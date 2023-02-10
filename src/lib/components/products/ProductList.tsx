@@ -13,7 +13,7 @@ import {
   Tr,
   useColorModeValue
 } from "@chakra-ui/react"
-import {CheckIcon, CloseIcon, Search2Icon, SearchIcon} from "@chakra-ui/icons"
+import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 import {FiArrowDown, FiArrowRight, FiArrowUp, FiCheckSquare} from "react-icons/fi"
 import {useEffect, useState} from "react"
 
@@ -21,7 +21,6 @@ import BrandedSpinner from "../branding/BrandedSpinner"
 import {CalculateEditorialProcess} from "./EditorialProgressBar"
 import NextLink from "next/link"
 import {Product} from "ordercloud-javascript-sdk"
-import {ProductXPs} from "lib/types/ProductXPs"
 import {textHelper} from "lib/utils/text.utils"
 
 const ProductList = (props) => {

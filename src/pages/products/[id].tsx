@@ -7,38 +7,42 @@ import {
   AlertDialogOverlay,
   Box,
   Button,
+  Checkbox,
+  CheckboxGroup,
   Container,
+  Divider,
+  FormControl,
+  FormLabel,
   Grid,
   GridItem,
   HStack,
+  Input,
   Link,
-  VStack,
   Menu,
-  useDisclosure,
   MenuButton,
-  MenuList,
   MenuItem,
-  Checkbox,
-  CheckboxGroup,
-  Divider,
-  Text,
+  MenuList,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Select,
   SimpleGrid,
   Spinner,
-  Select,
-  Modal,
-  ModalOverlay,
-  ModalHeader,
-  ModalContent,
-  ModalCloseButton,
-  ModalBody,
-  FormControl,
-  FormLabel,
-  Input,
-  ModalFooter
+  Text,
+  VStack,
+  useDisclosure
 } from "@chakra-ui/react"
-import {ComposedProduct, GetComposedProduct} from "lib/services/ordercloud.service"
 import {ChangeEvent, useEffect, useState} from "react"
+import {ComposedProduct, GetComposedProduct} from "lib/services/ordercloud.service"
+import {Product, Products} from "ordercloud-javascript-sdk"
+
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
+import Card from "lib/components/card/Card"
+import {ChevronDownIcon} from "@chakra-ui/icons"
 import EditorialProgressBar from "lib/components/products/EditorialProgressBar"
 import {NextSeo} from "next-seo"
 import ProductCatalogAssignments from "lib/components/products/ProductCatalogAssignments"
@@ -52,13 +56,10 @@ import ProductSpecs from "lib/components/products/ProductSpecs"
 import ProductSuppliers from "lib/components/products/ProductSupllier"
 import ProductVariants from "lib/components/products/ProductVariants"
 import ProductXpCards from "lib/components/products/ProductXpCards"
-import {Product, Products} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import React from "react"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {useRouter} from "next/router"
-import Card from "lib/components/card/Card"
-import {ChevronDownIcon} from "@chakra-ui/icons"
 import {useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
@@ -80,19 +81,18 @@ const ProductDetails = () => {
   const router = useRouter()
   const successToast = useSuccessToast()
   const {isOpen: isOpenAddProduct, onOpen: onOpenAddProduct, onClose: onCloseAddProduct} = useDisclosure()
-  const [selectedLanguage, setselectedLanguage] = useState("")
+  const [selectedLanguage] = useState("")
   const {id} = router.query
   const [composedProduct, setComposedProduct] = useState<ComposedProduct>(null)
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
   const [isViewProductDialogOpen, setViewProductDialogOpen] = useState(false)
   const [isDeleteProductDialogOpen, setDeleteProductDialogOpen] = useState(false)
   const [isLanguageDialogOpen, setLanguageDialogOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [loading] = useState(false)
   const [productName, setProductName] = useState("")
   const [isDeleting, setIsDeleting] = useState(false)
-  const {isOpen, onOpen, onClose} = useDisclosure()
+  const {isOpen, onClose} = useDisclosure()
   const cancelRef = React.useRef()
-  const [isLoading, setIsLoading] = useState(true)
   const [isAdding, setIsAdding] = useState(false)
 
   const [formValues, setFormValues] = useState({

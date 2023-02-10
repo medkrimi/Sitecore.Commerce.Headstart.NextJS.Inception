@@ -1,14 +1,4 @@
-import {
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
-  Button
-} from "@chakra-ui/react"
+import {Menu, MenuButton, MenuList, MenuItem, Button} from "@chakra-ui/react"
 
 import {ChevronDownIcon} from "@chakra-ui/icons"
 import {HiMenu} from "react-icons/hi"

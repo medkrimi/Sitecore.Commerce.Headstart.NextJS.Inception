@@ -32,7 +32,7 @@ async function create(fields) {
   //Products.Create(fields)
 }
 
-async function update(fields) {
+async function update() {
   //console.log("productsService::update")
   //console.log(fields)
   //Products.Patch(fields.ID, fields)

@@ -13,8 +13,6 @@ import {
   Heading,
   Input,
   ListItem,
-  Table,
-  TableContainer,
   Tbody,
   Td,
   Text,
@@ -23,22 +21,11 @@ import {
   Tooltip,
   Tr,
   UnorderedList,
-  useColorMode,
   useColorModeValue,
   useDisclosure
 } from "@chakra-ui/react"
-import {
-  Catalog,
-  CatalogAssignment,
-  Catalogs,
-  ListPage,
-  Product,
-  ProductCatalogAssignment,
-  Products,
-  RequiredDeep
-} from "ordercloud-javascript-sdk"
+import {Catalog, Catalogs, ProductCatalogAssignment} from "ordercloud-javascript-sdk"
 import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
-import {FiEdit, FiPlus, FiTrash2} from "react-icons/fi"
 import {useEffect, useState} from "react"
 
 import BrandedSpinner from "../branding/BrandedSpinner"

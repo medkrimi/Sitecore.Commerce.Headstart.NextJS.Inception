@@ -1,9 +1,8 @@
-import {Button, Flex, Icon, Image, Link, Text} from "@chakra-ui/react"
-import {FiSettings, FiStar} from "react-icons/fi"
-import {HiOutlineChartBar, HiOutlineEmojiSad, HiOutlineQrcode, HiOutlineUser, HiOutlineUserGroup} from "react-icons/hi"
+import {Flex, Icon, Link} from "@chakra-ui/react"
+import {FiSettings} from "react-icons/fi"
+import {HiOutlineChartBar, HiOutlineQrcode, HiOutlineUserGroup} from "react-icons/hi"
 import {TbBuildingWarehouse, TbShoppingCartDiscount, TbShoppingCartPlus, TbTruckReturn} from "react-icons/tb"
 
-import {BsCurrencyDollar} from "react-icons/bs"
 import NextLink from "next/link"
 import ProtectedContent from "../auth/ProtectedContent"
 import React from "react"

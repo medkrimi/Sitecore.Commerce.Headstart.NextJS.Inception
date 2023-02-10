@@ -1,6 +1,7 @@
-import {Flex, Text, Box, Icon, useColorModeValue} from "@chakra-ui/react"
-import React from "react"
+import {Box, Flex, Text, useColorModeValue} from "@chakra-ui/react"
+
 import Card from "../card/Card"
+import React from "react"
 
 export default function PercentChangeTitle(prop) {
   const color = useColorModeValue("textColor.900", "textColor.100")

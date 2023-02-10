@@ -1,5 +1,5 @@
 import {Box, Container, Flex} from "@chakra-ui/react"
-import {ReactNode, useEffect, useState} from "react"
+import {useEffect, useState} from "react"
 
 import ContentFooter from "./ContentFooter"
 import ContentHeader from "./ContentHeader"

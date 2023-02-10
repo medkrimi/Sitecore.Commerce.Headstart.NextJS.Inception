@@ -1,6 +1,5 @@
-import {Box, Container} from "@chakra-ui/react"
-
 import {AddEditForm} from "../../lib/components/promotions/AddEditForm"
+import {Box} from "@chakra-ui/react"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 

@@ -1,4 +1,4 @@
-import {Text, Flex, useStyleConfig, Input, HStack, VStack} from "@chakra-ui/react"
+import {Text, Flex, Input, HStack, VStack} from "@chakra-ui/react"
 
 export default function AddressCard(props) {
   return (

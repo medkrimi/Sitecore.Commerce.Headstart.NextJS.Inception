@@ -1,12 +1,13 @@
 import {Box, Button, ButtonGroup, HStack, Switch, Tooltip} from "@chakra-ui/react"
 import {useEffect, useState} from "react"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
+
 import Card from "lib/components/card/Card"
 import CatalogsDataTable from "lib/components/datatable/datatable"
 import Link from "lib/components/navigation/Link"
 import React from "react"
 import {catalogsService} from "lib/api"
 import {useRouter} from "next/router"
-import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -69,7 +70,7 @@ const CatalogsList = () => {
     {
       Header: "Active",
       accessor: "Active",
-      Cell: ({value, row}) => (
+      Cell: ({value}) => (
         <>
           <Tooltip label={value ? "Active" : "Non active"} placement="bottom">
             <Switch colorScheme="teal" size="lg" isReadOnly isChecked={value} />

@@ -1,12 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
+
+import Document, {Head, Html, Main, NextScript} from "next/document"
+
 import {ColorModeScript} from "@chakra-ui/react"
 import type {DocumentContext} from "next/document"
-import Document, {Html, Head, Main, NextScript} from "next/document"
-import Script from "next/script"
-
 import sitecorecommerceTheme from "lib/styles/theme/sitecorecommerce/"
-import playsummitTheme from "lib/styles/theme/playsummit/"
-import industrialTheme from "lib/styles/theme/industrial/"
 
 const APP_NAME = "nextarter-chakra"
 

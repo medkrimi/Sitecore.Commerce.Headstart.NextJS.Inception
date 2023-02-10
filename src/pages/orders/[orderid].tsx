@@ -13,8 +13,6 @@ import {
   Grid,
   GridItem,
   HStack,
-  Heading,
-  IconButton,
   Input,
   Link,
   Spacer,
@@ -25,22 +23,21 @@ import {
   Text,
   Textarea,
   Tr,
-  VStack,
-  useDisclosure,
-  useToast
+  VStack
 } from "@chakra-ui/react"
 import {IntegrationEvents, OrderReturn, OrderReturns, OrderWorksheet, Orders} from "ordercloud-javascript-sdk"
 import React, {FunctionComponent, useEffect, useRef, useState} from "react"
 import {dateHelper, priceHelper} from "lib/utils/"
+
 import AddressCard from "../../lib/components/card/AddressCard"
 import Card from "lib/components/card/Card"
 import LettersCard from "lib/components/card/LettersCard"
 import NextLink from "next/link"
 import {NextSeo} from "next-seo"
 import OcLineItemList from "lib/components/shoppingcart/OcLineItemList"
-import {useRouter} from "next/router"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
+import {useRouter} from "next/router"
 import {useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */

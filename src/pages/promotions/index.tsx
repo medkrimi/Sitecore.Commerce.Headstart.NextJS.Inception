@@ -2,6 +2,7 @@ import {
   AlertDialog,
   AlertDialogBody,
   AlertDialogContent,
+  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
   Badge,
@@ -10,12 +11,12 @@ import {
   ButtonGroup,
   HStack,
   Icon,
+  Spinner,
   Stack,
-  Text,
-  AlertDialogFooter,
-  Spinner
+  Text
 } from "@chakra-ui/react"
 import {useEffect, useRef, useState} from "react"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 import Card from "lib/components/card/Card"
 import {IoMdClose} from "react-icons/io"
@@ -28,7 +29,6 @@ import {appPermissions} from "lib/constants/app-permissions.config"
 import {dateHelper} from "lib/utils/date.utils"
 import {promotionsService} from "lib/api"
 import router from "next/router"
-import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getStaticProps() {
@@ -48,11 +48,6 @@ export async function getStaticProps() {
 
 const PromotionsList = () => {
   const [promotions, setPromotions] = useState([])
-  const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const cancelRef = useRef()
-  const requestExportCSV = () => {}
-
   const successToast = useSuccessToast()
   const errorToast = useErrorToast()
 
@@ -182,7 +177,7 @@ const PromotionsList = () => {
 
 const ProtectedBuyersList = () => {
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [loading] = useState(false)
   const cancelRef = useRef()
   const requestExportCSV = () => {}
 

@@ -1,5 +1,5 @@
 import NextLink from "next/link"
-import {Box, Flex, Link, Text, VStack, Heading} from "@chakra-ui/react"
+import {Flex, Link, Text, VStack} from "@chakra-ui/react"
 import {ReactNode} from "react"
 
 const FooterLinksNavigation = () => {

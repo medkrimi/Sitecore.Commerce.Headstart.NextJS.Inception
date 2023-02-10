@@ -24,7 +24,7 @@ export async function getServerSideProps() {
   }
 }
 
-const PromotionItem = (props) => {
+const PromotionItem = () => {
   const router = useRouter()
   const [promotion, setPromotion] = useState({} as Promotion)
   useEffect(() => {

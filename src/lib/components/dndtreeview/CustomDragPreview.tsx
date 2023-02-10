@@ -1,4 +1,3 @@
-import {NodeModel} from "@minoru/react-dnd-treeview"
 import React from "react"
 import {TypeIcon} from "./TypeIcon"
 import styles from "./CustomDragPreview.module.css"

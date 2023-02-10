@@ -22,9 +22,8 @@ import {
   useDisclosure,
   Divider
 } from "@chakra-ui/react"
-import {Filters, LineItem, LineItems, Order, Orders, Promotion, User, Users} from "ordercloud-javascript-sdk"
-import {ChangeEvent, useEffect, useState} from "react"
-import {FiCheck, FiEdit, FiX} from "react-icons/fi"
+import {Filters, LineItem, LineItems, Order, Orders, Promotion, User} from "ordercloud-javascript-sdk"
+import {useEffect, useState} from "react"
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"

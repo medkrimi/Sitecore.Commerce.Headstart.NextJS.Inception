@@ -8,11 +8,8 @@ import {
   Box,
   Button,
   Checkbox,
-  Collapse,
   HStack,
   Heading,
-  Table,
-  TableContainer,
   Tbody,
   Td,
   Th,
@@ -25,10 +22,9 @@ import {
 } from "@chakra-ui/react"
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
 import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
-import {FiMinus, FiPlus, FiRefreshCw, FiTrash2, FiZap} from "react-icons/fi"
-import {Product, Products, RequiredDeep, Variant} from "ordercloud-javascript-sdk"
+import {FiMinus, FiPlus} from "react-icons/fi"
+import {Products, Variant} from "ordercloud-javascript-sdk"
 
-import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 import React from "react"

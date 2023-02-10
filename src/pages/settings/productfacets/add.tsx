@@ -1,8 +1,8 @@
-import {Box, Container} from "@chakra-ui/react"
 import {AddEditForm} from "../../../lib/components/productfacets/AddEditForm"
+import {Container} from "@chakra-ui/react"
+import {NextSeo} from "next-seo"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
-import {NextSeo} from "next-seo"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getStaticProps() {

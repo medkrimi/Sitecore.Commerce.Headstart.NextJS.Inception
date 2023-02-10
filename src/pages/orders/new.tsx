@@ -1,20 +1,6 @@
-import {
-  Button,
-  Container,
-  Flex,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  HStack,
-  Heading,
-  IconButton,
-  Input,
-  Text
-} from "@chakra-ui/react"
+import {Button, Container, FormControl, FormLabel, HStack, Input} from "@chakra-ui/react"
 
 import Card from "lib/components/card/Card"
-import {Form} from "formik"
-import {HiOutlineMinusSm} from "react-icons/hi"
 import {NextSeo} from "next-seo"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import React from "react"

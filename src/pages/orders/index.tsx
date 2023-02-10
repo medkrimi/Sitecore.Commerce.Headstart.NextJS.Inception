@@ -21,16 +21,17 @@ import {
   VStack
 } from "@chakra-ui/react"
 import {useEffect, useRef, useState} from "react"
+
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
 import Link from "../../lib/components/navigation/Link"
 import {NextSeo} from "next-seo"
 import {Orders} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
+import SearchDataTable from "lib/components/datatable/datatable"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {dateHelper} from "lib/utils/date.utils"
 import {priceHelper} from "lib/utils/price.utils"
-import SearchDataTable from "lib/components/datatable/datatable"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -49,7 +50,7 @@ export async function getServerSideProps() {
 const OrdersPage = () => {
   const [orders, setOrders] = useState([])
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [loading] = useState(false)
   const cancelRef = useRef()
 
   const requestExportCSV = () => {}

@@ -1,5 +1,3 @@
-import {Promotions} from "ordercloud-javascript-sdk"
-
 export const appPredefinedPromotions = [
   {
     Name: "$10 off any order greater than $50",

@@ -1,4 +1,4 @@
-import {Buyers, Catalogs, UserGroups, Users} from "ordercloud-javascript-sdk"
+import {Buyers} from "ordercloud-javascript-sdk"
 
 export const buyersService = {
   list,

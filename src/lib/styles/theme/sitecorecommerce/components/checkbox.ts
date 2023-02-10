@@ -1,5 +1,3 @@
-import type {DeepPartial, Theme} from "@chakra-ui/react"
-
 export const Checkbox = {
   baseStyle: {
     control: {

@@ -21,7 +21,6 @@ import {User, Users} from "ordercloud-javascript-sdk"
 
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
-import {JsonLd} from "next-seo/lib/jsonld/jsonld"
 
 type UserDataProps = {
   user: User

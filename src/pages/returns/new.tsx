@@ -1,23 +1,10 @@
-import {
-  Button,
-  Container,
-  Flex,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Heading,
-  HStack,
-  IconButton,
-  Input,
-  Text
-} from "@chakra-ui/react"
-import {Form} from "formik"
-import ProtectedContent from "lib/components/auth/ProtectedContent"
-import Card from "lib/components/card/Card"
-import {appPermissions} from "lib/constants/app-permissions.config"
-import {NextSeo} from "next-seo"
+import {Button, Container, FormControl, FormLabel, HStack, Input} from "@chakra-ui/react"
 
+import Card from "lib/components/card/Card"
+import {NextSeo} from "next-seo"
+import ProtectedContent from "lib/components/auth/ProtectedContent"
 import React from "react"
+import {appPermissions} from "lib/constants/app-permissions.config"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
