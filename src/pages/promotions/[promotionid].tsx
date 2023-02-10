@@ -29,10 +29,11 @@ const PromotionItem = (props) => {
   const [promotion, setPromotion] = useState({} as Promotion)
   useEffect(() => {
     if (router.query.promotionid) {
-      promotionsService.getById(router.query.promotionid).then((promotion) => setPromotion(promotion))
+      promotionsService.getById(router.query.promotionid)      
+      .then((promotion) => setPromotion(promotion))
     }
   }, [router.query.promotionid])
-  console.log(promotion)
+
   return <>{promotion?.ID ? <AddEditForm promotion={promotion} /> : <div> Loading</div>}</>
 }
 

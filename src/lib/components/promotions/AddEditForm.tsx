@@ -26,6 +26,7 @@ import {
 import {Formik, useField, useFormikContext} from "formik"
 import {InputControl, RadioGroupControl, SelectControl, SwitchControl, TextareaControl} from "formik-chakra-ui"
 import {Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react"
+import {appPredefinedPromotions, appPredefinedPromotionsGrouped} from "../../constants/app-promotions.config"
 import {useEffect, useState} from "react"
 import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
@@ -34,8 +35,6 @@ import DatePicker from "../datepicker/DatePicker"
 import {DeleteIcon} from "@chakra-ui/icons"
 import {ExpressionBuilder} from "./ExpressionBuilder"
 import {Promotion} from "ordercloud-javascript-sdk"
-import {appPromotions} from "../../constants/app-promotions.config"
-import {json} from "stream/consumers"
 import {promotionsService} from "lib/api"
 import {useRouter} from "next/router"
 import {xpHelper} from "lib/utils/xp.utils"
@@ -75,6 +74,9 @@ function AddEditForm({promotion}: AddEditFormProps) {
   const router = useRouter()
   const successToast = useSuccessToast()
   const errorToast = useErrorToast()
+
+  console.log(appPredefinedPromotionsGrouped)
+
   // form validation rules
   const validationSchema = Yup.object().shape({
     Name: Yup.string().max(100),
@@ -161,7 +163,7 @@ function AddEditForm({promotion}: AddEditFormProps) {
   }
 
   const updateExpressions = (value, setFieldValue) => {
-    const promo = appPromotions.find((item) => item.Name === value)
+    const promo = appPredefinedPromotions.find((item) => item.Name === value)
     setFieldValue("EligibleExpression", promo?.EligibleExpression)
     setFieldValue("ValueExpression", promo?.ValueExpression)
   }
@@ -348,15 +350,21 @@ function AddEditForm({promotion}: AddEditFormProps) {
                             <label>Predefined Promotion Templates</label>
                             <SelectControl
                               name="PromotionTemplate"
-                              selectProps={{placeholder: "Select from promotion predefined templates"}}
+                              selectProps={{
+                                placeholder: "Select from promotion predefined templates"
+                              }}
                               onChange={(e) => {
                                 handleChange(e)
                                 const value = (e.target as HTMLSelectElement).value
                                 updateExpressions(value, setFieldValue)
                               }}
                             >
-                              {appPromotions.map((item, index) => (
-                                <option key={item.Name}>{item.Name}</option>
+                              {Object.keys(appPredefinedPromotionsGrouped).map((group, index) => (
+                                <optgroup key={index} label={group}>
+                                  {appPredefinedPromotionsGrouped[group].map((promo, key) => (
+                                    <option key={promo.Name}>{promo.Name}</option>
+                                  ))}
+                                </optgroup>
                               ))}
                             </SelectControl>
                           </Box>
