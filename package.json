@@ -23,10 +23,10 @@
     "yarn": ">=1.0.0"
   },
   "lint-staged": {
-    "*.js": [
+    "*.{js,ts,tsx}": [
       "eslint --fix"
     ],
-    "*.{html,js}": [
+    "*.{html,js,tx,tsx}": [
       "prettier --write"
     ]
   },
