@@ -24,11 +24,9 @@ import {
   UnorderedList
 } from "@chakra-ui/react"
 import {Formik, useField, useFormikContext} from "formik"
-import {InputControl, RadioGroupControl, SelectControl, SwitchControl, TextareaControl} from "formik-chakra-ui"
+import {InputControl, RadioGroupControl, SwitchControl, TextareaControl} from "formik-chakra-ui"
 import {Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react"
-import {appPredefinedPromotions, appPredefinedPromotionsGrouped} from "../../constants/app-promotions.config"
 import {useEffect, useState} from "react"
-import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 import Card from "../card/Card"
 import DatePicker from "../datepicker/DatePicker"
@@ -36,13 +34,12 @@ import {DeleteIcon} from "@chakra-ui/icons"
 import {ExpressionBuilder} from "./ExpressionBuilder"
 import {Promotion} from "ordercloud-javascript-sdk"
 import {promotionsService} from "lib/api"
+import {useCreateUpdateForm} from "lib/hooks/useCreateUpdateForm"
 import {useRouter} from "next/router"
-import {xpHelper} from "lib/utils/xp.utils"
-import {yupResolver} from "@hookform/resolvers/yup"
 
-export {AddEditForm}
+export {CreateUpdateForm}
 
-interface AddEditFormProps {
+interface CreateUpdateFormProps {
   promotion?: Promotion
 }
 
@@ -56,7 +53,6 @@ const EligibleExpressionField = (props) => {
       setFieldValue(props.name, elExpression)
     }
     eligibleExpression()
-    //
   }, [props.name, setFieldValue, touched, values])
 
   return (
@@ -67,18 +63,8 @@ const EligibleExpressionField = (props) => {
   )
 }
 
-function AddEditForm({promotion}: AddEditFormProps) {
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
-  const isAddMode = !promotion
-  const router = useRouter()
-  const successToast = useSuccessToast()
-  const errorToast = useErrorToast()
-
-  console.log(appPredefinedPromotionsGrouped)
-
-  // form validation rules
-  const validationSchema = Yup.object().shape({
+function CreateUpdateForm({promotion}: CreateUpdateFormProps) {
+  const formShape = {
     Name: Yup.string().max(100),
     Code: Yup.string().max(100).required("Code is required"),
     StartDate: Yup.date(),
@@ -87,66 +73,27 @@ function AddEditForm({promotion}: AddEditFormProps) {
     ValueExpression: Yup.string().max(400).required("Value Expression is required"),
     Description: Yup.string().max(100),
     xp_MinReqValue: Yup.number()
-  })
+  }
+  const {isCreating, successToast, errorToast, validationSchema, initialValues, onSubmit} =
+    useCreateUpdateForm<Promotion>(promotion, formShape, createPromotion, updatePromotion)
+  const [startDate, setStartDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(new Date())
+  const router = useRouter()
 
-  const formOptions = {
-    resolver: yupResolver(validationSchema, {
-      stripUnknown: true,
-      abortEarly: false
-    }),
-    defaultValues: {}
+  async function createPromotion(fields: Promotion) {
+    await promotionsService.create(fields)
+    successToast({
+      description: "Promotion created successfully."
+    })
+    router.push(`/promotions`)
   }
 
-  // set default form values if user passed in props
-  if (!isAddMode) {
-    formOptions.defaultValues = xpHelper.flattenXpObject(promotion, "_")
-  }
-
-  function onSubmit(fields, {setStatus, setSubmitting}) {
-    setStatus()
-    if (isAddMode) {
-      const promotion = xpHelper.unflattenXpObject(fields, "_")
-      createPromotion(promotion, setSubmitting)
-    } else {
-      const promotion = xpHelper.unflattenXpObject(fields, "_")
-      updatePromotion(promotion, setSubmitting)
-    }
-  }
-
-  async function createPromotion(fields, setSubmitting) {
-    try {
-      const createdPromotion = await promotionsService.create(fields)
-      /*await promotionsService.saveAssignment(
-        router.query.catalogid,
-        createdCatalog.ID,
-        router.query.buyerid,
-        router.query.usergroupid
-      )*/
-      successToast({
-        description: "Promotion created successfully."
-      })
-      router.push(`/promotions`)
-    } catch (e) {
-      setSubmitting(false)
-    }
-  }
-
-  async function updatePromotion(fields, setSubmitting) {
-    try {
-      const updatedPromotion = await promotionsService.update(fields)
-      /*await promotionsService.saveAssignment(
-        router.query.catalogid,
-        updatedCatalog.ID,
-        router.query.buyerid,
-        router.query.usergroupid
-      )*/
-      successToast({
-        description: "Promotion updated successfully."
-      })
-      router.push(`/promotions`)
-    } catch (e) {
-      setSubmitting(false)
-    }
+  async function updatePromotion(fields: Promotion) {
+    await promotionsService.update(fields)
+    successToast({
+      description: "Promotion updated successfully."
+    })
+    router.push(`/promotions`)
   }
 
   async function deletePromotion(promotionid) {
@@ -162,18 +109,12 @@ function AddEditForm({promotion}: AddEditFormProps) {
     }
   }
 
-  const updateExpressions = (value, setFieldValue) => {
-    const promo = appPredefinedPromotions.find((item) => item.Name === value)
-    setFieldValue("EligibleExpression", promo?.EligibleExpression)
-    setFieldValue("ValueExpression", promo?.ValueExpression)
-  }
-
   return (
     <>
       <Card variant="primaryCard">
         <Formik
           enableReinitialize
-          initialValues={formOptions.defaultValues}
+          initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={onSubmit}
         >
@@ -182,7 +123,7 @@ function AddEditForm({promotion}: AddEditFormProps) {
             values,
             errors,
             touched,
-            handleChange,
+            handleBlur,
             handleSubmit,
             isSubmitting,
             setFieldValue,
@@ -340,36 +281,12 @@ function AddEditForm({promotion}: AddEditFormProps) {
                         <TabPanel>
                           <SimpleGrid columns={2} spacing={10}>
                             <Box>
-                              <TextareaControl name="EligibleExpression" label="Eligible Expression" />
+                              <EligibleExpressionField name="EligibleExpression" label="Eligible Expression" />
                             </Box>
                             <Box>
                               <TextareaControl name="ValueExpression" label="Value Expression" />
                             </Box>
                           </SimpleGrid>
-                          <Box>
-                            <label>Predefined Promotion Templates</label>
-                            <SelectControl
-                              name="PromotionTemplate"
-                              selectProps={{
-                                placeholder: "Select from promotion predefined templates"
-                              }}
-                              onChange={(e) => {
-                                handleChange(e)
-                                const value = (e.target as HTMLSelectElement).value
-                                updateExpressions(value, setFieldValue)
-                              }}
-                            >
-                              {Object.keys(appPredefinedPromotionsGrouped).map((group, index) => (
-                                <optgroup key={index} label={group}>
-                                  {appPredefinedPromotionsGrouped[group].map((promo, key) => (
-                                    <option key={promo.Name}>{promo.Name}</option>
-                                  ))}
-                                </optgroup>
-                              ))}
-                            </SelectControl>
-                          </Box>
-                          <Divider mt="15" mb="15" />
-                          <label>Expression Builder</label>
                           <ExpressionBuilder />
                         </TabPanel>
                       </TabPanels>
@@ -398,13 +315,15 @@ function AddEditForm({promotion}: AddEditFormProps) {
                       >
                         Cancel
                       </Button>
-                      <Button
-                        variant="secondaryButton"
-                        onClick={() => deletePromotion(values.ID)}
-                        leftIcon={<DeleteIcon />}
-                      >
-                        Delete
-                      </Button>
+                      {!isCreating && (
+                        <Button
+                          variant="secondaryButton"
+                          onClick={() => deletePromotion(values.ID)}
+                          leftIcon={<DeleteIcon />}
+                        >
+                          Delete
+                        </Button>
+                      )}
                     </ButtonGroup>
                   </GridItem>
                 </Grid>

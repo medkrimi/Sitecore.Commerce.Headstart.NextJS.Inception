@@ -89,10 +89,6 @@ const SuppliersList = () => {
       Cell: ({value, row}) => <Link href={`/suppliers/${row.original.ID}`}>{value}</Link>
     },
     {
-      Header: "DEFAULT CATALOG ID",
-      accessor: "DefaultCatalogID"
-    },
-    {
       Header: "STATUS",
       accessor: "Active",
       Cell: ({row}) => (

@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react"
 
-import {AddEditForm} from "lib/components/productfacets"
 import {Box} from "@chakra-ui/react"
+import {CreateUpdateForm} from "lib/components/productfacets"
 import {ProductFacet} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
@@ -33,7 +33,7 @@ const ProductFacetsListItem = () => {
     }
   }, [productfacet?.ID, router.query.id])
 
-  return <>{productfacet?.ID ? <AddEditForm productfacet={productfacet} /> : <div> Loading</div>}</>
+  return <>{productfacet?.ID ? <CreateUpdateForm productfacet={productfacet} /> : <div> Loading</div>}</>
 }
 
 const ProtectedProductFacetsListItem = () => {

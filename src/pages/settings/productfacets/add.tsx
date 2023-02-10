@@ -1,6 +1,6 @@
-import {AddEditForm} from "../../../lib/components/productfacets/AddEditForm"
-import {Container} from "@chakra-ui/react"
-import {NextSeo} from "next-seo"
+import {CreateUpdateForm} from "../../../lib/components/productfacets/CreateUpdateForm"
+import {Container, Container} from "@chakra-ui/react"
+import {NextSeo, NextSeo} from "next-seo"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 
@@ -23,7 +23,7 @@ const NewProductFacetsPage = () => {
   return (
     <Container maxW="full">
       <NextSeo title="New Product Facets" />
-      <AddEditForm />
+      <CreateUpdateForm />
     </Container>
   )
 }

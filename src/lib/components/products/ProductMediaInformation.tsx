@@ -158,15 +158,11 @@ export default function ProductMediaInformation({composedProduct, setComposedPro
                     <HStack key={key} mt={3}>
                       <Text>{key + 1}</Text>
                       <Input value={image.Url} onChange={handleInputChange(key)} />
-                      {key != 0 ? (
-                        <Tooltip pt={2} label="Remove Product Image">
-                          <Button onClick={onDeleteProductImageClicked(image.Url)} variant="secondaryButton">
-                            Delete
-                          </Button>
-                        </Tooltip>
-                      ) : (
-                        <></>
-                      )}
+                      <Tooltip pt={2} label="Remove Product Image">
+                        <Button onClick={onDeleteProductImageClicked(image.Url)} variant="secondaryButton">
+                          Delete
+                        </Button>
+                      </Tooltip>
                     </HStack>
                   ) : (
                     <></>

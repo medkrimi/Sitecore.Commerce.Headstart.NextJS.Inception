@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react"
 
-import {AddEditForm} from "../../lib/components/promotions/AddEditForm"
 import {Box} from "@chakra-ui/react"
+import {CreateUpdateForm} from "../../lib/components/promotions/CreateUpdateForm"
 import {Promotion} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
@@ -33,7 +33,7 @@ const PromotionItem = () => {
     }
   }, [router.query.promotionid])
 
-  return <>{promotion?.ID ? <AddEditForm promotion={promotion} /> : <div> Loading</div>}</>
+  return <>{promotion?.ID ? <CreateUpdateForm promotion={promotion} /> : <div> Loading</div>}</>
 }
 
 const ProtectedPromotionItem = () => {

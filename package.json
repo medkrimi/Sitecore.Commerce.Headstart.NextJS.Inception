@@ -16,7 +16,8 @@
     "up-latest": "yarn up --latest",
     "release": "cross-env HUSKY=0 standard-version",
     "push-release": "git push --follow-tags origin main",
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged",
+    "seed": "seeding seed playshop-marketplace.yml"
   },
   "engines": {
     "npm": "Please use yarn",
@@ -35,7 +36,6 @@
     "@chakra-ui/react": "^2.3.6",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.10.5",
-    "@hookform/resolvers": "^2.9.10",
     "@minoru/react-dnd-treeview": "^3.4.1",
     "@react-querybuilder/chakra": "^5.4.0",
     "@react-querybuilder/dnd": "^5.4.0",
@@ -58,7 +58,6 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.43.0",
     "react-icons": "^4.4.0",
     "react-querybuilder": "^5.4.0",
     "react-table": "^7.8.0",
@@ -66,6 +65,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@ordercloud/seeding": "^1.0.31",
     "@types/date-fns": "^2.6.0",
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.15",
