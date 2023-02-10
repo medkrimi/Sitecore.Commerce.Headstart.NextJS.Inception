@@ -1,7 +1,6 @@
-import {Container, HStack, Heading, Icon, Link, Text, useColorModeValue} from "@chakra-ui/react"
-
+import {Container, Icon, Link, Text, useColorModeValue, Grid, GridItem, Box} from "@chakra-ui/react"
 import Card from "lib/components/card/Card"
-import {HiOutlineFilter} from "react-icons/hi"
+import {HiOutlineFilter, HiUsers} from "react-icons/hi"
 import {NextSeo} from "next-seo"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import React from "react"
@@ -12,7 +11,7 @@ export async function getServerSideProps() {
   return {
     props: {
       header: {
-        title: "Settings ",
+        title: "Settings",
         metas: {
           hasBreadcrumbs: true,
           hasBuyerContextSwitch: false
@@ -28,25 +27,32 @@ const SettingsPage = () => {
   return (
     <Container maxW="full">
       <NextSeo title="Settings" />
-      <HStack justifyContent="space-between" w="100%">
-        <Card
-          showclosebutton="false"
-          p="28px 10px 0px 0px"
-          mb={{sm: "26px", lg: "0px"}}
-          bg={boxBgColor}
-          color={color}
-          width="225px"
-          maxW="225px"
-          align="center"
-        >
-          <Link href="/settings/productfacets/">
-            <Icon as={HiOutlineFilter} fontSize="80px" title="Settings" color="darkGray"></Icon>
-            <Text width="100%" w="full">
-              Product Facets
-            </Text>
+      <Grid gridTemplateColumns="repeat(auto-fit, 225px)" gridGap="1rem">
+        <GridItem>
+          <Link href="/settings/adminusers/">
+            <Card showclosebutton="false" color={color} align="center">
+              <Box>
+                <Icon as={HiUsers} fontSize="80px" title="Settings" color="darkGray"></Icon>
+                <Text width="100%" w="full">
+                  Admin Users
+                </Text>
+              </Box>
+            </Card>
           </Link>
-        </Card>
-      </HStack>
+        </GridItem>
+        <GridItem>
+          <Link href="/settings/productfacets/">
+            <Card showclosebutton="false" bg={boxBgColor} color={color} align="center">
+              <Box>
+                <Icon as={HiOutlineFilter} fontSize="80px" title="Settings" color="darkGray"></Icon>
+                <Text width="100%" w="full">
+                  Product Facets
+                </Text>
+              </Box>
+            </Card>
+          </Link>
+        </GridItem>
+      </Grid>
     </Container>
   )
 }

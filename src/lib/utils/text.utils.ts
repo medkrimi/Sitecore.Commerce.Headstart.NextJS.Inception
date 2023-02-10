@@ -2,7 +2,8 @@ export const textHelper = {
   stripHTML,
   formatTextTruncate,
   capitalizeFirstLetter,
-  formatStatus
+  formatStatus,
+  camelCaseToTitleCase
 }
 
 /**
@@ -26,12 +27,6 @@ function formatTextTruncate(len: number, str: string, ending: string): string {
     ending = "..."
   }
   return str
-  //TODO FIX
-  if (str.length > len) {
-    return str.substring(0, len - ending.length) + ending
-  } else {
-    return str
-  }
 }
 
 function capitalizeFirstLetter(string) {
@@ -55,4 +50,11 @@ function formatStatus(status: string): string {
     default:
       return "Completed"
   }
+}
+
+// ex: JimBobJoe => Jim Bob Joe
+function camelCaseToTitleCase(text: string): string {
+  const withSpaces = text.replace(/([A-Z])/g, " $1")
+  const capitalized = withSpaces.charAt(0).toUpperCase() + withSpaces.slice(1)
+  return capitalized
 }

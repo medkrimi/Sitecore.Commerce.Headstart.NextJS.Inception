@@ -39,6 +39,11 @@ Objects:
       xp: {
         IsPermission: true
       }
+    - ID: ReportViewer
+      Name: Report Viewer
+      Roles:
+        - ProductAdmin
+        - OrderAdmin
     - ID: ProductManager
       Name: Product Manager
       Roles:
@@ -119,6 +124,9 @@ Objects:
     - ID: ProductManager
       Name: Product Manager
       Description: Associated with the ProductManager security profile
+    - ID: ReportViewer
+      Name: Report Viewer
+      Description: Associated with the ReportViewer security profile
     - ID: SupplierManager
       Name: Supplier Manager
       Description: Associated with the SupplierManager security profile
@@ -5144,6 +5152,11 @@ Assignments:
       SupplierID: null
       UserID: null
       UserGroupID: ProductManager
+    - SecurityProfileID: ReportViewer
+      BuyerID: null
+      SupplierID: null
+      UserID: null
+      UserGroupID: ReportViewer
     - SecurityProfileID: SupplierManager
       BuyerID: null
       SupplierID: null
@@ -5162,6 +5175,8 @@ Assignments:
     - UserGroupID: OrderManager
       UserID: initial-admin-user
     - UserGroupID: ProductManager
+      UserID: initial-admin-user
+    - UserGroupID: ReportViewer
       UserID: initial-admin-user
     - UserGroupID: SupplierManager
       UserID: initial-admin-user
