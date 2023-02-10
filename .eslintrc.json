@@ -1,9 +1,10 @@
 {
-  "extends": ["next", "prettier"],
+  "extends": ["eslint:recommended", "next", "next/core-web-vitals", "prettier"],
   "plugins": ["prettier"],
   "rules": {
-    "prettier/prettier": ["error", {"endOfLine": "auto"}]
-  },
+    "prettier/prettier": "error",
+    "no-console": "warn"
+  },  
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion" : 2020
