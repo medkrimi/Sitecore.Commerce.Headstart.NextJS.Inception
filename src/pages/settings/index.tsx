@@ -1,6 +1,7 @@
 import {Container, Icon, Link, Text, useColorModeValue, Grid, GridItem, Box} from "@chakra-ui/react"
 import Card from "lib/components/card/Card"
 import {HiOutlineFilter, HiUsers} from "react-icons/hi"
+import {FaAddressBook} from "react-icons/fa"
 import {NextSeo} from "next-seo"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import React from "react"
@@ -35,6 +36,18 @@ const SettingsPage = () => {
                 <Icon as={HiUsers} fontSize="80px" title="Settings" color="darkGray"></Icon>
                 <Text width="100%" w="full">
                   Admin Users
+                </Text>
+              </Box>
+            </Card>
+          </Link>
+        </GridItem>
+        <GridItem>
+          <Link href="/settings/adminaddresses/">
+            <Card showclosebutton="false" color={color} align="center">
+              <Box>
+                <Icon as={FaAddressBook} fontSize="80px" title="Settings" color="darkGray"></Icon>
+                <Text width="100%" w="full">
+                  Admin Addresses
                 </Text>
               </Box>
             </Card>

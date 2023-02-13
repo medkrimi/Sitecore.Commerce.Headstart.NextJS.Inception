@@ -9,7 +9,6 @@ import {
   ButtonGroup,
   Container,
   HStack,
-  Icon,
   Spinner,
   Text,
   Link
@@ -20,18 +19,17 @@ import {NextSeo} from "next-seo"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {useRouter} from "next/router"
-import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
+import {useSuccessToast} from "lib/hooks/useToast"
 import SearchDataTable from "lib/components/datatable/datatable"
-import {AdminUsers} from "ordercloud-javascript-sdk"
-import {IoMdClose} from "react-icons/io"
-import {MdCheck} from "react-icons/md"
+import {AdminAddresses, Address} from "ordercloud-javascript-sdk"
+import {addressHelper} from "lib/utils/address.utils"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
   return {
     props: {
       header: {
-        title: "Admin Users List",
+        title: "Admin Address List",
         metas: {
           hasBreadcrumbs: true,
           hasBuyerContextSwitch: false
@@ -41,68 +39,56 @@ export async function getServerSideProps() {
   }
 }
 
-const AdminUsersPage = () => {
+const AdminAddressesPage = () => {
   const router = useRouter()
   const successToast = useSuccessToast()
-  const errorToast = useErrorToast()
-  const [adminUsers, setAdminUsers] = useState([])
+  const [addresses, setAddresses] = useState([] as Address[])
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const cancelRef = useRef()
 
   const requestExportCSV = () => {}
 
-  const getAdminUsers = useCallback(async () => {
-    const adminUsersList = await AdminUsers.List()
-    setAdminUsers(adminUsersList.Items)
+  const getAdminAddresses = useCallback(async () => {
+    const adminAddresses = await AdminAddresses.List()
+    setAddresses(adminAddresses.Items)
   }, [])
 
   useEffect(() => {
-    getAdminUsers()
-  }, [getAdminUsers])
+    getAdminAddresses()
+  }, [getAdminAddresses])
 
-  async function deleteAdminUser(userId: string): Promise<void> {
-    await AdminUsers.Delete(userId)
-    await getAdminUsers()
+  async function deleteAddress(addressId: string): Promise<void> {
+    await AdminAddresses.Delete(addressId)
+    await getAdminAddresses()
     successToast({
-      description: "User deleted successfully"
+      description: "Address deleted successfully"
     })
   }
 
   const columnsData = [
     {
-      Header: "FIRSTNAME",
-      accessor: "FirstName",
-      Cell: ({value, row}) => <Link href={`/settings/adminusers/${row.original.ID}`}>{value}</Link>
+      Header: "ID",
+      accessor: "ID",
+      Cell: ({value, row}) => <Link href={`/settings/adminaddresses/${row.original.ID}`}>{value}</Link>
     },
     {
-      Header: "LASTNAME",
-      accessor: "LastName",
-      Cell: ({value, row}) => <Link href={`/settings/adminusers/${row.original.ID}`}>{value}</Link>
+      Header: "ADDRESS NAME",
+      accessor: "AddressName",
+      Cell: ({value, row}) => <Link href={`/settings/adminaddresses/${row.original.ID}`}>{value}</Link>
     },
     {
-      Header: "EMAIL",
-      accessor: "Email"
-    },
-    {
-      Header: "Active",
-      accessor: "Active",
-      Cell: ({value}) => (
-        <>
-          <Icon as={value ? MdCheck : IoMdClose} color={value ? "green.400" : "red.400"} w="20px" h="20px" />
-          <Text>{value ? "Active" : "Non active"}</Text>
-        </>
-      )
+      Header: "ADDRESS",
+      Cell: ({row}: {row}) => addressHelper.formatOneLineAddress(row.original)
     },
     {
       Header: "ACTIONS",
-      accessor: "ID",
-      Cell: ({value}) => (
+      Cell: ({row}) => (
         <ButtonGroup>
-          <Button variant="secondaryButton" onClick={() => router.push(`/settings/adminusers/${value}/`)}>
+          <Button variant="secondaryButton" onClick={() => router.push(`/settings/adminaddresses/${row.original.ID}/`)}>
             Edit
           </Button>
-          <Button variant="secondaryButton" onClick={() => deleteAdminUser(value)}>
+          <Button variant="secondaryButton" onClick={() => deleteAddress(row.original.ID)}>
             Delete
           </Button>
         </ButtonGroup>
@@ -112,10 +98,10 @@ const AdminUsersPage = () => {
 
   return (
     <Container maxW="full">
-      <NextSeo title="Admin Users List" />
+      <NextSeo title="Admin Addresses List" />
       <HStack justifyContent="space-between" w="100%" mb={5}>
-        <Link href={`/settings/adminusers/add`}>
-          <Button variant="primaryButton">New Admin User</Button>
+        <Link href={`/settings/adminaddresses/add`}>
+          <Button variant="primaryButton">New Admin Address</Button>
         </Link>
         <HStack>
           <Button variant="secondaryButton" onClick={() => setExportCSVDialogOpen(true)}>
@@ -124,7 +110,7 @@ const AdminUsersPage = () => {
         </HStack>
       </HStack>
       <Card variant="primaryCard">
-        <SearchDataTable tableData={adminUsers} columnsData={columnsData}></SearchDataTable>
+        <SearchDataTable tableData={addresses} columnsData={columnsData}></SearchDataTable>
       </Card>
       <AlertDialog
         isOpen={isExportCSVDialogOpen}
@@ -134,13 +120,13 @@ const AdminUsersPage = () => {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Export Selected Admin Users to CSV
+              Export Selected Admin Address to CSV
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text display="inline">
-                Export the selected admin users to a CSV, once the export button is clicked behind the scenes a job will
-                be kicked off to create the csv and then will automatically download to your downloads folder in the
-                browser.
+                Export the selected admin addresses to a CSV, once the export button is clicked behind the scenes a job
+                will be kicked off to create the csv and then will automatically download to your downloads folder in
+                the browser.
               </Text>
             </AlertDialogBody>
             <AlertDialogFooter>
@@ -154,7 +140,7 @@ const AdminUsersPage = () => {
                   Cancel
                 </Button>
                 <Button onClick={requestExportCSV} disabled={loading}>
-                  {loading ? <Spinner color="brand.500" /> : "Export Admin Users"}
+                  {loading ? <Spinner color="brand.500" /> : "Export Admin Addresses"}
                 </Button>
               </HStack>
             </AlertDialogFooter>
@@ -165,12 +151,12 @@ const AdminUsersPage = () => {
   )
 }
 
-const ProtectedAdminUsersPage = () => {
+const ProtectedAdminAddressesPage = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.SettingsManager}>
-      <AdminUsersPage />
+      <AdminAddressesPage />
     </ProtectedContent>
   )
 }
 
-export default ProtectedAdminUsersPage
+export default ProtectedAdminAddressesPage
