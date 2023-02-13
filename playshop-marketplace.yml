@@ -57,6 +57,9 @@ Objects:
       Name: Settings Manager
       Roles:
         - ProductFacetAdmin
+        - AdminUserAdmin
+        - AdminUserGroupAdmin
+        - AdminAddressAdmin
       xp: {
         IsPermission: true
       }
