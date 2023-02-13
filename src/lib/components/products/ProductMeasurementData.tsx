@@ -16,17 +16,9 @@ import {
 } from "@chakra-ui/react"
 import {ChangeEvent, useState} from "react"
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
-import {
-  ComposedProduct,
-  GetComposedProduct
-} from "../../services/ordercloud.service"
+import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
 import {FiCheck, FiEdit, FiMinus, FiPlus, FiX} from "react-icons/fi"
-import {
-  Inventory,
-  Product,
-  Products,
-  RequiredDeep
-} from "ordercloud-javascript-sdk"
+import {Inventory, Product, Products, RequiredDeep} from "ordercloud-javascript-sdk"
 
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
@@ -36,14 +28,11 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductMeasurementData({
-  composedProduct,
-  setComposedProduct
-}: ProductDataProps) {
+export default function ProductMeasurementData({composedProduct, setComposedProduct}: ProductDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [formValues, setFormValues] = useState({
     shipWeight: composedProduct?.Product?.ShipWeight,
@@ -52,13 +41,12 @@ export default function ProductMeasurementData({
     shipWidth: composedProduct?.Product?.ShipWidth
   })
 
-  const handleNumberInputChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({
-        ...v,
-        [fieldKey]: e.target.value == "" ? 0 : e.target.value
-      }))
-    }
+  const handleNumberInputChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({
+      ...v,
+      [fieldKey]: e.target.value == "" ? 0 : e.target.value
+    }))
+  }
 
   const onEditClicked = (e) => {
     setFormValues((v) => ({
@@ -107,59 +95,20 @@ export default function ProductMeasurementData({
 
   return (
     <>
-      <BrandedBox isExpaned={expanded} setExpanded={setExpanded}>
-        <>
-          {isEditingBasicData ? (
-            <HStack float={"right"}>
-              <Tooltip label="Save">
-                <Button
-                  colorScheme="brandButtons"
-                  aria-label="Save"
-                  onClick={onSaveClicked}
-                >
-                  <FiCheck />
-                </Button>
-              </Tooltip>
-              <Tooltip label="Abort">
-                <Button
-                  colorScheme="brandButtons"
-                  aria-label="Abort"
-                  onClick={onAbortClicked}
-                >
-                  <FiX />
-                </Button>
-              </Tooltip>
-            </HStack>
-          ) : (
-            <HStack float={"right"}>
-              <Tooltip label="Edit">
-                <Button
-                  colorScheme="brandButtons"
-                  aria-label="Edit"
-                  onClick={onEditClicked}
-                >
-                  <FiEdit />
-                </Button>
-              </Tooltip>
-            </HStack>
-          )}
-          {(!composedProduct?.Product || isLoading) && expanded ? (
-            <Box pt={6} textAlign={"center"}>
-              Updating... <BrandedSpinner />
-            </Box>
-          ) : (
-            <>
-              <Heading
-                size={{base: "md", md: "lg", lg: "xl"}}
-                mb={expanded ? 6 : 0}
-              >
-                Sizes
-              </Heading>
-              <Collapse in={expanded}>
+      <>
+        {(!composedProduct?.Product || isLoading) && expanded ? (
+          <Box pt={6} textAlign={"center"}>
+            Updating... <BrandedSpinner />
+          </Box>
+        ) : (
+          <>
+            <Heading size={{base: "sm", md: "md", lg: "md"}} mb={expanded ? 6 : 0}>
+              Shipping Dimensions
+            </Heading>
+            <Collapse in={expanded}>
+              <Box width="full" pb="50" pt={4} h="100%">
                 <Box width="full" pb={2}>
-                  <Text opacity={0.5} fontWeight={"bold"}>
-                    Ship Weight:
-                  </Text>
+                  <Text>Ship Weight:</Text>
                   {isEditingBasicData ? (
                     <Input
                       type={"number"}
@@ -167,11 +116,7 @@ export default function ProductMeasurementData({
                       onChange={handleNumberInputChange("shipWeight")}
                     />
                   ) : (
-                    <Heading
-                      fontSize={"xl"}
-                      fontFamily={"body"}
-                      fontWeight={500}
-                    >
+                    <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                       {composedProduct?.Product?.ShipWeight ?? "Not set"}
                     </Heading>
                   )}
@@ -187,20 +132,14 @@ export default function ProductMeasurementData({
                       onChange={handleNumberInputChange("shipHeight")}
                     />
                   ) : (
-                    <Heading
-                      fontSize={"xl"}
-                      fontFamily={"body"}
-                      fontWeight={500}
-                    >
+                    <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                       {composedProduct?.Product?.ShipHeight ?? "Not set"}
                     </Heading>
                   )}
                 </Box>
 
                 <Box width="full" pb={2}>
-                  <Text opacity={0.5} fontWeight={"bold"}>
-                    Ship Length:
-                  </Text>
+                  <Text>Ship Length:</Text>
                   {isEditingBasicData ? (
                     <Input
                       type={"number"}
@@ -208,11 +147,7 @@ export default function ProductMeasurementData({
                       onChange={handleNumberInputChange("shipLength")}
                     />
                   ) : (
-                    <Heading
-                      fontSize={"xl"}
-                      fontFamily={"body"}
-                      fontWeight={500}
-                    >
+                    <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                       {composedProduct?.Product?.ShipLength ?? "Not set"}
                     </Heading>
                   )}
@@ -229,20 +164,38 @@ export default function ProductMeasurementData({
                       onChange={handleNumberInputChange("shipWidth")}
                     />
                   ) : (
-                    <Heading
-                      fontSize={"xl"}
-                      fontFamily={"body"}
-                      fontWeight={500}
-                    >
+                    <Heading fontSize={"xl"} fontFamily={"body"} fontWeight={500}>
                       {composedProduct?.Product?.ShipWidth ?? "Not set"}
                     </Heading>
                   )}
                 </Box>
-              </Collapse>
-            </>
-          )}
-        </>
-      </BrandedBox>
+              </Box>
+            </Collapse>
+          </>
+        )}
+      </>
+      {isEditingBasicData ? (
+        <HStack float={"right"} position="absolute" bottom="20px">
+          <Tooltip label="Save">
+            <Button colorScheme="brandButtons" aria-label="Save" variant="primaryButton" onClick={onSaveClicked}>
+              Save
+            </Button>
+          </Tooltip>
+          <Tooltip label="Cancel">
+            <Button colorScheme="brandButtons" aria-label="Cancel" variant="secondaryButton" onClick={onAbortClicked}>
+              Cancel
+            </Button>
+          </Tooltip>
+        </HStack>
+      ) : (
+        <HStack float={"right"} position="absolute" bottom="20px">
+          <Tooltip label="Edit">
+            <Button colorScheme="brandButtons" aria-label="Edit" variant="tertiaryButton" onClick={onEditClicked}>
+              Edit
+            </Button>
+          </Tooltip>
+        </HStack>
+      )}
     </>
   )
 }

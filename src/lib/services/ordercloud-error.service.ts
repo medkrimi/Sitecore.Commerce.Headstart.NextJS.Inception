@@ -31,17 +31,13 @@ function logDetailsInternally(apiError: AxiosError) {
   if (apiError.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
-    console.error(
-      `OrderCloud API call failed: ${apiError.response.config.method} ${apiError.response.config.url}`
-    )
+    console.error(`OrderCloud API call failed: ${apiError.response.config.method} ${apiError.response.config.url}`)
     if (apiError.response.config.data) {
       console.error(`Request body: ${apiError.response.config.data}`)
     }
     var orderCloudErrors = (apiError.response.data as any).Errors
     if (orderCloudErrors.length) {
-      console.error(
-        `Response body: ${JSON.stringify(orderCloudErrors, null, 4)}`
-      )
+      console.error(`Response body: ${JSON.stringify(orderCloudErrors, null, 4)}`)
     }
   } else if (apiError.request) {
     // The request was made but no response was received

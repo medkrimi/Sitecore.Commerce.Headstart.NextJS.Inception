@@ -1,12 +1,4 @@
-import {
-  Button,
-  HStack,
-  Heading,
-  Icon,
-  Link,
-  Text,
-  VStack
-} from "@chakra-ui/react"
+import {Button, HStack, Heading, Icon, Link, Text, VStack} from "@chakra-ui/react"
 import {ComposedOrder, GetCurrentOrder} from "../../services/ordercloud.service"
 import {FunctionComponent, useEffect, useState} from "react"
 
@@ -32,30 +24,13 @@ const ShoppingCart: FunctionComponent = () => {
   }
 
   return (
-    <VStack
-      as="section"
-      w="100%"
-      width="full"
-      pt="40px"
-      pb="40px"
-      mt="30px"
-      maxWidth="1000px"
-    >
+    <VStack as="section" w="100%" width="full" pt="40px" pb="40px" mt="30px" maxWidth="1000px">
       <Heading as="h1">Shopping Cart</Heading>
 
-      {currentOrder?.Order?.LineItems &&
-      currentOrder?.Order?.LineItems?.length ? (
+      {currentOrder?.Order?.LineItems && currentOrder?.Order?.LineItems?.length ? (
         <VStack w="100%" width="full" justifyContent="flex-end">
           <HStack w="100%" width="full" justifyContent="space-between">
-            <Button
-              type="button"
-              border="1px"
-              borderColor="gray.300"
-              bgColor="white"
-              rounded="0"
-              p="4"
-              fontSize="12"
-            >
+            <Button type="button" border="1px" borderColor="gray.300" bgColor="white" rounded="0" p="4" fontSize="12">
               Continue Shopping
             </Button>
             <Button
@@ -73,25 +48,10 @@ const ShoppingCart: FunctionComponent = () => {
             </Button>
           </HStack>
 
-          <HStack
-            w="100%"
-            width="full"
-            justifyContent="space-between"
-            alignItems="flex-start"
-            pt="10"
-          >
-            <OcCurrentOrderLineItemList
-              emptyMessage="Your shopping cart is empty"
-              editable
-            />
+          <HStack w="100%" width="full" justifyContent="space-between" alignItems="flex-start" pt="10">
+            <OcCurrentOrderLineItemList emptyMessage="Your shopping cart is empty" editable />
             <NextLink href="/checkout" passHref>
-              <Link
-                width={48}
-                bg="brand.500"
-                color="white"
-                textAlign="center"
-                p={4}
-              >
+              <Link width={48} bg="brand.500" color="white" textAlign="center" p={4}>
                 <HStack w="100%" width="full" justifyContent="center">
                   <Text>Checkout</Text>
                   <Icon as={HiChevronDoubleRight} />

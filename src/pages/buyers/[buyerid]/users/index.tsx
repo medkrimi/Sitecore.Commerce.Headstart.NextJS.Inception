@@ -1,26 +1,14 @@
-import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Container,
-  HStack,
-  Heading,
-  Icon,
-  Text,
-  useToast
-} from "@chakra-ui/react"
+import {Box, Button, ButtonGroup, HStack, Icon, Text} from "@chakra-ui/react"
 import {useEffect, useState} from "react"
-
 import Card from "lib/components/card/Card"
 import {IoMdClose} from "react-icons/io"
 import Link from "lib/components/navigation/Link"
 import {MdCheck} from "react-icons/md"
 import React from "react"
 import UsersDataTable from "lib/components/datatable/datatable"
-import {dateHelper} from "lib/utils/date.utils"
 import {useRouter} from "next/router"
 import {usersService} from "lib/api"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -41,7 +29,8 @@ export async function getServerSideProps() {
 const UsersList = () => {
   const [users, setBuyers] = useState([])
   const router = useRouter()
-  const toast = useToast()
+  const successToast = useSuccessToast()
+  const errorToast = useErrorToast()
   useEffect(() => {
     initUsersData(router.query.buyerid)
   }, [router.query.buyerid])
@@ -55,24 +44,12 @@ const UsersList = () => {
     try {
       await usersService.delete(router.query.buyerid, userid)
       initUsersData(router.query.buyerid)
-      toast({
-        id: userid + "-deleted",
-        title: "Success",
-        description: "Buyer deleted successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Buyer deleted successfully."
       })
     } catch (e) {
-      toast({
-        id: userid + "fail-deleted",
-        title: "Error",
-        description: "Buyer delete failed",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      errorToast({
+        description: "Buyer delete failed"
       })
     }
   }
@@ -81,11 +58,7 @@ const UsersList = () => {
     {
       Header: "FirstName",
       accessor: "FirstName",
-      Cell: ({value, row}) => (
-        <Link href={`/buyers/${router.query.buyerid}/users/${row.original.ID}`}>
-          {value}
-        </Link>
-      )
+      Cell: ({value, row}) => <Link href={`/buyers/${router.query.buyerid}/users/${row.original.ID}`}>{value}</Link>
     },
     {
       Header: "LastName",
@@ -132,20 +105,11 @@ const UsersList = () => {
         <ButtonGroup>
           <Button
             variant="secondaryButton"
-            onClick={() =>
-              router.push(
-                `/buyers/${router.query.buyerid}/users/${row.original.ID}`
-              )
-            }
-            leftIcon={<EditIcon />}
+            onClick={() => router.push(`/buyers/${router.query.buyerid}/users/${row.original.ID}`)}
           >
             Edit
           </Button>
-          <Button
-            variant="secondaryButton"
-            onClick={() => deleteBuyer(row.original.ID)}
-            leftIcon={<DeleteIcon />}
-          >
+          <Button variant="secondaryButton" onClick={() => deleteBuyer(row.original.ID)}>
             Delete
           </Button>
         </ButtonGroup>
@@ -157,14 +121,7 @@ const UsersList = () => {
     <>
       <Box padding="GlobalPadding">
         <HStack justifyContent="space-between" w="100%" mb={5}>
-          <Button
-            onClick={() =>
-              router.push(`/buyers/${router.query.buyerid}/users/add`)
-            }
-            variant="primaryButton"
-            leftIcon={<AddIcon />}
-            size="lg"
-          >
+          <Button onClick={() => router.push(`/buyers/${router.query.buyerid}/users/add`)} variant="primaryButton">
             Create user
           </Button>
 

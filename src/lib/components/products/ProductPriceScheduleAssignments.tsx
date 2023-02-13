@@ -39,10 +39,7 @@ import {
   UserGroups
 } from "ordercloud-javascript-sdk"
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
-import {
-  ComposedProduct,
-  GetComposedProduct
-} from "../../services/ordercloud.service"
+import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
 import {FiPlus, FiTrash2} from "react-icons/fi"
 import {useEffect, useState} from "react"
 
@@ -50,24 +47,20 @@ import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import BrandedTable from "../branding/BrandedTable"
 import React from "react"
+import {priceHelper} from "lib/utils"
 
 type ProductDataProps = {
   composedProduct: ComposedProduct
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductPriceScheduleAssignments({
-  composedProduct,
-  setComposedProduct
-}: ProductDataProps) {
+export default function ProductPriceScheduleAssignments({composedProduct, setComposedProduct}: ProductDataProps) {
   const {isOpen, onOpen, onClose} = useDisclosure()
   const [isLoading, setIsLoading] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const color = useColorModeValue("textColor.900", "textColor.100")
-  const [priceScheduleAssignments, setPriceScheduleAssignments] =
-    useState<PriceScheduleWithAssignment[]>(null)
-  const [defaultPriceScheduleAssignment, setDefaultPriceScheduleAssignment] =
-    useState<PriceSchedule>(null)
+  const [priceScheduleAssignments, setPriceScheduleAssignments] = useState<PriceScheduleWithAssignment[]>(null)
+  const [defaultPriceScheduleAssignment, setDefaultPriceScheduleAssignment] = useState<PriceSchedule>(null)
   const cancelRef = React.useRef()
   const [newPriceScheduleAssignment, setNewPriceScheduleAssignment] = useState({
     priceSchedule: "",
@@ -75,11 +68,9 @@ export default function ProductPriceScheduleAssignments({
     userGroup: ""
   })
   const [isLinking, setIsLinking] = useState(false)
-  const [availablePriceSchedule, setAvailablePriceSchedules] =
-    useState<PriceSchedule[]>(null)
+  const [availablePriceSchedule, setAvailablePriceSchedules] = useState<PriceSchedule[]>(null)
   const [availableBuyers, setAvailableBuyers] = useState<Buyer[]>(null)
-  const [availableUsergroups, setAvailableUsergroups] =
-    useState<UserGroup[]>(null)
+  const [availableUsergroups, setAvailableUsergroups] = useState<UserGroup[]>(null)
   const [isChosen, setIsChosen] = useState({
     priceSchedule: false,
     buyerGroup: false
@@ -99,9 +90,7 @@ export default function ProductPriceScheduleAssignments({
         })
 
         if (composedProduct?.Product?.DefaultPriceScheduleID) {
-          const defaultPriceSchedule = await PriceSchedules.Get(
-            composedProduct?.Product?.DefaultPriceScheduleID
-          )
+          const defaultPriceSchedule = await PriceSchedules.Get(composedProduct?.Product?.DefaultPriceScheduleID)
           setDefaultPriceScheduleAssignment(defaultPriceSchedule)
         }
 
@@ -191,11 +180,7 @@ export default function ProductPriceScheduleAssignments({
     executeSearch(fieldKey, newValue, true)
   }
 
-  const executeSearch = (
-    fieldKey: string,
-    fieldValue: string,
-    resetOthers: boolean
-  ) => {
+  const executeSearch = (fieldKey: string, fieldValue: string, resetOthers: boolean) => {
     const newValue = fieldValue
     if (resetOthers) {
       setIsChosen((v) => ({
@@ -227,8 +212,7 @@ export default function ProductPriceScheduleAssignments({
           return item.priceSchedule.ID
         })
         const filteredPriceSchedules = innerPriceSchedules?.Items?.filter(
-          (innerPriceSchedule) =>
-            !priceScheduleIds.includes(innerPriceSchedule.ID)
+          (innerPriceSchedule) => !priceScheduleIds.includes(innerPriceSchedule.ID)
         )
         setAvailablePriceSchedules(filteredPriceSchedules)
         setAvailableUsergroups(null)
@@ -257,9 +241,7 @@ export default function ProductPriceScheduleAssignments({
           .map((item) => {
             return item.assignment.BuyerID
           })
-        const filteredAvailableBuyer = innerBuyers.Items.filter(
-          (buyer) => !buyerIds.includes(buyer.ID)
-        )
+        const filteredAvailableBuyer = innerBuyers.Items.filter((buyer) => !buyerIds.includes(buyer.ID))
         setAvailableBuyers(filteredAvailableBuyer)
         setAvailableUsergroups(null)
         setAvailablePriceSchedules(null)
@@ -289,127 +271,116 @@ export default function ProductPriceScheduleAssignments({
 
   return (
     <>
-      <BrandedBox isExpaned={expanded} setExpanded={setExpanded}>
-        <>
-          <HStack float={"right"}>
-            <Tooltip label="Add Price Schedule to Product">
-              <Button
-                colorScheme="brandButtons"
-                aria-label="Add Price Schedule to Product"
-                onClick={onOpen}
-              >
-                <FiPlus />
-              </Button>
-            </Tooltip>
-          </HStack>
-          <Heading size={{base: "md", md: "lg", lg: "xl"}}>
-            Price Schedules
-          </Heading>{" "}
-          {(isLoading || !composedProduct?.Product) && expanded ? (
-            <Box pt={6} textAlign={"center"}>
-              Updating... <BrandedSpinner />
-            </Box>
-          ) : (
-            <>
-              <Collapse in={expanded}>
-                <Box width="full" pb={2} pt={4}>
-                  {(priceScheduleAssignments?.length ?? 0) == 0 &&
-                  defaultPriceScheduleAssignment == null ? (
-                    <>No Price Schedules</>
-                  ) : (
-                    <BrandedTable>
-                      <Thead>
-                        <Tr>
-                          <Th color={color}>ID</Th>
-                          <Th color={color}>Name</Th>
-                          <Th color={color}>Price Breaks</Th>
-                          <Th color={color}>Buyer Group</Th>
-                          <Th color={color}>User Group</Th>
-                          <Th color={color}>Action</Th>
-                        </Tr>
-                      </Thead>
-                      <Tbody alignContent={"center"}>
-                        {defaultPriceScheduleAssignment != null ? (
-                          <Tr>
-                            <Td>{defaultPriceScheduleAssignment?.ID}</Td>
-                            <Td>{defaultPriceScheduleAssignment?.Name}</Td>
-                            <Td>
-                              {" "}
-                              <ul>
-                                {defaultPriceScheduleAssignment?.PriceBreaks?.map(
-                                  (item, index) => {
-                                    return (
-                                      <li key={index}>
-                                        Quantity: {item.Quantity} <br />
-                                        Price: {item.Price} <br />{" "}
-                                        {item.SalePrice
-                                          ? "Sales Price: " + item.SalePrice
-                                          : null}
-                                      </li>
-                                    )
-                                  }
-                                )}
-                              </ul>
-                            </Td>
-                            <Td></Td>
-                            <Td></Td>
-                            <Td>DEFAULT</Td>
-                          </Tr>
-                        ) : null}
+      <>
+        <Heading size={{base: "sm", md: "md", lg: "md"}}>Price Schedules</Heading>{" "}
+        {(isLoading || !composedProduct?.Product) && expanded ? (
+          <Box pt={6} textAlign={"center"}>
+            Updating... <BrandedSpinner />
+          </Box>
+        ) : (
+          <>
+            <Box width="full" pb="50" pt={4}>
+              {(priceScheduleAssignments?.length ?? 0) == 0 && defaultPriceScheduleAssignment == null ? (
+                <>No Price Schedules</>
+              ) : (
+                <BrandedTable>
+                  <Thead>
+                    <Tr>
+                      <Th color={color}>ID</Th>
+                      <Th color={color}>Name</Th>
+                      <Th color={color}>Price Breaks</Th>
+                      <Th color={color}>Buyer Group</Th>
+                      <Th color={color}>User Group</Th>
+                      <Th color={color}>Action</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody alignContent={"center"}>
+                    {defaultPriceScheduleAssignment != null ? (
+                      <Tr>
+                        <Td>{defaultPriceScheduleAssignment?.ID}</Td>
+                        <Td>{defaultPriceScheduleAssignment?.Name}</Td>
+                        <Td>
+                          {" "}
+                          <ul>
+                            {defaultPriceScheduleAssignment?.PriceBreaks?.map((item, index) => {
+                              return (
+                                <li key={index}>
+                                  Quantity: {item.Quantity} <br />
+                                  Price: {priceHelper.formatPrice(item.Price)} <br />{" "}
+                                  {priceHelper.formatPrice(item.SalePrice)
+                                    ? "Sales Price: " + priceHelper.formatPrice(item.SalePrice)
+                                    : null}
+                                </li>
+                              )
+                            })}
+                          </ul>
+                        </Td>
+                        <Td></Td>
+                        <Td></Td>
+                        <Td>DEFAULT</Td>
+                      </Tr>
+                    ) : null}
 
-                        {priceScheduleAssignments?.map((item, index) => {
-                          return (
-                            <Tr key={index}>
-                              <Td>{item.priceSchedule.ID}</Td>
-                              <Td>{item.priceSchedule.Name}</Td>
-                              <Td>
-                                {" "}
-                                <ul>
-                                  {item?.priceSchedule.PriceBreaks?.map(
-                                    (item, index) => {
-                                      return (
-                                        <li key={index}>
-                                          Quantity: {item.Quantity} <br />{" "}
-                                          Price: {item.Price} <br />
-                                          {item.SalePrice
-                                            ? "Sales Price: " + item.SalePrice
-                                            : null}
-                                        </li>
-                                      )
-                                    }
-                                  )}
-                                </ul>
-                              </Td>
-                              <Td>{item.assignment.BuyerID}</Td>
-                              <Td>{item.assignment.UserGroupID}</Td>
-                              <Td>
-                                {" "}
-                                <Tooltip label="Remove Price Schedule from Product">
-                                  <Button
-                                    colorScheme="brandButtons"
-                                    aria-label="Remove Price Schedule from Product"
-                                    data-buyerId={item.assignment.BuyerID}
-                                    data-userGroupId={
-                                      item.assignment.UserGroupID
-                                    }
-                                    onClick={onPriceScheduleAssignmentRemove}
-                                  >
-                                    <FiTrash2 />
-                                  </Button>
-                                </Tooltip>
-                              </Td>
-                            </Tr>
-                          )
-                        })}
-                      </Tbody>
-                    </BrandedTable>
-                  )}
-                </Box>
-              </Collapse>
-            </>
-          )}
-        </>
-      </BrandedBox>
+                    {priceScheduleAssignments?.map((item, index) => {
+                      return (
+                        <Tr key={index}>
+                          <Td>{item.priceSchedule.ID}</Td>
+                          <Td>{item.priceSchedule.Name}</Td>
+                          <Td>
+                            {" "}
+                            <ul>
+                              {item?.priceSchedule.PriceBreaks?.map((item, index) => {
+                                return (
+                                  <li key={index}>
+                                    Quantity: {item.Quantity} <br /> Price: {priceHelper.formatPrice(item.Price)} <br />
+                                    {priceHelper.formatPrice(item.SalePrice)
+                                      ? "Sales Price: " + priceHelper.formatPrice(item.SalePrice)
+                                      : null}
+                                  </li>
+                                )
+                              })}
+                            </ul>
+                          </Td>
+                          <Td>{item.assignment.BuyerID}</Td>
+                          <Td>{item.assignment.UserGroupID}</Td>
+                          <Td>
+                            {" "}
+                            <Tooltip label="Remove Price Schedule from Product">
+                              <Button
+                                colorScheme="brandButtons"
+                                aria-label="Remove Price Schedule from Product"
+                                variant="secondaryButton"
+                                data-buyerId={item.assignment.BuyerID}
+                                data-userGroupId={item.assignment.UserGroupID}
+                                onClick={onPriceScheduleAssignmentRemove}
+                              >
+                                Delete
+                              </Button>
+                            </Tooltip>
+                          </Td>
+                        </Tr>
+                      )
+                    })}
+                  </Tbody>
+                </BrandedTable>
+              )}
+            </Box>
+          </>
+        )}
+      </>
+      <HStack float={"right"} position="absolute" bottom="20px">
+        <Tooltip label="Add Price Schedule to Product">
+          <Button
+            colorScheme="brandButtons"
+            aria-label="Add Price Schedule to Product"
+            variant="tertiaryButton"
+            onClick={onOpen}
+          >
+            Add Price Schedule
+          </Button>
+        </Tooltip>
+      </HStack>
+
       <AlertDialog
         motionPreset="slideInBottom"
         leastDestructiveRef={cancelRef}
@@ -420,11 +391,7 @@ export default function ProductPriceScheduleAssignments({
         <AlertDialogOverlay>
           <AlertDialogContent>
             {isLinking ? (
-              <AlertDialogHeader
-                textAlign={"center"}
-                fontSize="lg"
-                fontWeight="bold"
-              >
+              <AlertDialogHeader textAlign={"center"} fontSize="lg" fontWeight="bold">
                 Linking... <BrandedSpinner />
               </AlertDialogHeader>
             ) : (
@@ -433,9 +400,7 @@ export default function ProductPriceScheduleAssignments({
                   Link Price Schedule to Product
                 </AlertDialogHeader>
 
-                <AlertDialogBody>
-                  Please fill in the following fields to link a Price Schedule
-                </AlertDialogBody>
+                <AlertDialogBody>Please fill in the following fields to link a Price Schedule</AlertDialogBody>
                 <FormControl ml={6}>
                   <Input
                     autoComplete="off"
@@ -487,9 +452,7 @@ export default function ProductPriceScheduleAssignments({
                               textDecor={"none"}
                               _hover={{textDecor: "underline"}}
                               cursor={"copy"}
-                              onClick={onAvailableReferenceClick(
-                                "priceSchedule"
-                              )}
+                              onClick={onAvailableReferenceClick("priceSchedule")}
                               data-id={element.ID}
                             >
                               <b>Name:</b> {element.Name} | <b>ID: </b>
@@ -551,28 +514,18 @@ export default function ProductPriceScheduleAssignments({
                     </Box>
                   </>
                 ) : null}
-                <AlertDialogFooter
-                  width={"full"}
-                  justifyContent={"space-between"}
-                >
+                <AlertDialogFooter width={"full"} justifyContent={"space-between"}>
                   <Box width={"full"}>
                     {!isChosen.priceSchedule ? (
-                      <Text pb={2}>
-                        Please start entering a price schedule ID and choose
-                        from the search
-                      </Text>
+                      <Text pb={2}>Please start entering a price schedule ID and choose from the search</Text>
                     ) : !isChosen.buyerGroup ? (
-                      <Text pb={2}>
-                        Please now start entering a buyer id and choose from the
-                        search
-                      </Text>
+                      <Text pb={2}>Please now start entering a buyer id and choose from the search</Text>
                     ) : (
                       <Text pb={2}>
-                        Please optionally start entering an usergroup id and
-                        choose from the search if wanted
+                        Please optionally start entering an usergroup id and choose from the search if wanted
                       </Text>
                     )}
-                    <Button width={"45%"} size={"md"} onClick={onClose}>
+                    <Button width={"45%"} size={"md"} variant="tertiaryButton" onClick={onClose}>
                       Cancel
                     </Button>
                     <Button
@@ -581,6 +534,7 @@ export default function ProductPriceScheduleAssignments({
                       size={"md"}
                       colorScheme="brandButtons"
                       onClick={onPriceScheduleLink}
+                      variant="tertiaryButton"
                       ml={3}
                       disabled={!isChosen.priceSchedule || !isChosen.buyerGroup}
                     >

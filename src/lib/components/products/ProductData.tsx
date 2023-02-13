@@ -10,14 +10,12 @@ import {
   Input,
   Text,
   Tooltip,
-  useColorModeValue
+  useColorModeValue,
+  Switch
 } from "@chakra-ui/react"
-import {ChangeEvent, useState} from "react"
+import {ChangeEvent, useEffect, useState} from "react"
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
-import {
-  ComposedProduct,
-  GetComposedProduct
-} from "../../services/ordercloud.service"
+import {ComposedProduct, GetComposedProduct} from "../../services/ordercloud.service"
 import {FiCheck, FiEdit, FiX} from "react-icons/fi"
 import {Product, Products} from "ordercloud-javascript-sdk"
 
@@ -29,10 +27,7 @@ type ProductDataProps = {
   setComposedProduct: React.Dispatch<React.SetStateAction<ComposedProduct>>
 }
 
-export default function ProductData({
-  composedProduct,
-  setComposedProduct
-}: ProductDataProps) {
+export default function ProductData({composedProduct, setComposedProduct}: ProductDataProps) {
   const [isEditingBasicData, setIsEditingBasicData] = useState(false)
   const okColor = useColorModeValue("okColor.800", "okColor.200")
   const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
@@ -52,26 +47,49 @@ export default function ProductData({
     defaultSupplierId: composedProduct?.Product?.DefaultSupplierID
   })
 
-  const handleInputChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      if (fieldKey == "name" && e.target.value == "") {
-        return
-      }
-      setFormValues((v) => ({...v, [fieldKey]: e.target.value}))
-    }
+  useEffect(() => {
+    setFormValues({
+      name: composedProduct?.Product?.Name,
+      id: composedProduct?.Product?.ID,
+      description: composedProduct?.Product?.Description,
+      defaultPriceScheduleId: composedProduct?.Product?.DefaultPriceScheduleID,
+      quantityMultiplier: composedProduct?.Product?.QuantityMultiplier,
+      shipFromAddress: composedProduct?.Product?.ShipFromAddressID,
+      returnable: composedProduct?.Product?.Returnable,
+      isActive: composedProduct?.Product?.Active,
+      allSuppliersCanSell: composedProduct?.Product?.AllSuppliersCanSell,
+      defaultSupplierId: composedProduct?.Product?.DefaultSupplierID
+    })
+  }, [
+    composedProduct?.Product?.Active,
+    composedProduct?.Product?.AllSuppliersCanSell,
+    composedProduct?.Product?.DefaultPriceScheduleID,
+    composedProduct?.Product?.DefaultSupplierID,
+    composedProduct?.Product?.Description,
+    composedProduct?.Product?.ID,
+    composedProduct?.Product?.Name,
+    composedProduct?.Product?.QuantityMultiplier,
+    composedProduct?.Product?.Returnable,
+    composedProduct?.Product?.ShipFromAddressID
+  ])
 
-  const handleNumberInputChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({
-        ...v,
-        [fieldKey]: e.target.value == "" ? 0 : e.target.value
-      }))
+  const handleInputChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    if (fieldKey == "name" && e.target.value == "") {
+      return
     }
+    setFormValues((v) => ({...v, [fieldKey]: e.target.value}))
+  }
 
-  const handleCheckboxChange =
-    (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
-    }
+  const handleNumberInputChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({
+      ...v,
+      [fieldKey]: e.target.value == "" ? 0 : e.target.value
+    }))
+  }
+
+  const handleCheckboxChange = (fieldKey: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setFormValues((v) => ({...v, [fieldKey]: !!e.target.checked}))
+  }
 
   const onEditClicked = (e) => {
     setFormValues((v) => ({
@@ -79,8 +97,7 @@ export default function ProductData({
       ["name"]: composedProduct?.Product?.Name,
       ["id"]: composedProduct?.Product?.ID,
       ["description"]: composedProduct?.Product?.Description,
-      ["defaultPriceScheduleId"]:
-        composedProduct?.Product?.DefaultPriceScheduleID,
+      ["defaultPriceScheduleId"]: composedProduct?.Product?.DefaultPriceScheduleID,
       ["quantityMultiplier"]: composedProduct?.Product?.QuantityMultiplier,
       ["shipFromAddress"]: composedProduct?.Product?.ShipFromAddressID,
       ["returnable"]: composedProduct?.Product?.Returnable,
@@ -97,8 +114,7 @@ export default function ProductData({
       ["name"]: composedProduct?.Product?.Name,
       ["id"]: composedProduct?.Product?.ID,
       ["description"]: composedProduct?.Product?.Description,
-      ["defaultPriceScheduleId"]:
-        composedProduct?.Product?.DefaultPriceScheduleID,
+      ["defaultPriceScheduleId"]: composedProduct?.Product?.DefaultPriceScheduleID,
       ["quantityMultiplier"]: composedProduct?.Product?.QuantityMultiplier,
       ["shipFromAddress"]: composedProduct?.Product?.ShipFromAddressID,
       ["returnable"]: composedProduct?.Product?.Returnable,
@@ -136,301 +152,181 @@ export default function ProductData({
 
   return (
     <>
-      <BrandedBox isExpaned={expanded} setExpanded={setExpanded}>
-        <>
-          {isEditingBasicData ? (
-            <HStack float={"right"}>
-              <Tooltip label="Save">
-                <Button
-                  colorScheme="brandButtons"
-                  aria-label="Save"
-                  onClick={onSaveClicked}
-                >
-                  <FiCheck />
-                </Button>
-              </Tooltip>
-              <Tooltip label="Abort">
-                <Button
-                  colorScheme="brandButtons"
-                  aria-label="Abort"
-                  onClick={onAbortClicked}
-                >
-                  <FiX color={color} />
-                </Button>
-              </Tooltip>
-            </HStack>
-          ) : (
-            <HStack float={"right"}>
-              <Tooltip label="Edit">
-                <Button
-                  colorScheme="brandButtons"
-                  aria-label="Edit"
-                  onClick={onEditClicked}
-                >
-                  <FiEdit color={color} />
-                </Button>
-              </Tooltip>
-            </HStack>
-          )}
-          {(!composedProduct?.Product || isLoading) && expanded ? (
-            <Box pt={6} textAlign={"center"}>
-              Updating... <BrandedSpinner />
-            </Box>
-          ) : (
-            <>
-              <Heading
-                size={{base: "md", md: "lg", lg: "xl"}}
-                mb={expanded ? 6 : 0}
-              >
-                Product Data
-              </Heading>
-              <Collapse in={expanded}>
-                <Flex flexDirection={{base: "column", sm: "column", md: "row"}}>
-                  <Container>
-                    <Tooltip
-                      label={
-                        isEditingBasicData
-                          ? "Product Name is mandatory to fill"
-                          : ""
-                      }
-                    >
-                      <Box width="full" pb={2}>
-                        <Text opacity={0.5} fontWeight={"bold"}>
-                          Product Name:*
-                        </Text>
-                        {isEditingBasicData ? (
-                          <Input
-                            value={formValues.name}
-                            onChange={handleInputChange("name")}
-                          />
-                        ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {composedProduct?.Product?.Name}
-                          </Heading>
-                        )}
-                      </Box>
-                    </Tooltip>
-                    <Tooltip
-                      label={isEditingBasicData ? "ID is not changeable" : ""}
-                    >
-                      <Box width="full" pb={2}>
-                        <Text opacity={0.5} fontWeight={"bold"}>
-                          ID:
-                        </Text>
-                        {isEditingBasicData ? (
-                          <Input
-                            disabled={true}
-                            value={formValues.id}
-                            onChange={handleInputChange("productId")}
-                          />
-                        ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {composedProduct?.Product?.ID}
-                          </Heading>
-                        )}
-                      </Box>
-                    </Tooltip>
+      <>
+        {(!composedProduct?.Product || isLoading) && expanded ? (
+          <Box pt={6} textAlign={"center"}>
+            Updating... <BrandedSpinner />
+          </Box>
+        ) : (
+          <>
+            <Heading size={{base: "sm", md: "md", lg: "md"}} mb={expanded ? 6 : 0}>
+              Product Data
+            </Heading>
+            <Collapse in={expanded}>
+              <Flex flexDirection={{base: "column", sm: "column", md: "row"}}>
+                <Container pt="0" pl="0" pr="0" pb="50">
+                  <Tooltip label={isEditingBasicData ? "Product Name is mandatory to fill" : ""}>
                     <Box width="full" pb={2}>
-                      <Text opacity={0.5} fontWeight={"bold"}>
-                        Description:
-                      </Text>
+                      <Text>Product Name:</Text>
+                      {isEditingBasicData ? (
+                        <Input value={formValues.name} onChange={handleInputChange("name")} />
+                      ) : (
+                        <Input border={"1px"} value={composedProduct?.Product?.Name} readOnly />
+                      )}
+                    </Box>
+                  </Tooltip>
+                  <Tooltip label={isEditingBasicData ? "ID is not changeable" : ""}>
+                    <Box width="full" pb={2}>
+                      <Text>ID:</Text>
+                      {isEditingBasicData ? (
+                        <Input readOnly value={formValues.id} onChange={handleInputChange("productId")} />
+                      ) : (
+                        <Input value={composedProduct?.Product?.ID} readOnly />
+                      )}
+                    </Box>
+                  </Tooltip>
+
+                  <Tooltip label="When provided, no explicit PriceSchedule assignment is required. When a PriceSchedule assignment exists, it will override any default provided.">
+                    <Box width="full" pb={2}>
+                      <Text>Default Price Schedule ID:</Text>
                       {isEditingBasicData ? (
                         <Input
-                          value={formValues.description}
-                          onChange={handleInputChange("description")}
+                          value={formValues.defaultPriceScheduleId}
+                          onChange={handleInputChange("defaultPriceScheduleId")}
                         />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
-                          {composedProduct?.Product?.Description}
-                        </Heading>
+                        <Input value={composedProduct?.Product?.DefaultPriceScheduleID ?? "Not set"} readOnly />
                       )}
                     </Box>
-                    <Tooltip label="When provided, no explicit PriceSchedule assignment is required. When a PriceSchedule assignment exists, it will override any default provided.">
-                      <Box width="full" pb={2}>
-                        <Text opacity={0.5} fontWeight={"bold"}>
-                          Default Price Schedule ID:
-                        </Text>
-                        {isEditingBasicData ? (
-                          <Input
-                            value={formValues.defaultPriceScheduleId}
-                            onChange={handleInputChange(
-                              "defaultPriceScheduleId"
-                            )}
-                          />
-                        ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {composedProduct?.Product?.DefaultPriceScheduleID ??
-                              "Not set"}
-                          </Heading>
-                        )}
-                      </Box>
-                    </Tooltip>
-                  </Container>
-                  <Container>
-                    <Tooltip label="Marketplace Owner or Supplier AddressID where the product will be shipped from. Can be used to calculate shipping costs.">
-                      <Box width="full" pb={2}>
-                        <Text opacity={0.5} fontWeight={"bold"}>
-                          Ship from Address:
-                        </Text>
-                        {isEditingBasicData ? (
-                          <Input
-                            value={formValues.shipFromAddress}
-                            onChange={handleInputChange("shipFromAddress")}
-                          />
-                        ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {composedProduct?.Product?.ShipFromAddressID ??
-                              "Not set"}
-                          </Heading>
-                        )}
-                      </Box>
-                    </Tooltip>
-                    <Tooltip label="If this property has a value and a SupplierID isn't explicitly passed when creating a LineItem, this SupplierID will be used.">
-                      <Box width="full" pb={2}>
-                        <Text opacity={0.5} fontWeight={"bold"}>
-                          Default Supplier ID
-                        </Text>
-                        {isEditingBasicData ? (
-                          <Input
-                            value={formValues?.defaultSupplierId}
-                            onChange={handleInputChange("defaultSupplierId")}
-                          />
-                        ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {composedProduct?.Product?.DefaultSupplierID ??
-                              "Not set"}
-                          </Heading>
-                        )}
-                      </Box>
-                    </Tooltip>
+                  </Tooltip>
+                  <Box width="full" pb={2}>
+                    <Text>Description:</Text>
+                    {isEditingBasicData ? (
+                      <Input value={formValues.description} onChange={handleInputChange("description")} />
+                    ) : (
+                      <Input value={composedProduct?.Product?.Description} readOnly />
+                    )}
+                  </Box>
+                </Container>
+                <Container>
+                  <Tooltip label="Marketplace Owner or Supplier AddressID where the product will be shipped from. Can be used to calculate shipping costs.">
                     <Box width="full" pb={2}>
-                      <Text opacity={0.5} fontWeight={"bold"}>
-                        All Suppliers can sell?{" "}
-                      </Text>
+                      <Text>Ship from Address:</Text>
                       {isEditingBasicData ? (
-                        <Checkbox
-                          isChecked={formValues.allSuppliersCanSell}
-                          onChange={handleCheckboxChange("allSuppliersCanSell")}
-                        />
+                        <Input value={formValues.shipFromAddress} onChange={handleInputChange("shipFromAddress")} />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
-                          {composedProduct?.Product?.AllSuppliersCanSell ??
-                          false ? (
-                            <CheckIcon boxSize={6} color={okColor} />
-                          ) : (
-                            <CloseIcon boxSize={6} color={errorColor} />
-                          )}
-                        </Heading>
+                        <Input value={composedProduct?.Product?.ShipFromAddressID ?? "Not set"} readOnly />
                       )}
                     </Box>
-                  </Container>
-                  <Container>
-                    <Tooltip label="For reference only, does not influence any OrderCloud behavior. Used to indicate an amount per Quantity.">
-                      <Box width="full" pb={2}>
-                        <Text opacity={0.5} fontWeight={"bold"}>
-                          Quantity Multiplier:
-                        </Text>
-                        {isEditingBasicData ? (
-                          <Input
-                            type={"number"}
-                            value={formValues.quantityMultiplier}
-                            onChange={handleNumberInputChange(
-                              "quantityMultiplier"
-                            )}
-                          />
-                        ) : (
-                          <Heading
-                            fontSize={"xl"}
-                            fontFamily={"body"}
-                            fontWeight={500}
-                          >
-                            {composedProduct?.Product?.QuantityMultiplier ??
-                              "Not set"}
-                          </Heading>
-                        )}
-                      </Box>
-                    </Tooltip>
+                  </Tooltip>
+                  <Tooltip label="If this property has a value and a SupplierID isn't explicitly passed when creating a LineItem, this SupplierID will be used.">
                     <Box width="full" pb={2}>
-                      <Text opacity={0.5} fontWeight={"bold"}>
-                        Returnable?{" "}
-                      </Text>
+                      <Text>Default Supplier ID</Text>
                       {isEditingBasicData ? (
-                        <Checkbox
-                          isChecked={formValues.returnable}
-                          onChange={handleCheckboxChange("returnable")}
+                        <Input
+                          value={formValues?.defaultSupplierId}
+                          onChange={handleInputChange("defaultSupplierId")}
                         />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
-                          {composedProduct?.Product?.Returnable ?? false ? (
-                            <CheckIcon boxSize={6} color={okColor} />
-                          ) : (
-                            <CloseIcon boxSize={6} color={errorColor} />
-                          )}
-                        </Heading>
+                        <Input value={composedProduct?.Product?.DefaultSupplierID ?? "Not set"} readOnly />
                       )}
                     </Box>
+                  </Tooltip>
+                  <Box width="full" pb={2}>
+                    <Text>All Suppliers can sell? </Text>
+                    {isEditingBasicData ? (
+                      <Switch
+                        isChecked={formValues.allSuppliersCanSell}
+                        onChange={handleCheckboxChange("allSuppliersCanSell")}
+                        colorScheme="teal"
+                      />
+                    ) : (
+                      <Switch
+                        isChecked={formValues.allSuppliersCanSell}
+                        isReadOnly
+                        onChange={handleCheckboxChange("allSuppliersCanSell")}
+                        colorScheme="teal"
+                      />
+                    )}
+                  </Box>
+                </Container>
+                <Container>
+                  <Tooltip label="For reference only, does not influence any OrderCloud behavior. Used to indicate an amount per Quantity.">
                     <Box width="full" pb={2}>
-                      <Text opacity={0.5} fontWeight={"bold"}>
-                        Is Active{" "}
-                      </Text>
+                      <Text>Quantity Multiplier:</Text>
                       {isEditingBasicData ? (
-                        <Checkbox
-                          isChecked={formValues.isActive}
-                          onChange={handleCheckboxChange("isActive")}
+                        <Input
+                          type={"number"}
+                          value={formValues.quantityMultiplier}
+                          onChange={handleNumberInputChange("quantityMultiplier")}
                         />
                       ) : (
-                        <Heading
-                          fontSize={"xl"}
-                          fontFamily={"body"}
-                          fontWeight={500}
-                        >
-                          {composedProduct?.Product?.Active ?? false ? (
-                            <CheckIcon boxSize={6} color={okColor} />
-                          ) : (
-                            <CloseIcon boxSize={6} color={errorColor} />
-                          )}
-                        </Heading>
+                        <Input value={composedProduct?.Product?.QuantityMultiplier ?? "Not set"} readOnly />
                       )}
                     </Box>
-                  </Container>
-                </Flex>
-              </Collapse>
-            </>
-          )}
-        </>
-      </BrandedBox>
+                  </Tooltip>
+                  <Box width="full" pb={2}>
+                    <Text>Returnable? </Text>
+                    {isEditingBasicData ? (
+                      <Switch
+                        isChecked={formValues.returnable}
+                        onChange={handleCheckboxChange("returnable")}
+                        colorScheme="teal"
+                      />
+                    ) : (
+                      <Switch
+                        isChecked={formValues.returnable}
+                        isReadOnly
+                        onChange={handleCheckboxChange("returnable")}
+                        colorScheme="teal"
+                      />
+                    )}
+                  </Box>
+                  <Box width="full" pb={2}>
+                    <Text>Is Active </Text>
+                    {isEditingBasicData ? (
+                      <Switch
+                        isChecked={formValues.isActive}
+                        onChange={handleCheckboxChange("isActive")}
+                        colorScheme="teal"
+                      />
+                    ) : (
+                      <Switch
+                        isChecked={formValues.isActive}
+                        isReadOnly
+                        onChange={handleCheckboxChange("isActive")}
+                        colorScheme="teal"
+                      />
+                    )}
+                  </Box>
+                </Container>
+              </Flex>
+            </Collapse>
+          </>
+        )}
+      </>
+      {isEditingBasicData ? (
+        <HStack float={"right"} position="absolute" bottom="20px">
+          <Tooltip label="Save">
+            <Button colorScheme="brandButtons" aria-label="Save" variant="primaryButton" onClick={onSaveClicked}>
+              Save
+            </Button>
+          </Tooltip>
+          <Tooltip label="Cancel">
+            <Button colorScheme="brandButtons" aria-label="Cancel" variant="secondaryButton" onClick={onAbortClicked}>
+              Cancel
+            </Button>
+          </Tooltip>
+        </HStack>
+      ) : (
+        <HStack float={"right"} position="absolute" bottom="20px">
+          <Tooltip label="Edit">
+            <Button colorScheme="brandButtons" aria-label="Edit" variant="tertiaryButton" onClick={onEditClicked}>
+              Edit
+            </Button>
+          </Tooltip>
+        </HStack>
+      )}
     </>
   )
 }

@@ -1,6 +1,7 @@
-import {AddEditForm} from "lib/components/catalogs"
+import {CreateUpdateForm} from "lib/components/catalogs"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
+import {Box} from "@chakra-ui/react"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -18,12 +19,14 @@ export async function getServerSideProps() {
   }
 }
 
-const ProtectedAddEditForm = () => {
+const ProtectedCreateUpdateForm = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
-      <AddEditForm />
+      <Box pl="GlobalPadding">
+        <CreateUpdateForm />
+      </Box>
     </ProtectedContent>
   )
 }
 
-export default ProtectedAddEditForm
+export default ProtectedCreateUpdateForm

@@ -1,28 +1,27 @@
-import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
 import {
   Box,
   Button,
-  ButtonGroup,
-  Container,
   Grid,
   GridItem,
   HStack,
   Heading,
-  Icon,
-  Text,
-  useToast
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure
 } from "@chakra-ui/react"
-import {useEffect, useRef, useState} from "react"
-
+import {useEffect, useState} from "react"
 import Card from "lib/components/card/Card"
-import CategoriesDataTable from "lib/components/datatable/datatable"
-import Link from "lib/components/navigation/Link"
-import ProtectedCategoryListItem from "./[categoryid]"
 import React from "react"
 import TreeView from "lib/components/dndtreeview/TreeView"
 import {categoriesService} from "lib/api"
 import {ocNodeModel} from "@minoru/react-dnd-treeview"
 import {useRouter} from "next/router"
+import {CreateUpdateForm} from "lib/components/categories"
+import {Category} from "ordercloud-javascript-sdk"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -32,7 +31,7 @@ export async function getServerSideProps() {
         title: "Categories List",
         metas: {
           hasBreadcrumbs: true,
-          hasBuyerContextSwitch: true
+          hasBuyerContextSwitch: false
         }
       },
       revalidate: 5 * 60
@@ -41,23 +40,29 @@ export async function getServerSideProps() {
 }
 
 const CategoriesList = (props) => {
-  const [categories, setCategories] = useState([])
   const [categoriesTreeView, setCategoriesTreeView] = useState([])
   const [selectedNode, setSelectedNode] = useState<ocNodeModel>(null)
   const router = useRouter()
-  const toast = useToast()
+  const {isOpen: isCategoryCreateOpen, onOpen: onOpenCategoryCreate, onClose: onCloseCategoryCreate} = useDisclosure()
+  const [parentIdToCreate, setParentIdToCreate] = useState(null)
   useEffect(() => {
     initCategoriesData(router.query.catalogid)
   }, [router.query.catalogid])
 
   async function initCategoriesData(catalogid) {
     const categoriesList = await categoriesService.list(catalogid)
-    setCategories(categoriesList.Items)
+    if (selectedNode) {
+      const selectedCategoryId = selectedNode.data.ID
+      const selectedCategoryExists = categoriesList.Items.find((category) => category.ID === selectedCategoryId)
+      if (!selectedCategoryExists) {
+        setSelectedNode(null)
+      }
+    }
     setCategoriesTreeView(await buildTreeView(categoriesList.Items))
   }
 
   async function buildTreeView(treeData: any[]) {
-    return treeData.map((item) => {
+    const treeViewData = treeData.map((item) => {
       return {
         id: item.ID,
         parent: item.ParentID ? item.ParentID : "-",
@@ -67,104 +72,37 @@ const CategoriesList = (props) => {
         data: item
       }
     })
+    treeViewData.push({
+      id: "__CREATE_CATEGORY_BUTTON__",
+      parent: "-",
+      text: "",
+      droppable: false,
+      type: "button",
+      data: {}
+    })
+
+    return treeViewData
   }
   const handleSelect = (node: ocNodeModel) => setSelectedNode(node)
 
-  async function deleteCategory(categoryid) {
-    try {
-      await categoriesService.delete(router.query.catalogid, categoryid)
-      initCategoriesData(router.query.buyerid)
-      toast({
-        id: categoryid + "-deleted",
-        title: "Success",
-        description: "Category deleted successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
-      })
-    } catch (e) {
-      toast({
-        id: categoryid + "fail-deleted",
-        title: "Error",
-        description: "Category delete failed",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
-      })
-    }
+  const handleCategoryCreate = (category: Category) => {
+    setParentIdToCreate(category?.ID)
+    onOpenCategoryCreate()
   }
 
-  const columnsData = [
-    {
-      Header: "Name",
-      accessor: "Name",
-      Cell: ({value, row}) => (
-        <Link
-          href={`/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories/${row.original.ID}`}
-        >
-          {value}
-        </Link>
-      )
-    },
-    {
-      Header: "DESCRIPTION",
-      accessor: "Description"
-    },
-    {
-      Header: "ACTIONS",
-      Cell: ({row}) => (
-        <ButtonGroup>
-          <Button
-            variant="secondaryButton"
-            onClick={() =>
-              router.push(
-                `/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories/${row.original.ID}`
-              )
-            }
-            leftIcon={<EditIcon />}
-          >
-            Edit
-          </Button>
-          <Button
-            variant="secondaryButton"
-            onClick={() => deleteCategory(row.original.ID)}
-            leftIcon={<DeleteIcon />}
-          >
-            Delete
-          </Button>
-        </ButtonGroup>
-      )
-    }
-  ]
+  const onCategoryCreateSuccess = async (category: Category) => {
+    onCloseCategoryCreate()
+    await initCategoriesData(router.query.catalogid)
+  }
 
   return (
     <>
       <Box padding="20px">
-        <HStack justifyContent="space-between" w="100%" mb={5}>
-          <Button
-            onClick={() =>
-              router.push(
-                `/buyers/${router.query.buyerid}/catalogs/${router.query.catalogid}/categories/add`
-              )
-            }
-            variant="primaryButton"
-            leftIcon={<AddIcon />}
-            size="lg"
-          >
-            Create category
-          </Button>
+        <HStack justifyContent="end" w="100%" mb={5}>
           <HStack>
             <Button variant="secondaryButton">Export CSV</Button>
           </HStack>
         </HStack>
-        <Card variant="primaryCard">
-          <CategoriesDataTable
-            tableData={categories}
-            columnsData={columnsData}
-          />
-        </Card>
         <Card variant="primaryCard">
           <Grid
             templateAreas={`"header header"
@@ -178,26 +116,52 @@ const CategoriesList = (props) => {
             fontWeight="bold"
           >
             <GridItem pl="2" area={"header"}></GridItem>
-            <GridItem pl="2" area={"nav"}>
+            <GridItem pl="2" area={"nav"} width="300px">
               <TreeView
                 treeData={categoriesTreeView}
                 selectedNode={selectedNode}
                 handleSelect={handleSelect}
+                handleCategoryCreate={handleCategoryCreate}
                 {...props}
               />
             </GridItem>
             <GridItem pl="2" area={"main"}>
-              <ProtectedCategoryListItem
-                selectedNode={selectedNode}
-                {...props}
-              />
+              {selectedNode ? (
+                <CreateUpdateForm
+                  category={selectedNode.data}
+                  onSuccess={onCategoryCreateSuccess}
+                  headerComponent={
+                    <Heading as="h5" size="md" marginLeft={10} marginTop={5}>
+                      Update the selected category
+                    </Heading>
+                  }
+                />
+              ) : (
+                <CreateUpdateForm
+                  onSuccess={onCategoryCreateSuccess}
+                  category={{Name: "", Description: "", Active: false, ParentID: ""}}
+                  headerComponent={
+                    <Heading as="h5" size="md" marginLeft={10} marginTop={5}>
+                      Create root category
+                    </Heading>
+                  }
+                />
+              )}
             </GridItem>
-            <GridItem pl="2" area={"footer"}>
-              Common element
-            </GridItem>
+            <GridItem pl="2" area={"footer"}></GridItem>
           </Grid>
         </Card>
       </Box>
+      <Modal size="2xl" isOpen={isCategoryCreateOpen} onClose={onCloseCategoryCreate}>
+        <ModalOverlay backdropFilter="blur(10px) hue-rotate(90deg)" />
+        <ModalContent>
+          <ModalHeader>Create category</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <CreateUpdateForm parentId={parentIdToCreate} onSuccess={onCategoryCreateSuccess} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   )
 }

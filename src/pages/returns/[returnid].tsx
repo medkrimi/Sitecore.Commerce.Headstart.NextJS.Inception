@@ -18,12 +18,7 @@ import {
   useColorModeValue
 } from "@chakra-ui/react"
 import {FunctionComponent, useEffect, useState} from "react"
-import {
-  OrderReturn,
-  OrderReturns,
-  Payment,
-  Payments
-} from "ordercloud-javascript-sdk"
+import {OrderReturn, OrderReturns, Payment, Payments} from "ordercloud-javascript-sdk"
 import {dateHelper, priceHelper} from "lib/utils"
 
 import Card from "lib/components/card/Card"
@@ -134,25 +129,16 @@ const OrderReturnDetailPage: FunctionComponent = () => {
             <Divider m="3" />
             <Flex minWidth="max-content" alignItems="center" gap="2" mb="4">
               <Box>
-                <Heading size="md">
-                  Refund Amount:{" "}
-                  {priceHelper.formatPrice(orderReturn.RefundAmount)}
-                </Heading>
+                <Heading size="md">Refund Amount: {priceHelper.formatPrice(orderReturn.RefundAmount)}</Heading>
               </Box>
               <Spacer />
               <ButtonGroup gap="2">
                 {orderReturn.Status === "Open" && (
                   <>
-                    <Button
-                      variant="primaryButton"
-                      onClick={handleCompleteAnOrderReturn}
-                    >
+                    <Button variant="primaryButton" onClick={handleCompleteAnOrderReturn}>
                       Complete
                     </Button>
-                    <Button
-                      variant="secondaryButton"
-                      onClick={handleCancelAnOrderReturn}
-                    >
+                    <Button variant="secondaryButton" onClick={handleCancelAnOrderReturn}>
                       Cancel
                     </Button>
                   </>

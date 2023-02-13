@@ -21,6 +21,9 @@ export const styles = {
         my: "15px !important"
       },
       //MOVE THESE TO PROPER PLACE AFTER V1 RELEASE
+      ".chakra-input__group": {
+        isolation: "auto"
+      },
       ".facet-input": {
         input: {
           bg: "inputBg",
@@ -35,27 +38,26 @@ export const styles = {
       "input[type=text]": {
         bg: "inputBg",
         border: "1px",
-        borderColor: "gray.200",
-        mb: "GlobalPadding"
+        borderColor: "gray.800",
+        mb: "20px"
       },
       input: {
         bg: "inputBg",
         border: "1px",
-        borderColor: "gray.200",
-        mb: "GlobalPadding",
-        borderRadius: "md"
+        borderColor: "gray.800",
+        mb: "20px"
       },
       "input:read-only": {
         bg: "none",
-        border: "0px",
-        PointerEvent: "none",
-        pl: "0px"
+        border: "1px solid",
+        borderColor: "gray.200",
+        PointerEvent: "none"
       },
       ".chakra-input": {
         bg: "inputBg",
         border: "1px",
-        borderColor: "gray.200",
-        mb: "GlobalPadding"
+        borderColor: "gray.800",
+        mb: "20px"
       },
       ".css-1jj9yua": {height: "38px"},
       ".breadcrumb": {
@@ -99,6 +101,54 @@ export const styles = {
             _hover: {
               color: "#252525",
               borderColor: "#252525"
+            }
+          }
+        }
+      },
+      ".TreeView_app__mdeVn": {
+        div: {
+          p: {
+            display: "none"
+          }
+        },
+        ".tree-node": {
+          py: "20px",
+          _hover: {
+            bgColor: "gray.200"
+          }
+        },
+        ul: {
+          listStyle: "none",
+          border: "0px",
+          li: {
+            fontWeight: 500,
+            borderBottom: "1px",
+            borderColor: "gray.200",
+            cursor: "pointer",
+            _first: {
+              borderTop: "1px",
+              borderColor: "gray.200"
+            },
+            svg: {
+              //display: "none"
+            },
+            ul: {
+              marginTop: "0px",
+              li: {
+                _last: {
+                  borderBottom: "0px"
+                  // borderColor: "gray.200"
+                },
+                ul: {
+                  marginTop: "0px",
+                  li: {
+                    _last: {
+                      borderBottom: "0px"
+                      // borderColor: "gray.200"
+                    }
+                  }
+                }
+              }
             }
           }
         }

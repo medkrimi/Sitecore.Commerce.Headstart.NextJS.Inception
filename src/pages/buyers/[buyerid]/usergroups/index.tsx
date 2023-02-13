@@ -1,26 +1,12 @@
-import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Container,
-  HStack,
-  Heading,
-  Icon,
-  Text,
-  useToast
-} from "@chakra-ui/react"
+import {Box, Button, ButtonGroup, HStack} from "@chakra-ui/react"
 import {useEffect, useState} from "react"
-
 import Card from "lib/components/card/Card"
-import {IoMdClose} from "react-icons/io"
 import Link from "lib/components/navigation/Link"
-import {MdCheck} from "react-icons/md"
-import {NextSeo} from "next-seo"
 import React from "react"
 import UserGroupsDataTable from "lib/components/datatable/datatable"
 import {useRouter} from "next/router"
 import {userGroupsService} from "lib/api"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -41,7 +27,8 @@ export async function getServerSideProps() {
 const UserGroupsList = () => {
   const [userGroups, setUserGroup] = useState([])
   const router = useRouter()
-  const toast = useToast()
+  const successToast = useSuccessToast()
+  const errorToast = useErrorToast()
   useEffect(() => {
     initUserGroupsData(router.query.buyerid)
   }, [router.query.buyerid])
@@ -55,24 +42,12 @@ const UserGroupsList = () => {
     try {
       await userGroupsService.delete(router.query.buyerid, userGroupid)
       initUserGroupsData(router.query.buyerid)
-      toast({
-        id: userGroupid + "-deleted",
-        title: "Success",
-        description: "Buyer deleted successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Buyer deleted successfully."
       })
     } catch (e) {
-      toast({
-        id: userGroupid + "fail-deleted",
-        title: "Error",
-        description: "Buyer delete failed",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      errorToast({
+        description: "Buyer delete failed"
       })
     }
   }
@@ -82,11 +57,7 @@ const UserGroupsList = () => {
       Header: "Name",
       accessor: "Name",
       Cell: ({value, row}) => (
-        <Link
-          href={`/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`}
-        >
-          {value}
-        </Link>
+        <Link href={`/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`}>{value}</Link>
       )
     },
     {
@@ -99,20 +70,11 @@ const UserGroupsList = () => {
         <ButtonGroup>
           <Button
             variant="secondaryButton"
-            onClick={() =>
-              router.push(
-                `/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`
-              )
-            }
-            leftIcon={<EditIcon />}
+            onClick={() => router.push(`/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`)}
           >
             Edit
           </Button>
-          <Button
-            variant="secondaryButton"
-            onClick={() => deleteUserGroup(row.original.ID)}
-            leftIcon={<DeleteIcon />}
-          >
+          <Button variant="secondaryButton" onClick={() => deleteUserGroup(row.original.ID)}>
             Delete
           </Button>
         </ButtonGroup>
@@ -124,14 +86,7 @@ const UserGroupsList = () => {
     <>
       <Box padding="GlobalPadding">
         <HStack justifyContent="space-between" w="100%" mb={5}>
-          <Button
-            onClick={() =>
-              router.push(`/buyers/${router.query.buyerid}/usergroups/add`)
-            }
-            variant="primaryButton"
-            leftIcon={<AddIcon />}
-            size="lg"
-          >
+          <Button onClick={() => router.push(`/buyers/${router.query.buyerid}/usergroups/add`)} variant="primaryButton">
             Create user group
           </Button>
           <HStack>
@@ -139,10 +94,7 @@ const UserGroupsList = () => {
           </HStack>
         </HStack>
         <Card variant="primaryCard">
-          <UserGroupsDataTable
-            tableData={userGroups}
-            columnsData={columnsData}
-          />
+          <UserGroupsDataTable tableData={userGroups} columnsData={columnsData} />
         </Card>
       </Box>
     </>

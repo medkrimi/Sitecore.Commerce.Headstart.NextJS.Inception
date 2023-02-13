@@ -1,9 +1,4 @@
-import {
-  OrderReturn,
-  OrderReturns,
-  Payment,
-  Payments
-} from "ordercloud-javascript-sdk"
+import {OrderReturn, OrderReturns, Payment, Payments} from "ordercloud-javascript-sdk"
 
 export const returnsService = {
   getAll,

@@ -9,6 +9,7 @@ const SideNavigation = () => {
   return (
     <Flex
       pos="sticky"
+      top="0px"
       left="2"
       h="95vh"
       borderRadius={{
@@ -28,9 +29,7 @@ const SideNavigation = () => {
       flexDir="column"
       justifyContent="flex-start"
     >
-      <VStack justifyContent="flex-start">
-        {isMobile ? <MobileSideBarMenu /> : <DesktopSideBarMenu />}
-      </VStack>
+      <VStack justifyContent="flex-start">{isMobile ? <MobileSideBarMenu /> : <DesktopSideBarMenu />}</VStack>
     </Flex>
   )
 }

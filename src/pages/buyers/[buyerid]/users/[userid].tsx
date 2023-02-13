@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react"
-
-import {AddEditForm} from "../../../../lib/components/users/AddEditForm"
+import {CreateUpdateForm} from "../../../../lib/components/users/CreateUpdateForm"
 import {Box} from "@chakra-ui/react"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {User} from "ordercloud-javascript-sdk"
@@ -29,12 +28,10 @@ const UserListItem = () => {
   const [user, setUser] = useState({} as User)
   useEffect(() => {
     if (router.query.buyerid) {
-      usersService
-        .getById(router.query.buyerid, router.query.userid)
-        .then((user) => setUser(user))
+      usersService.getById(router.query.buyerid, router.query.userid).then((user) => setUser(user))
     }
   }, [router.query.buyerid, router.query.userid])
-  return <>{user?.ID ? <AddEditForm user={user} /> : <div> Loading</div>}</>
+  return <>{user?.ID ? <CreateUpdateForm user={user} ocService={usersService} /> : <div> Loading</div>}</>
 }
 
 const ProtectedBuyerListItem = () => {

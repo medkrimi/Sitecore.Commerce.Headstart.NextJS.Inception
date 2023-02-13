@@ -1,19 +1,8 @@
-import {
-  Box,
-  Container,
-  Grid,
-  GridItem,
-  HStack,
-  Heading,
-  Icon,
-  Link,
-  SimpleGrid,
-  Text,
-  useColorModeValue
-} from "@chakra-ui/react"
-import {HiOutlineFilter, HiOutlineShare} from "react-icons/hi"
+import {Box, Container, Grid, GridItem, Icon, Link, Text, useColorModeValue} from "@chakra-ui/react"
+import {HiOutlineFilter, HiUsers} from "react-icons/hi"
 
 import Card from "lib/components/card/Card"
+import {NextSeo} from "next-seo"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import React from "react"
 import {appPermissions} from "lib/constants/app-permissions.config"
@@ -23,7 +12,7 @@ export async function getServerSideProps() {
   return {
     props: {
       header: {
-        title: "Settings ",
+        title: "Settings",
         metas: {
           hasBreadcrumbs: true,
           hasBuyerContextSwitch: false
@@ -38,63 +27,40 @@ const SettingsPage = () => {
 
   return (
     <Container maxW="full">
-      <SimpleGrid columns={7} spacing={3}>
-        <Box width="225">
-          <Card
-            showclosebutton="false"
-            p="28px 10px 0px 0px"
-            mb={{sm: "26px", lg: "0px"}}
-            bg={boxBgColor}
-            color={color}
-            width="225px"
-            maxW="225px"
-            align="center"
-          >
-            <Link href="/settings/productfacets/">
-              <Icon
-                as={HiOutlineFilter}
-                fontSize="80px"
-                title="Settings"
-                color="darkGray"
-              ></Icon>
-              <Text width="100%" w="full">
-                Product Facets
-              </Text>
-            </Link>
-          </Card>
-        </Box>
-        <Box width="225">
-          <Card
-            showclosebutton="false"
-            p="28px 10px 0px 0px"
-            mb={{sm: "26px", lg: "0px"}}
-            bg={boxBgColor}
-            color={color}
-            width="225px"
-            maxW="225px"
-            align="center"
-          >
-            <Link href="/oc-admin/ocorg-graph">
-              <Icon
-                as={HiOutlineShare}
-                fontSize="80px"
-                title="Settings"
-                color="darkGray"
-              ></Icon>
-              <Text width="100%" w="full">
-                Organization
-              </Text>
-            </Link>
-          </Card>
-        </Box>
-      </SimpleGrid>
+      <NextSeo title="Settings" />
+      <Grid gridTemplateColumns="repeat(auto-fit, 225px)" gridGap="1rem">
+        <GridItem>
+          <Link href="/settings/adminusers/">
+            <Card showclosebutton="false" color={color} align="center">
+              <Box>
+                <Icon as={HiUsers} fontSize="80px" title="Settings" color="darkGray"></Icon>
+                <Text width="100%" w="full">
+                  Admin Users
+                </Text>
+              </Box>
+            </Card>
+          </Link>
+        </GridItem>
+        <GridItem>
+          <Link href="/settings/productfacets/">
+            <Card showclosebutton="false" bg={boxBgColor} color={color} align="center">
+              <Box>
+                <Icon as={HiOutlineFilter} fontSize="80px" title="Settings" color="darkGray"></Icon>
+                <Text width="100%" w="full">
+                  Product Facets
+                </Text>
+              </Box>
+            </Card>
+          </Link>
+        </GridItem>
+      </Grid>
     </Container>
   )
 }
 
 const ProtectedSettingsPage = () => {
   return (
-    <ProtectedContent hasAccess={appPermissions.MeManager}>
+    <ProtectedContent hasAccess={appPermissions.SettingsManager}>
       <SettingsPage />
     </ProtectedContent>
   )

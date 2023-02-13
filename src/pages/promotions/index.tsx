@@ -2,46 +2,36 @@ import {
   AlertDialog,
   AlertDialogBody,
   AlertDialogContent,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
+  Badge,
+  Box,
   Button,
-  Checkbox,
-  CheckboxGroup,
-  Container,
-  Divider,
+  ButtonGroup,
   HStack,
-  Heading,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Spinner,
+  Icon,
   Stack,
-  Table,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  Tr,
-  VStack
+  AlertDialogFooter,
+  Spinner
 } from "@chakra-ui/react"
-import {dateHelper, textHelper} from "lib/utils/"
 import {useEffect, useRef, useState} from "react"
 
 import Card from "lib/components/card/Card"
-import {ChevronDownIcon} from "@chakra-ui/icons"
-import {HiOutlineMinusSm} from "react-icons/hi"
-import Link from "../../lib/components/navigation/Link"
-import {NextSeo} from "next-seo"
-import {Promotions} from "ordercloud-javascript-sdk"
+import {IoMdClose} from "react-icons/io"
+import Link from "lib/components/navigation/Link"
+import {MdCheck} from "react-icons/md"
+import PromotionsDataTable from "lib/components/datatable/datatable"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
+import React from "react"
 import {appPermissions} from "lib/constants/app-permissions.config"
+import {dateHelper} from "lib/utils/date.utils"
+import {promotionsService} from "lib/api"
+import router from "next/router"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
-export async function getServerSideProps() {
+export async function getStaticProps() {
   return {
     props: {
       header: {
@@ -50,192 +40,208 @@ export async function getServerSideProps() {
           hasBreadcrumbs: true,
           hasBuyerContextSwitch: false
         }
-      }
+      },
+      revalidate: 5 * 60
     }
   }
 }
 
-const PromotionsPage = () => {
+const PromotionsList = () => {
   const [promotions, setPromotions] = useState([])
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const cancelRef = useRef()
-
   const requestExportCSV = () => {}
 
-  const showInfiniteScrollBtn = promotions.length
-
-  const loadMoreButton = showInfiniteScrollBtn != 0 && (
-    <HStack justifyContent="center">
-      <Button variant="tertiaryButton">
-        Scroll down to load more promotions
-      </Button>
-    </HStack>
-  )
+  const successToast = useSuccessToast()
+  const errorToast = useErrorToast()
 
   useEffect(() => {
-    const getPromotions = async () => {
-      const promotionsList = Promotions.List()
-      setPromotions((await promotionsList).Items)
-    }
-    getPromotions()
+    initPromotionsData()
   }, [])
 
-  const promotionsContent = promotions.length ? (
-    promotions.map((promotion) => (
-      <Tr key={promotion.Code}>
-        <Td>
-          <Checkbox pr="10px"></Checkbox>
-          <Link href={`/promotions/${promotion.ID}`}>{promotion.Code}</Link>
-        </Td>
-        <Td>{promotion.Description}</Td>
-        <Td>{promotion.Type}</Td>
-        <Td>{promotion.Elgibility}</Td>
-        <Td>{textHelper.formatStatus(promotion.Status)}</Td>
-        <Td>{dateHelper.formatDate(promotion.StartDate)}</Td>
-        <Td>{dateHelper.formatDate(promotion.ExpirationDate)}</Td>
-      </Tr>
-    ))
-  ) : (
-    <Tr>
-      <Td colSpan={7}>No promotions have been created</Td>
-    </Tr>
-  )
+  async function initPromotionsData() {
+    const promotionsList = await promotionsService.list()
+    setPromotions(promotionsList.Items)
+  }
+
+  async function deletePromotion(id) {
+    try {
+      await promotionsService.delete(id)
+      initPromotionsData()
+      successToast({
+        description: "Promotion deleted successfully."
+      })
+    } catch (e) {
+      errorToast({
+        description: "Promotion delete failed"
+      })
+    }
+  }
+
+  const columnsData = [
+    {
+      Header: "Promotion ID",
+      accessor: "ID",
+      Cell: ({value, row}) => <Link href={`/promotions/${row.original.ID}`}>{value}</Link>
+    },
+    {
+      Header: "Name",
+      accessor: "Name",
+      Cell: ({value, row}) => <Link href={`/promotions/${row.original.ID}`}>{value}</Link>
+    },
+    {
+      Header: "Code",
+      accessor: "Code"
+    },
+    {
+      Header: "Line Item Level?",
+      accessor: "LineItemLevel",
+      Cell: ({value}) => (
+        <>
+          <Icon
+            as={value === true ? MdCheck : IoMdClose}
+            color={value === true ? "green.400" : "red.400"}
+            w="20px"
+            h="20px"
+          />
+        </>
+      )
+    },
+    {
+      Header: "Can combine?",
+      accessor: "CanCombine",
+      Cell: ({value}) => (
+        <>
+          <Icon
+            as={value === true ? MdCheck : IoMdClose}
+            color={value === true ? "green.400" : "red.400"}
+            w="20px"
+            h="20px"
+          />
+        </>
+      )
+    },
+    {
+      Header: "Allow All Buyers?",
+      accessor: "AllowAllBuyers",
+      Cell: ({value}) => (
+        <>
+          <Icon
+            as={value === true ? MdCheck : IoMdClose}
+            color={value === true ? "green.400" : "red.400"}
+            w="20px"
+            h="20px"
+          />
+        </>
+      )
+    },
+    {
+      Header: "Start Date",
+      accessor: "StartDate",
+      Cell: ({value}) => dateHelper.formatDate(value)
+    },
+    {
+      Header: "Expiration Date",
+      accessor: "Expiration Date",
+      Cell: ({value}) => (value ? dateHelper.formatDate(value) : "No Expiration")
+    },
+    {
+      Header: "Redemption Limit",
+      Cell: ({row}) => (
+        <>
+          <Stack direction="row">
+            <Badge colorScheme="green">{row.original.RedemptionLimit}</Badge>
+            <Badge colorScheme="purpple">{row.original.RedemptionLimitPerUser}</Badge>
+            <Badge colorScheme="gray">{row.original.RedemptionLimitCount}</Badge>
+          </Stack>
+        </>
+      )
+    },
+    {
+      Header: "ACTIONS",
+      Cell: ({row}) => (
+        <ButtonGroup>
+          <Button variant="secondaryButton" onClick={() => router.push(`/promotions/${row.original.ID}/`)}>
+            Edit
+          </Button>
+          <Button variant="secondaryButton" onClick={() => deletePromotion(row.original.ID)}>
+            Delete
+          </Button>
+        </ButtonGroup>
+      )
+    }
+  ]
 
   return (
-    <Container maxW="full">
-      <NextSeo title="Promotions List" />
-      <HStack justifyContent="space-between" w="100%" mb={5}>
-        <Link href={`/promotions/new`}>
-          <Button variant="primaryButton">New Promotion</Button>
-        </Link>
-        <HStack>
-          <Menu>
-            <MenuButton
-              px={4}
-              py={2}
-              transition="all 0.2s"
-              borderRadius="md"
-              borderWidth="1px"
-              _hover={{bg: "gray.400"}}
-              _expanded={{bg: "blue.400"}}
-              _focus={{boxShadow: "outline"}}
-            >
-              Filters <ChevronDownIcon />
-            </MenuButton>
-            <MenuList>
-              <MenuItem>
-                <VStack>
-                  <Text>Promotion Status</Text>
-                  <CheckboxGroup>
-                    <Stack spacing={[1, 3]} direction={["column", "row"]}>
-                      <Checkbox value="Completed" defaultChecked>
-                        Completed
-                      </Checkbox>
-                      <Checkbox value="AwaitingApproval" defaultChecked>
-                        Awaiting Approval
-                      </Checkbox>
-                      <Checkbox value="Canceled" defaultChecked>
-                        Canceled
-                      </Checkbox>
-                      <Checkbox value="Active" defaultChecked>
-                        Active
-                      </Checkbox>
-                    </Stack>
-                  </CheckboxGroup>
-                  <Divider />
-                  <HStack>
-                    {/*<Button size="md" bg={boxBgColor} color={color}>
-                      Clear
-                    </Button>
-                  <Button size="md" bg={boxBgColor} color={color}>
-                      Submit
-                    </Button> */}
-                  </HStack>
-                </VStack>
-              </MenuItem>
-            </MenuList>
-          </Menu>
-          <Button
-            variant="secondaryButton"
-            onClick={() => setExportCSVDialogOpen(true)}
-          >
-            Export CSV
-          </Button>
-        </HStack>
-      </HStack>
-      <Card variant="primaryCard">
-        <IconButton
-          variant="closePanelButton"
-          aria-label="close panel"
-          icon={<HiOutlineMinusSm />}
-        ></IconButton>
-        <Table>
-          <Thead>
-            <Tr>
-              <Th>Code</Th>
-              <Th>Description</Th>
-              <Th>Type</Th>
-              <Th>Elgibility</Th>
-              <Th>Status</Th>
-              <Th>Start Date</Th>
-              <Th>End Date</Th>
-            </Tr>
-          </Thead>
-          <Tbody>{promotionsContent}</Tbody>
-        </Table>
-        {/* {loadMoreButton} */}
-      </Card>
-      <AlertDialog
-        isOpen={isExportCSVDialogOpen}
-        onClose={() => setExportCSVDialogOpen(false)}
-        leastDestructiveRef={cancelRef}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Export Selected Promotion to CSV
-            </AlertDialogHeader>
-            <AlertDialogBody>
-              <Text display="inline">
-                Export the selected promotions to a CSV, once the export button
-                is clicked behind the scense a job will be kicked off to create
-                the csv and then will automatically download to your downloads
-                folder in the browser.
-              </Text>
-            </AlertDialogBody>
-            <AlertDialogFooter>
-              <HStack justifyContent="space-between" w="100%">
-                <Button
-                  ref={cancelRef}
-                  onClick={() => setExportCSVDialogOpen(false)}
-                  disabled={loading}
-                  variant="secondaryButton"
-                >
-                  Cancel
-                </Button>
-                <Button onClick={requestExportCSV} disabled={loading}>
-                  {loading ? (
-                    <Spinner color="brand.500" />
-                  ) : (
-                    "Export Promotions"
-                  )}
-                </Button>
-              </HStack>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
-    </Container>
+    <>
+      <PromotionsDataTable tableData={promotions} columnsData={columnsData} />
+    </>
   )
 }
 
-const ProtectedPromotionsPage = () => {
+const ProtectedBuyersList = () => {
+  const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const cancelRef = useRef()
+  const requestExportCSV = () => {}
+
   return (
-    <ProtectedContent hasAccess={appPermissions.ProductManager}>
-      <PromotionsPage />
+    <ProtectedContent hasAccess={appPermissions.OrderManager}>
+      <Box padding="GlobalPadding">
+        <HStack justifyContent="space-between" w="100%" mb={5}>
+          <Button onClick={() => router.push(`/promotions/add`)} variant="primaryButton">
+            Create promotion
+          </Button>
+
+          <HStack>
+            <Button variant="secondaryButton" onClick={() => setExportCSVDialogOpen(true)}>
+              Export CSV
+            </Button>
+          </HStack>
+        </HStack>
+        <Card variant="primaryCard">
+          <PromotionsList />
+        </Card>
+
+        <AlertDialog
+          isOpen={isExportCSVDialogOpen}
+          onClose={() => setExportCSVDialogOpen(false)}
+          leastDestructiveRef={cancelRef}
+        >
+          <AlertDialogOverlay>
+            <AlertDialogContent>
+              <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                Export Selected Promotions to CSV
+              </AlertDialogHeader>
+              <AlertDialogBody>
+                <Text display="inline">
+                  Export the selected promotions to a CSV, once the export button is clicked behind the scenes a job
+                  will be kicked off to create the csv and then will automatically download to your downloads folder in
+                  the browser.
+                </Text>
+              </AlertDialogBody>
+              <AlertDialogFooter>
+                <HStack justifyContent="space-between" w="100%">
+                  <Button
+                    ref={cancelRef}
+                    onClick={() => setExportCSVDialogOpen(false)}
+                    disabled={loading}
+                    variant="secondaryButton"
+                  >
+                    Cancel
+                  </Button>
+                  <Button onClick={requestExportCSV} disabled={loading}>
+                    {loading ? <Spinner color="brand.500" /> : "Export Promotions"}
+                  </Button>
+                </HStack>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
+      </Box>
     </ProtectedContent>
   )
 }
 
-export default ProtectedPromotionsPage
+export default ProtectedBuyersList

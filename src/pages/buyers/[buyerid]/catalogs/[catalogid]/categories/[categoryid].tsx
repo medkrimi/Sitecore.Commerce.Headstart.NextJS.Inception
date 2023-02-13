@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react"
-
-import {AddEditForm} from "lib/components/categories/AddEditForm"
+import {CreateUpdateForm} from "lib/components/categories/CreateUpdateForm"
 import {Box} from "@chakra-ui/react"
 import {Category} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
@@ -29,17 +28,12 @@ const CategoryListItem = (props) => {
   const [category, setCategory] = useState({} as Category)
   useEffect(() => {
     const categoryid = props.selectedNode?.id || router.query.categoryid
-    categoriesService
-      .getById(router.query.catalogid, categoryid)
-      .then((category) => {
+    if (categoryid)
+      categoriesService.getById(router.query.catalogid, categoryid).then((category) => {
         setCategory(category)
       })
   }, [props.selectedNode, router.query.catalogid, router.query.categoryid])
-  return (
-    <>
-      {category?.ID ? <AddEditForm category={category} /> : <div> Loading</div>}
-    </>
-  )
+  return <>{category?.ID ? <CreateUpdateForm category={category} /> : <div> Loading</div>}</>
 }
 const ProtectedCategoryListItem = (props) => {
   return (

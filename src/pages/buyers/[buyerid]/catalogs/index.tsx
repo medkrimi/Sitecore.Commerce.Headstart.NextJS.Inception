@@ -1,21 +1,12 @@
-import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons"
-import {
-  Button,
-  ButtonGroup,
-  HStack,
-  Switch,
-  Text,
-  Tooltip,
-  useToast
-} from "@chakra-ui/react"
+import {Box, Button, ButtonGroup, HStack, Switch, Tooltip} from "@chakra-ui/react"
 import {useEffect, useState} from "react"
-
 import Card from "lib/components/card/Card"
 import CatalogsDataTable from "lib/components/datatable/datatable"
 import Link from "lib/components/navigation/Link"
 import React from "react"
 import {catalogsService} from "lib/api"
 import {useRouter} from "next/router"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -36,7 +27,8 @@ export async function getServerSideProps() {
 const CatalogsList = () => {
   const [catalogs, setCatalogs] = useState([])
   const router = useRouter()
-  const toast = useToast()
+  const successToast = useSuccessToast()
+  const errorToast = useErrorToast()
   useEffect(() => {
     initCatalogsData(router.query.buyerid)
   }, [router.query.buyerid])
@@ -50,24 +42,12 @@ const CatalogsList = () => {
     try {
       await catalogsService.delete(catalogid)
       initCatalogsData(router.query.buyerid)
-      toast({
-        id: catalogid + "-deleted",
-        title: "Success",
-        description: "Buyer deleted successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      successToast({
+        description: "Buyer deleted successfully."
       })
     } catch (e) {
-      toast({
-        id: catalogid + "fail-deleted",
-        title: "Error",
-        description: "Buyer delete failed",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
+      errorToast({
+        description: "Buyer delete failed"
       })
     }
   }
@@ -76,13 +56,7 @@ const CatalogsList = () => {
     {
       Header: "Catalog ID",
       accessor: "ID",
-      Cell: ({value, row}) => (
-        <Link
-          href={`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}`}
-        >
-          {value}
-        </Link>
-      )
+      Cell: ({value, row}) => <Link href={`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}`}>{value}</Link>
     },
     {
       Header: "Name",
@@ -107,9 +81,7 @@ const CatalogsList = () => {
       Header: "Category Count",
       accessor: "CategoryCount",
       Cell: ({row, value}) => (
-        <Link
-          href={`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}/categories`}
-        >
+        <Link href={`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}/categories`}>
           <Button variant="secondaryButton">Categories ({value})</Button>
         </Link>
       )
@@ -124,20 +96,11 @@ const CatalogsList = () => {
         <ButtonGroup>
           <Button
             variant="secondaryButton"
-            onClick={() =>
-              router.push(
-                `/buyers/${router.query.buyerid}/catalogs/${row.original.ID}`
-              )
-            }
-            leftIcon={<EditIcon />}
+            onClick={() => router.push(`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}`)}
           >
             Edit
           </Button>
-          <Button
-            variant="secondaryButton"
-            onClick={() => deleteCatalog(row.original.ID)}
-            leftIcon={<DeleteIcon />}
-          >
+          <Button variant="secondaryButton" onClick={() => deleteCatalog(row.original.ID)}>
             Delete
           </Button>
         </ButtonGroup>
@@ -147,24 +110,19 @@ const CatalogsList = () => {
 
   return (
     <>
-      <HStack justifyContent="space-between" w="100%" mb={5}>
-        <Button
-          onClick={() =>
-            router.push(`/buyers/${router.query.buyerid}/catalogs/add`)
-          }
-          variant="primaryButton"
-          leftIcon={<AddIcon />}
-          size="lg"
-        >
-          Create catalog
-        </Button>
-        <HStack>
-          <Button variant="secondaryButton">Export CSV</Button>
+      <Box pl="GlobalPadding">
+        <HStack justifyContent="space-between" w="100%" mb={5}>
+          <Button onClick={() => router.push(`/buyers/${router.query.buyerid}/catalogs/add`)} variant="primaryButton">
+            Create catalog
+          </Button>
+          <HStack>
+            <Button variant="secondaryButton">Export CSV</Button>
+          </HStack>
         </HStack>
-      </HStack>
-      <Card variant="primaryCard">
-        <CatalogsDataTable tableData={catalogs} columnsData={columnsData} />
-      </Card>
+        <Card variant="primaryCard">
+          <CatalogsDataTable tableData={catalogs} columnsData={columnsData} />
+        </Card>
+      </Box>
     </>
   )
 }

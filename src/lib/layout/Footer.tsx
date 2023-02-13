@@ -49,8 +49,7 @@ const Footer = () => {
           <FooterLogo />
         </Flex>
         <Text pt={6} fontSize={"sm"} textAlign={"center"}>
-          Copyright © {new Date().getFullYear()} Sitecore.com All Rights
-          Reserved.
+          Copyright © {new Date().getFullYear()} Sitecore.com All Rights Reserved.
         </Text>
       </Box>
     </Box>

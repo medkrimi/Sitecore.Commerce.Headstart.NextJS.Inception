@@ -1,4 +1,4 @@
-import {Flex} from "@chakra-ui/react"
+import {Box, Flex} from "@chakra-ui/react"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import ProductSearch from "lib/components/products/ProductSearch"
 import {appPermissions} from "lib/constants/app-permissions.config"
@@ -30,17 +30,9 @@ const Products = () => {
 
   return (
     <>
-      <Flex
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        gap={4}
-        mb={2}
-        p={8}
-        w="full"
-      >
+      <Box pl="GlobalPadding">
         <ProductSearch query={query} />
-      </Flex>
+      </Box>
     </>
   )
 }

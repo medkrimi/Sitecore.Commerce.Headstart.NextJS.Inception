@@ -1,18 +1,14 @@
 export async function getGuestRefByEmail(email: string): Promise<string> {
-  const response = await fetch(
-    process.env.NEXT_PUBLIC_CDP_ENDPOINT + "/guests/?email=" + email,
-    {
-      method: "GET", // *GET, POST, PUT, DELETE, etc.
-      mode: "cors", // no-cors, *cors, same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      headers: {
-        "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization:
-          "Basic " + process.env.NEXT_PUBLIC_CDP_CLIENT_KEY_SECRET_ENCODED
-      }
+  const response = await fetch(process.env.NEXT_PUBLIC_CDP_ENDPOINT + "/guests/?email=" + email, {
+    method: "GET", // *GET, POST, PUT, DELETE, etc.
+    mode: "cors", // no-cors, *cors, same-origin
+    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: "Basic " + process.env.NEXT_PUBLIC_CDP_CLIENT_KEY_SECRET_ENCODED
     }
-  )
+  })
   var responseJson = (await response.json()) as getGuestRefByEmailInterface // parses JSON response into native JavaScript objects
   console.log(responseJson)
   var guestUrl = responseJson.items[0].href
@@ -22,8 +18,7 @@ export async function getGuestRefByEmail(email: string): Promise<string> {
 export async function getGuestContext(email: string): Promise<CdpGuestModel> {
   var guestUrl = await getGuestRefByEmail(email)
   guestUrl = guestUrl.replace("guests", "guestContexts")
-  guestUrl +=
-    "?expand=items.sessions(offset%3A0%2Climit%3A100)&source=all&timeout=30000"
+  guestUrl += "?expand=items.sessions(offset%3A0%2Climit%3A100)&source=all&timeout=30000"
   const contextResponse = await fetch(guestUrl, {
     method: "GET", // *GET, POST, PUT, DELETE, etc.
     mode: "cors", // no-cors, *cors, same-origin
@@ -31,8 +26,7 @@ export async function getGuestContext(email: string): Promise<CdpGuestModel> {
     headers: {
       "Content-Type": "application/json",
       // 'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization:
-        "Basic " + process.env.NEXT_PUBLIC_CDP_CLIENT_KEY_SECRET_ENCODED
+      Authorization: "Basic " + process.env.NEXT_PUBLIC_CDP_CLIENT_KEY_SECRET_ENCODED
     }
   })
 

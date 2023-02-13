@@ -11,6 +11,7 @@ import {
   Flex,
   HStack,
   Icon,
+  Image,
   Link,
   Menu,
   MenuButton,
@@ -32,14 +33,13 @@ import {ChevronDownIcon} from "@chakra-ui/icons"
 import Cookies from "universal-cookie"
 import {ItemContent} from "../generic/ItemContent"
 import NextLink from "next/link"
-import {useAuth} from "lib/hooks/useAuth"
 import ProtectedContent from "../auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
+import {useAuth} from "lib/hooks/useAuth"
 
 const MobileNavigation = () => {
   const {Logout} = useAuth()
-  let usersToken =
-    typeof window !== "undefined" ? localStorage.getItem("usersToken") : ""
+  let usersToken = typeof window !== "undefined" ? localStorage.getItem("usersToken") : ""
   let menuBg = useColorModeValue("white", "navy.800")
   const {isOpen, onOpen, onClose} = useDisclosure()
   const btnRef = React.useRef()
@@ -150,23 +150,14 @@ const MobileNavigation = () => {
       <Button ref={btnRef} onClick={onOpen} variant="unstyled">
         <Icon as={HiOutlineCog} fontSize="24px" />
       </Button>
-      <Drawer
-        isOpen={isOpen}
-        placement="right"
-        onClose={onClose}
-        finalFocusRef={btnRef}
-      >
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose} finalFocusRef={btnRef}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader color={color}>Application Settings</DrawerHeader>
 
           <DrawerBody color={color}>
-            <Tooltip
-              label={
-                colorMode === "dark" ? "Set Light Model" : "Set Dark Model"
-              }
-            >
+            <Tooltip label={colorMode === "dark" ? "Set Light Model" : "Set Dark Model"}>
               <Button
                 colorScheme="brandButtons"
                 aria-label="Toggle Color Mode"
@@ -179,18 +170,26 @@ const MobileNavigation = () => {
               </Button>
             </Tooltip>
             <Text mt="10">Change Theme:</Text>
-            <Select
-              id="ThemeDropdown"
-              onChange={selectChange}
-              placeholder="Select a theme"
-              value={currenttheme}
-            >
-              <option value="lib/styles/theme/sitecorecommerce/">
-                Sitecore Commerce
-              </option>
+            <Select id="ThemeDropdown" onChange={selectChange} placeholder="Select a theme" value={currenttheme}>
+              <option value="lib/styles/theme/sitecorecommerce/">Sitecore Commerce</option>
               <option value="lib/styles/theme/playsummit/">Play Summit</option>
               <option value="lib/styles/theme/industrial/">Industrial</option>
             </Select>
+
+            <Flex justify="center" direction="column" align="center" w="100%" width="full" pb="10px" pt="90px">
+              <Image src="/images/SidebarHelpImage.png" w="90px" alt="" />
+              <Flex direction="column" align="center" textAlign="center" mb="12px" me="12px" w="100%" width="full">
+                <Text fontSize="14px" fontWeight="bold">
+                  Need help?
+                </Text>
+                <Text fontSize="10px">Please check our docs.</Text>
+              </Flex>
+              <Link href="/docs">
+                <Button variant="tertiaryButton" size="sm" fontWeight="bold" minW="185px" m="0" fontSize="10px">
+                  Documentation
+                </Button>
+              </Link>
+            </Flex>
           </DrawerBody>
 
           <DrawerFooter></DrawerFooter>

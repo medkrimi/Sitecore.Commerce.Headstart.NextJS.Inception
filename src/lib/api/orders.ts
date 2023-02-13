@@ -1,18 +1,14 @@
-import {
-  Orders,
-  OrderWorksheet,
-  IntegrationEvents
-} from "ordercloud-javascript-sdk"
+import {IntegrationEvents, OrderWorksheet, Orders} from "ordercloud-javascript-sdk"
 
 export const ordersService = {
-  getAll,
+  list,
   getById,
   create,
   update
   //delete: _delete
 }
 
-async function getAll() {
+async function list() {
   //console.log("ordersService::getAll")
   return await Orders.List("All")
 }

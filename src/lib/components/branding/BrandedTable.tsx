@@ -1,10 +1,4 @@
-import {
-  useColorMode,
-  useColorModeValue,
-  Box,
-  TableContainer,
-  Table
-} from "@chakra-ui/react"
+import {useColorMode, useColorModeValue, Box, TableContainer, Table} from "@chakra-ui/react"
 
 export default function BrandedTable({children}) {
   const tableHeaderBg = useColorModeValue("white.000", "gray.900")
@@ -16,7 +10,7 @@ export default function BrandedTable({children}) {
     <TableContainer
       width={"full"}
       rounded={20}
-      boxShadow={"md"}
+      //boxShadow={"md"}
       bg={tableHeaderBg}
       color={tableColor}
     >

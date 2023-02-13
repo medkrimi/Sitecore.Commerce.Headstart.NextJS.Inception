@@ -1,10 +1,4 @@
-import {
-  MdDomain,
-  MdGroup,
-  MdLibraryBooks,
-  MdPerson,
-  MdStorefront
-} from "react-icons/md"
+import {MdDomain, MdGroup, MdLibraryBooks, MdPerson, MdStorefront} from "react-icons/md"
 
 import {Icon} from "@chakra-ui/react"
 import React from "react"
@@ -27,8 +21,8 @@ export const TypeIcon: React.FC<Props> = (props) => {
     case "catalog":
       return <Icon as={MdStorefront} />
     case "category":
-      return <Icon boxSize={6} as={MdLibraryBooks} />
+      return
     default:
-      return <Icon boxSize={6} as={MdLibraryBooks} />
+      return
   }
 }

@@ -1,13 +1,6 @@
-import {Box, Button, ButtonGroup, Icon, Text, useToast} from "@chakra-ui/react"
-import {DeleteIcon, EditIcon} from "@chakra-ui/icons"
-import {
-  buyersService,
-  catalogsService,
-  userGroupsService,
-  usersService
-} from "lib/api"
+import {Box, Button, ButtonGroup, HStack, Icon, Text} from "@chakra-ui/react"
+import {buyersService, catalogsService, userGroupsService, usersService} from "lib/api"
 import {useEffect, useState} from "react"
-
 import BuyersDataTable from "lib/components/datatable/datatable"
 import Card from "lib/components/card/Card"
 import {IoMdClose} from "react-icons/io"
@@ -18,6 +11,7 @@ import React from "react"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {dateHelper} from "lib/utils/date.utils"
 import router from "next/router"
+import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getStaticProps() {
@@ -37,12 +31,8 @@ export async function getStaticProps() {
 const BuyersList = () => {
   const [buyers, setBuyers] = useState([])
   const [buyersMeta, setBuyersMeta] = useState({})
-
-  const toast = useToast({
-    duration: 6000,
-    isClosable: true,
-    position: "top"
-  })
+  const successToast = useSuccessToast()
+  const errorToast = useErrorToast()
 
   useEffect(() => {
     initBuyersData()
@@ -54,12 +44,9 @@ const BuyersList = () => {
 
     const requests = buyersList.Items.map(async (buyer) => {
       _buyerListMeta[buyer.ID] = {}
-      _buyerListMeta[buyer.ID]["userGroupsCount"] =
-        await userGroupsService.getUserGroupsCountByBuyerID(buyer.ID)
-      _buyerListMeta[buyer.ID]["usersCount"] =
-        await usersService.getUsersCountByBuyerID(buyer.ID)
-      _buyerListMeta[buyer.ID]["catalogsCount"] =
-        await catalogsService.getCatalogsCountByBuyerID(buyer.ID)
+      _buyerListMeta[buyer.ID]["userGroupsCount"] = await userGroupsService.getUserGroupsCountByBuyerID(buyer.ID)
+      _buyerListMeta[buyer.ID]["usersCount"] = await usersService.getUsersCountByBuyerID(buyer.ID)
+      _buyerListMeta[buyer.ID]["catalogsCount"] = await catalogsService.getCatalogsCountByBuyerID(buyer.ID)
     })
     await Promise.all(requests)
     setBuyersMeta(_buyerListMeta)
@@ -70,18 +57,12 @@ const BuyersList = () => {
     try {
       await buyersService.delete(id)
       initBuyersData()
-      toast({
-        id: id + "-deleted",
-        title: "Success",
-        description: "Buyer deleted successfully.",
-        status: "success"
+      successToast({
+        description: "Buyer deleted successfully."
       })
     } catch (e) {
-      toast({
-        id: id + "fail-deleted",
-        title: "Error",
-        description: "Buyer delete failed",
-        status: "error"
+      errorToast({
+        description: "Buyer delete failed"
       })
     }
   }
@@ -90,16 +71,12 @@ const BuyersList = () => {
     {
       Header: "BUYER ID",
       accessor: "ID",
-      Cell: ({value, row}) => (
-        <Link href={`/buyers/${row.original.ID}`}>{value}</Link>
-      )
+      Cell: ({value, row}) => <Link href={`/buyers/${row.original.ID}`}>{value}</Link>
     },
     {
       Header: "Name",
       accessor: "Name",
-      Cell: ({value, row}) => (
-        <Link href={`/buyers/${row.original.ID}`}>{value}</Link>
-      )
+      Cell: ({value, row}) => <Link href={`/buyers/${row.original.ID}`}>{value}</Link>
     },
     {
       Header: "DEFAULT CATALOG ID",
@@ -129,16 +106,10 @@ const BuyersList = () => {
       Header: "USER GROUPS / USERS",
       Cell: ({row}) => (
         <ButtonGroup>
-          <Button
-            onClick={() => router.push(`/buyers/${row.original.ID}/usergroups`)}
-            variant="secondaryButton"
-          >
+          <Button onClick={() => router.push(`/buyers/${row.original.ID}/usergroups`)} variant="secondaryButton">
             User Groups ({buyersMeta[row.original.ID]["userGroupsCount"]})
           </Button>
-          <Button
-            onClick={() => router.push(`/buyers/${row.original.ID}/users`)}
-            variant="secondaryButton"
-          >
+          <Button onClick={() => router.push(`/buyers/${row.original.ID}/users`)} variant="secondaryButton">
             Users ({buyersMeta[row.original.ID]["usersCount"]})
           </Button>
         </ButtonGroup>
@@ -148,9 +119,7 @@ const BuyersList = () => {
       Header: "CATALOGS",
       Cell: ({row}) => (
         <Link href={`/buyers/${row.original.ID}/catalogs`}>
-          <Button variant="secondaryButton">
-            Catalogs ({buyersMeta[row.original.ID]["catalogsCount"]})
-          </Button>
+          <Button variant="secondaryButton">Catalogs ({buyersMeta[row.original.ID]["catalogsCount"]})</Button>
         </Link>
       )
     },
@@ -158,18 +127,10 @@ const BuyersList = () => {
       Header: "ACTIONS",
       Cell: ({row}) => (
         <ButtonGroup>
-          <Button
-            variant="secondaryButton"
-            onClick={() => router.push(`/buyers/${row.original.ID}/`)}
-            leftIcon={<EditIcon />}
-          >
+          <Button variant="secondaryButton" onClick={() => router.push(`/buyers/${row.original.ID}/`)}>
             Edit
           </Button>
-          <Button
-            variant="secondaryButton"
-            onClick={() => deleteBuyer(row.original.ID)}
-            leftIcon={<DeleteIcon />}
-          >
+          <Button variant="secondaryButton" onClick={() => deleteBuyer(row.original.ID)}>
             Delete
           </Button>
         </ButtonGroup>
@@ -188,6 +149,15 @@ const ProtectedBuyersList = () => {
   return (
     <ProtectedContent hasAccess={appPermissions.BuyerManager}>
       <Box padding="GlobalPadding">
+        <HStack justifyContent="space-between" w="100%" mb={5}>
+          <Button onClick={() => router.push(`/buyers/add`)} variant="primaryButton">
+            Create buyer
+          </Button>
+
+          <HStack>
+            <Button variant="secondaryButton">Export CSV</Button>
+          </HStack>
+        </HStack>
         <Card variant="primaryCard">
           <BuyersList />
         </Card>

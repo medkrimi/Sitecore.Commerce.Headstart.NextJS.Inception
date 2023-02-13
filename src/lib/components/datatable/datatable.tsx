@@ -20,14 +20,14 @@ import {
 } from "@chakra-ui/react"
 import {GrFormNext, GrFormPrevious} from "react-icons/gr"
 import React, {useMemo} from "react"
-import {
-  TiArrowSortedDown,
-  TiArrowSortedUp,
-  TiArrowUnsorted
-} from "react-icons/ti"
+import {TiArrowSortedDown, TiArrowSortedUp, TiArrowUnsorted} from "react-icons/ti"
 import {useGlobalFilter, usePagination, useSortBy, useTable} from "react-table"
 
-function SearchDataTable(props) {
+interface SearchDataTableProps {
+  columnsData
+  tableData
+}
+function SearchDataTable(props: SearchDataTableProps) {
   const {columnsData, tableData} = props
   const columns = useMemo(() => columnsData, [columnsData])
   const data = useMemo(() => tableData, [tableData])
@@ -70,11 +70,7 @@ function SearchDataTable(props) {
   const {pageIndex, pageSize} = state
   return (
     <>
-      <Flex
-        direction="column"
-        w="100%"
-        overflowX={{sm: "scroll", lg: "hidden"}}
-      >
+      <Flex direction="column" w="100%" overflowX={{sm: "scroll", lg: "hidden"}}>
         <Flex justify="space-between" align="center" w="100%" px="22px">
           <Stack
             direction={{sm: "column", md: "row"}}
@@ -84,17 +80,10 @@ function SearchDataTable(props) {
             my="24px"
             minW={{sm: "100px", md: "200px"}}
           >
-            <Text
-              fontSize="sm"
-              color="gray.500"
-              fontWeight="normal"
-              mb={{sm: "24px", md: "0px"}}
-            >
+            <Text fontSize="sm" color="gray.500" fontWeight="normal" mb={{sm: "24px", md: "0px"}}>
               Showing {pageSize * pageIndex + 1} to{" "}
-              {pageSize * (pageIndex + 1) <= tableData.length
-                ? pageSize * (pageIndex + 1)
-                : tableData.length}{" "}
-              of {tableData.length} entries
+              {pageSize * (pageIndex + 1) <= tableData.length ? pageSize * (pageIndex + 1) : tableData.length} of{" "}
+              {tableData.length} entries
             </Text>
           </Stack>
           <Input
@@ -113,17 +102,8 @@ function SearchDataTable(props) {
             {headerGroups.map((headerGroup, index) => (
               <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
                 {headerGroup.headers.map((column, index) => (
-                  <Th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    pe="0px"
-                    key={index}
-                  >
-                    <Flex
-                      justify="space-between"
-                      align="center"
-                      fontSize={{sm: "10px", lg: "12px"}}
-                      color="gray.400"
-                    >
+                  <Th {...column.getHeaderProps(column.getSortByToggleProps())} pe="0px" key={index}>
+                    <Flex justify="space-between" align="center" fontSize={{sm: "10px", lg: "12px"}} color="gray.400">
                       {column.render("Header")}
                       {column.canSort && (
                         <Icon
@@ -153,11 +133,7 @@ function SearchDataTable(props) {
                 <Tr {...row.getRowProps()} key={index}>
                   {row.cells.map((cell, index) => {
                     return (
-                      <Td
-                        {...cell.getCellProps()}
-                        fontSize={{sm: "14px"}}
-                        key={index}
-                      >
+                      <Td {...cell.getCellProps()} fontSize={{sm: "14px"}} key={index}>
                         {cell.render("Cell")}
                       </Td>
                     )
@@ -168,13 +144,7 @@ function SearchDataTable(props) {
           </Tbody>
         </Table>
         {tableData.length > 10 && (
-          <Flex
-            direction={{sm: "column", md: "row"}}
-            justify="space-between"
-            align="center"
-            px="22px"
-            w="100%"
-          >
+          <Flex direction={{sm: "column", md: "row"}} justify="space-between" align="center" px="22px" w="100%">
             <Select
               variant="main"
               value={pageSize}
@@ -204,9 +174,7 @@ function SearchDataTable(props) {
                 borderRadius="8px"
                 bg="#fff"
                 border="1px solid lightgray"
-                display={
-                  pageSize === 5 ? "none" : canPreviousPage ? "flex" : "none"
-                }
+                display={pageSize === 5 ? "none" : canPreviousPage ? "flex" : "none"}
                 _hover={{
                   bg: "gray.200",
                   opacity: "0.7",
@@ -241,23 +209,14 @@ function SearchDataTable(props) {
                       h="40px"
                       borderRadius="8px"
                       bg={pageNumber === pageIndex + 1 ? "blue.500" : "#fff"}
-                      border={
-                        pageNumber === pageIndex + 1
-                          ? "none"
-                          : "1px solid lightgray"
-                      }
+                      border={pageNumber === pageIndex + 1 ? "none" : "1px solid lightgray"}
                       _hover={{
                         opacity: "0.7",
                         borderColor: "gray.500"
                       }}
                       key={index}
                     >
-                      <Text
-                        fontSize="sm"
-                        color={
-                          pageNumber === pageIndex + 1 ? "#fff" : "gray.600"
-                        }
-                      >
+                      <Text fontSize="sm" color={pageNumber === pageIndex + 1 ? "#fff" : "gray.600"}>
                         {pageNumber}
                       </Text>
                     </Button>
@@ -273,9 +232,7 @@ function SearchDataTable(props) {
                 borderRadius="8px"
                 bg="#fff"
                 border="1px solid lightgray"
-                display={
-                  pageSize === 5 ? "none" : canNextPage ? "flex" : "none"
-                }
+                display={pageSize === 5 ? "none" : canNextPage ? "flex" : "none"}
                 _hover={{
                   bg: "gray.200",
                   opacity: "0.7",
