@@ -20,17 +20,18 @@ import {
   Text,
   VStack
 } from "@chakra-ui/react"
-import {useEffect, useRef, useState} from "react"
+import {useCallback, useEffect, useMemo, useRef, useState} from "react"
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
 import Link from "../../lib/components/navigation/Link"
 import {NextSeo} from "next-seo"
-import {Orders} from "ordercloud-javascript-sdk"
+import {ListPage, Order, Orders} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {dateHelper} from "lib/utils/date.utils"
 import {priceHelper} from "lib/utils/price.utils"
-import SearchDataTable from "lib/components/datatable/datatable"
+import {DataTable} from "lib/components/data-table/DataTable"
+import {OrderCloudTableColumn, OrderCloudTableFilters} from "lib/components/ordercloud-table"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -47,51 +48,56 @@ export async function getServerSideProps() {
   }
 }
 const OrdersPage = () => {
-  const [orders, setOrders] = useState([])
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
   const cancelRef = useRef()
+  const [tableData, setTableData] = useState(null as ListPage<Order>)
+  const [filters, setFilters] = useState({} as OrderCloudTableFilters)
 
   const requestExportCSV = () => {}
 
-  useEffect(() => {
-    const getOrders = async () => {
-      const ordersList = await Orders.List("All")
-      setOrders(ordersList.Items)
-    }
-    getOrders()
+  const fetchData = useCallback(async (filters: OrderCloudTableFilters) => {
+    setFilters(filters)
+    const ordersList = await Orders.List("All", filters)
+    setTableData(ordersList)
   }, [])
 
-  const columnsData = [
-    {
-      Header: "ORDER ID",
-      accessor: "ID",
-      Cell: ({value, row}) => <Link href={`/orders/${row.original.ID}`}>{value}</Link>
-    },
-    {
-      Header: "DATE SUBMITTED",
-      accessor: "DateSubmitted",
-      Cell: ({value}) => dateHelper.formatDate(value)
-    },
-    {
-      Header: "STATUS",
-      accessor: "Status"
-    },
-    {
-      Header: "CUSTOMER",
-      accessor: "FromUserID",
-      Cell: ({row}) => `${row.original.FromUser.FirstName} ${row.original.FromUser.LastName}`
-    },
-    {
-      Header: "# OF LINE ITEMS",
-      accessor: "LineItemCount"
-    },
-    {
-      Header: "TOTAL",
-      accessor: "Total",
-      Cell: ({value}) => priceHelper.formatPrice(value)
-    }
-  ]
+  useEffect(() => {
+    fetchData({})
+  }, [fetchData])
+
+  const columnsData = useMemo(
+    (): OrderCloudTableColumn<Order>[] => [
+      {
+        Header: "ORDER ID",
+        accessor: "ID",
+        Cell: ({value, row}) => <Link href={`/orders/${row.original.ID}`}>{value}</Link>
+      },
+      {
+        Header: "DATE SUBMITTED",
+        accessor: "DateSubmitted",
+        Cell: ({value}) => dateHelper.formatDate(value)
+      },
+      {
+        Header: "STATUS",
+        accessor: "Status"
+      },
+      {
+        Header: "CUSTOMER",
+        accessor: "FromUserID",
+        Cell: ({row}) => `${row.original.FromUser.FirstName} ${row.original.FromUser.LastName}`
+      },
+      {
+        Header: "# OF LINE ITEMS",
+        accessor: "LineItemCount"
+      },
+      {
+        Header: "TOTAL",
+        accessor: "Total",
+        Cell: ({value}) => priceHelper.formatPrice(value)
+      }
+    ],
+    []
+  )
 
   return (
     <Container maxW="full">
@@ -149,7 +155,7 @@ const OrdersPage = () => {
         </HStack>
       </HStack>
       <Card variant="primaryCard">
-        <SearchDataTable tableData={orders} columnsData={columnsData} />
+        <DataTable data={tableData} columns={columnsData} filters={filters} fetchData={fetchData} />
       </Card>
 
       <AlertDialog
@@ -171,17 +177,10 @@ const OrdersPage = () => {
             </AlertDialogBody>
             <AlertDialogFooter>
               <HStack justifyContent="space-between" w="100%">
-                <Button
-                  ref={cancelRef}
-                  onClick={() => setExportCSVDialogOpen(false)}
-                  disabled={loading}
-                  variant="secondaryButton"
-                >
+                <Button ref={cancelRef} onClick={() => setExportCSVDialogOpen(false)} variant="secondaryButton">
                   Cancel
                 </Button>
-                <Button onClick={requestExportCSV} disabled={loading}>
-                  {loading ? <Spinner color="brand.500" /> : "Export Orders"}
-                </Button>
+                <Button onClick={requestExportCSV}>Export Orders</Button>
               </HStack>
             </AlertDialogFooter>
           </AlertDialogContent>

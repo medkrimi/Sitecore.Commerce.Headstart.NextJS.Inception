@@ -12,9 +12,9 @@ export const catalogsService = {
   saveAssignment
 }
 
-async function list() {
+async function list(filters?) {
   console.log("catalogsService::List")
-  return await Catalogs.List()
+  return await Catalogs.List(filters)
 }
 
 async function listAssignements(buyerID) {

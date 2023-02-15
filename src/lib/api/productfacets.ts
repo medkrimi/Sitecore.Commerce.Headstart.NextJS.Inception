@@ -8,9 +8,9 @@ export const productfacetsService = {
   delete: _delete
 }
 
-async function getAll() {
+async function getAll(filters?) {
   //console.log("productfacetsService::getAll")
-  return await ProductFacets.List()
+  return await ProductFacets.List(filters)
 }
 
 async function getById(id) {

@@ -21,8 +21,8 @@ import {
   Text,
   VStack
 } from "@chakra-ui/react"
-import {OrderReturns} from "ordercloud-javascript-sdk"
-import React, {useRef} from "react"
+import {ListPage, OrderReturn, OrderReturns} from "ordercloud-javascript-sdk"
+import React, {useCallback, useMemo, useRef} from "react"
 import {useEffect, useState} from "react"
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
@@ -31,7 +31,8 @@ import {dateHelper} from "lib/utils/date.utils"
 import {priceHelper} from "lib/utils/price.utils"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
-import SearchDataTable from "lib/components/datatable/datatable"
+import {DataTable} from "lib/components/data-table/DataTable"
+import {OrderCloudTableColumn, OrderCloudTableFilters} from "lib/components/ordercloud-table"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -49,52 +50,56 @@ export async function getServerSideProps() {
 }
 
 const ReturnsPage = () => {
-  const [returns, setReturns] = useState([])
-  const getReturns = async () => {
-    const returnsList = await OrderReturns.List({sortBy: ["DateSubmitted"]})
-    setReturns(returnsList.Items)
-  }
-
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
+  const requestExportCSV = () => {}
   const [loading, setLoading] = useState(false)
   const cancelRef = useRef()
+  const [tableData, setTableData] = useState(null as ListPage<OrderReturn>)
+  const [filters, setFilters] = useState({} as OrderCloudTableFilters)
 
-  const columnsData = [
-    {
-      Header: "ID",
-      accessor: "ID",
-      Cell: ({value, row}) => <Link href={`/returns/${row.original.ID}`}>{value}</Link>
-    },
-    {
-      Header: "OrderID",
-      accessor: "OrderID",
-      Cell: ({value, row}) => <Link href={`/orders/${row.original.OrderID}`}>{value}</Link>
-    },
-    {
-      Header: "DATE CREATED",
-      accessor: "DateCreated",
-      Cell: ({value}) => dateHelper.formatDate(value)
-    },
-    {
-      Header: "STATUS",
-      accessor: "Status"
-    },
-    {
-      Header: "# OF LINE ITEMS",
-      Cell: ({row}) => `${row.original.ItemsToReturn?.length}`
-    },
-    {
-      Header: "Refund Amount",
-      accessor: "RefundAmount",
-      Cell: ({value}) => priceHelper.formatPrice(value)
-    }
-  ]
-
-  const requestExportCSV = () => {}
+  const fetchData = useCallback(async (filters: OrderCloudTableFilters) => {
+    setFilters(filters)
+    const returnsList = await OrderReturns.List(filters)
+    setTableData(returnsList)
+  }, [])
 
   useEffect(() => {
-    getReturns()
-  }, [])
+    fetchData({sortBy: ["DateSubmitted"]})
+  }, [fetchData])
+
+  const columnsData = useMemo(
+    (): OrderCloudTableColumn<OrderReturn>[] => [
+      {
+        Header: "ID",
+        accessor: "ID",
+        Cell: ({value, row}) => <Link href={`/returns/${row.original.ID}`}>{value}</Link>
+      },
+      {
+        Header: "OrderID",
+        accessor: "OrderID",
+        Cell: ({value, row}) => <Link href={`/orders/${row.original.OrderID}`}>{value}</Link>
+      },
+      {
+        Header: "DATE CREATED",
+        accessor: "DateCreated",
+        Cell: ({value}) => dateHelper.formatDate(value)
+      },
+      {
+        Header: "STATUS",
+        accessor: "Status"
+      },
+      {
+        Header: "# OF LINE ITEMS",
+        Cell: ({row}) => `${row.original.ItemsToReturn?.length}`
+      },
+      {
+        Header: "Refund Amount",
+        accessor: "RefundAmount",
+        Cell: ({value}) => priceHelper.formatPrice(value)
+      }
+    ],
+    []
+  )
 
   return (
     <Container maxW="full">
@@ -148,7 +153,7 @@ const ReturnsPage = () => {
         </HStack>
       </HStack>
       <Card variant="primaryCard">
-        <SearchDataTable tableData={returns} columnsData={columnsData} />
+        <DataTable data={tableData} columns={columnsData} filters={filters} fetchData={fetchData} />
       </Card>
       <AlertDialog
         isOpen={isExportCSVDialogOpen}

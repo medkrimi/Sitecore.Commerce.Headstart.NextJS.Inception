@@ -23,14 +23,13 @@ import React, {useMemo} from "react"
 import {TiArrowSortedDown, TiArrowSortedUp, TiArrowUnsorted} from "react-icons/ti"
 import {useGlobalFilter, usePagination, useSortBy, useTable} from "react-table"
 
-interface SearchDataTableProps {
-  columnsData
-  tableData
+interface ReactTableProps {
+  columns
+  data
 }
-function SearchDataTable(props: SearchDataTableProps) {
-  const {columnsData, tableData} = props
-  const columns = useMemo(() => columnsData, [columnsData])
-  const data = useMemo(() => tableData, [tableData])
+export function ReactTable(props: ReactTableProps) {
+  const columns = useMemo(() => props.columns, [props.columns])
+  const data = useMemo(() => props.data, [props.data])
   const tableInstance = useTable(
     // The type definition for react-table is dependent upon which options
     // are passed in, if you change the options make sure to update types/react-table.config.d.ts accordingly
@@ -82,8 +81,8 @@ function SearchDataTable(props: SearchDataTableProps) {
           >
             <Text fontSize="sm" color="gray.500" fontWeight="normal" mb={{sm: "24px", md: "0px"}}>
               Showing {pageSize * pageIndex + 1} to{" "}
-              {pageSize * (pageIndex + 1) <= tableData.length ? pageSize * (pageIndex + 1) : tableData.length} of{" "}
-              {tableData.length} entries
+              {pageSize * (pageIndex + 1) <= data.length ? pageSize * (pageIndex + 1) : data.length} of {data.length}{" "}
+              entries
             </Text>
           </Stack>
           <Input
@@ -143,7 +142,7 @@ function SearchDataTable(props: SearchDataTableProps) {
             })}
           </Tbody>
         </Table>
-        {tableData.length > 10 && (
+        {data.length > 10 && (
           <Flex direction={{sm: "column", md: "row"}} justify="space-between" align="center" px="22px" w="100%">
             <Select
               variant="main"
@@ -157,9 +156,9 @@ function SearchDataTable(props: SearchDataTableProps) {
             >
               <option>5</option>
               <option>10</option>
-              {tableData.length > 15 && <option>15</option>}
-              {tableData.length > 20 && <option>20</option>}
-              {tableData.length > 25 && <option>25</option>}=
+              {data.length > 15 && <option>15</option>}
+              {data.length > 20 && <option>20</option>}
+              {data.length > 25 && <option>25</option>}=
             </Select>
             <Text fontSize="xs" color="gray.400" fontWeight="normal">
               entries per page
@@ -248,5 +247,3 @@ function SearchDataTable(props: SearchDataTableProps) {
     </>
   )
 }
-
-export default SearchDataTable

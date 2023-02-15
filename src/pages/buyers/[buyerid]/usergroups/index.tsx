@@ -1,12 +1,14 @@
 import {Box, Button, ButtonGroup, HStack} from "@chakra-ui/react"
-import {useEffect, useState} from "react"
+import {useCallback, useEffect, useMemo, useState} from "react"
 import Card from "lib/components/card/Card"
 import Link from "lib/components/navigation/Link"
 import React from "react"
-import UserGroupsDataTable from "lib/components/datatable/datatable"
 import {useRouter} from "next/router"
 import {userGroupsService} from "lib/api"
 import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
+import {DataTable} from "lib/components/data-table/DataTable"
+import {OrderCloudTableColumn, OrderCloudTableFilters} from "lib/components/ordercloud-table"
+import {ListPage, UserGroup} from "ordercloud-javascript-sdk"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -29,58 +31,65 @@ const UserGroupsList = () => {
   const router = useRouter()
   const successToast = useSuccessToast()
   const errorToast = useErrorToast()
+  const [tableData, setTableData] = useState(null as ListPage<UserGroup>)
+  const [filters, setFilters] = useState({} as OrderCloudTableFilters)
+
+  const fetchData = useCallback(
+    async (filters: OrderCloudTableFilters) => {
+      setFilters(filters)
+      const userGroupsList = await userGroupsService.list(router.query.buyerid, filters)
+      setTableData(userGroupsList)
+    },
+    [router.query.buyerid]
+  )
+
   useEffect(() => {
-    initUserGroupsData(router.query.buyerid)
-  }, [router.query.buyerid])
+    fetchData({})
+  }, [fetchData])
 
-  async function initUserGroupsData(buyerid) {
-    const userGroupsList = await userGroupsService.list(buyerid)
-    setUserGroup(userGroupsList.Items)
-  }
-
-  async function deleteUserGroup(userGroupid) {
-    try {
-      await userGroupsService.delete(router.query.buyerid, userGroupid)
-      initUserGroupsData(router.query.buyerid)
+  const deleteUserGroup = useCallback(
+    async (userGroupId: string) => {
+      await userGroupsService.delete(router.query.buyerid, userGroupId)
+      fetchData({})
       successToast({
         description: "Buyer deleted successfully."
       })
-    } catch (e) {
-      errorToast({
-        description: "Buyer delete failed"
-      })
-    }
-  }
+    },
+    [fetchData, router.query.buyerid, successToast]
+  )
 
-  const columnsData = [
-    {
-      Header: "Name",
-      accessor: "Name",
-      Cell: ({value, row}) => (
-        <Link href={`/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`}>{value}</Link>
-      )
-    },
-    {
-      Header: "DESCRIPTION",
-      accessor: "Description"
-    },
-    {
-      Header: "ACTIONS",
-      Cell: ({row}) => (
-        <ButtonGroup>
-          <Button
-            variant="secondaryButton"
-            onClick={() => router.push(`/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`)}
-          >
-            Edit
-          </Button>
-          <Button variant="secondaryButton" onClick={() => deleteUserGroup(row.original.ID)}>
-            Delete
-          </Button>
-        </ButtonGroup>
-      )
-    }
-  ]
+  const columnsData = useMemo(
+    (): OrderCloudTableColumn<UserGroup>[] => [
+      {
+        Header: "Name",
+        accessor: "Name",
+        Cell: ({value, row}) => (
+          <Link href={`/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`}>{value}</Link>
+        )
+      },
+      {
+        Header: "DESCRIPTION",
+        accessor: "Description"
+      },
+      {
+        Header: "ACTIONS",
+        Cell: ({row}) => (
+          <ButtonGroup>
+            <Button
+              variant="secondaryButton"
+              onClick={() => router.push(`/buyers/${router.query.buyerid}/usergroups/${row.original.ID}`)}
+            >
+              Edit
+            </Button>
+            <Button variant="secondaryButton" onClick={() => deleteUserGroup(row.original.ID)}>
+              Delete
+            </Button>
+          </ButtonGroup>
+        )
+      }
+    ],
+    [deleteUserGroup, router]
+  )
 
   return (
     <>
@@ -94,7 +103,7 @@ const UserGroupsList = () => {
           </HStack>
         </HStack>
         <Card variant="primaryCard">
-          <UserGroupsDataTable tableData={userGroups} columnsData={columnsData} />
+          <DataTable data={tableData} columns={columnsData} filters={filters} fetchData={fetchData} />
         </Card>
       </Box>
     </>

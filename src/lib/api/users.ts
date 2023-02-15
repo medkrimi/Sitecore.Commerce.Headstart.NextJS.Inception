@@ -9,9 +9,9 @@ export const usersService = {
   getUsersCountByBuyerID
 }
 
-async function list(buyerID) {
+async function list(buyerID, filters?) {
   console.log("usersService::List")
-  return await Users.List(buyerID)
+  return await Users.List(buyerID, filters)
 }
 
 async function getById(buyerID, userID) {
