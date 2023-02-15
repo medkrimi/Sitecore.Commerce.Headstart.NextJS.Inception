@@ -9,20 +9,20 @@ import {
   ButtonGroup,
   Container,
   HStack,
-  Spinner,
   Text,
   Link
 } from "@chakra-ui/react"
-import {useCallback, useEffect, useRef, useState} from "react"
+import {useCallback, useEffect, useMemo, useRef, useState} from "react"
 import Card from "lib/components/card/Card"
 import {NextSeo} from "next-seo"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {useRouter} from "next/router"
 import {useSuccessToast} from "lib/hooks/useToast"
-import SearchDataTable from "lib/components/datatable/datatable"
-import {AdminAddresses, Address} from "ordercloud-javascript-sdk"
+import {AdminAddresses, Address, ListPage} from "ordercloud-javascript-sdk"
 import {addressHelper} from "lib/utils/address.utils"
+import {DataTable} from "lib/components/data-table/DataTable"
+import {OrderCloudTableFilters} from "lib/components/ordercloud-table"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -42,59 +42,68 @@ export async function getServerSideProps() {
 const AdminAddressesPage = () => {
   const router = useRouter()
   const successToast = useSuccessToast()
-  const [addresses, setAddresses] = useState([] as Address[])
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const cancelRef = useRef()
-
   const requestExportCSV = () => {}
+  const cancelRef = useRef()
+  const [tableData, setTableData] = useState(null as ListPage<Address>)
+  const [filters, setFilters] = useState({} as OrderCloudTableFilters)
 
-  const getAdminAddresses = useCallback(async () => {
-    const adminAddresses = await AdminAddresses.List()
-    setAddresses(adminAddresses.Items)
+  const fetchData = useCallback(async (filters: OrderCloudTableFilters) => {
+    setFilters(filters)
+    const adminAddresses = await AdminAddresses.List(filters)
+    setTableData(adminAddresses)
   }, [])
 
   useEffect(() => {
-    getAdminAddresses()
-  }, [getAdminAddresses])
+    fetchData({})
+  }, [fetchData])
 
-  async function deleteAddress(addressId: string): Promise<void> {
-    await AdminAddresses.Delete(addressId)
-    await getAdminAddresses()
-    successToast({
-      description: "Address deleted successfully"
-    })
-  }
+  const deleteAddress = useCallback(
+    async (addressId: string) => {
+      await AdminAddresses.Delete(addressId)
+      await fetchData({})
+      successToast({
+        description: "Address deleted successfully"
+      })
+    },
+    [fetchData, successToast]
+  )
 
-  const columnsData = [
-    {
-      Header: "ID",
-      accessor: "ID",
-      Cell: ({value, row}) => <Link href={`/settings/adminaddresses/${row.original.ID}`}>{value}</Link>
-    },
-    {
-      Header: "ADDRESS NAME",
-      accessor: "AddressName",
-      Cell: ({value, row}) => <Link href={`/settings/adminaddresses/${row.original.ID}`}>{value}</Link>
-    },
-    {
-      Header: "ADDRESS",
-      Cell: ({row}: {row}) => addressHelper.formatOneLineAddress(row.original)
-    },
-    {
-      Header: "ACTIONS",
-      Cell: ({row}) => (
-        <ButtonGroup>
-          <Button variant="secondaryButton" onClick={() => router.push(`/settings/adminaddresses/${row.original.ID}/`)}>
-            Edit
-          </Button>
-          <Button variant="secondaryButton" onClick={() => deleteAddress(row.original.ID)}>
-            Delete
-          </Button>
-        </ButtonGroup>
-      )
-    }
-  ]
+  const columnsData = useMemo(
+    () => [
+      {
+        Header: "ID",
+        accessor: "ID",
+        Cell: ({value, row}) => <Link href={`/settings/adminaddresses/${row.original.ID}`}>{value}</Link>
+      },
+      {
+        Header: "ADDRESS NAME",
+        accessor: "AddressName",
+        Cell: ({value, row}) => <Link href={`/settings/adminaddresses/${row.original.ID}`}>{value}</Link>
+      },
+      {
+        Header: "ADDRESS",
+        Cell: ({row}: {row}) => addressHelper.formatOneLineAddress(row.original)
+      },
+      {
+        Header: "ACTIONS",
+        Cell: ({row}) => (
+          <ButtonGroup>
+            <Button
+              variant="secondaryButton"
+              onClick={() => router.push(`/settings/adminaddresses/${row.original.ID}/`)}
+            >
+              Edit
+            </Button>
+            <Button variant="secondaryButton" onClick={() => deleteAddress(row.original.ID)}>
+              Delete
+            </Button>
+          </ButtonGroup>
+        )
+      }
+    ],
+    [deleteAddress, router]
+  )
 
   return (
     <Container maxW="full">
@@ -110,7 +119,7 @@ const AdminAddressesPage = () => {
         </HStack>
       </HStack>
       <Card variant="primaryCard">
-        <SearchDataTable tableData={addresses} columnsData={columnsData}></SearchDataTable>
+        <DataTable data={tableData} columns={columnsData} filters={filters} fetchData={fetchData}></DataTable>
       </Card>
       <AlertDialog
         isOpen={isExportCSVDialogOpen}
@@ -131,17 +140,10 @@ const AdminAddressesPage = () => {
             </AlertDialogBody>
             <AlertDialogFooter>
               <HStack justifyContent="space-between" w="100%">
-                <Button
-                  ref={cancelRef}
-                  onClick={() => setExportCSVDialogOpen(false)}
-                  disabled={loading}
-                  variant="secondaryButton"
-                >
+                <Button ref={cancelRef} onClick={() => setExportCSVDialogOpen(false)} variant="secondaryButton">
                   Cancel
                 </Button>
-                <Button onClick={requestExportCSV} disabled={loading}>
-                  {loading ? <Spinner color="brand.500" /> : "Export Admin Addresses"}
-                </Button>
+                <Button onClick={requestExportCSV}>Export Admin Addresses</Button>
               </HStack>
             </AlertDialogFooter>
           </AlertDialogContent>

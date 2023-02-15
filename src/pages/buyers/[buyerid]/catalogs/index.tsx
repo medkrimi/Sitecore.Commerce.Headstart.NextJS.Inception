@@ -1,12 +1,14 @@
 import {Box, Button, ButtonGroup, HStack, Switch, Tooltip} from "@chakra-ui/react"
-import {useEffect, useState} from "react"
+import {useCallback, useEffect, useMemo, useState} from "react"
 import Card from "lib/components/card/Card"
-import CatalogsDataTable from "lib/components/datatable/datatable"
 import Link from "lib/components/navigation/Link"
 import React from "react"
 import {catalogsService} from "lib/api"
 import {useRouter} from "next/router"
-import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
+import {useSuccessToast} from "lib/hooks/useToast"
+import {DataTable} from "lib/components/data-table/DataTable"
+import {OrderCloudTableFilters} from "lib/components/ordercloud-table"
+import {ListPage, Catalog} from "ordercloud-javascript-sdk"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -25,88 +27,95 @@ export async function getServerSideProps() {
 }
 
 const CatalogsList = () => {
-  const [catalogs, setCatalogs] = useState([])
   const router = useRouter()
   const successToast = useSuccessToast()
-  const errorToast = useErrorToast()
+  const [tableData, setTableData] = useState(null as ListPage<Catalog>)
+  const [filters, setFilters] = useState({} as OrderCloudTableFilters)
+
+  const fetchData = useCallback(
+    async (filters: OrderCloudTableFilters) => {
+      setFilters(filters)
+      const catalogsList = await catalogsService.getCatalogsbyBuyerID(router.query.buyerid)
+      setTableData(catalogsList)
+    },
+    [router.query.buyerid]
+  )
+
   useEffect(() => {
-    initCatalogsData(router.query.buyerid)
-  }, [router.query.buyerid])
+    fetchData({})
+  }, [fetchData])
 
-  async function initCatalogsData(buyerid) {
-    const catalogsList = await catalogsService.getCatalogsbyBuyerID(buyerid)
-    setCatalogs(catalogsList.Items)
-  }
-
-  async function deleteCatalog(catalogid) {
-    try {
+  const deleteCatalog = useCallback(
+    async (catalogid: string) => {
       await catalogsService.delete(catalogid)
-      initCatalogsData(router.query.buyerid)
+      fetchData({})
       successToast({
         description: "Buyer deleted successfully."
       })
-    } catch (e) {
-      errorToast({
-        description: "Buyer delete failed"
-      })
-    }
-  }
+    },
+    [fetchData, successToast]
+  )
 
-  const columnsData = [
-    {
-      Header: "Catalog ID",
-      accessor: "ID",
-      Cell: ({value, row}) => <Link href={`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}`}>{value}</Link>
-    },
-    {
-      Header: "Name",
-      accessor: "Name"
-    },
-    {
-      Header: "Description",
-      accessor: "Description"
-    },
-    {
-      Header: "Active",
-      accessor: "Active",
-      Cell: ({value, row}) => (
-        <>
-          <Tooltip label={value ? "Active" : "Non active"} placement="bottom">
-            <Switch colorScheme="teal" size="lg" isReadOnly isChecked={value} />
-          </Tooltip>
-        </>
-      )
-    },
-    {
-      Header: "Category Count",
-      accessor: "CategoryCount",
-      Cell: ({row, value}) => (
-        <Link href={`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}/categories`}>
-          <Button variant="secondaryButton">Categories ({value})</Button>
-        </Link>
-      )
-    },
-    {
-      Header: "Marketplace",
-      accessor: "OwnerID"
-    },
-    {
-      Header: "ACTIONS",
-      Cell: ({row}) => (
-        <ButtonGroup>
-          <Button
-            variant="secondaryButton"
-            onClick={() => router.push(`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}`)}
-          >
-            Edit
-          </Button>
-          <Button variant="secondaryButton" onClick={() => deleteCatalog(row.original.ID)}>
-            Delete
-          </Button>
-        </ButtonGroup>
-      )
-    }
-  ]
+  const columnsData = useMemo(
+    () => [
+      {
+        Header: "Catalog ID",
+        accessor: "ID",
+        Cell: ({value, row}) => (
+          <Link href={`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}`}>{value}</Link>
+        )
+      },
+      {
+        Header: "Name",
+        accessor: "Name"
+      },
+      {
+        Header: "Description",
+        accessor: "Description"
+      },
+      {
+        Header: "Active",
+        accessor: "Active",
+        Cell: ({value, row}) => (
+          <>
+            <Tooltip label={value ? "Active" : "Non active"} placement="bottom">
+              <Switch colorScheme="teal" size="lg" isReadOnly isChecked={value} />
+            </Tooltip>
+          </>
+        )
+      },
+      {
+        Header: "Category Count",
+        accessor: "CategoryCount",
+        Cell: ({row, value}) => (
+          <Link href={`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}/categories`}>
+            <Button variant="secondaryButton">Categories ({value})</Button>
+          </Link>
+        )
+      },
+      {
+        Header: "Marketplace",
+        accessor: "OwnerID"
+      },
+      {
+        Header: "ACTIONS",
+        Cell: ({row}) => (
+          <ButtonGroup>
+            <Button
+              variant="secondaryButton"
+              onClick={() => router.push(`/buyers/${router.query.buyerid}/catalogs/${row.original.ID}`)}
+            >
+              Edit
+            </Button>
+            <Button variant="secondaryButton" onClick={() => deleteCatalog(row.original.ID)}>
+              Delete
+            </Button>
+          </ButtonGroup>
+        )
+      }
+    ],
+    [deleteCatalog, router]
+  )
 
   return (
     <>
@@ -120,7 +129,7 @@ const CatalogsList = () => {
           </HStack>
         </HStack>
         <Card variant="primaryCard">
-          <CatalogsDataTable tableData={catalogs} columnsData={columnsData} />
+          <DataTable data={tableData} columns={columnsData} filters={filters} fetchData={fetchData} />
         </Card>
       </Box>
     </>

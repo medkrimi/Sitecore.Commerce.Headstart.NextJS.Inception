@@ -8,9 +8,9 @@ export const suppliersService = {
   delete: _delete
 }
 
-async function list() {
+async function list(filters?) {
   console.log("suppliersService::List")
-  return await Suppliers.List()
+  return await Suppliers.List(filters)
 }
 
 async function getById(supplierID) {

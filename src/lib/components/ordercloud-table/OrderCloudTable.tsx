@@ -78,7 +78,7 @@ export function OrderCloudTable<T = any>({columns, data, fetchData, filters: app
       cells: columns.map((column) => {
         const value = get(row, column.accessor, null)
         return {
-          value: column.Cell?.({value, row}) || value
+          value: column.Cell?.({value, row: {original: row}}) || value
         }
       })
     }))

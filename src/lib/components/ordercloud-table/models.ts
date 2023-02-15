@@ -11,7 +11,7 @@ export interface OrderCloudTableFilters {
 export interface OrderCloudTableColumn<T> {
   Header: string
   accessor?: string
-  Cell?: ({row, value}: {row: T; value: string}) => ReactElement
+  Cell?: ({row, value}: {row: {original: T}; value: any}) => ReactElement | string
   canSort?: boolean
 }
 

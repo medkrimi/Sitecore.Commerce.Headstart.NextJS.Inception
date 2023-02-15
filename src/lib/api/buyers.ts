@@ -8,9 +8,9 @@ export const buyersService = {
   delete: _delete
 }
 
-async function list() {
+async function list(filters?) {
   console.log("buyersService::List")
-  return await Buyers.List()
+  return await Buyers.List(filters)
 }
 
 async function getById(buyerID) {

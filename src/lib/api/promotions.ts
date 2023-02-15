@@ -10,9 +10,9 @@ export const promotionsService = {
   buildValueExpression
 }
 
-async function list() {
+async function list(filters?) {
   console.log("promotionsService::getAll")
-  return await Promotions.List()
+  return await Promotions.List(filters)
 }
 
 async function getById(id) {

@@ -10,21 +10,21 @@ import {
   Container,
   HStack,
   Icon,
-  Spinner,
   Text,
   Link
 } from "@chakra-ui/react"
-import {useCallback, useEffect, useRef, useState} from "react"
+import {useCallback, useEffect, useRef, useState, useMemo} from "react"
 import Card from "lib/components/card/Card"
 import {NextSeo} from "next-seo"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {useRouter} from "next/router"
-import {useErrorToast, useSuccessToast} from "lib/hooks/useToast"
-import SearchDataTable from "lib/components/datatable/datatable"
-import {AdminUsers} from "ordercloud-javascript-sdk"
+import {useSuccessToast} from "lib/hooks/useToast"
+import {AdminUsers, ListPage, User} from "ordercloud-javascript-sdk"
 import {IoMdClose} from "react-icons/io"
 import {MdCheck} from "react-icons/md"
+import {OrderCloudTable} from "lib/components/ordercloud-table/OrderCloudTable"
+import {OrderCloudTableColumn, OrderCloudTableFilters} from "lib/components/ordercloud-table/models"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -44,71 +44,76 @@ export async function getServerSideProps() {
 const AdminUsersPage = () => {
   const router = useRouter()
   const successToast = useSuccessToast()
-  const errorToast = useErrorToast()
-  const [adminUsers, setAdminUsers] = useState([])
   const [isExportCSVDialogOpen, setExportCSVDialogOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
   const cancelRef = useRef()
-
   const requestExportCSV = () => {}
+  const [tableData, setTableData] = useState(null as ListPage<User>)
+  const [filters, setFilters] = useState({} as OrderCloudTableFilters)
 
-  const getAdminUsers = useCallback(async () => {
-    const adminUsersList = await AdminUsers.List()
-    setAdminUsers(adminUsersList.Items)
+  const fetchData = useCallback(async (filters: OrderCloudTableFilters) => {
+    setFilters(filters)
+    const adminUsersList = await AdminUsers.List(filters)
+    setTableData(adminUsersList)
   }, [])
 
   useEffect(() => {
-    getAdminUsers()
-  }, [getAdminUsers])
+    fetchData({})
+  }, [fetchData])
 
-  async function deleteAdminUser(userId: string): Promise<void> {
-    await AdminUsers.Delete(userId)
-    await getAdminUsers()
-    successToast({
-      description: "User deleted successfully"
-    })
-  }
+  const deleteAdminUser = useCallback(
+    async (userId: string) => {
+      await AdminUsers.Delete(userId)
+      await fetchData({})
+      successToast({
+        description: "User deleted successfully"
+      })
+    },
+    [fetchData, successToast]
+  )
 
-  const columnsData = [
-    {
-      Header: "FIRSTNAME",
-      accessor: "FirstName",
-      Cell: ({value, row}) => <Link href={`/settings/adminusers/${row.original.ID}`}>{value}</Link>
-    },
-    {
-      Header: "LASTNAME",
-      accessor: "LastName",
-      Cell: ({value, row}) => <Link href={`/settings/adminusers/${row.original.ID}`}>{value}</Link>
-    },
-    {
-      Header: "EMAIL",
-      accessor: "Email"
-    },
-    {
-      Header: "Active",
-      accessor: "Active",
-      Cell: ({value}) => (
-        <>
-          <Icon as={value ? MdCheck : IoMdClose} color={value ? "green.400" : "red.400"} w="20px" h="20px" />
-          <Text>{value ? "Active" : "Non active"}</Text>
-        </>
-      )
-    },
-    {
-      Header: "ACTIONS",
-      accessor: "ID",
-      Cell: ({value}) => (
-        <ButtonGroup>
-          <Button variant="secondaryButton" onClick={() => router.push(`/settings/adminusers/${value}/`)}>
-            Edit
-          </Button>
-          <Button variant="secondaryButton" onClick={() => deleteAdminUser(value)}>
-            Delete
-          </Button>
-        </ButtonGroup>
-      )
-    }
-  ]
+  const columns = useMemo(
+    (): OrderCloudTableColumn<User>[] => [
+      {
+        Header: "FIRSTNAME",
+        accessor: "FirstName",
+        Cell: ({value, row}) => <Link href={`/settings/adminusers/${row.original.ID}`}>{value}</Link>
+      },
+      {
+        Header: "LASTNAME",
+        accessor: "LastName",
+        Cell: ({value, row}) => <Link href={`/settings/adminusers/${row.original.ID}`}>{value}</Link>
+      },
+      {
+        Header: "EMAIL",
+        accessor: "Email"
+      },
+      {
+        Header: "Active",
+        accessor: "Active",
+        Cell: ({value}) => (
+          <>
+            <Icon as={value ? MdCheck : IoMdClose} color={value ? "green.400" : "red.400"} w="20px" h="20px" />
+            <Text>{value ? "Active" : "Non active"}</Text>
+          </>
+        )
+      },
+      {
+        Header: "ACTIONS",
+        accessor: "ID",
+        Cell: ({value}) => (
+          <ButtonGroup>
+            <Button variant="secondaryButton" onClick={() => router.push(`/settings/adminusers/${value}/`)}>
+              Edit
+            </Button>
+            <Button variant="secondaryButton" onClick={() => deleteAdminUser(value)}>
+              Delete
+            </Button>
+          </ButtonGroup>
+        )
+      }
+    ],
+    [deleteAdminUser, router]
+  )
 
   return (
     <Container maxW="full">
@@ -124,7 +129,7 @@ const AdminUsersPage = () => {
         </HStack>
       </HStack>
       <Card variant="primaryCard">
-        <SearchDataTable tableData={adminUsers} columnsData={columnsData}></SearchDataTable>
+        <OrderCloudTable data={tableData} filters={filters} columns={columns} fetchData={fetchData} />
       </Card>
       <AlertDialog
         isOpen={isExportCSVDialogOpen}
@@ -145,17 +150,10 @@ const AdminUsersPage = () => {
             </AlertDialogBody>
             <AlertDialogFooter>
               <HStack justifyContent="space-between" w="100%">
-                <Button
-                  ref={cancelRef}
-                  onClick={() => setExportCSVDialogOpen(false)}
-                  disabled={loading}
-                  variant="secondaryButton"
-                >
+                <Button ref={cancelRef} onClick={() => setExportCSVDialogOpen(false)} variant="secondaryButton">
                   Cancel
                 </Button>
-                <Button onClick={requestExportCSV} disabled={loading}>
-                  {loading ? <Spinner color="brand.500" /> : "Export Admin Users"}
-                </Button>
+                <Button onClick={requestExportCSV}>Export admin users</Button>
               </HStack>
             </AlertDialogFooter>
           </AlertDialogContent>

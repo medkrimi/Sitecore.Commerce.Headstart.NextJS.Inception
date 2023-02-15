@@ -9,9 +9,9 @@ export const userGroupsService = {
   getUserGroupsCountByBuyerID
 }
 
-async function list(buyerID) {
+async function list(buyerID, filters?) {
   console.log("userGroupsService::List")
-  return await UserGroups.List(buyerID)
+  return await UserGroups.List(buyerID, filters)
 }
 
 async function getById(buyerID, userGroupID) {
