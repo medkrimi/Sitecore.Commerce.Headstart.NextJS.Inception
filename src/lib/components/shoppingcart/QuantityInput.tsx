@@ -1,7 +1,7 @@
 import {PriceSchedule} from "ordercloud-javascript-sdk"
 import {ChangeEvent, FunctionComponent} from "react"
 import {Input} from "@chakra-ui/react"
-interface OcQuantityInputProps {
+interface QuantityInputProps {
   controlId: string
   priceSchedule: PriceSchedule
   label?: string
@@ -10,7 +10,7 @@ interface OcQuantityInputProps {
   onChange: (quantity: number) => void
 }
 
-const OcQuantityInput: FunctionComponent<OcQuantityInputProps> = ({
+const QuantityInput: FunctionComponent<QuantityInputProps> = ({
   controlId,
   priceSchedule,
   label = "Quantity",
@@ -54,4 +54,4 @@ const OcQuantityInput: FunctionComponent<OcQuantityInputProps> = ({
   )
 }
 
-export default OcQuantityInput
+export default QuantityInput

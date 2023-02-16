@@ -1,5 +1,4 @@
-import NextLink from "next/link"
-import {Box, Flex, Link, VStack, Heading, Text} from "@chakra-ui/react"
+import {Flex, Link, VStack, Text} from "@chakra-ui/react"
 
 const ShoppingNavigation = () => {
   return (
@@ -8,21 +7,11 @@ const ShoppingNavigation = () => {
         <Text fontWeight={"500"} fontSize={"lg"} mb={2}>
           My Account
         </Text>
-        <NextLink href="/home" passHref>
-          <Link>Check Out</Link>
-        </NextLink>
-        <NextLink href="/blog" passHref>
-          <Link>Cart</Link>
-        </NextLink>
-        <NextLink href="/pages" passHref>
-          <Link>Products</Link>
-        </NextLink>
-        <NextLink href="/shop" passHref>
-          <Link>Shop</Link>
-        </NextLink>
-        <NextLink href="/shop" passHref>
-          <Link>Legal</Link>
-        </NextLink>
+        <Link href="/home">Check Out</Link>
+        <Link href="/blog">Cart</Link>
+        <Link href="/pages">Products</Link>
+        <Link href="/shop">Shop</Link>
+        <Link href="/shop">Legal</Link>
       </VStack>
     </Flex>
   )

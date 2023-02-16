@@ -5,8 +5,6 @@ import Document, {Html, Head, Main, NextScript} from "next/document"
 import Script from "next/script"
 
 import sitecorecommerceTheme from "lib/styles/theme/sitecorecommerce/"
-import playsummitTheme from "lib/styles/theme/playsummit/"
-import industrialTheme from "lib/styles/theme/industrial/"
 
 const APP_NAME = "nextarter-chakra"
 
@@ -28,14 +26,6 @@ class MyDocument extends Document {
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="theme-color" content="#FFFFFF" />
-
-          {/* add your own app-icon */}
-          {/* <link
-            rel="apple-touch-icon"
-            sizes="180x180"
-            href="/icons/apple-touch-icon.png"
-          />
-          <link rel="icon" href="/app-icon.png" /> */}
           <link rel="manifest" href="/manifest.json" />
         </Head>
         <body>

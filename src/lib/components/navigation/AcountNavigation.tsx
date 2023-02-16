@@ -12,7 +12,6 @@ import {
   HStack,
   Icon,
   Image,
-  Link,
   Menu,
   MenuButton,
   MenuItem,
@@ -28,14 +27,13 @@ import {
 import {BsMoonStarsFill, BsSun} from "react-icons/bs"
 import {HiOutlineBell, HiOutlineCog} from "react-icons/hi"
 import React, {useState} from "react"
-
 import {ChevronDownIcon} from "@chakra-ui/icons"
 import Cookies from "universal-cookie"
 import {ItemContent} from "../generic/ItemContent"
-import NextLink from "next/link"
 import ProtectedContent from "../auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {useAuth} from "lib/hooks/useAuth"
+import {Link} from "./Link"
 
 const MobileNavigation = () => {
   const {Logout} = useAuth()
@@ -124,20 +122,16 @@ const MobileNavigation = () => {
         <MenuList>
           <ProtectedContent hasAccess={appPermissions.MeManager}>
             <MenuItem>
-              <NextLink href="#" passHref>
-                <Link pl="2" pr="2">
-                  Manage Profile
-                </Link>
-              </NextLink>
+              <Link href="#" pl="2" pr="2">
+                Manage Profile
+              </Link>
             </MenuItem>
           </ProtectedContent>
           <ProtectedContent hasAccess={appPermissions.MeManager}>
             <MenuItem>
-              <NextLink href="#" passHref>
-                <Link pl="2" pr="2">
-                  Notifications
-                </Link>
-              </NextLink>
+              <Link href="#" pl="2" pr="2">
+                Notifications
+              </Link>
             </MenuItem>
           </ProtectedContent>
           <MenuItem onClick={() => Logout()}>

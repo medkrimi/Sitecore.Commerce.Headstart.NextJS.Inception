@@ -3,7 +3,6 @@ import {
   Checkbox,
   Flex,
   Image,
-  Link,
   Tbody,
   Td,
   Text,
@@ -18,9 +17,9 @@ import {FiArrowDown, FiArrowRight, FiArrowUp, FiCheckSquare} from "react-icons/f
 import {useEffect, useState} from "react"
 import BrandedSpinner from "../branding/BrandedSpinner"
 import {CalculateEditorialProcess} from "./EditorialProgressBar"
-import NextLink from "next/link"
 import {Product} from "ordercloud-javascript-sdk"
 import {textHelper} from "lib/utils/text.utils"
+import {Link} from "../navigation/Link"
 
 interface ProductListProps {
   products: Product[]
@@ -136,32 +135,26 @@ const ProductList = (props: ProductListProps) => {
                       isChecked={props.selectedProductIds.includes(product.ID)}
                       onChange={(event) => props.onProductSelected(product.ID, event.target.checked)}
                     />
-                    <NextLink href={"/products/" + product.ID} passHref>
-                      <Link> {product.ID}</Link>
-                    </NextLink>
+                    <Link href={"/products/" + product.ID}> {product.ID}</Link>
                   </Td>
                   <Td>
                     <Center>
-                      <NextLink href={"/products/" + product.ID} passHref>
-                        <Link>
-                          <Image
-                            src={
-                              typeof product?.xp?.Images != "undefined"
-                                ? product?.xp?.Images[0]?.ThumbnailUrl ?? product?.xp?.Images[0]?.Url
-                                : product?.xp?.image_url ??
-                                  "https://mss-p-006-delivery.stylelabs.cloud/api/public/content/4fc742feffd14e7686e4820e55dbfbaa"
-                            }
-                            alt="product image"
-                            width="50px"
-                          />
-                        </Link>
-                      </NextLink>
+                      <Link href={"/products/" + product.ID}>
+                        <Image
+                          src={
+                            typeof product?.xp?.Images != "undefined"
+                              ? product?.xp?.Images[0]?.ThumbnailUrl ?? product?.xp?.Images[0]?.Url
+                              : product?.xp?.image_url ??
+                                "https://mss-p-006-delivery.stylelabs.cloud/api/public/content/4fc742feffd14e7686e4820e55dbfbaa"
+                          }
+                          alt="product image"
+                          width="50px"
+                        />
+                      </Link>
                     </Center>
                   </Td>
                   <Td>
-                    <NextLink href={"/products/" + product.ID} passHref>
-                      <Link>{product.Name}</Link>
-                    </NextLink>
+                    <Link href={"/products/" + product.ID}>{product.Name}</Link>
                   </Td>
                   <Td>
                     {textHelper.stripHTML(product.Description).length > 40

@@ -16,10 +16,9 @@ import {
   Spinner
 } from "@chakra-ui/react"
 import {useCallback, useEffect, useMemo, useRef, useState} from "react"
-
 import Card from "lib/components/card/Card"
 import {IoMdClose} from "react-icons/io"
-import Link from "lib/components/navigation/Link"
+import {Link} from "lib/components/navigation/Link"
 import {MdCheck} from "react-icons/md"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import React from "react"

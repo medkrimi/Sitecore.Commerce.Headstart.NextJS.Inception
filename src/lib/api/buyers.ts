@@ -8,7 +8,7 @@ export const buyersService = {
   delete: _delete
 }
 
-async function list(filters?) {
+async function list(filters?: any) {
   console.log("buyersService::List")
   return await Buyers.List(filters)
 }

@@ -10,7 +10,6 @@ import {
   Checkbox,
   CheckboxGroup,
   Divider,
-  Flex,
   FormControl,
   FormLabel,
   HStack,
@@ -19,7 +18,6 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Link,
   Menu,
   MenuButton,
   MenuItem,
@@ -63,6 +61,7 @@ import {ProductListOptions} from "../../services/ordercloud.service"
 import {ProductXPs} from "lib/types/ProductXPs"
 import {promotionsService} from "lib/api"
 import {useErrorToast} from "lib/hooks/useToast"
+import {Link} from "../navigation/Link"
 
 interface ProductSearchProps {
   query: string
@@ -335,7 +334,7 @@ export default function ProductSearch({query}: ProductSearchProps) {
           ) : (
             <>
               <HStack justifyContent="space-between" w="100%">
-                <Link onClick={onOpenAddProduct}>
+                <Link href="" onClick={onOpenAddProduct}>
                   <Button variant="primaryButton">Create Product</Button>
                 </Link>
                 <HStack>

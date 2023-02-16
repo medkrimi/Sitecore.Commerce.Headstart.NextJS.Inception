@@ -5,7 +5,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
-  Box,
   Button,
   HStack,
   Image,
@@ -17,25 +16,15 @@ import {
 } from "@chakra-ui/react"
 import {ComposedProduct, GetComposedProduct, RemoveLineItem, UpdateLineItem} from "../../services/ordercloud.service"
 import {FormEvent, FunctionComponent, useCallback, useEffect, useRef, useState} from "react"
-
 import {LineItem} from "ordercloud-javascript-sdk"
-import OcQuantityInput from "./OcQuantityInput"
 import {priceHelper} from "../../utils/price.utils"
 
-interface OcLineItemCardProps {
+interface LineItemCardProps {
   lineItem: LineItem
   editable?: boolean
 }
 
-// const getPDFProof = (props): string => {
-//   console.log(props)
-//   if (props.length) {
-//     return "HAS PDF"
-//   }
-//   return `Refund ${"No PDF"}`
-// }
-
-const OcLineItemCard: FunctionComponent<OcLineItemCardProps> = ({lineItem, editable}) => {
+const LineItemCard: FunctionComponent<LineItemCardProps> = ({lineItem, editable}) => {
   const [disabled, setDisabled] = useState(false)
   const [quantity, setQuantity] = useState(lineItem.Quantity)
   const [product, setProduct] = useState<ComposedProduct>()
@@ -75,9 +64,6 @@ const OcLineItemCard: FunctionComponent<OcLineItemCardProps> = ({lineItem, edita
         <HStack>
           <VStack>
             <Image src={lineItem.xp?.proofUrl} maxW="125" alt=""></Image>
-            {/* <a href={lineItem.xp?.pdfUrl} target="_blank" rel="noreferrer">
-              /<Text fontSize="xs">View proof</Text>
-            </a> */}
           </VStack>
           <Text>{`# ${lineItem.ID}`}</Text>
         </HStack>
@@ -144,4 +130,4 @@ const OcLineItemCard: FunctionComponent<OcLineItemCardProps> = ({lineItem, edita
   )
 }
 
-export default OcLineItemCard
+export default LineItemCard

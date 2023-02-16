@@ -1,40 +1,31 @@
-import {HStack, Link} from "@chakra-ui/react"
-import NextLink from "next/link"
+import {HStack} from "@chakra-ui/react"
 import {useAuth} from "lib/hooks/useAuth"
 import ProtectedContent from "../auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
+import {Link} from "./Link"
 
 const MainNavigation = () => {
   const {Logout} = useAuth()
   return (
     <HStack width="full" align="center">
       <ProtectedContent hasAccess={appPermissions.ProductManager}>
-        <NextLink href="/products" passHref>
-          <Link pl="2" pr="2">
-            Products
-          </Link>
-        </NextLink>
+        <Link href="/products" pl="2" pr="2">
+          Products
+        </Link>
       </ProtectedContent>
       <ProtectedContent hasAccess={appPermissions.OrderManager}>
-        <NextLink href="/orders" passHref>
-          <Link pl="2" pr="2">
-            Orders
-          </Link>
-        </NextLink>
+        <Link href="/orders" pl="2" pr="2">
+          Orders
+        </Link>
       </ProtectedContent>
       <ProtectedContent hasAccess={appPermissions.BuyerManager}>
-        <NextLink href="/buyers" passHref>
-          <Link pl="2" pr="2">
-            Users
-          </Link>
-        </NextLink>
-      </ProtectedContent>
-
-      <NextLink href="/" passHref>
-        <Link pl="2" pr="2" onClick={() => Logout()}>
-          Log out
+        <Link href="/buyers" pl="2" pr="2">
+          Users
         </Link>
-      </NextLink>
+      </ProtectedContent>
+      <Link href="" pl="2" pr="2" onClick={() => Logout()}>
+        Log out
+      </Link>
     </HStack>
   )
 }
