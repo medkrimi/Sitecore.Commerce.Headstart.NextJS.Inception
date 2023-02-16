@@ -1,0 +1,68 @@
+{
+    "entityName": "Coca-Cola (Seller)",
+    "entityType": "Seller",
+    "usergroup": [
+        {
+            "name": "Buyer Group 1",
+            "user": {
+                "name": "User 1.1"
+            }
+        },
+        {
+            "name": "Buyer Group 3221",
+            "user": {
+                "name": "User 1.1"
+            }
+        }
+    ],
+    "entityRelationship": [
+        {
+            "entityName": "Coca-Cola US",
+            "entityType": "Buyer",
+            "usergroup": [
+                {
+                    "name": "Buyer Group 2",
+                    "user": {
+                        "name": "User 2.1"
+                    }
+                },
+                {
+                    "name": "Buyer Group 3",
+                    "user": {
+                        "name": "User 3.1"
+                    }
+                }
+            ]
+        },
+        {
+            "entityName": "Coca-Cola US - User",
+            "entityType": "User"
+        },
+        {
+            "entityName": "Coca-Cola Canada",
+            "entityType": "Supplier",
+            "usergroup": [
+                {
+                    "name": "Buyer Group 4",
+                    "user": {
+                        "name": "User 4.1"
+                    }
+                }
+            ],
+            "entityRelationship": [
+                {
+                    "entityName": "Coca-Cola Bangalore",
+                    "entityType": "Buyer",
+                    "usergroup": [
+                        {
+                            "name": "Buyer Group 5",
+                            "user": {
+                                "name": "User 5.1"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
