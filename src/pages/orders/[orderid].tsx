@@ -31,7 +31,7 @@ import AddressCard from "../../lib/components/card/AddressCard"
 import Card from "lib/components/card/Card"
 import LettersCard from "lib/components/card/LettersCard"
 import {NextSeo} from "next-seo"
-import OcLineItemList from "lib/components/shoppingcart/OcLineItemList"
+import LineItemList from "lib/components/shoppingcart/LineItemList"
 import {useRouter} from "next/router"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"
@@ -325,7 +325,7 @@ const OrderConfirmationPage: FunctionComponent = () => {
             </VStack>
           </HStack>
 
-          <OcLineItemList lineItems={orderWorksheet.LineItems} editable={false} />
+          <LineItemList lineItems={orderWorksheet.LineItems} editable={false} />
         </Card>
       </Container>
       <AlertDialog

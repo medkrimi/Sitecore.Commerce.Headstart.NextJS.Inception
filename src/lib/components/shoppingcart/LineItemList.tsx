@@ -1,15 +1,15 @@
 import {FunctionComponent} from "react"
-import OcLineItemCard from "./OcLineItemCard"
-import {Grid, GridItem, Box, HStack, Table, Thead, Th, Tr, Tbody, Flex} from "@chakra-ui/react"
+import LineItemCard from "./LineItemCard"
+import {Table, Thead, Th, Tr, Tbody, Flex} from "@chakra-ui/react"
 import {LineItem} from "ordercloud-javascript-sdk"
 
-interface OcLineItemListProps {
+interface LineItemListProps {
   emptyMessage?: string
   editable?: boolean
   lineItems: LineItem[]
 }
 
-const OcLineItemList: FunctionComponent<OcLineItemListProps> = ({emptyMessage, editable, lineItems}) => {
+const LineItemList: FunctionComponent<LineItemListProps> = ({emptyMessage, editable, lineItems}) => {
   return lineItems && lineItems.length ? (
     <Flex as="section" gap={3} w="full" width="full">
       <Table>
@@ -26,7 +26,7 @@ const OcLineItemList: FunctionComponent<OcLineItemListProps> = ({emptyMessage, e
         </Thead>
         <Tbody>
           {lineItems.map((li) => (
-            <OcLineItemCard lineItem={li} key={li.ID} />
+            <LineItemCard lineItem={li} key={li.ID} />
           ))}
         </Tbody>
       </Table>
@@ -36,4 +36,4 @@ const OcLineItemList: FunctionComponent<OcLineItemListProps> = ({emptyMessage, e
   )
 }
 
-export default OcLineItemList
+export default LineItemList
