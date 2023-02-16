@@ -81,4 +81,8 @@ body {
 }
 .flickity-page-dots .dot.is-selected {
   opacity: 1;
-}
+},
+.orgchart : {
+        background-image: 'none'
+        
+      },

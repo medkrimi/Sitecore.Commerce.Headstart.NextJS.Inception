@@ -2,6 +2,8 @@
 
 import "react-querybuilder/dist/query-builder.css"
 import "nextjs-breadcrumbs/dist/index.css"
+import "nextjs-orgchart/dist/ChartContainer.css"
+import "nextjs-orgchart/dist/ChartNode.css"
 
 import type {AppProps} from "next/app"
 import {AuthProvider} from "lib/context/auth-context"

@@ -21,6 +21,12 @@ export const styles = {
         my: "15px !important"
       },
       //MOVE THESE TO PROPER PLACE AFTER V1 RELEASE
+      ".orgchart": {
+        bgGradient: "none"
+      },
+      ".oc-heading": {
+        bgColor: "#252525 !important"
+      },
       ".chakra-input__group": {
         isolation: "auto"
       },

@@ -1,5 +1,5 @@
 import {Box, Container, Grid, GridItem, Icon, Link, Text, useColorModeValue} from "@chakra-ui/react"
-import {HiOutlineFilter, HiUsers} from "react-icons/hi"
+import {HiOutlineFilter, HiOutlineShare, HiUsers} from "react-icons/hi"
 
 import Card from "lib/components/card/Card"
 import {NextSeo} from "next-seo"
@@ -29,6 +29,18 @@ const SettingsPage = () => {
     <Container maxW="full">
       <NextSeo title="Settings" />
       <Grid gridTemplateColumns="repeat(auto-fit, 225px)" gridGap="1rem">
+        <GridItem>
+          <Link href="/settings/graph/">
+            <Card showclosebutton="false" color={color} align="center">
+              <Box>
+                <Icon as={HiOutlineShare} fontSize="80px" title="Settings" color="darkGray"></Icon>
+                <Text width="100%" w="full">
+                  Marketplace Graph
+                </Text>
+              </Box>
+            </Card>
+          </Link>
+        </GridItem>
         <GridItem>
           <Link href="/settings/adminusers/">
             <Card showclosebutton="false" color={color} align="center">
