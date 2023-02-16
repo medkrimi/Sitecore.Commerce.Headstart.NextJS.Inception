@@ -1,14 +1,22 @@
 import NextLink from "next/link"
-import {Link} from "@chakra-ui/react"
+import {Link as ChakraLink, HTMLChakraProps, ThemingProps} from "@chakra-ui/react"
+
+interface ChakraLinkProps extends HTMLChakraProps<"a">, ThemingProps<"Link"> {
+  /**
+   *  If `true`, the link will open in new tab
+   *
+   * @default false
+   */
+  isExternal?: boolean
+}
 
 // combines chakra ui, with functionality needed for nextjs links
 // https://jools.dev/using-nextjs-link-with-chakra-ui-link
-const AppLink = ({href, children}: {href: string; children: React.ReactNode}) => {
+
+export const Link = ({href, children, ...props}: ChakraLinkProps) => {
   return (
     <NextLink href={href} passHref>
-      <Link>{children}</Link>
+      <ChakraLink {...props}>{children}</ChakraLink>
     </NextLink>
   )
 }
-
-export default AppLink

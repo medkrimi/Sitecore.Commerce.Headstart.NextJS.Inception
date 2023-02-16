@@ -1,7 +1,8 @@
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
-import {Checkbox, Flex, Heading, Image, Link, Spacer, Text, Tooltip, VStack, useColorModeValue} from "@chakra-ui/react"
+import {Checkbox, Flex, Heading, Image, Spacer, Text, Tooltip, VStack, useColorModeValue} from "@chakra-ui/react"
 import {textHelper} from "lib/utils/text.utils"
 import {Product} from "ordercloud-javascript-sdk"
+import {Link} from "../navigation/Link"
 
 interface ProductCardProps {
   product: Product
@@ -62,12 +63,6 @@ const ProductCard = (props: ProductCardProps) => {
               : textHelper.stripHTML(product.Description)}
           </Text>
         </Link>
-        {/*         <Link href={"/products/" + product.ID}>
-          <Button bg="brand.500" size="xs">
-            Edit Product
-          </Button>
-        </Link>
- */}
       </VStack>
     </VStack>
   )

@@ -9,8 +9,7 @@ import {
   ButtonGroup,
   Container,
   HStack,
-  Text,
-  Link
+  Text
 } from "@chakra-ui/react"
 import {useCallback, useEffect, useMemo, useRef, useState} from "react"
 import Card from "lib/components/card/Card"
@@ -23,6 +22,7 @@ import {AdminAddresses, Address, ListPage} from "ordercloud-javascript-sdk"
 import {addressHelper} from "lib/utils/address.utils"
 import {DataTable} from "lib/components/data-table/DataTable"
 import {OrderCloudTableFilters} from "lib/components/ordercloud-table"
+import {Link} from "lib/components/navigation/Link"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {

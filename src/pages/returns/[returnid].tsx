@@ -10,19 +10,12 @@ import {
   GridItem,
   HStack,
   Heading,
-  IconButton,
-  Link,
-  Spacer,
-  Text,
-  useColorMode,
-  useColorModeValue
+  Spacer
 } from "@chakra-ui/react"
 import {FunctionComponent, useEffect, useState} from "react"
 import {OrderReturn, OrderReturns, Payment, Payments} from "ordercloud-javascript-sdk"
 import {dateHelper, priceHelper} from "lib/utils"
-
 import Card from "lib/components/card/Card"
-import NextLink from "next/link"
 import {NextSeo} from "next-seo"
 import OcOrderReturnItemList from "lib/components/returns/OcOrderReturnItem"
 import {useRouter} from "next/router"
@@ -107,13 +100,6 @@ const OrderReturnDetailPage: FunctionComponent = () => {
       <Container maxW="full" marginTop={30} marginBottom={30}>
         <NextSeo title="Order Return Detail" />
         <HStack justifyContent="space-between" w="100%" mb={5}>
-          <Box>
-            {/* <NextLink href="new" passHref>
-            <Link pl="2" pr="2">
-              <Button variant="primaryButton">New Return</Button>
-            </Link>
-          </NextLink> */}
-          </Box>
           <HStack>
             <Button variant="secondaryButton">Print Shipping Label</Button>
             <Button variant="secondaryButton">Export PDF</Button>

@@ -1,11 +1,10 @@
-import {Button, HStack, Heading, Icon, Link, Text, VStack} from "@chakra-ui/react"
+import {Button, HStack, Heading, Icon, Text, VStack} from "@chakra-ui/react"
 import {ComposedOrder, GetCurrentOrder} from "../../services/ordercloud.service"
 import {FunctionComponent, useEffect, useState} from "react"
-
 import {HiChevronDoubleRight} from "react-icons/hi"
-import NextLink from "next/link"
 import OcCurrentOrderLineItemList from "./OcCurrentOrderLineItemList"
 import {Orders} from "ordercloud-javascript-sdk"
+import {Link} from "../navigation/Link"
 
 const ShoppingCart: FunctionComponent = () => {
   const [currentOrder, setCurrentOrder] = useState<ComposedOrder>()
@@ -50,14 +49,12 @@ const ShoppingCart: FunctionComponent = () => {
 
           <HStack w="100%" width="full" justifyContent="space-between" alignItems="flex-start" pt="10">
             <OcCurrentOrderLineItemList emptyMessage="Your shopping cart is empty" editable />
-            <NextLink href="/checkout" passHref>
-              <Link width={48} bg="brand.500" color="white" textAlign="center" p={4}>
-                <HStack w="100%" width="full" justifyContent="center">
-                  <Text>Checkout</Text>
-                  <Icon as={HiChevronDoubleRight} />
-                </HStack>
-              </Link>
-            </NextLink>
+            <Link href="/checkout" width={48} bg="brand.500" color="white" textAlign="center" p={4}>
+              <HStack w="100%" width="full" justifyContent="center">
+                <Text>Checkout</Text>
+                <Icon as={HiChevronDoubleRight} />
+              </HStack>
+            </Link>
           </HStack>
         </VStack>
       ) : (

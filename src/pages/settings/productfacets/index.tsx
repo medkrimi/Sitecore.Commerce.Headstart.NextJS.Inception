@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react"
 import {useCallback, useEffect, useMemo, useRef, useState} from "react"
 import Card from "lib/components/card/Card"
-import Link from "../../../lib/components/navigation/Link"
+import {Link} from "../../../lib/components/navigation/Link"
 import {NextSeo} from "next-seo"
 import ProtectedContent from "lib/components/auth/ProtectedContent"
 import {appPermissions} from "lib/constants/app-permissions.config"

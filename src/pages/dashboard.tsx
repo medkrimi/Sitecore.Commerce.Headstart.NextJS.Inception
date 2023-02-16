@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-no-undef */
-
 import {
   Box,
   Container,
@@ -9,7 +7,6 @@ import {
   Heading,
   Icon,
   Image,
-  Link,
   SimpleGrid,
   Text,
   VStack,
@@ -19,12 +16,10 @@ import {
 import {HiOutlineCurrencyDollar, HiOutlineFolderOpen, HiOutlineUserAdd, HiOutlineUserCircle} from "react-icons/hi"
 import {dashboardService, ordersService, productsService, promotionsService} from "lib/api"
 import {useEffect, useState} from "react"
-
 import AverageOrderAmount from "lib/components/analytics/AverageOrderAmount"
 import BrandedSpinner from "lib/components/branding/BrandedSpinner"
 import Card from "lib/components/card/Card"
 import NewClients from "lib/components/analytics/PercentChangeTile"
-import NextLink from "next/link"
 import {NextSeo} from "next-seo"
 import TodaysMoney from "lib/components/analytics/PercentChangeTile"
 import TodaysUsers from "lib/components/analytics/PercentChangeTile"
@@ -32,12 +27,10 @@ import TotalSales from "lib/components/analytics/PercentChangeTile"
 import {appPermissions} from "lib/constants/app-permissions.config"
 import {priceHelper} from "lib/utils/price.utils"
 import useHasAccess from "lib/hooks/useHasAccess"
-import {useRouter} from "next/router"
+import {Link} from "lib/components/navigation/Link"
 
 const Dashboard = () => {
-  const {push} = useRouter()
   const {colorMode, toggleColorMode} = useColorMode()
-
   const [orders, setOrders] = useState([])
   const [products, setProducts] = useState([])
   const [promotions, setPromotions] = useState([])
@@ -179,34 +172,30 @@ const Dashboard = () => {
                 >
                   <GridItem>
                     <Box w="full" width="100%">
-                      <NextLink href="#" passHref>
-                        <Link>
-                          <TodaysMoney
-                            title="todays money"
-                            totalamount={` ${priceHelper.formatShortPrice(totalTodaysSales)}`}
-                            percentchange={previousTodaysSales}
-                            percentchangetype={percentTodaysSalesChange}
-                            percentlabel="Compared to last month (mtd)"
-                            icon={<Icon as={HiOutlineFolderOpen} />}
-                          />
-                        </Link>
-                      </NextLink>
+                      <Link href="#">
+                        <TodaysMoney
+                          title="todays money"
+                          totalamount={` ${priceHelper.formatShortPrice(totalTodaysSales)}`}
+                          percentchange={previousTodaysSales}
+                          percentchangetype={percentTodaysSalesChange}
+                          percentlabel="Compared to last month (mtd)"
+                          icon={<Icon as={HiOutlineFolderOpen} />}
+                        />
+                      </Link>
                     </Box>
                   </GridItem>
                   <GridItem>
                     <Box w="full" width="100%">
-                      <NextLink href="#" passHref>
-                        <Link>
-                          <TotalSales
-                            title="total sales"
-                            totalamount={` ${priceHelper.formatShortPrice(totalSales)}`}
-                            percentchange={percentSales}
-                            percentchangetype={percentSalesChange}
-                            percentlabel="Compared to last year  (ytd)"
-                            icon={<Icon as={HiOutlineCurrencyDollar} />}
-                          />
-                        </Link>
-                      </NextLink>
+                      <Link href="#">
+                        <TotalSales
+                          title="total sales"
+                          totalamount={` ${priceHelper.formatShortPrice(totalSales)}`}
+                          percentchange={percentSales}
+                          percentchangetype={percentSalesChange}
+                          percentlabel="Compared to last year  (ytd)"
+                          icon={<Icon as={HiOutlineCurrencyDollar} />}
+                        />
+                      </Link>
                     </Box>
                   </GridItem>
                 </SimpleGrid>
@@ -218,44 +207,38 @@ const Dashboard = () => {
                 >
                   <GridItem>
                     <Box w="full" width="100%">
-                      <NextLink href="#" passHref>
-                        <Link>
-                          <NewClients
-                            title="new users"
-                            totalamount={totalNewUsers}
-                            percentchange={percentNewUsers}
-                            percentchangetype={percentNewUsersChange}
-                            percentlabel="Compared to last month (mtd)"
-                            icon={<Icon as={HiOutlineUserAdd} />}
-                          />
-                        </Link>
-                      </NextLink>
+                      <Link href="#">
+                        <NewClients
+                          title="new users"
+                          totalamount={totalNewUsers}
+                          percentchange={percentNewUsers}
+                          percentchangetype={percentNewUsersChange}
+                          percentlabel="Compared to last month (mtd)"
+                          icon={<Icon as={HiOutlineUserAdd} />}
+                        />
+                      </Link>
                     </Box>
                   </GridItem>
                   <GridItem>
                     <Box w="full" width="100%">
-                      <NextLink href="#" passHref>
-                        <Link>
-                          <TodaysUsers
-                            title="total users"
-                            totalamount={totalUsers}
-                            percentchange={percentTotalUsers}
-                            percentchangetype={percentTotalUsersChange}
-                            percentlabel="Compared to last year  (ytd)"
-                            icon={<Icon as={HiOutlineUserCircle} />}
-                          />
-                        </Link>
-                      </NextLink>
+                      <Link href="#">
+                        <TodaysUsers
+                          title="total users"
+                          totalamount={totalUsers}
+                          percentchange={percentTotalUsers}
+                          percentchangetype={percentTotalUsersChange}
+                          percentlabel="Compared to last year  (ytd)"
+                          icon={<Icon as={HiOutlineUserCircle} />}
+                        />
+                      </Link>
                     </Box>
                   </GridItem>
                 </SimpleGrid>
               </GridItem>
               <GridItem mt={{xl: 4, lg: 4, md: 2, sm: 0, base: 0}} mb={{xl: 4, lg: 4, md: 2, sm: 4, base: 4}}>
-                <NextLink href="#" passHref>
-                  <Link>
-                    <AverageOrderAmount />
-                  </Link>
-                </NextLink>
+                <Link href="#">
+                  <AverageOrderAmount />
+                </Link>
               </GridItem>
             </SimpleGrid>
             <SimpleGrid
@@ -265,137 +248,124 @@ const Dashboard = () => {
               mb={{xl: 4, lg: 4, md: 2, sm: 0, base: 0}}
             >
               <GridItem mb={{xl: 0, lg: 0, md: 2, sm: 2, base: 2}}>
-                <NextLink href="/products" passHref>
-                  <Link>
-                    <Card showclosebutton="false" p="0px" mb={{sm: "26px", lg: "0px"}} bg={boxBgColor} color={color}>
-                      <HStack justifyContent="space-around" w="100%" width="full">
-                        <Heading size="md">
-                          Products
-                          <Text
-                            as="span"
-                            pl={{
-                              xl: "8px",
-                              lg: "8px",
-                              md: "0px",
-                              sm: "0px",
-                              base: "0px"
-                            }}
-                          >
-                            {products != null ? (
-                              <i>({products.length})</i>
-                            ) : (
-                              <Box pt={2}>
-                                <BrandedSpinner />
-                              </Box>
-                            )}
-                          </Text>
-                        </Heading>
-                        <Image src="/images/icon_product.png" alt="Icon Products" />
-                      </HStack>
-                    </Card>
-                  </Link>
-                </NextLink>
+                <Link href="/products">
+                  <Card showclosebutton="false" p="0px" mb={{sm: "26px", lg: "0px"}} bg={boxBgColor} color={color}>
+                    <HStack justifyContent="space-around" w="100%" width="full">
+                      <Heading size="md">
+                        Products
+                        <Text
+                          as="span"
+                          pl={{
+                            xl: "8px",
+                            lg: "8px",
+                            md: "0px",
+                            sm: "0px",
+                            base: "0px"
+                          }}
+                        >
+                          {products != null ? (
+                            <i>({products.length})</i>
+                          ) : (
+                            <Box pt={2}>
+                              <BrandedSpinner />
+                            </Box>
+                          )}
+                        </Text>
+                      </Heading>
+                      <Image src="/images/icon_product.png" alt="Icon Products" />
+                    </HStack>
+                  </Card>
+                </Link>
               </GridItem>
               <GridItem mb={{xl: 0, lg: 0, md: 2, sm: 2, base: 2}}>
-                <NextLink href="/orders" passHref>
-                  <Link>
-                    <Card showclosebutton="false" p="0px" mb={{sm: "26px", lg: "0px"}} bg={boxBgColor} color={color}>
-                      <HStack justifyContent="space-around" w="100%" width="full">
-                        <Heading size="md">
-                          Orders
-                          <Text
-                            as="span"
-                            pl={{
-                              xl: "8px",
-                              lg: "8px",
-                              md: "0px",
-                              sm: "0px",
-                              base: "0px"
-                            }}
-                          >
-                            {orders != null ? (
-                              <i>({orders.length})</i>
-                            ) : (
-                              <Box pt={2}>
-                                <BrandedSpinner />
-                              </Box>
-                            )}
-                          </Text>
-                        </Heading>
-                        <Image src="/images/icon_order.png" alt="Icon Orders" />
-                      </HStack>
-                    </Card>
-                  </Link>
-                </NextLink>
+                <Link href="/orders">
+                  <Card showclosebutton="false" p="0px" mb={{sm: "26px", lg: "0px"}} bg={boxBgColor} color={color}>
+                    <HStack justifyContent="space-around" w="100%" width="full">
+                      <Heading size="md">
+                        Orders
+                        <Text
+                          as="span"
+                          pl={{
+                            xl: "8px",
+                            lg: "8px",
+                            md: "0px",
+                            sm: "0px",
+                            base: "0px"
+                          }}
+                        >
+                          {orders != null ? (
+                            <i>({orders.length})</i>
+                          ) : (
+                            <Box pt={2}>
+                              <BrandedSpinner />
+                            </Box>
+                          )}
+                        </Text>
+                      </Heading>
+                      <Image src="/images/icon_order.png" alt="Icon Orders" />
+                    </HStack>
+                  </Card>
+                </Link>
               </GridItem>
               <GridItem mb={{xl: 0, lg: 0, md: 2, sm: 2, base: 2}}>
-                <NextLink href="/users" passHref>
-                  <Link>
-                    <Card showclosebutton="false" p="0px" mb={{sm: "26px", lg: "0px"}} bg={boxBgColor} color={color}>
-                      <HStack
-                        justifyContent="space-around"
-                        w="100%"
-                        width="full"
-                        direction={{base: "column", md: "row"}}
-                      >
-                        <Heading size="md">
-                          Users
-                          <Text
-                            as="span"
-                            pl={{
-                              xl: "8px",
-                              lg: "8px",
-                              md: "0px",
-                              sm: "0px",
-                              base: "0px"
-                            }}
-                          >
-                            {users != null ? (
-                              <i>({users.length})</i>
-                            ) : (
-                              <Box pt={2}>
-                                <BrandedSpinner />
-                              </Box>
-                            )}
-                          </Text>
-                        </Heading>
-                        <Image src="/images/icon_user.png" alt="Icon Users" />
-                      </HStack>
-                    </Card>
-                  </Link>
-                </NextLink>
+                <Link href="/users">
+                  <Card showclosebutton="false" p="0px" mb={{sm: "26px", lg: "0px"}} bg={boxBgColor} color={color}>
+                    <HStack justifyContent="space-around" w="100%" width="full" direction={{base: "column", md: "row"}}>
+                      <Heading size="md">
+                        Users
+                        <Text
+                          as="span"
+                          pl={{
+                            xl: "8px",
+                            lg: "8px",
+                            md: "0px",
+                            sm: "0px",
+                            base: "0px"
+                          }}
+                        >
+                          {users != null ? (
+                            <i>({users.length})</i>
+                          ) : (
+                            <Box pt={2}>
+                              <BrandedSpinner />
+                            </Box>
+                          )}
+                        </Text>
+                      </Heading>
+                      <Image src="/images/icon_user.png" alt="Icon Users" />
+                    </HStack>
+                  </Card>
+                </Link>
               </GridItem>
               <GridItem mb={{xl: 0, lg: 0, md: 2, sm: 2, base: 2}}>
-                <NextLink href="/promotions" passHref>
-                  <Link>
-                    <Card showclosebutton="false" p="0px" mb={{sm: "26px", lg: "0px"}} bg={boxBgColor} color={color}>
-                      <HStack justifyContent="space-around" w="100%" width="full">
-                        <Heading size="md">
-                          Promotions
-                          <Text
-                            as="span"
-                            pl={{
-                              xl: "8px",
-                              lg: "8px",
-                              md: "0px",
-                              sm: "0px",
-                              base: "0px"
-                            }}
-                          >
-                            {promotions != null ? (
-                              <i>({promotions.length})</i>
-                            ) : (
-                              <Box pt={2}>
-                                <BrandedSpinner />
-                              </Box>
-                            )}
-                          </Text>
-                        </Heading>
-                        <Image src="/images/icon_promo.png" alt="Icon Promotions" />
-                      </HStack>
-                    </Card>
-                  </Link>
-                </NextLink>
+                <Link href="/promotions">
+                  <Card showclosebutton="false" p="0px" mb={{sm: "26px", lg: "0px"}} bg={boxBgColor} color={color}>
+                    <HStack justifyContent="space-around" w="100%" width="full">
+                      <Heading size="md">
+                        Promotions
+                        <Text
+                          as="span"
+                          pl={{
+                            xl: "8px",
+                            lg: "8px",
+                            md: "0px",
+                            sm: "0px",
+                            base: "0px"
+                          }}
+                        >
+                          {promotions != null ? (
+                            <i>({promotions.length})</i>
+                          ) : (
+                            <Box pt={2}>
+                              <BrandedSpinner />
+                            </Box>
+                          )}
+                        </Text>
+                      </Heading>
+                      <Image src="/images/icon_promo.png" alt="Icon Promotions" />
+                    </HStack>
+                  </Card>
+                </Link>
               </GridItem>
             </SimpleGrid>
           </Container>

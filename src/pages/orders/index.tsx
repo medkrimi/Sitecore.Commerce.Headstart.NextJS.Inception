@@ -15,7 +15,6 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Spinner,
   Stack,
   Text,
   VStack
@@ -23,7 +22,7 @@ import {
 import {useCallback, useEffect, useMemo, useRef, useState} from "react"
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
-import Link from "../../lib/components/navigation/Link"
+import {Link} from "../../lib/components/navigation/Link"
 import {NextSeo} from "next-seo"
 import {ListPage, Order, Orders} from "ordercloud-javascript-sdk"
 import ProtectedContent from "lib/components/auth/ProtectedContent"

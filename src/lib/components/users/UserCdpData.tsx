@@ -1,38 +1,10 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  Collapse,
-  Container,
-  Flex,
-  HStack,
-  Heading,
-  Input,
-  ListItem,
-  OrderedList,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tooltip,
-  Tr,
-  UnorderedList,
-  color,
-  useColorModeValue,
-  useToast
-} from "@chakra-ui/react"
-import {ChangeEvent, useEffect, useState} from "react"
-import {CheckIcon, CloseIcon} from "@chakra-ui/icons"
-import {FiCheck, FiEdit, FiX} from "react-icons/fi"
-import {User, Users} from "ordercloud-javascript-sdk"
-
+import {Box, Collapse, Container, Flex, Heading, Text} from "@chakra-ui/react"
+import {useEffect, useState} from "react"
+import {User} from "ordercloud-javascript-sdk"
 import BrandedBox from "../branding/BrandedBox"
 import BrandedSpinner from "../branding/BrandedSpinner"
-import BrandedTable from "../branding/BrandedTable"
 import {CdpGuestModel} from "../../services/cdp.service"
-import {JsonLd} from "next-seo/lib/jsonld/jsonld"
-import Link from "next/link"
+import {Link} from "../navigation/Link"
 
 type UserDataProps = {
   user: User
@@ -41,14 +13,10 @@ type UserDataProps = {
 }
 
 export default function UserCdpData({user, buyerId, cdpGuest}: UserDataProps) {
-  const [isEditingBasicData, setIsEditingBasicData] = useState(false)
-  const okColor = useColorModeValue("okColor.800", "okColor.200")
-  const errorColor = useColorModeValue("errorColor.800", "errorColor.200")
   const [expanded, setExpanded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [componentUser, setComponentUser] = useState<User<any>>(user)
   const [cdpGuestData, setCdpGuestData] = useState<CdpGuestModel>(null)
-  const color = useColorModeValue("textColor.900", "textColor.100")
 
   useEffect(() => {
     setComponentUser(user)

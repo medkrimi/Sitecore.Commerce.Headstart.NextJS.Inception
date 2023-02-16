@@ -1,7 +1,7 @@
 import {Box, Button, ButtonGroup, HStack, Switch, Tooltip} from "@chakra-ui/react"
 import {useCallback, useEffect, useMemo, useState} from "react"
 import Card from "lib/components/card/Card"
-import Link from "lib/components/navigation/Link"
+import {Link} from "lib/components/navigation/Link"
 import React from "react"
 import {catalogsService} from "lib/api"
 import {useRouter} from "next/router"

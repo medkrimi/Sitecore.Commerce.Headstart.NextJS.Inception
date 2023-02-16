@@ -11,7 +11,6 @@ import {
   Grid,
   GridItem,
   HStack,
-  Link,
   VStack,
   Menu,
   useDisclosure,
@@ -60,6 +59,7 @@ import {useRouter} from "next/router"
 import Card from "lib/components/card/Card"
 import {ChevronDownIcon} from "@chakra-ui/icons"
 import {useSuccessToast} from "lib/hooks/useToast"
+import {Link} from "lib/components/navigation/Link"
 
 /* This declare the page title and enable the breadcrumbs in the content header section. */
 export async function getServerSideProps() {
@@ -201,7 +201,7 @@ const ProductDetails = () => {
           <HStack justifyContent="space-between" w="100%" pl="10px" pr="15px">
             <HStack justifyContent="space-between" w="100%" mr="208px">
               <Box>
-                <Link onClick={onOpenAddProduct} pr="10px">
+                <Link href="" onClick={onOpenAddProduct} pr="10px">
                   <Button variant="primaryButton">Create Product</Button>
                 </Link>
                 <Button variant="secondaryButton" onClick={() => setViewProductDialogOpen(true)}>

@@ -1,6 +1,6 @@
-import NextLink from "next/link"
-import {Box, Flex, Link, Text, VStack, Heading} from "@chakra-ui/react"
+import {Flex, Text, VStack} from "@chakra-ui/react"
 import {ReactNode} from "react"
+import {Link} from "./Link"
 
 const FooterLinksNavigation = () => {
   const ListHeader = ({children}: {children: ReactNode}) => {
@@ -15,18 +15,10 @@ const FooterLinksNavigation = () => {
     <Flex width="full" align="left">
       <VStack align="left">
         <ListHeader>Policies</ListHeader>
-        <NextLink href="/privacy-policy" passHref>
-          <Link>Privacy Policy</Link>
-        </NextLink>
-        <NextLink href="/refund-policy" passHref>
-          <Link>Refund Policy</Link>
-        </NextLink>
-        <NextLink href="/cookie-policy" passHref>
-          <Link>Cookie Policy</Link>
-        </NextLink>
-        <NextLink href="/terms-and-conditions" passHref>
-          <Link>Terms & Conditions</Link>
-        </NextLink>
+        <Link href="/privacy-policy">Privacy Policy</Link>
+        <Link href="/refund-policy">Refund Policy</Link>
+        <Link href="/cookie-policy">Cookie Policy</Link>
+        <Link href="/terms-and-conditions">Terms & Conditions</Link>
       </VStack>
     </Flex>
   )
